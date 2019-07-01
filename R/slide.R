@@ -1,0 +1,135 @@
+slide <- function(.x,
+                  .f,
+                  ...,
+                  .size = 1L,
+                  .step = 1L,
+                  .align = "right",
+                  .partial = FALSE,
+                  .dir = "forward") {
+
+  .f <- as_function(.f)
+  n <- vec_size(.x)
+
+  if (.size > n) {
+    abort("The size of `.x` cannot be less than `.size`.")
+  }
+
+  out <- new_list(n)
+
+  start <- 1L
+  stop <- .size
+
+  # compute initial entry before adjusting `n`!
+  entry <- compute_initial_entry(.size, .align, .dir, n)
+
+  pos_adjuster <- direction_position_adjuster(.dir, n)
+  start <- pos_adjuster(start)
+  stop <- pos_adjuster(stop)
+  n <- pos_adjuster(n)
+
+  .step <- direction_step_adjust(.dir, .step)
+
+  compare <- direction_compare_function(.dir)
+  bound <- direction_bound_function(.dir)
+
+  while(TRUE) {
+    i <- seq(from = start, to = stop)
+
+    out[[entry]] <- .f(vec_slice(.x, i), ...)
+
+    start <- start + .step
+    stop <- stop + .step
+    entry <- entry + .step
+
+    if (is_finished(n, stop, entry, .partial, compare)) {
+      break
+    }
+
+    stop <- bound(stop, n)
+    entry <- bound(entry, n)
+  }
+
+  out
+}
+
+# align = "center" for an even size is treated as "center-left"
+compute_initial_entry <- function(size, align, dir, n) {
+  entry <- switch(
+    align,
+    "left" = 1L,
+    "right" = size,
+    "center" =,
+    "center-left" = floor(median(seq_len(size))),
+    "center-right" = ceiling(median(seq_len(size))),
+    abort("Invalid `align`.")
+  )
+
+  if (dir == "backward") {
+    entry <- entry + (n - size)
+  }
+
+  entry
+}
+
+# - First check if we haven't even gone past the end yet with normal stepping
+# - If we have, and we aren't doing partial, we are done
+# - If we have, and we are doing partial,
+#   but we still have a valid location to insert info into, then continue
+is_finished <- function(n, stop, entry, partial, compare) {
+  if (compare(stop, n)) {
+    return(FALSE)
+  }
+
+  if (!partial) {
+    return(TRUE)
+  }
+
+  if (compare(entry, n)) {
+    return(FALSE)
+  }
+
+  TRUE
+}
+
+direction_position_adjuster <- function(.dir, n) {
+  if (.dir == "forward") {
+    identity
+  } else if (.dir == "backward") {
+    n <- n + 1L
+    function(x) n - x
+  } else {
+    abort("`.dir` should be one of: 'forward' or 'backward'.")
+  }
+}
+
+direction_step_adjust <- function(.dir, .step) {
+  if (.dir == "forward") {
+    .step
+  }
+  else if (.dir == "backward") {
+    -.step
+  }
+  else {
+    abort("`.dir` should be one of: 'forward' or 'backward'.")
+  }
+}
+
+direction_compare_function <- function(.dir) {
+  if (.dir == "forward") {
+    `<=`
+  }
+  else {
+    `>=`
+  }
+}
+
+direction_bound_function <- function(.dir) {
+  if (.dir == "forward") {
+    # faster pmin
+    function(x, n) if (x < n) x else n
+  }
+  else {
+    # faster pmax
+    function(x, n) if (x < n) n else x
+  }
+}
