@@ -15,3 +15,5 @@ Imports:
     rlang,
     vctrs
 RoxygenNote: 6.1.1
+URL: https://github.com/DavisVaughan/slurrr
+BugReports: https://github.com/DavisVaughan/slurrr/issues
