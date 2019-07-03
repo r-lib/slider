@@ -13,7 +13,11 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     rlang,
-    vctrs
+    vctrs,
+    glue
 RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
 URL: https://github.com/DavisVaughan/slurrr
 BugReports: https://github.com/DavisVaughan/slurrr/issues
+Suggests: 
+    testthat (>= 2.1.0)

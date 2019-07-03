@@ -1,3 +1,43 @@
+#' Slide
+#'
+#'
+#'
+#' @param .x A list or atomic vector.
+#'
+#' @param .f A function or formula.
+#'
+#' @param ... Additional arguments passed on to the mapped function.
+#'
+#' @param .size A single positive integer. The size of the sliding window.
+#'
+#' @param .step A single positive integer. The size of the step between each
+#'   function evaluation.
+#'
+#' @param .align The alignment to begin the placement of results in the output
+#' vector.
+#'
+#'   One of:
+#'   * `"right"`
+#'   * `"left"`
+#'   * `"center"`
+#'   * `"center-left"`
+#'   * `"center-right"`
+#'
+#' When `.size` is even, `"center"` is assumed to be
+#' equivalent to `"center-left"`.
+#'
+#' @param .partial Should partial results be computed?
+#' If `TRUE` and `.dir == "forward"`, this may result in partial results at the
+#' _end_ of the vector. If `.dir == "backwards"`, this may result in partial
+#' results at the _start_ of the vector.
+#'
+#' @param .dir The direction to slide.
+#'
+#' One of:
+#' - `"forward"`
+#' - `"backward"`
+#'
+#' @export
 slide <- function(.x,
                   .f,
                   ...,
@@ -7,32 +47,53 @@ slide <- function(.x,
                   .partial = FALSE,
                   .dir = "forward") {
 
+  vec_assert(.x)
+  vec_assert(.size, size = 1L)
+  vec_assert(.step, size = 1L)
+  vec_assert(.align, character(), 1L)
+  vec_assert(.partial, logical(), 1L)
+  vec_assert(.dir, character(), 1L)
+
+  .size <- vec_cast(.size, integer())
+  .step <- vec_cast(.step, integer())
+
+  arg_match(.dir, valid_dir())
+  arg_match(.align, valid_align())
+
   .f <- as_function(.f)
   n <- vec_size(.x)
 
   if (.size > n) {
-    abort("The size of `.x` cannot be less than `.size`.")
+    glubort("The size of `.x` ({n}) cannot be less than `.size` ({.size}).")
   }
 
-  validate_direction(.dir)
+  if (.size <= 0L) {
+    glubort("`.size` must be at least 1, not {.size}.")
+  }
+
+  if (.step <= 0L) {
+    glubort("`.step` must be at least 1, not {.step}.")
+  }
+
+  forward <- .dir == "forward"
 
   out <- new_list(n)
 
-  if (.dir == "forward") {
+  if (forward) {
     start <- 1L
     stop <- .size
-    entry <- compute_initial_entry(.size, .align)
+    entry <- entry_init(.size, .align)
   }
   else {
     start <- n
     stop <- n + 1L - .size
-    entry <- compute_initial_entry(.size, .align) + n - .size
+    entry <- entry_init(.size, .align) + n - .size
     n <- 1L
     .step <- -.step
   }
 
-  compare <- direction_compare_function(.dir)
-  bound <- direction_bound_function(.dir)
+  compare <- compare_function(forward)
+  bound <- bound_function(forward)
 
   while(TRUE) {
     i <- seq(from = start, to = stop)
@@ -55,24 +116,35 @@ slide <- function(.x,
   out
 }
 
-validate_direction <- function(dir) {
-  if (!dir %in% c("forward", "backward")) {
-    abort("`.dir` must be either 'forward' or 'backward'.")
-  }
-  invisible(dir)
+valid_dir <- function() {
+  c("forward", "backward")
+}
+
+valid_align <- function() {
+  c("right", "left", "center", "center-left", "center-right")
 }
 
 # align = "center" for an even size is treated as "center-left"
-compute_initial_entry <- function(size, align) {
+entry_init <- function(size, align) {
   switch(
     align,
     "left" = 1L,
     "right" = size,
     "center" =,
-    "center-left" = floor(median(seq_len(size))),
-    "center-right" = ceiling(median(seq_len(size))),
+    "center-left" = floor(median2(size)),
+    "center-right" = ceiling(median2(size)),
     abort("Invalid `align`.")
   )
+}
+
+# compute the median from a length
+# figured it out after looking at the definition of median on wiki
+# https://en.wikipedia.org/wiki/Median
+# mimics median(seq_len(n)) but is much faster
+# bench::mark(median(seq_len(5)), median2(5))
+median2 <- function(n) {
+  i <- (n + 1) / 2
+  (floor(i) + ceiling(i)) / 2
 }
 
 # - First check if we haven't even gone past the end yet with normal stepping
@@ -95,8 +167,8 @@ is_finished <- function(n, stop, entry, partial, compare) {
   TRUE
 }
 
-direction_compare_function <- function(.dir) {
-  if (.dir == "forward") {
+compare_function <- function(forward) {
+  if (forward) {
     `<=`
   }
   else {
@@ -104,8 +176,8 @@ direction_compare_function <- function(.dir) {
   }
 }
 
-direction_bound_function <- function(.dir) {
-  if (.dir == "forward") {
+bound_function <- function(forward) {
+  if (forward) {
     # faster pmin
     function(x, n) if (x < n) x else n
   }
