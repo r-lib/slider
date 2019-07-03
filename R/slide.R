@@ -18,16 +18,15 @@ slide <- function(.x,
 
   out <- new_list(n)
 
-  start <- 1L
-  stop <- .size
-
-  # compute initial entry before adjusting `n`!
-  entry <- compute_initial_entry(.size, .align)
-
-  if (.dir == "backward") {
-    entry <- entry + n - .size
-    start <- n + 1L - start
-    stop <- n + 1L - stop
+  if (.dir == "forward") {
+    start <- 1L
+    stop <- .size
+    entry <- compute_initial_entry(.size, .align)
+  }
+  else {
+    start <- n
+    stop <- n + 1L - .size
+    entry <- compute_initial_entry(.size, .align) + n - .size
     n <- 1L
     .step <- -.step
   }
