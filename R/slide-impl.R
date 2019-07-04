@@ -62,7 +62,7 @@ slide_impl <- function(.x,
   .step_stop <- .step
 
   for (j in seq_len(iterations_n)) {
-    i <- seq(from = start, to = stop)
+    i <- seq(from = start, to = stop) # compact seq? but it could be like `5:3` which isnt allowed
 
     elt <- .f(vec_slice(.x, i), ...)
     out <- assign(out, entry, value = elt)
@@ -88,9 +88,9 @@ slide_impl <- function(.x,
 # https://github.com/r-lib/vctrs/issues/141
 get_assigner <- function(x) {
   if (is.recursive(x)) {
-    `[[<-`
+    `[[<-` # SET_VECTOR_ELT
   } else {
-    vec_assign
+    vec_assign # vec_assign_impl(copy = FALSE)
   }
 }
 
