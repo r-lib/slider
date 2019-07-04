@@ -2,10 +2,19 @@
 % Please edit documentation in R/slide.R
 \name{slide}
 \alias{slide}
+\alias{slide_dbl}
+\alias{slide_dfr}
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
   .partial = FALSE, .dir = "forward")
+
+slide_dbl(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
+  .partial = FALSE, .dir = "forward")
+
+slide_dfr(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
+  .partial = FALSE, .dir = "forward", .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique"))
 }
 \arguments{
 \item{.x}{A list or atomic vector.}
