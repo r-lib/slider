@@ -105,8 +105,5 @@ slide_dfr <- function(.x,
     .dir = .dir
   )
 
-  # should there be a size constraint?
-  # lapply(out, vec_assert, size = 1)
-
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
 }
