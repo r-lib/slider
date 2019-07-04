@@ -43,7 +43,11 @@ slide_impl <- function(.x,
   assign <- get_assigner(.ptype)
 
   iterations_n <- iterations(.x_n, .size, .step, .align, .partial, forward)
-  complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
+
+  # Number of full (non-partial) iterations possible
+  if (.partial) {
+    complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
+  }
 
   if (forward) {
     start <- 1L
