@@ -61,10 +61,10 @@ slide <- function(.x,
   arg_match(.align, valid_align())
 
   .f <- as_function(.f)
-  n <- vec_size(.x)
+  .x_n <- vec_size(.x)
 
-  if (.size > n) {
-    glubort("The size of `.x` ({n}) cannot be less than `.size` ({.size}).")
+  if (.size > .x_n) {
+    glubort("The size of `.x` ({.x_n}) cannot be less than `.size` ({.size}).")
   }
 
   if (.size <= 0L) {
@@ -77,44 +77,47 @@ slide <- function(.x,
 
   forward <- .dir == "forward"
 
-  out <- new_list(n)
+  out <- new_list(.x_n)
+
+  iterations_n <- iterations(.x_n, .size, .step, .align, .partial, forward)
+  complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
 
   if (forward) {
     start <- 1L
     stop <- .size
-    entry <- entry_init(.size, .align)
+    entry <- .size - offset_align(.size, .align) + 1L
+    endpoint <- .x_n
   }
   else {
-    start <- n
-    stop <- n + 1L - .size
-    entry <- entry_init(.size, .align) + n - .size
-    n <- 1L
+    start <- .x_n
+    stop <- .x_n - .size + 1L
+    entry <- .x_n - offset_align(.size, .align) + 1L
+    endpoint <- 1L
     .step <- -.step
   }
 
-  compare <- compare_function(forward)
-  bound <- bound_function(forward)
+  .step_stop <- .step
 
-  while(TRUE) {
+  for (j in seq_len(iterations_n)) {
     i <- seq(from = start, to = stop)
 
     out[[entry]] <- .f(vec_slice(.x, i), ...)
 
+    if (.partial && j == complete_iterations_n) {
+      stop <- endpoint # set stop to the endpoint value
+      .step_stop <- 0L # stop incrementing stop as we can no longer perform a full step
+      .partial <- FALSE # no need to check second condition anymore
+    }
+
     start <- start + .step
-    stop <- stop + .step
+    stop <- stop + .step_stop
     entry <- entry + .step
-
-    if (is_finished(n, stop, entry, .partial, compare)) {
-      break
-    }
-
-    if (.partial) {
-      stop <- bound(stop, n)
-    }
   }
 
   out
 }
+
+# ------------------------------------------------------------------------------
 
 valid_dir <- function() {
   c("forward", "backward")
@@ -124,18 +127,41 @@ valid_align <- function() {
   c("right", "left", "center", "center-left", "center-right")
 }
 
-# align = "center" for an even size is treated as "center-left"
-entry_init <- function(size, align) {
+# ------------------------------------------------------------------------------
+
+offset_align <- function(size, align) {
   switch(
     align,
-    "left" = 1L,
-    "right" = size,
+    "left" = size,
+    "right" = 1L,
     "center" =,
-    "center-left" = floor(median2(size)),
-    "center-right" = ceiling(median2(size)),
-    abort("Invalid `align`.")
+    "center-left" = ceiling(median2(size)),
+    "center-right" = floor(median2(size))
   )
 }
+
+offset_dir <- function(forward, size, align) {
+  if (forward) {
+    offset_align(size, align)
+  } else {
+    size - offset_align(size, align) + 1L
+  }
+}
+
+offset <- function(partial, forward, size, align) {
+  if (partial) {
+    offset_dir(forward, size, align)
+  } else {
+    1L
+  }
+}
+
+iterations <- function(n, size, step, align, partial, forward) {
+  offset <- offset(partial, forward, size, align)
+  ceiling((n - size + offset) / step)
+}
+
+# ------------------------------------------------------------------------------
 
 # compute the median from a length
 # figured it out after looking at the definition of median on wiki
@@ -145,44 +171,4 @@ entry_init <- function(size, align) {
 median2 <- function(n) {
   i <- (n + 1) / 2
   (floor(i) + ceiling(i)) / 2
-}
-
-# - First check if we haven't even gone past the end yet with normal stepping
-# - If we have, and we aren't doing partial, we are done
-# - If we have, and we are doing partial,
-#   but we still have a valid location to insert info into, then continue
-is_finished <- function(n, stop, entry, partial, compare) {
-  if (compare(stop, n)) {
-    return(FALSE)
-  }
-
-  if (!partial) {
-    return(TRUE)
-  }
-
-  if (compare(entry, n)) {
-    return(FALSE)
-  }
-
-  TRUE
-}
-
-compare_function <- function(forward) {
-  if (forward) {
-    `<=`
-  }
-  else {
-    `>=`
-  }
-}
-
-bound_function <- function(forward) {
-  if (forward) {
-    # faster pmin
-    function(x, n) if (x < n) x else n
-  }
-  else {
-    # faster pmax
-    function(x, n) if (x < n) n else x
-  }
 }
