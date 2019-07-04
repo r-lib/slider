@@ -71,6 +71,12 @@ slide_impl <- function(.x,
     elt <- .f(vec_slice(.x, i), ...)
     out <- assign(out, entry, value = elt)
 
+    # can this be extracted into its own loop? we'd compute the number of
+    # "full" iterations, and do those, and then if .partial = TRUE we'd add
+    # on the partial iterations. but that way we don't repeatedly check
+    # if(.partial) {}
+    # AND it would mean we know how large `i` is at each of the full iterations
+    # so we can allocate the sequence once and then just continually overwrite the values
     if (.partial && j == complete_iterations_n) {
       stop <- endpoint # set stop to the endpoint value
       .step_stop <- 0L # stop incrementing stop as we can no longer perform a full step
