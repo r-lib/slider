@@ -254,6 +254,31 @@ test_that(".dir backwards + .partial is meaningful with align right + size > 1",
 })
 
 # ------------------------------------------------------------------------------
+# data frames
+
+test_that("slide() is a rowwise iterator", {
+  x <- data.frame(x = 1:3, y = 2:4)
+
+  expect_equal(
+    slide(x, identity),
+    list(
+      vec_slice(x, 1),
+      vec_slice(x, 2),
+      vec_slice(x, 3)
+    )
+  )
+
+  expect_equal(
+    slide(x, identity, .size = 2L),
+    list(
+      NULL,
+      vec_slice(x, 1:2),
+      vec_slice(x, 2:3)
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
 # complex combinations
 
 test_that(".partial is only activated when an endpoint lands inside the output vector", {
