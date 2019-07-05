@@ -6,5 +6,6 @@
 ## usethis namespace: start
 #' @import rlang
 #' @import vctrs
+#' @useDynLib slurrr, .registration = TRUE
 ## usethis namespace: end
 NULL
