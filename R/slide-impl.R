@@ -42,11 +42,12 @@ slide_impl <- function(.x,
 
   assign <- get_assigner(.ptype)
 
-  iterations_n <- iterations(.x_n, .size, .step, .align, .partial, forward)
+  # Number of "complete" iterations (where .partial is not involved)
+  complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
 
-  # Number of full (non-partial) iterations possible
   if (.partial) {
-    complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
+    max_iterations_n <- iterations(.x_n, .size, .step, .align, .partial, forward)
+    partial_iterations_n <- max_iterations_n - complete_iterations_n
   }
 
   if (forward) {
@@ -63,28 +64,30 @@ slide_impl <- function(.x,
     .step <- -.step
   }
 
-  .step_stop <- .step
+  i <- seq(from = start, to = stop)
 
-  for (j in seq_len(iterations_n)) {
-    i <- seq(from = start, to = stop) # compact seq? but it could be like `5:3` which isnt allowed
+  for (j in seq_len(complete_iterations_n)) {
+    elt <- .f(vec_slice(.x, i), ...)
+    # will be way more efficient at the C level with `copy = FALSE`
+    out <- assign(out, entry, value = elt)
 
+    i <- i + .step
+    entry <- entry + .step
+  }
+
+  # Done if no `.partial`
+  if (!.partial) {
+    return(out)
+  }
+
+  start <- i[1] # current `start` point
+  i <- seq(from = start, to = endpoint)
+
+  for (j in seq_len(partial_iterations_n)) {
     elt <- .f(vec_slice(.x, i), ...)
     out <- assign(out, entry, value = elt)
 
-    # can this be extracted into its own loop? we'd compute the number of
-    # "full" iterations, and do those, and then if .partial = TRUE we'd add
-    # on the partial iterations. but that way we don't repeatedly check
-    # if(.partial) {}
-    # AND it would mean we know how large `i` is at each of the full iterations
-    # so we can allocate the sequence once and then just continually overwrite the values
-    if (.partial && j == complete_iterations_n) {
-      stop <- endpoint # set stop to the endpoint value
-      .step_stop <- 0L # stop incrementing stop as we can no longer perform a full step
-      .partial <- FALSE # no need to check second condition anymore
-    }
-
-    start <- start + .step
-    stop <- stop + .step_stop
+    i <- i + .step
     entry <- entry + .step
   }
 
