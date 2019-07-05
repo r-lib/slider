@@ -21,3 +21,5 @@ URL: https://github.com/DavisVaughan/slurrr
 BugReports: https://github.com/DavisVaughan/slurrr/issues
 Suggests: 
     testthat (>= 2.1.0)
+Remotes:
+    DavisVaughan/vctrs@export
