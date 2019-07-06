@@ -16,6 +16,8 @@ slide_impl <- function(.x,
   vec_assert(.dir, character(), 1L)
   forward <- .dir == "forward"
 
+  # If we are unbounded() in `.before` we pin `.before` to an offset such that
+  # `.before + startpoint == 1L`
   .before_unbounded <- FALSE
   if (is_unbounded(.before)) {
     .before_unbounded <- TRUE
@@ -26,6 +28,8 @@ slide_impl <- function(.x,
     }
   }
 
+  # If we are unbounded() in `.after` we pin `.after` to an offset such that
+  # `.after + startpoint == .x_n`
   .after_unbounded <- FALSE
   if (is_unbounded(.after)) {
     .after_unbounded <- TRUE
@@ -36,6 +40,14 @@ slide_impl <- function(.x,
     }
   }
 
+  vec_assert(.before, size = 1L)
+  .before <- vec_cast(.before, integer())
+
+  vec_assert(.after, size = 1L)
+  .after <- vec_cast(.after, integer())
+
+  # `.offset + startpoint` determines the initial `entry` in the `out` container
+  # The default offset is at `.before` if forward / `.after` if backward
   if (is.null(.offset)) {
     if (forward) {
       .offset <- .before
@@ -44,14 +56,10 @@ slide_impl <- function(.x,
     }
   }
 
-  vec_assert(.before, size = 1L)
-  vec_assert(.after, size = 1L)
   vec_assert(.step, size = 1L)
   vec_assert(.offset, size = 1L)
   vec_assert(.partial, logical(), 1L)
 
-  .before <- vec_cast(.before, integer())
-  .after <- vec_cast(.after, integer())
   .step <- vec_cast(.step, integer())
   .offset <- vec_cast(.offset, integer())
 
@@ -228,35 +236,6 @@ iterations <- function(n, before, after, step, offset, partial, forward) {
 
 # ------------------------------------------------------------------------------
 
-# Need something that can assign elements of a list and of
-# a non recursive vector
-# https://github.com/r-lib/vctrs/issues/141
-get_assigner <- function(x) {
-  if (is.recursive(x)) {
-    `[[<-` # SET_VECTOR_ELT
-  } else {
-    vec_assign # vec_assign_impl(copy = FALSE)
-  }
-}
-
-# ------------------------------------------------------------------------------
-
 valid_dir <- function() {
   c("forward", "backward")
-}
-
-valid_align <- function() {
-  c("right", "left", "center", "center-left", "center-right")
-}
-
-# ------------------------------------------------------------------------------
-
-# compute the median from a length
-# figured it out after looking at the definition of median on wiki
-# https://en.wikipedia.org/wiki/Median
-# mimics median(seq_len(n)) but is much faster
-# bench::mark(median(seq_len(5)), median2(5))
-median2 <- function(n) {
-  i <- (n + 1) / 2
-  (floor(i) + ceiling(i)) / 2
 }
