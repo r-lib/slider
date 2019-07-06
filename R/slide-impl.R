@@ -98,8 +98,16 @@ slide_impl <- function(.x,
   out <- vec_init(.ptype, n = .x_n)
   .ptype_is_list <- vctrs::vec_is(.ptype, list())
 
-  # Number of "complete" iterations (where .partial is not involved)
-  complete_iterations_n <- iterations(.x_n, .before, .after, .step, .offset, FALSE, forward)
+  # If we are unbounded in the direction we are going, we compute the number
+  # of complete iterations as the maximum number of iterations. This implies
+  # we set `partial = TRUE` in iterations()
+  partial_unbounded <- FALSE
+  if (forward && .after_unbounded | !forward && .before_unbounded) {
+    partial_unbounded <- TRUE
+  }
+
+  # Number of "complete" iterations
+  complete_iterations_n <- iterations(.x_n, .before, .after, .step, .offset, partial_unbounded, forward)
 
   # compute before adjustments are made to .step/.offset
   if (.partial) {
