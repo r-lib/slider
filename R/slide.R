@@ -38,7 +38,7 @@
 #' - `"backward"`
 #'
 #' @export
-slide <- function(.x,
+slide2 <- function(.x,
                   .f,
                   ...,
                   .size = 1L,

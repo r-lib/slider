@@ -3,11 +3,11 @@ test_that("default settings is the same as map()", {
 })
 
 # ------------------------------------------------------------------------------
-# .size
+# .before / .after
 
-test_that("can slide over a window", {
+test_that("can use .before for right alignment", {
   expect_equal(
-    slide(1:7, identity, .size = 2),
+    slide(1:7, identity, .before = 1),
     list(
       NULL,
       c(1, 2),
@@ -20,7 +20,7 @@ test_that("can slide over a window", {
   )
 
   expect_equal(
-    slide(1:7, identity, .size = 3),
+    slide(1:7, identity, .before = 2),
     list(
       NULL,
       NULL,
@@ -29,6 +29,92 @@ test_that("can slide over a window", {
       c(3, 4, 5),
       c(4, 5, 6),
       c(5, 6, 7)
+    )
+  )
+})
+
+test_that("can use .after for left alignment", {
+  expect_equal(
+    slide(1:7, identity, .after = 1),
+    list(
+      c(1, 2),
+      c(2, 3),
+      c(3, 4),
+      c(4, 5),
+      c(5, 6),
+      c(6, 7),
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:7, identity, .after = 2),
+    list(
+      c(1, 2, 3),
+      c(2, 3, 4),
+      c(3, 4, 5),
+      c(4, 5, 6),
+      c(5, 6, 7),
+      NULL,
+      NULL
+    )
+  )
+})
+
+test_that("can use .before / .after for center alignment", {
+  expect_equal(
+    slide(1:7, identity, .before = 1, .after = 1),
+    list(
+      NULL,
+      1:3,
+      2:4,
+      3:5,
+      4:6,
+      5:7,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:7, identity, .before = 2, .after = 2),
+    list(
+      NULL,
+      NULL,
+      1:5,
+      2:6,
+      3:7,
+      NULL,
+      NULL
+    )
+  )
+})
+
+test_that("can use .before / .after for center-left alignment", {
+  expect_equal(
+    slide(1:7, identity, .before = 2, .after = 1),
+    list(
+      NULL,
+      NULL,
+      1:4,
+      2:5,
+      3:6,
+      4:7,
+      NULL
+    )
+  )
+})
+
+test_that("can use .before / .after for center-right alignment", {
+  expect_equal(
+    slide(1:7, identity, .before = 1, .after = 2),
+    list(
+      NULL,
+      1:4,
+      2:5,
+      3:6,
+      4:7,
+      NULL,
+      NULL
     )
   )
 })
@@ -65,90 +151,6 @@ test_that("can step to skip over function calls", {
 })
 
 # ------------------------------------------------------------------------------
-# .align
-
-test_that("can align right", {
-  expect_equal(
-    slide(1:7, identity, .size = 4, .align = "right"),
-    list(
-      NULL,
-      NULL,
-      NULL,
-      1:4,
-      2:5,
-      3:6,
-      4:7
-    )
-  )
-})
-
-test_that("can align left", {
-  expect_equal(
-    slide(1:7, identity, .size = 4, .align = "left"),
-    list(
-      1:4,
-      2:5,
-      3:6,
-      4:7,
-      NULL,
-      NULL,
-      NULL
-    )
-  )
-})
-
-test_that("can align center-left with even .size", {
-  expect_equal(
-    slide(1:7, identity, .size = 4, .align = "center-left"),
-    list(
-      NULL,
-      1:4,
-      2:5,
-      3:6,
-      4:7,
-      NULL,
-      NULL
-    )
-  )
-})
-
-test_that("can align center-right with even .size", {
-  expect_equal(
-    slide(1:7, identity, .size = 4, .align = "center-right"),
-    list(
-      NULL,
-      NULL,
-      1:4,
-      2:5,
-      3:6,
-      4:7,
-      NULL
-    )
-  )
-})
-
-test_that("align center with even size falls back to center-left", {
-  expect_equal(
-    slide(1:7, identity, .size = 4, .align = "center"),
-    slide(1:7, identity, .size = 4, .align = "center-left")
-  )
-})
-
-test_that("align center-left with odd size is equivalent to align center", {
-  expect_equal(
-    slide(1:7, identity, .size = 3, .align = "center-left"),
-    slide(1:7, identity, .size = 3, .align = "center")
-  )
-})
-
-test_that("align center-right with odd size is equivalent to align center", {
-  expect_equal(
-    slide(1:7, identity, .size = 3, .align = "center-right"),
-    slide(1:7, identity, .size = 3, .align = "center")
-  )
-})
-
-# ------------------------------------------------------------------------------
 # .partial
 
 test_that(".partial doesn't change the result if not required", {
@@ -163,22 +165,24 @@ test_that(".partial doesn't change the result if not required", {
   )
 })
 
-test_that(".partial is meaningful with align left + size > 1", {
+test_that(".partial works when the size shrinks over the last iterations", {
   expect_equal(
-    slide(1:5, identity, .partial = TRUE, .size = 2L, .align = "left"),
+    slide(1:7, identity, .partial = TRUE, .after = 2L),
     list(
-      1:2,
-      2:3,
-      3:4,
-      4:5,
-      5
+      1:3,
+      2:4,
+      3:5,
+      4:6,
+      5:7,
+      6:7,
+      7
     )
   )
 })
 
-test_that(".partial is meaningful with align center + size > 1", {
+test_that(".partial works when doing center alignment", {
   expect_equal(
-    slide(1:5, identity, .partial = TRUE, .size = 3L, .align = "center"),
+    slide(1:5, identity, .partial = TRUE, .before = 1, .after = 1),
     list(
       NULL,
       1:3,
@@ -206,19 +210,19 @@ test_that(".dir backward is equivalent to .dir forward if .size = 1", {
 
 test_that(".dir with only altered size is equivalent to reversed forward .dir", {
   expect_equal(
-    slide(1:5, identity, .dir = "backward", .size = 2),
-    lapply(slide(1:5, identity, .size = 2), rev)
+    slide(1:5, identity, .dir = "backward", .before = 1),
+    lapply(slide(1:5, identity, .before = 1), rev)
   )
 
   expect_equal(
-    slide(1:5, identity, .dir = "backward", .size = 3),
-    lapply(slide(1:5, identity, .size = 3), rev)
+    slide(1:5, identity, .dir = "backward", .before = 1, .after = 2),
+    lapply(slide(1:5, identity, .before = 1, .after = 2), rev)
   )
 })
 
-test_that(".dir doesn't reverse the idea of align", {
+test_that(".dir keeps intuitive alignment with .before / .after", {
   expect_equal(
-    slide(1:5, identity, .size = 2, .step = 2, .dir = "backward"),
+    slide(1:5, identity, .before = 1, .step = 2, .dir = "backward"),
     list(
       NULL,
       NULL,
@@ -229,7 +233,7 @@ test_that(".dir doesn't reverse the idea of align", {
   )
 
   expect_equal(
-    slide(1:5, identity, .size = 2, .step = 2, .dir = "backward", .align = "left"),
+    slide(1:5, identity, .after = 1, .step = 2, .dir = "backward"),
     list(
       NULL,
       3:2,
@@ -240,16 +244,99 @@ test_that(".dir doesn't reverse the idea of align", {
   )
 })
 
-test_that(".dir backwards + .partial is meaningful with align right + size > 1", {
+test_that(".dir backwards + .partial is meaningful with `.before > 0`", {
   expect_equal(
-    slide(1:5, identity, .partial = TRUE, .size = 2L, .dir = "backward"),
+    slide(1:5, identity, .partial = TRUE, .before = 2L, .dir = "backward"),
     list(
       1,
       2:1,
-      3:2,
-      4:3,
-      5:4
+      3:1,
+      4:2,
+      5:3
     )
+  )
+})
+
+# ------------------------------------------------------------------------------
+# .offset
+
+test_that(".offset shifts starting point", {
+  expect_equal(
+    slide(1:5, identity, .offset = 1),
+    list(
+      NULL,
+      2,
+      3,
+      4,
+      5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .offset = 4),
+    list(
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .offset = 1, .dir = "backward"),
+    list(
+      1,
+      2,
+      3,
+      4,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .offset = 4, .dir = "backward"),
+    list(
+      1,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    )
+  )
+})
+
+test_that(".offset with .before/.after cannot imply a location larger than the size of .x", {
+  expect_error(
+    slide(1:5, identity, .offset = 5),
+    "`.offset` and `.after` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  )
+
+  expect_error(
+    slide(1:5, identity, .offset = 2, .after = 3),
+    "`.offset` and `.after` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  )
+
+  expect_error(
+    slide(1:5, identity, .offset = 5, .dir = "backward"),
+    "`.offset` and `.before` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  )
+
+  expect_error(
+    slide(1:5, identity, .offset = 2, .before = 3, .dir = "backward"),
+    "`.offset` and `.before` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  )
+})
+
+test_that(".offset must be at least .before/.after", {
+  expect_error(
+    slide(1:5, identity, .offset = 3, .before = 4),
+    "`.offset` [(]3[)] must be at least as large as `.before` [(]4[)]"
+  )
+
+  expect_error(
+    slide(1:5, identity, .offset = 3, .after = 4, .dir = "backward"),
+    "`.offset` [(]3[)] must be at least as large as `.after` [(]4[)]"
   )
 })
 
@@ -269,7 +356,7 @@ test_that("slide() is a rowwise iterator", {
   )
 
   expect_equal(
-    slide(x, identity, .size = 2L),
+    slide(x, identity, .before = 1L),
     list(
       NULL,
       vec_slice(x, 1:2),
@@ -284,7 +371,7 @@ test_that("slide() is a rowwise iterator", {
 test_that(".partial is only activated when an endpoint lands inside the output vector", {
   # here, partial is not active because the final step would place the endpoint at position -1
   expect_equal(
-    slide(1:7, identity, .partial = TRUE, .size = 3L, .dir = "backward", .align = "center-left", .step = 2L),
+    slide(1:7, identity, .partial = TRUE, .before = 1L, .after = 1L, .dir = "backward", .step = 2L),
     list(
       NULL,
       3:1,
@@ -298,7 +385,7 @@ test_that(".partial is only activated when an endpoint lands inside the output v
 
   # now partial is activated because the last point lands at 0
   expect_equal(
-    slide(1:8, identity, .partial = TRUE, .size = 3L, .dir = "backward", .align = "center-left", .step = 2L),
+    slide(1:8, identity, .partial = TRUE, .before = 1L, .after = 1L, .dir = "backward", .step = 2L),
     list(
       2:1,
       NULL,
@@ -315,12 +402,25 @@ test_that(".partial is only activated when an endpoint lands inside the output v
 # ------------------------------------------------------------------------------
 # validation
 
-test_that("cannot use invalid .size", {
-  expect_error(slide(1, identity, .size = -1), "at least 1, not -1")
-  expect_error(slide(1, identity, .size = 0), "at least 1, not 0")
+test_that("cannot use invalid .before", {
+  expect_error(slide(1, identity, .before = -1), "at least 0, not -1")
 
-  expect_error(slide(1, identity, .size = c(1, 2)), class = "vctrs_error_assert_size")
-  expect_error(slide(1, identity, .size = "x"), class = "vctrs_error_cast_lossy")
+  expect_error(slide(1, identity, .before = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_cast_lossy")
+})
+
+test_that("cannot use invalid .after", {
+  expect_error(slide(1, identity, .after = -1), "at least 0, not -1")
+
+  expect_error(slide(1, identity, .after = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_cast_lossy")
+})
+
+test_that("cannot use invalid .offset", {
+  expect_error(slide(1, identity, .offset = -1), "at least 0, not -1")
+
+  expect_error(slide(1, identity, .offset = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .offset = "x"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .step", {
@@ -331,22 +431,13 @@ test_that("cannot use invalid .step", {
   expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_cast_lossy")
 })
 
-test_that("cannot use invalid .align", {
-  expect_error(slide(1, identity, .align = "stuff"), "must be one of")
-  expect_error(slide(1, identity, .align = "ri"), 'Did you mean "right"?')
-
-  expect_error(slide(1, identity, .align = c("right", "left")), class = "vctrs_error_assert_size")
-
-  expect_error(slide(1, identity, .align = 1), class = "vctrs_error_assert_ptype")
-})
-
 test_that("cannot use invalid .dir", {
   expect_error(slide(1, identity, .dir = "stuff"), "must be one of")
   expect_error(slide(1, identity, .dir = "for"), 'Did you mean "forward"?')
 
   expect_error(slide(1, identity, .dir = c("forward", "backward")), class = "vctrs_error_assert_size")
 
-  expect_error(slide(1, identity, .dir = 1), class = "vctrs_error_assert_ptype")
+  expect_error(slide(1, identity, .dir = 1), "must be a character vector", class = "rlang_error")
 })
 
 test_that("cannot use invalid .partial", {
