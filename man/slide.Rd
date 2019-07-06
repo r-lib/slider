@@ -6,15 +6,16 @@
 \alias{slide_dfr}
 \title{Slide}
 \usage{
-slide(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
-  .partial = FALSE, .dir = "forward")
+slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .partial = FALSE, .dir = "forward")
 
-slide_dbl(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
-  .partial = FALSE, .dir = "forward")
+slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .partial = FALSE, .dir = "forward")
 
-slide_dfr(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
-  .partial = FALSE, .dir = "forward", .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .partial = FALSE, .dir = "forward",
+  .names_to = NULL, .name_repair = c("unique", "universal",
+  "check_unique"))
 }
 \arguments{
 \item{.x}{A list or atomic vector.}
@@ -23,10 +24,23 @@ slide_dfr(.x, .f, ..., .size = 1L, .step = 1L, .align = "right",
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.size}{A single positive integer. The size of the sliding window.}
-
 \item{.step}{A single positive integer. The size of the step between each
 function evaluation.}
+
+\item{.partial}{Should partial results be computed?
+If \code{TRUE} and \code{.dir == "forward"}, this may result in partial results at the
+\emph{end} of the vector. If \code{.dir == "backwards"}, this may result in partial
+results at the \emph{start} of the vector.}
+
+\item{.dir}{The direction to slide.
+
+One of:
+\itemize{
+\item \code{"forward"}
+\item \code{"backward"}
+}}
+
+\item{.size}{A single positive integer. The size of the sliding window.}
 
 \item{.align}{The alignment to begin the placement of results in the output
 vector.
@@ -42,19 +56,6 @@ One of:
 
 When \code{.size} is even, \code{"center"} is assumed to be
 equivalent to \code{"center-left"}.}
-
-\item{.partial}{Should partial results be computed?
-If \code{TRUE} and \code{.dir == "forward"}, this may result in partial results at the
-\emph{end} of the vector. If \code{.dir == "backwards"}, this may result in partial
-results at the \emph{start} of the vector.}
-
-\item{.dir}{The direction to slide.
-
-One of:
-\itemize{
-\item \code{"forward"}
-\item \code{"backward"}
-}}
 }
 \description{
 Slide

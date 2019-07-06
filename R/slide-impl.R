@@ -1,77 +1,161 @@
 slide_impl <- function(.x,
                        .f,
                        ...,
-                       .size,
+                       .before,
+                       .after,
                        .step,
-                       .align,
+                       .offset,
                        .partial,
                        .dir,
                        .ptype) {
 
   vec_assert(.x)
-  vec_assert(.size, size = 1L)
-  vec_assert(.step, size = 1L)
-  vec_assert(.align, character(), 1L)
-  vec_assert(.partial, logical(), 1L)
-  vec_assert(.dir, character(), 1L)
-
-  .size <- vec_cast(.size, integer())
-  .step <- vec_cast(.step, integer())
-
-  arg_match(.dir, valid_dir())
-  arg_match(.align, valid_align())
-
-  .f <- as_function(.f)
   .x_n <- vec_size(.x)
 
-  if (.size > .x_n) {
-    glubort("The size of `.x` ({.x_n}) cannot be less than `.size` ({.size}).")
+  arg_match(.dir, valid_dir())
+  vec_assert(.dir, character(), 1L)
+  forward <- .dir == "forward"
+
+  .before_unbounded <- FALSE
+  if (is_unbounded(.before)) {
+    .before_unbounded <- TRUE
+    if (forward) {
+      .before <- 0L
+    } else {
+      .before <- .x_n - 1L
+    }
   }
 
-  if (.size <= 0L) {
-    glubort("`.size` must be at least 1, not {.size}.")
+  .after_unbounded <- FALSE
+  if (is_unbounded(.after)) {
+    .after_unbounded <- TRUE
+    if (forward) {
+      .after <- .x_n - 1L
+    } else {
+      .after <- 0L
+    }
   }
 
-  if (.step <= 0L) {
+  if (is.null(.offset)) {
+    if (forward) {
+      .offset <- .before
+    } else {
+      .offset <- .after
+    }
+  }
+
+  vec_assert(.before, size = 1L)
+  vec_assert(.after, size = 1L)
+  vec_assert(.step, size = 1L)
+  vec_assert(.offset, size = 1L)
+  vec_assert(.partial, logical(), 1L)
+
+  .before <- vec_cast(.before, integer())
+  .after <- vec_cast(.after, integer())
+  .step <- vec_cast(.step, integer())
+  .offset <- vec_cast(.offset, integer())
+
+  .f <- as_function(.f)
+
+  if (.before < 0L) {
+    glubort("`.before` must be at least 0, not {.before}.")
+  }
+
+  if (.after < 0L) {
+    glubort("`.after` must be at least 0, not {.after}.")
+  }
+
+  if (.offset < 0L) {
+    glubort("`.offset` must be at least 0, not {.offset}.")
+  }
+
+  if (.step < 1L) {
     glubort("`.step` must be at least 1, not {.step}.")
   }
 
-  forward <- .dir == "forward"
+  width <- .before + .after + 1L
+  if (.before + .after + 1L > .x_n) {
+    glubort("The width of the rolling interval ({width}) must be less than or equal to the size of `.x` ({.x_n}).")
+  }
+
+  if (forward) {
+    if (.offset < .before) {
+      glubort("`.offset` ({.offset}) must be at least as large as `.before` ({.before}).")
+    }
+    if (.offset + .after + 1L > .x_n) {
+      # improve message
+      glubort("`.offset` and `.after` imply a location ({.offset + .after + 1}) outside the size of `.x` ({.x_n}).")
+    }
+  } else {
+    if (.offset < .after) {
+      glubort("`.offset` ({.offset}) must be at least as large as `.after` ({.after}).")
+    }
+    if (.offset + .before + 1L > .x_n) {
+      glubort("`.offset` and `.before` imply a location ({.offset + .before + 1}) outside the size of `.x` ({.x_n}).")
+    }
+  }
 
   out <- vec_init(.ptype, n = .x_n)
-
-  assign <- get_assigner(.ptype)
+  .ptype_is_list <- vctrs::vec_is(.ptype, list())
 
   # Number of "complete" iterations (where .partial is not involved)
-  complete_iterations_n <- iterations(.x_n, .size, .step, .align, FALSE, forward)
+  complete_iterations_n <- iterations(.x_n, .before, .after, .step, .offset, FALSE, forward)
 
+  # compute before adjustments are made to .step/.offset
   if (.partial) {
-    max_iterations_n <- iterations(.x_n, .size, .step, .align, .partial, forward)
+    max_iterations_n <- iterations(.x_n, .before, .after, .step, .offset, .partial, forward)
     partial_iterations_n <- max_iterations_n - complete_iterations_n
   }
 
   if (forward) {
-    start <- 1L
-    stop <- .size
-    entry <- .size - offset_align(.size, .align) + 1L
+    startpoint <- 1L
     endpoint <- .x_n
+    start <- startpoint - .before + .offset
+    stop <- start + (.before + .after)
   }
   else {
-    start <- .x_n
-    stop <- .x_n - .size + 1L
-    entry <- .x_n - offset_align(.size, .align) + 1L
+    startpoint <- .x_n
     endpoint <- 1L
+    start <- startpoint - .offset + .after
+    stop <- start - (.before + .after)
     .step <- -.step
+    .offset <- -.offset
   }
 
-  i <- seq(from = start, to = stop)
+  entry <- startpoint + .offset
+
+  .start_step <- .step
+  .stop_step <- .step
+  if (forward) {
+    if (.before_unbounded) {
+      .start_step <- 0L
+    }
+    if (.after_unbounded) {
+      .stop_step <- 0L
+    }
+  } else {
+    if (.before_unbounded) {
+      .stop_step <- 0L
+    }
+    if (.after_unbounded) {
+      .start_step <- 0L
+    }
+  }
 
   for (j in seq_len(complete_iterations_n)) {
+    # must be inside the loop since unbounded-ness could affect the length of i
+    i <- seq(from = start, to = stop)
     elt <- .f(vec_slice(.x, i), ...)
-    # will be way more efficient at the C level with `copy = FALSE`
-    out <- assign(out, entry, value = elt)
 
-    i <- i + .step
+    # will be way more efficient at the C level with `copy = FALSE`
+    if (.ptype_is_list) {
+      out <- vec_assign(out, entry, list(elt))
+    } else {
+      out <- vec_assign(out, entry, elt)
+    }
+
+    start <- start + .start_step
+    stop <- stop + .stop_step
     entry <- entry + .step
   }
 
@@ -80,18 +164,58 @@ slide_impl <- function(.x,
     return(out)
   }
 
-  start <- i[1] # current `start` point
-  i <- seq(from = start, to = endpoint)
+  # can't compute any partial iterations
+  if (partial_iterations_n == 0L) {
+    return(out)
+  }
 
   for (j in seq_len(partial_iterations_n)) {
+    # cannot extract outside the loop, length of `i` is possibly shrinking each iteration
+    i <- seq(from = start, to = endpoint)
     elt <- .f(vec_slice(.x, i), ...)
-    out <- assign(out, entry, value = elt)
 
-    i <- i + .step
+    # will be way more efficient at the C level with `copy = FALSE`
+    if (.ptype_is_list) {
+      out <- vec_assign(out, entry, list(elt))
+    } else {
+      out <- vec_assign(out, entry, elt)
+    }
+
+    start <- start + .start_step
     entry <- entry + .step
   }
 
   out
+}
+
+# ------------------------------------------------------------------------------
+
+adjust_partial <- function(partial, forward, before, after) {
+  if (partial) {
+    if (forward) {
+      after + 1L
+    } else {
+      before + 1L
+    }
+  } else {
+    1L
+  }
+}
+
+# number of positions lost to `.offset`
+adjust_n <- function(forward, offset, before, after) {
+  if (forward) {
+    offset - before
+  } else {
+    offset - after
+  }
+}
+
+iterations <- function(n, before, after, step, offset, partial, forward) {
+  width <- before + after + 1L
+  n <- n - adjust_n(forward, offset, before, after)
+  adjust <- adjust_partial(partial, forward, before, after)
+  ceiling((n - width + adjust) / step)
 }
 
 # ------------------------------------------------------------------------------
@@ -115,40 +239,6 @@ valid_dir <- function() {
 
 valid_align <- function() {
   c("right", "left", "center", "center-left", "center-right")
-}
-
-# ------------------------------------------------------------------------------
-
-offset_align <- function(size, align) {
-  switch(
-    align,
-    "left" = size,
-    "right" = 1L,
-    "center" =,
-    "center-left" = ceiling(median2(size)),
-    "center-right" = floor(median2(size))
-  )
-}
-
-offset_dir <- function(forward, size, align) {
-  if (forward) {
-    offset_align(size, align)
-  } else {
-    size - offset_align(size, align) + 1L
-  }
-}
-
-offset <- function(partial, forward, size, align) {
-  if (partial) {
-    offset_dir(forward, size, align)
-  } else {
-    1L
-  }
-}
-
-iterations <- function(n, size, step, align, partial, forward) {
-  offset <- offset(partial, forward, size, align)
-  ceiling((n - size + offset) / step)
 }
 
 # ------------------------------------------------------------------------------
