@@ -7,6 +7,8 @@
 // Defined below
 int iterations(int n, int before, int after, int step, int offset, bool partial, bool forward);
 
+void* get_assigner(SEXP x);
+
 // -----------------------------------------------------------------------------
 
 // just to test if it works
@@ -32,10 +34,17 @@ SEXP slurrr_slide(SEXP env,
   bool after_unbounded = r_lgl_get(after_unbounded_, 0);
 
   R_len_t x_n = vec_size(x);
-  SEXP out = PROTECT(vec_init(ptype, x_n));
 
-  // Determines assignment function used
-  bool ptype_is_list = TYPEOF(ptype) == VECSXP;
+  // Init and proxy our `out` container
+  PROTECT_INDEX out_prot_idx;
+  SEXP out = vec_init(ptype, x_n);
+  PROTECT_WITH_INDEX(out, &out_prot_idx);
+  out = vec_proxy(out);
+  REPROTECT(out, out_prot_idx);
+
+  // Get assignment function
+  void (*assigner)(SEXP, SEXP, SEXP, SEXP) = NULL;
+  assigner = (void (*)(SEXP, SEXP, SEXP, SEXP)) get_assigner(ptype);
 
   bool partial_unbounded = false;
   if (forward && after_unbounded | !forward && before_unbounded) {
@@ -95,85 +104,106 @@ SEXP slurrr_slide(SEXP env,
     }
   }
 
-  SEXP f_call = PROTECT(Rf_lang3(syms_dot_f, syms_slice, syms_dots));
+  // The indices to slice x with
+  PROTECT_INDEX i_prot_idx;
+  SEXP i = R_NilValue;
+  PROTECT_WITH_INDEX(i, &i_prot_idx);
 
+  // The current slice of x, defined as syms_slice in the env
+  PROTECT_INDEX slice_prot_idx;
+  SEXP slice = R_NilValue;
+  PROTECT_WITH_INDEX(slice, &slice_prot_idx);
+
+  // The result of each function call
   PROTECT_INDEX elt_prot_idx;
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
+  // The symbolic form of `.f(slice, ...)`
+  SEXP f_call = PROTECT(Rf_lang3(syms_dot_f, syms_slice, syms_dots));
+
   for (int j = 0; j < complete_iterations_n; ++j) {
-    // must be inside the loop since unbounded-ness could affect the length of i
-    SEXP i = PROTECT(r_seq(start, stop));
+    i = r_seq(start, stop);
+    REPROTECT(i, i_prot_idx);
 
-    SEXP x_slice = PROTECT(vec_slice(x, i));
-    Rf_defineVar(syms_slice, x_slice, env);
+    slice = vec_slice(x, i);
+    REPROTECT(slice, slice_prot_idx);
+    Rf_defineVar(syms_slice, slice, env);
 
-    SEXP elt = Rf_eval(f_call, env);
+    elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    // will be way more efficient at the C level with `copy = FALSE`
-    if (ptype_is_list) {
-      SET_VECTOR_ELT(out, entry_data[0] - 1, elt);
-    } else {
-      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
-      REPROTECT(elt, elt_prot_idx);
-
-      if (vec_size(elt) != 1) {
-        Rf_errorcall(R_NilValue, "The size of each element must be 1 if .ptype is not a list");
-      }
-
-      vec_assign_impl(out, entry, elt, false);
-    }
+    assigner(out, entry, elt, ptype);
 
     start += start_step;
     stop += stop_step;
     *entry_data += step;
-    UNPROTECT(2);
   }
 
   // Done if no `.partial`
   if (!partial) {
-    UNPROTECT(4);
+    UNPROTECT(6);
     return out;
   }
 
   // can't compute any partial iterations
   if (partial_iterations_n == 0) {
-    UNPROTECT(4);
+    UNPROTECT(6);
     return out;
   }
 
   for (int j = 0; j < partial_iterations_n; ++j) {
-    // must be inside the loop since unbounded-ness could affect the length of i
-    SEXP i = PROTECT(r_seq(start, endpoint));
+    i = r_seq(start, endpoint);
+    REPROTECT(i, i_prot_idx);
 
-    SEXP x_slice = PROTECT(vec_slice(x, i));
-    Rf_defineVar(syms_slice, x_slice, env);
+    slice = vec_slice(x, i);
+    REPROTECT(slice, slice_prot_idx);
 
-    SEXP elt = Rf_eval(f_call, env);
+    elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    // will be way more efficient at the C level with `copy = FALSE`
-    if (ptype_is_list) {
-      SET_VECTOR_ELT(out, entry_data[0] - 1, elt);
-    } else {
-      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
-      REPROTECT(elt, elt_prot_idx);
-
-      if (vec_size(elt) != 1) {
-        Rf_errorcall(R_NilValue, "The size of each element must be 1 if .ptype is not a list");
-      }
-
-      vec_assign_impl(out, entry, elt, false);
-    }
+    assigner(out, entry, elt, ptype);
 
     start += start_step;
     *entry_data += step;
-    UNPROTECT(2);
   }
 
   UNPROTECT(4);
-  return out;
+  return vec_restore(out, ptype, R_NilValue);
+}
+
+// -----------------------------------------------------------------------------
+
+// Two assignment functions. One for assigning directly into lists, and one
+// for assigning everything else (including data frame rows)
+
+void slurrr_assign_list(SEXP x, SEXP i, SEXP value, SEXP ptype) {
+  int loc = INTEGER(i)[0] - 1;
+  SET_VECTOR_ELT(x, loc, value);
+}
+
+void slurrr_assign(SEXP x, SEXP i, SEXP value, SEXP ptype) {
+  value = PROTECT(vctrs_cast(value, ptype, strings_empty, strings_empty));
+  value = PROTECT(vec_proxy(value));
+
+  if (vec_size(value) != 1) {
+    Rf_errorcall(R_NilValue, "The size of each element must be 1 if .ptype is not a list");
+  }
+
+  vec_assign_impl(x, i, value, false);
+  UNPROTECT(2);
+}
+
+bool is_bare_list(SEXP x) {
+  return OBJECT(x) != 1 && TYPEOF(x) == VECSXP;
+}
+
+void* get_assigner(SEXP x) {
+  if (is_bare_list(x)) {
+    return slurrr_assign_list;
+  } else {
+    return slurrr_assign;
+  }
 }
 
 // -----------------------------------------------------------------------------
