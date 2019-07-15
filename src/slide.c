@@ -43,8 +43,8 @@ SEXP slurrr_slide(SEXP env,
   REPROTECT(out, out_prot_idx);
 
   // Get assignment function
-  void (*assigner)(SEXP, SEXP, SEXP, SEXP) = NULL;
-  assigner = (void (*)(SEXP, SEXP, SEXP, SEXP)) get_assigner(ptype);
+  void (*assigner)(SEXP, SEXP, SEXP, PROTECT_INDEX, SEXP) = NULL;
+  assigner = (void (*)(SEXP, SEXP, SEXP, PROTECT_INDEX, SEXP)) get_assigner(ptype);
 
   bool partial_unbounded = false;
   if (forward && after_unbounded | !forward && before_unbounded) {
@@ -133,7 +133,7 @@ SEXP slurrr_slide(SEXP env,
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    assigner(out, entry, elt, ptype);
+    assigner(out, entry, elt, elt_prot_idx, ptype);
 
     start += start_step;
     stop += stop_step;
@@ -162,7 +162,7 @@ SEXP slurrr_slide(SEXP env,
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    assigner(out, entry, elt, ptype);
+    assigner(out, entry, elt, elt_prot_idx, ptype);
 
     start += start_step;
     *entry_data += step;
@@ -177,21 +177,22 @@ SEXP slurrr_slide(SEXP env,
 // Two assignment functions. One for assigning directly into lists, and one
 // for assigning everything else (including data frame rows)
 
-void slurrr_assign_list(SEXP x, SEXP i, SEXP value, SEXP ptype) {
+void slurrr_assign_list(SEXP x, SEXP i, SEXP value, PROTECT_INDEX value_prot_idx, SEXP ptype) {
   int loc = INTEGER(i)[0] - 1;
   SET_VECTOR_ELT(x, loc, value);
 }
 
-void slurrr_assign(SEXP x, SEXP i, SEXP value, SEXP ptype) {
-  value = PROTECT(vctrs_cast(value, ptype, strings_empty, strings_empty));
-  value = PROTECT(vec_proxy(value));
+void slurrr_assign(SEXP x, SEXP i, SEXP value, PROTECT_INDEX value_prot_idx, SEXP ptype) {
+  value = vctrs_cast(value, ptype, strings_empty, strings_empty);
+  REPROTECT(value, value_prot_idx);
+  value = vec_proxy(value);
+  REPROTECT(value, value_prot_idx);
 
   if (vec_size(value) != 1) {
     Rf_errorcall(R_NilValue, "The size of each element must be 1 if .ptype is not a list");
   }
 
   vec_assign_impl(x, i, value, false);
-  UNPROTECT(2);
 }
 
 bool is_bare_list(SEXP x) {
