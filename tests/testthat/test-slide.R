@@ -366,6 +366,21 @@ test_that("slide() is a rowwise iterator", {
 })
 
 # ------------------------------------------------------------------------------
+# .ptype
+
+# TODO - turn into a real test
+test_that(".ptypes with a vec_proxy() are restored to original type", {
+  expect_is(
+    slide_impl_c(
+      Sys.Date() + 1:5,
+      ~.x,
+      .ptype = as.POSIXlt(Sys.Date())
+    ),
+    "POSIXlt"
+  )
+})
+
+# ------------------------------------------------------------------------------
 # complex combinations
 
 test_that(".partial is only activated when an endpoint lands inside the output vector", {
