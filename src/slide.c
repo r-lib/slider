@@ -90,17 +90,17 @@ SEXP slurrr_slide(SEXP env,
 
   if (forward) {
     if (before_unbounded) {
-        start_step = 0;
+      start_step = 0;
     }
     if (after_unbounded) {
-        stop_step = 0;
+      stop_step = 0;
     }
   } else {
     if (before_unbounded) {
-        stop_step = 0;
+      stop_step = 0;
     }
     if (after_unbounded) {
-        start_step = 0;
+      start_step = 0;
     }
   }
 
