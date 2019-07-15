@@ -168,7 +168,7 @@ SEXP slurrr_slide(SEXP env,
     *entry_data += step;
   }
 
-  UNPROTECT(4);
+  UNPROTECT(6);
   return vec_restore(out, ptype, R_NilValue);
 }
 
