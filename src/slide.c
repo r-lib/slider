@@ -143,13 +143,13 @@ SEXP slurrr_slide(SEXP env,
   // Done if no `.partial`
   if (!partial) {
     UNPROTECT(6);
-    return out;
+    return vec_restore(out, ptype, R_NilValue);
   }
 
   // can't compute any partial iterations
   if (partial_iterations_n == 0) {
     UNPROTECT(6);
-    return out;
+    return vec_restore(out, ptype, R_NilValue);
   }
 
   for (int j = 0; j < partial_iterations_n; ++j) {
