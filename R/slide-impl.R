@@ -104,6 +104,7 @@ slide_impl <- function(.x,
   }
 
   out <- vec_init(.ptype, n = .x_n)
+  vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
   .ptype_is_list <- vctrs::vec_is(.ptype, list())
 
   # If we are unbounded in the direction we are going, we compute the number
