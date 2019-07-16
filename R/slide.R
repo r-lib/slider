@@ -1,41 +1,127 @@
 #' Slide
 #'
+#' `slide()` iterates through `.x` using a moving window, applying `.f` to each
+#' sub-window of `.x`. In slurrr, `slide()` is the most generic of the iterating
+#' functions, and `tile()` and `stretch()` are just special cases of `slide()`.
 #'
+#' @param .x `[vector]` The vector to iterate over.
 #'
-#' @param .x A list or atomic vector.
+#' @param .f `[function / formula]`
 #'
-#' @param .f A function or formula.
+#'   If a __function__, it is used as is.
+#'
+#'   If a __formula__, e.g. `~ .x + 2`, it is converted to a function with up
+#'   to two arguments: `.x` (single argument) or `.x` and `.y` (two arguments).
+#'   The `.` placeholder can be used instead of `.x`. This allows you to
+#'   create very compact anonymous functions with up to two inputs.
 #'
 #' @param ... Additional arguments passed on to the mapped function.
 #'
-#' @param .size A single positive integer. The size of the sliding window.
+#' @param .before `[positive integer]` The number of values _before_ the
+#'   current element to include in the sliding window. Set to `unbounded()`
+#'   to select all
 #'
-#' @param .step A single positive integer. The size of the step between each
-#'   function evaluation.
+#' @param .after `[positive integer]` The number of values _after_ the
+#'   current element to include in the sliding window.
 #'
-#' @param .align The alignment to begin the placement of results in the output
-#' vector.
+#' @param .step `[positive integer]` The number of elements to shift the
+#'   window forwards or backwards between function calls
+#'   (depending on the `.dir`).
 #'
-#'   One of:
-#'   * `"right"`
-#'   * `"left"`
-#'   * `"center"`
-#'   * `"center-left"`
-#'   * `"center-right"`
+#' @param .offset `[NULL / positive integer]` An offset from the beginning
+#'   (or end) of `.x` to place the first element in the output vector. If
+#'   `NULL`, this defaults to `.before` when sliding `"forward"` and `.after`
+#'   when sliding `"backward"`.
 #'
-#' When `.size` is even, `"center"` is assumed to be
-#' equivalent to `"center-left"`.
+#' @param .partial `[logical]` Should partial results be computed?
+#'   If sliding `"forward"`, this may result in partial results at the
+#'   _end_ of the vector. If sliding `"backwards"`, this may result in partial
+#'   results at the _start_ of the vector.
 #'
-#' @param .partial Should partial results be computed?
-#' If `TRUE` and `.dir == "forward"`, this may result in partial results at the
-#' _end_ of the vector. If `.dir == "backwards"`, this may result in partial
-#' results at the _start_ of the vector.
+#' @param .dir `["forward", "backward"]` The direction to slide.
 #'
-#' @param .dir The direction to slide.
+#' @details
 #'
-#' One of:
-#' - `"forward"`
-#' - `"backward"`
+#' Unlike `lapply()` / `purrr::map()`, which construct calls
+#' like `.f(.x[[i]], ...)`, the equivalent with `slide()`
+#' looks like `.f(vec_slice(.x, i), ...)` which is approximately
+#' `.f(.x[i], ...)` except in the case of data frames or arrays,
+#' which are iterated over rowwise.
+#'
+#' If `.x` has names, then the output will preserve those names.
+#'
+#' Using [vctrs::vec_cast()], the output of `.f` will be automatically cast
+#' to the type required by the version of `slide_*()` being used.
+#'
+#' @section Invariants:
+#'
+#'  * `vec_size(.x) == vec_size(slide(.x, .f))`
+#'
+#' @examples
+#'
+#' # The defaults work similarly to `map()`
+#' slide(1:10, ~.x)
+#'
+#' # Use `.before`, `.after`, and `.step` to control the window
+#' slide(1:10, ~.x, .before = 1)
+#'
+#' # This can be used for rolling means
+#' slide_dbl(rnorm(10), mean, .before = 2)
+#'
+#' # Or more flexible rolling operations
+#' slide(rnorm(10), ~ .x - mean(.x), .before = 2)
+#'
+#' # `.after` allows you to "align to the left"
+#' # rather than the right
+#' slide(1:10, ~.x, .after = 2)
+#'
+#' # And a mixture of `.before` and `.after`
+#' # allows you complete control over the exact alignment.
+#' # Below, "center alignment" is used.
+#' slide(1:10, ~.x, .before = 1, .after = 1)
+#'
+#' # The `.step` controls how the window is shifted along `.x`,
+#' # allowing you to "skip" iterations if you only need a less granular result
+#' slide(1:10, ~.x, .before = 2, .step = 3)
+#'
+#' # The `.offset` let's you shift the initial placement of results
+#' # in the output. In this example, the offset is set to place the first
+#' # element at position 3, even though a result could have been computed
+#' # and inserted at position 2.
+#' slide(1:5, ~.x, .before = 1, .offset = 2)
+#' slide(1:5, ~.x, .before = 1)
+#'
+#' # `.partial` controls the behavior at the end of the iterations. Here,
+#' # where normally a `NULL` would be placed at the end because there are not
+#' # 2 values available to construct a complete window, a partial result
+#' # computed with only 1 value is instead allowed.
+#' slide(1:5, ~.x, .after = 1, .partial = TRUE)
+#'
+#' # `.dir` controls the actual direction of sliding, and controls the
+#' # order in which the sub-window of `.x` is actually sliced out (notice
+#' # the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
+#' slide(1:5, ~.x, .before = 1, .step = 2)
+#' slide(1:5, ~.x, .before = 1, .step = 2, .dir = "backward")
+#'
+#' # ---------------------------------------------------------------------------
+#' # Data frames
+#'
+#' # Data frames are iterated over rowwise
+#' slide(mtcars, ~.x)
+#'
+#' # This means that any column name is easily accessible
+#' slide_dbl(mtcars, ~.x$mpg + .x$cyl)
+#'
+#' # More advanced rowwise iteration is available as well
+#' slide(mtcars, ~.x, .before = 1, .after = 1)
+#'
+#' # ---------------------------------------------------------------------------
+#' # Cumulative sliding
+#'
+#' # Using the sentinel value, `unbounded()`, you can ask `slide()` to pin the
+#' # start of the sliding window to the first element, effectively creating
+#' # a cumulative window
+#' slide(1:5, ~.x, .before = unbounded())
 #'
 #' @export
 slide <- function(.x,

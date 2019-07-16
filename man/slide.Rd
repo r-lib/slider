@@ -18,45 +18,130 @@ slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   "check_unique"))
 }
 \arguments{
-\item{.x}{A list or atomic vector.}
+\item{.x}{\code{[vector]} The vector to iterate over.}
 
-\item{.f}{A function or formula.}
+\item{.f}{\code{[function / formula]}
+
+If a \strong{function}, it is used as is.
+
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
+to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
+The \code{.} placeholder can be used instead of \code{.x}. This allows you to
+create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.step}{A single positive integer. The size of the step between each
-function evaluation.}
+\item{.before}{\code{[positive integer]} The number of values \emph{before} the
+current element to include in the sliding window. Set to \code{unbounded()}
+to select all}
 
-\item{.partial}{Should partial results be computed?
-If \code{TRUE} and \code{.dir == "forward"}, this may result in partial results at the
-\emph{end} of the vector. If \code{.dir == "backwards"}, this may result in partial
+\item{.after}{\code{[positive integer]} The number of values \emph{after} the
+current element to include in the sliding window.}
+
+\item{.step}{\code{[positive integer]} The number of elements to shift the
+window forwards or backwards between function calls
+(depending on the \code{.dir}).}
+
+\item{.offset}{\code{[NULL / positive integer]} An offset from the beginning
+(or end) of \code{.x} to place the first element in the output vector. If
+\code{NULL}, this defaults to \code{.before} when sliding \code{"forward"} and \code{.after}
+when sliding \code{"backward"}.}
+
+\item{.partial}{\code{[logical]} Should partial results be computed?
+If sliding \code{"forward"}, this may result in partial results at the
+\emph{end} of the vector. If sliding \code{"backwards"}, this may result in partial
 results at the \emph{start} of the vector.}
 
-\item{.dir}{The direction to slide.
-
-One of:
-\itemize{
-\item \code{"forward"}
-\item \code{"backward"}
-}}
-
-\item{.size}{A single positive integer. The size of the sliding window.}
-
-\item{.align}{The alignment to begin the placement of results in the output
-vector.
-
-One of:
-\itemize{
-\item \code{"right"}
-\item \code{"left"}
-\item \code{"center"}
-\item \code{"center-left"}
-\item \code{"center-right"}
-}
-
-When \code{.size} is even, \code{"center"} is assumed to be
-equivalent to \code{"center-left"}.}
+\item{.dir}{\code{["forward", "backward"]} The direction to slide.}
 }
 \description{
-Slide
+\code{slide()} iterates through \code{.x} using a moving window, applying \code{.f} to each
+sub-window of \code{.x}. In slurrr, \code{slide()} is the most generic of the iterating
+functions, and \code{tile()} and \code{stretch()} are just special cases of \code{slide()}.
+}
+\details{
+Unlike \code{lapply()} / \code{purrr::map()}, which construct calls
+like \code{.f(.x[[i]], ...)}, the equivalent with \code{slide()}
+looks like \code{.f(vec_slice(.x, i), ...)} which is approximately
+\code{.f(.x[i], ...)} except in the case of data frames or arrays,
+which are iterated over rowwise.
+
+If \code{.x} has names, then the output will preserve those names.
+
+Using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, the output of \code{.f} will be automatically cast
+to the type required by the version of \code{slide_*()} being used.
+}
+\section{Invariants}{
+
+\itemize{
+\item \code{vec_size(.x) == vec_size(slide(.x, .f))}
+}
+}
+
+\examples{
+
+# The defaults work similarly to `map()`
+slide(1:10, ~.x)
+
+# Use `.before`, `.after`, and `.step` to control the window
+slide(1:10, ~.x, .before = 1)
+
+# This can be used for rolling means
+slide_dbl(rnorm(10), mean, .before = 2)
+
+# Or more flexible rolling operations
+slide(rnorm(10), ~ .x - mean(.x), .before = 2)
+
+# `.after` allows you to "align to the left"
+# rather than the right
+slide(1:10, ~.x, .after = 2)
+
+# And a mixture of `.before` and `.after`
+# allows you complete control over the exact alignment.
+# Below, "center alignment" is used.
+slide(1:10, ~.x, .before = 1, .after = 1)
+
+# The `.step` controls how the window is shifted along `.x`,
+# allowing you to "skip" iterations if you only need a less granular result
+slide(1:10, ~.x, .before = 2, .step = 3)
+
+# The `.offset` let's you shift the initial placement of results
+# in the output. In this example, the offset is set to place the first
+# element at position 3, even though a result could have been computed
+# and inserted at position 2.
+slide(1:5, ~.x, .before = 1, .offset = 2)
+slide(1:5, ~.x, .before = 1)
+
+# `.partial` controls the behavior at the end of the iterations. Here,
+# where normally a `NULL` would be placed at the end because there are not
+# 2 values available to construct a complete window, a partial result
+# computed with only 1 value is instead allowed.
+slide(1:5, ~.x, .after = 1, .partial = TRUE)
+
+# `.dir` controls the actual direction of sliding, and controls the
+# order in which the sub-window of `.x` is actually sliced out (notice
+# the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
+slide(1:5, ~.x, .before = 1, .step = 2)
+slide(1:5, ~.x, .before = 1, .step = 2, .dir = "backward")
+
+# ---------------------------------------------------------------------------
+# Data frames
+
+# Data frames are iterated over rowwise
+slide(mtcars, ~.x)
+
+# This means that any column name is easily accessible
+slide_dbl(mtcars, ~.x$mpg + .x$cyl)
+
+# More advanced rowwise iteration is available as well
+slide(mtcars, ~.x, .before = 1, .after = 1)
+
+# ---------------------------------------------------------------------------
+# Cumulative sliding
+
+# Using the sentinel value, `unbounded()`, you can ask `slide()` to pin the
+# start of the sliding window to the first element, effectively creating
+# a cumulative window
+slide(1:5, ~.x, .before = unbounded())
+
 }
