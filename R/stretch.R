@@ -5,7 +5,8 @@ stretch <- function(.x,
                    .extend = 0L,
                    .step = 1L,
                    .partial = FALSE,
-                   .dir = "forward") {
+                   .dir = "forward",
+                   .ptype = list()) {
 
   if (identical(.dir, "forward")) {
     .before <- unbounded()
@@ -24,6 +25,7 @@ stretch <- function(.x,
     .step = .step,
     .offset = .offset,
     .partial = .partial,
-    .dir = .dir
+    .dir = .dir,
+    .ptype = .ptype
   )
 }
