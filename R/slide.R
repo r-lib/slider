@@ -155,7 +155,15 @@ slide <- function(.x,
                   .partial = FALSE,
                   .dir = "forward",
                   .ptype = list()) {
-  slide_impl(
+
+  if (is.null(.ptype)) {
+    .ptype <- list()
+    simplify <- TRUE
+  } else {
+    simplify <- FALSE
+  }
+
+  out <- slide_impl(
     .x,
     .f,
     ...,
@@ -167,6 +175,12 @@ slide <- function(.x,
     .dir = .dir,
     .ptype = .ptype
   )
+
+  if (simplify) {
+    out <- vec_simplify(out)
+  }
+
+  out
 }
 
 #' @rdname slide
