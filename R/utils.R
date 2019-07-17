@@ -1,3 +1,8 @@
+glubort <- function(..., .sep = "", .envir = parent.frame()) {
+  abort(glue::glue(..., .sep = .sep, .envir = .envir))
+}
+
+
 vec_simplify <- function(x, .ptype = NULL) {
   .ptype <- tryCatch(
     vec_ptype_common(!!!x, .ptype = .ptype),
