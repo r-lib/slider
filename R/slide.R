@@ -42,6 +42,9 @@
 #'
 #' @param .dir `["forward", "backward"]` The direction to slide.
 #'
+#' @param .ptype `[vector]` The prototype corresponding to the type of the
+#'   output. Defaults to a `list()`.
+#'
 #' @details
 #'
 #' Unlike `lapply()` / `purrr::map()`, which construct calls
@@ -150,7 +153,8 @@ slide <- function(.x,
                   .step = 1L,
                   .offset = NULL,
                   .partial = FALSE,
-                  .dir = "forward") {
+                  .dir = "forward",
+                  .ptype = list()) {
   slide_impl(
     .x,
     .f,
@@ -161,7 +165,7 @@ slide <- function(.x,
     .offset = .offset,
     .partial = .partial,
     .dir = .dir,
-    .ptype = list()
+    .ptype = .ptype
   )
 }
 
@@ -176,7 +180,7 @@ slide_dbl <- function(.x,
                       .offset = NULL,
                       .partial = FALSE,
                       .dir = "forward") {
-  slide_impl(
+  slide(
     .x,
     .f,
     ...,
@@ -186,7 +190,7 @@ slide_dbl <- function(.x,
     .offset = .offset,
     .partial = .partial,
     .dir = .dir,
-    .ptype = double()
+    .ptype = dbl()
   )
 }
 

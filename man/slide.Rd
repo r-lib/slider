@@ -7,7 +7,8 @@
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .partial = FALSE, .dir = "forward")
+  .offset = NULL, .partial = FALSE, .dir = "forward",
+  .ptype = list())
 
 slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .partial = FALSE, .dir = "forward")
@@ -55,6 +56,9 @@ If sliding \code{"forward"}, this may result in partial results at the
 results at the \emph{start} of the vector.}
 
 \item{.dir}{\code{["forward", "backward"]} The direction to slide.}
+
+\item{.ptype}{\code{[vector]} The prototype corresponding to the type of the
+output. Defaults to a \code{list()}.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify
