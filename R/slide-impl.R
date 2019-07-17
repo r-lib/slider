@@ -217,9 +217,13 @@ slide_impl <- function(.x,
     return(out)
   }
 
+  # Pin `stop` to the endpoint of `.x`
+  stop <- endpoint
+  stop_step <- 0L
+
   for (j in seq_len(partial_iterations_n)) {
     # cannot extract outside the loop, length of `i` is possibly shrinking each iteration
-    i <- seq(from = start, to = endpoint)
+    i <- seq(from = start, to = stop)
     elt <- .f(vec_slice(.x, i), ...)
 
     # will be way more efficient at the C level with `copy = FALSE`
@@ -230,6 +234,7 @@ slide_impl <- function(.x,
     }
 
     start <- start + start_step
+    stop <- stop + stop_step
     entry <- entry + entry_step
   }
 
