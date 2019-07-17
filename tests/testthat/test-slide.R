@@ -10,12 +10,12 @@ test_that("can use .before for right alignment", {
     slide(1:7, identity, .before = 1),
     list(
       NULL,
-      c(1, 2),
-      c(2, 3),
-      c(3, 4),
-      c(4, 5),
-      c(5, 6),
-      c(6, 7)
+      1:2,
+      2:3,
+      3:4,
+      4:5,
+      5:6,
+      6:7
     )
   )
 
@@ -24,11 +24,11 @@ test_that("can use .before for right alignment", {
     list(
       NULL,
       NULL,
-      c(1, 2, 3),
-      c(2, 3, 4),
-      c(3, 4, 5),
-      c(4, 5, 6),
-      c(5, 6, 7)
+      1:3,
+      2:4,
+      3:5,
+      4:6,
+      5:7
     )
   )
 })
@@ -37,12 +37,12 @@ test_that("can use .after for left alignment", {
   expect_equal(
     slide(1:7, identity, .after = 1),
     list(
-      c(1, 2),
-      c(2, 3),
-      c(3, 4),
-      c(4, 5),
-      c(5, 6),
-      c(6, 7),
+      1:2,
+      2:3,
+      3:4,
+      4:5,
+      5:6,
+      6:7,
       NULL
     )
   )
@@ -50,11 +50,11 @@ test_that("can use .after for left alignment", {
   expect_equal(
     slide(1:7, identity, .after = 2),
     list(
-      c(1, 2, 3),
-      c(2, 3, 4),
-      c(3, 4, 5),
-      c(4, 5, 6),
-      c(5, 6, 7),
+      1:3,
+      2:4,
+      3:5,
+      4:6,
+      5:7,
       NULL,
       NULL
     )
@@ -117,6 +117,85 @@ test_that("can use .before / .after for center-right alignment", {
       NULL
     )
   )
+})
+
+# ------------------------------------------------------------------------------
+# negative before
+
+test_that("can use a negative before to 'look forward'", {
+  expect_equal(
+    slide(1:5, identity, .before = -1, .after = 1),
+    list(
+      2L,
+      3L,
+      4L,
+      5L,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = -1, .after = unbounded()),
+    list(
+      2:5,
+      3:5,
+      4:5,
+      5L,
+      NULL
+    )
+  )
+})
+
+test_that("can use negative before with offset", {
+  expect_equal(
+    slide(1:5, identity, .before = -1, .after = 1, .offset = 1),
+    list(
+      NULL,
+      3L,
+      4L,
+      5L,
+      NULL
+    )
+  )
+})
+
+test_that("error if negative .before's abs() is > .after", {
+  expect_error(slide(1:5, identity, .before = -1), "cannot be greater than `.after`.")
+})
+
+test_that("both .before and .after cannot be negative", {
+  expect_error(slide(1:5, identity, .before = -1, .after = -1), "cannot both be negative.")
+})
+
+# ------------------------------------------------------------------------------
+# negative after
+
+test_that("can use a negative .after to 'look backward'", {
+  expect_equal(
+    slide(1:5, identity, .before = 1, .after = -1),
+    list(
+      NULL,
+      1L,
+      2L,
+      3L,
+      4L
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = -1),
+    list(
+      NULL,
+      1L,
+      1:2,
+      1:3,
+      1:4
+    )
+  )
+})
+
+test_that("error if negative .after's abs() is > .before", {
+  expect_error(slide(1:5, identity, .after = -1), "cannot be greater than `.before`.")
 })
 
 # ------------------------------------------------------------------------------
@@ -341,6 +420,210 @@ test_that(".offset must be at least .before/.after", {
 })
 
 # ------------------------------------------------------------------------------
+# unbounded()
+
+test_that("can use unbounded() in .before for cumulative sliding", {
+  expect_equal(
+    slide(1:5, identity, .before = unbounded()),
+    list(
+      1L,
+      1:2,
+      1:3,
+      1:4,
+      1:5
+    )
+  )
+})
+
+test_that("can use unbounded() in .before + set .after", {
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = 1L),
+    list(
+      1:2,
+      1:3,
+      1:4,
+      1:5,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = -1L),
+    list(
+      NULL,
+      1L,
+      1:2,
+      1:3,
+      1:4
+    )
+  )
+})
+
+test_that("can use unbounded() in .after for cumulative sliding", {
+  expect_equal(
+    slide(1:5, identity, .after = unbounded()),
+    list(
+      1:5,
+      2:5,
+      3:5,
+      4:5,
+      5L
+    )
+  )
+})
+
+test_that("can use unbounded() in .after + set .before", {
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .before = 1L),
+    list(
+      NULL,
+      1:5,
+      2:5,
+      3:5,
+      4:5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .before = -1L),
+    list(
+      2:5,
+      3:5,
+      4:5,
+      5L,
+      NULL
+    )
+  )
+})
+
+test_that("can use unbounded() when going backwards", {
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .dir = "backward"),
+    list(
+      1L,
+      2:1,
+      3:1,
+      4:1,
+      5:1
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .dir = "backward"),
+    list(
+      5:1,
+      5:2,
+      5:3,
+      5:4,
+      5L
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = 1L, .dir = "backward"),
+    list(
+      2:1,
+      3:1,
+      4:1,
+      5:1,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .before = 1L, .dir = "backward"),
+    list(
+      NULL,
+      5:1,
+      5:2,
+      5:3,
+      5:4
+    )
+  )
+})
+
+test_that("can use unbounded() with .offset", {
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .offset = 1L),
+    list(
+      NULL,
+      2:5,
+      3:5,
+      4:5,
+      5L
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .offset = 1L),
+    list(
+      NULL,
+      1:2,
+      1:3,
+      1:4,
+      1:5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .dir = "backward", .offset = 1L),
+    list(
+      1L,
+      2:1,
+      3:1,
+      4:1,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .dir = "backward", .offset = 1L),
+    list(
+      5:1,
+      5:2,
+      5:3,
+      5:4,
+      NULL
+    )
+  )
+})
+
+test_that("can be doubly unbounded()", {
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = unbounded()),
+    list(
+      1:5,
+      1:5,
+      1:5,
+      1:5,
+      1:5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .dir = "backward"),
+    list(
+      5:1,
+      5:1,
+      5:1,
+      5:1,
+      5:1
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .offset = 1L),
+    list(
+      NULL,
+      1:5,
+      1:5,
+      1:5,
+      1:5
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
 # data frames
 
 test_that("slide() is a rowwise iterator", {
@@ -418,15 +701,11 @@ test_that(".partial is only activated when an endpoint lands inside the output v
 # validation
 
 test_that("cannot use invalid .before", {
-  expect_error(slide(1, identity, .before = -1), "at least 0, not -1")
-
   expect_error(slide(1, identity, .before = c(1, 2)), class = "vctrs_error_assert_size")
   expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .after", {
-  expect_error(slide(1, identity, .after = -1), "at least 0, not -1")
-
   expect_error(slide(1, identity, .after = c(1, 2)), class = "vctrs_error_assert_size")
   expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_cast_lossy")
 })
