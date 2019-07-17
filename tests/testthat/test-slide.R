@@ -670,6 +670,13 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
   )
 })
 
+test_that("`.ptype = NULL` validates that element lengths are 1", {
+  expect_error(
+    slide(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
+    "Result 1 is length 2."
+  )
+})
+
 test_that(".ptypes with a vec_proxy() are restored to original type", {
   expect_is(
     slide(Sys.Date() + 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),
