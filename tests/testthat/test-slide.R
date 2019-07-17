@@ -651,14 +651,28 @@ test_that("slide() is a rowwise iterator", {
 # ------------------------------------------------------------------------------
 # .ptype
 
-# TODO - turn into a real test
+test_that(".ptype is respected", {
+  expect_equal(slide(1, ~.x), list(1))
+  expect_equal(slide(1, ~.x, .ptype = int()), 1L)
+  expect_error(slide(1, ~.x, .ptype = new_date()), class = "vctrs_error_incompatible_type")
+})
+
+test_that("`.ptype = NULL` results in 'guessed' .ptype", {
+  expect_equal(
+    slide(1, ~.x, .ptype = NULL),
+    slide(1, ~.x, .ptype = dbl())
+  )
+
+  # failure = list()
+  expect_equal(
+    slide(1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+    list("hello", 1)
+  )
+})
+
 test_that(".ptypes with a vec_proxy() are restored to original type", {
   expect_is(
-    slide_impl_c(
-      Sys.Date() + 1:5,
-      ~.x,
-      .ptype = as.POSIXlt(Sys.Date())
-    ),
+    slide(Sys.Date() + 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),
     "POSIXlt"
   )
 })
