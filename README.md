@@ -23,6 +23,150 @@ And the development version from [GitHub](https://github.com/) with:
 remotes::install_github("DavisVaughan/slurrr")
 ```
 
+## Examples
+
+The help page for `slide()` has many examples, but here are a few:
+
+``` r
+library(slurrr)
+```
+
+The classic example would be to do a moving average. `slide()` handles
+this with a combination of the `.before` and `.after` arguments, which
+control the width of the window and the alignment.
+
+``` r
+# Moving average (Aligned right)
+slide_dbl(1:5, ~mean(.x), .before = 2)
+#> [1] NA NA  2  3  4
+
+# Align left and center aligned
+slide_dbl(1:5, ~mean(.x), .after = 2)
+#> [1]  2  3  4 NA NA
+
+slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
+#> [1] NA  2  3  4 NA
+```
+
+With `unbounded()`, you can do a “cumulative slide” to compute
+cumulative expressions.
+
+``` r
+slide(1:4, ~.x, .before = unbounded())
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+
+# De-cumulative (?) sliding + start at position 2
+slide(1:4, ~.x, .before = 1, .after = unbounded())
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> [1] 1 2 3 4
+#> 
+#> [[3]]
+#> [1] 2 3 4
+#> 
+#> [[4]]
+#> [1] 3 4
+```
+
+With the `.partial` argument, you can compute on partial results even if
+they don’t make up a complete sliding window as defined by `.before` and
+`.after`.
+
+``` r
+slide(1:4, ~.x, .after = 2)
+#> [[1]]
+#> [1] 1 2 3
+#> 
+#> [[2]]
+#> [1] 2 3 4
+#> 
+#> [[3]]
+#> NULL
+#> 
+#> [[4]]
+#> NULL
+
+slide(1:4, ~.x, .after = 2, .partial = TRUE)
+#> [[1]]
+#> [1] 1 2 3
+#> 
+#> [[2]]
+#> [1] 2 3 4
+#> 
+#> [[3]]
+#> [1] 3 4
+#> 
+#> [[4]]
+#> [1] 4
+```
+
+## Data frames
+
+Unlike `purrr::map()`, `slide()` iterates over data frames in a row wise
+fashion. Interestingly this means the default of `slide()` becomes a
+generic row wise iterator, with nice syntax for accessing data frame
+columns.
+
+``` r
+cars <- mtcars[1:4,]
+
+slide(cars, ~.x)
+#> [[1]]
+#>           mpg cyl disp  hp drat   wt  qsec vs am gear carb
+#> Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4
+#> 
+#> [[2]]
+#>               mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
+#> 
+#> [[3]]
+#>             mpg cyl disp hp drat   wt  qsec vs am gear carb
+#> Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1
+#> 
+#> [[4]]
+#>                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+
+slide_dbl(cars, ~.x$mpg + .x$drat)
+#> [1] 24.90 24.90 26.65 24.48
+```
+
+You can still use all of the other arguments to `slide()` to flexibly
+slide over data frames too:
+
+``` r
+slide(cars, ~.x, .before = 2)
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#>                mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+#> Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+#> 
+#> [[4]]
+#>                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4 Wag  21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+#> Datsun 710     22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+#> Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+```
+
 ## Window functions
 
 A good explanation of window
