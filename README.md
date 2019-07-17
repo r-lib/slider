@@ -40,10 +40,11 @@ control the width of the window and the alignment.
 slide_dbl(1:5, ~mean(.x), .before = 2)
 #> [1] NA NA  2  3  4
 
-# Align left and center aligned
+# Align left
 slide_dbl(1:5, ~mean(.x), .after = 2)
 #> [1]  2  3  4 NA NA
 
+# Center aligned
 slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
 #> [1] NA  2  3  4 NA
 ```

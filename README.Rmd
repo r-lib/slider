@@ -47,9 +47,10 @@ The classic example would be to do a moving average. `slide()` handles this with
 # Moving average (Aligned right)
 slide_dbl(1:5, ~mean(.x), .before = 2)
 
-# Align left and center aligned
+# Align left
 slide_dbl(1:5, ~mean(.x), .after = 2)
 
+# Center aligned
 slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
 ```
 
