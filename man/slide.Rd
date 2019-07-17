@@ -31,21 +31,23 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[positive integer]} The number of values \emph{before} the
+\item{.before}{\code{[integer]} The number of values \emph{before} the
 current element to include in the sliding window. Set to \code{unbounded()}
-to select all}
+to select all elements before the current position. A negative value
+is allowed, and allows you to "look forward" as well.}
 
-\item{.after}{\code{[positive integer]} The number of values \emph{after} the
-current element to include in the sliding window.}
+\item{.after}{\code{[integer]} The number of values \emph{after} the
+current element to include in the sliding window. Set to \code{unbounded()}
+to select all elements after the current position. A negative value
+is allowed, and allows you to "look backward" as well.}
 
 \item{.step}{\code{[positive integer]} The number of elements to shift the
-window forwards or backwards between function calls
-(depending on the \code{.dir}).}
+window forward (or backward, depending on \code{.dir}) between function calls.}
 
 \item{.offset}{\code{[NULL / positive integer]} An offset from the beginning
-(or end) of \code{.x} to place the first element in the output vector. If
-\code{NULL}, this defaults to \code{.before} when sliding \code{"forward"} and \code{.after}
-when sliding \code{"backward"}.}
+(or end, depending on \code{.dir}) of \code{.x} to place the first element in
+the output vector. If \code{NULL}, this is computed automatically as the first
+location where a complete sliding window can be generated.}
 
 \item{.partial}{\code{[logical]} Should partial results be computed?
 If sliding \code{"forward"}, this may result in partial results at the
@@ -53,9 +55,26 @@ If sliding \code{"forward"}, this may result in partial results at the
 results at the \emph{start} of the vector.}
 
 \item{.dir}{\code{["forward", "backward"]} The direction to slide.}
+
+\item{.names_to}{Optionally, the name of a column where the names
+of \code{...} arguments are copied. These names are useful to identify
+which row comes from which input. If supplied, \code{...} must be
+named.}
+
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
+\code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
+options.
+
+With \code{vec_rbind()}, the repair function is applied to all inputs
+separately. This is because \code{vec_rbind()} needs to align their
+columns before binding the rows, and thus needs all inputs to
+have unique names. On the other hand, \code{vec_cbind()} applies the
+repair function after all inputs have been concatenated together
+in a final data frame. Hence \code{vec_cbind()} allows the more
+permissive minimal names repair.}
 }
 \description{
-\code{slide()} iterates through \code{.x} using a moving window, applying \code{.f} to each
+\code{slide()} iterates through \code{.x} using a sliding window, applying \code{.f} to each
 sub-window of \code{.x}. In slurrr, \code{slide()} is the most generic of the iterating
 functions, and \code{tile()} and \code{stretch()} are just special cases of \code{slide()}.
 }
@@ -64,7 +83,7 @@ Unlike \code{lapply()} / \code{purrr::map()}, which construct calls
 like \code{.f(.x[[i]], ...)}, the equivalent with \code{slide()}
 looks like \code{.f(vec_slice(.x, i), ...)} which is approximately
 \code{.f(.x[i], ...)} except in the case of data frames or arrays,
-which are iterated over rowwise.
+which are iterated over row-wise.
 
 If \code{.x} has names, then the output will preserve those names.
 
@@ -92,8 +111,7 @@ slide_dbl(rnorm(10), mean, .before = 2)
 # Or more flexible rolling operations
 slide(rnorm(10), ~ .x - mean(.x), .before = 2)
 
-# `.after` allows you to "align to the left"
-# rather than the right
+# `.after` allows you to "align to the left" rather than the right
 slide(1:10, ~.x, .after = 2)
 
 # And a mixture of `.before` and `.after`
@@ -133,7 +151,8 @@ slide(mtcars, ~.x)
 # This means that any column name is easily accessible
 slide_dbl(mtcars, ~.x$mpg + .x$cyl)
 
-# More advanced rowwise iteration is available as well
+# More advanced rowwise iteration is available as well by using the
+# other arguments
 slide(mtcars, ~.x, .before = 1, .after = 1)
 
 # ---------------------------------------------------------------------------
@@ -143,5 +162,21 @@ slide(mtcars, ~.x, .before = 1, .after = 1)
 # start of the sliding window to the first element, effectively creating
 # a cumulative window
 slide(1:5, ~.x, .before = unbounded())
+
+# Same with `.after`, this creates a window where you start with all of the
+# elements, but decrease the total number over each iteration
+slide(1:5, ~.x, .after = unbounded())
+
+# ---------------------------------------------------------------------------
+# Negative `.before` / `.after`
+
+# `.before` is allowed to be negative, allowing you to "look forward" in
+# your vector. Note that `abs(.before) <= .after` must hold if `.before` is
+# negative. In this example, we look forward to elements in locations 2 and 3
+# but place the result in position 1 in the output.
+slide(1:5, ~.x, .before = -1, .after = 2)
+
+# `.after` can be negative as well to "look backwards"
+slide(1:5, ~.x, .before = 2, .after = -1)
 
 }

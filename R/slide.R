@@ -1,6 +1,6 @@
 #' Slide
 #'
-#' `slide()` iterates through `.x` using a moving window, applying `.f` to each
+#' `slide()` iterates through `.x` using a sliding window, applying `.f` to each
 #' sub-window of `.x`. In slurrr, `slide()` is the most generic of the iterating
 #' functions, and `tile()` and `stretch()` are just special cases of `slide()`.
 #'
@@ -17,21 +17,23 @@
 #'
 #' @param ... Additional arguments passed on to the mapped function.
 #'
-#' @param .before `[positive integer]` The number of values _before_ the
+#' @param .before `[integer]` The number of values _before_ the
 #'   current element to include in the sliding window. Set to `unbounded()`
-#'   to select all
+#'   to select all elements before the current position. A negative value
+#'   is allowed, and allows you to "look forward" as well.
 #'
-#' @param .after `[positive integer]` The number of values _after_ the
-#'   current element to include in the sliding window.
+#' @param .after `[integer]` The number of values _after_ the
+#'   current element to include in the sliding window. Set to `unbounded()`
+#'   to select all elements after the current position. A negative value
+#'   is allowed, and allows you to "look backward" as well.
 #'
 #' @param .step `[positive integer]` The number of elements to shift the
-#'   window forwards or backwards between function calls
-#'   (depending on the `.dir`).
+#'   window forward (or backward, depending on `.dir`) between function calls.
 #'
 #' @param .offset `[NULL / positive integer]` An offset from the beginning
-#'   (or end) of `.x` to place the first element in the output vector. If
-#'   `NULL`, this defaults to `.before` when sliding `"forward"` and `.after`
-#'   when sliding `"backward"`.
+#'   (or end, depending on `.dir`) of `.x` to place the first element in
+#'   the output vector. If `NULL`, this is computed automatically as the first
+#'   location where a complete sliding window can be generated.
 #'
 #' @param .partial `[logical]` Should partial results be computed?
 #'   If sliding `"forward"`, this may result in partial results at the
@@ -46,7 +48,7 @@
 #' like `.f(.x[[i]], ...)`, the equivalent with `slide()`
 #' looks like `.f(vec_slice(.x, i), ...)` which is approximately
 #' `.f(.x[i], ...)` except in the case of data frames or arrays,
-#' which are iterated over rowwise.
+#' which are iterated over row-wise.
 #'
 #' If `.x` has names, then the output will preserve those names.
 #'
@@ -71,8 +73,7 @@
 #' # Or more flexible rolling operations
 #' slide(rnorm(10), ~ .x - mean(.x), .before = 2)
 #'
-#' # `.after` allows you to "align to the left"
-#' # rather than the right
+#' # `.after` allows you to "align to the left" rather than the right
 #' slide(1:10, ~.x, .after = 2)
 #'
 #' # And a mixture of `.before` and `.after`
@@ -112,7 +113,8 @@
 #' # This means that any column name is easily accessible
 #' slide_dbl(mtcars, ~.x$mpg + .x$cyl)
 #'
-#' # More advanced rowwise iteration is available as well
+#' # More advanced rowwise iteration is available as well by using the
+#' # other arguments
 #' slide(mtcars, ~.x, .before = 1, .after = 1)
 #'
 #' # ---------------------------------------------------------------------------
@@ -122,6 +124,22 @@
 #' # start of the sliding window to the first element, effectively creating
 #' # a cumulative window
 #' slide(1:5, ~.x, .before = unbounded())
+#'
+#' # Same with `.after`, this creates a window where you start with all of the
+#' # elements, but decrease the total number over each iteration
+#' slide(1:5, ~.x, .after = unbounded())
+#'
+#' # ---------------------------------------------------------------------------
+#' # Negative `.before` / `.after`
+#'
+#' # `.before` is allowed to be negative, allowing you to "look forward" in
+#' # your vector. Note that `abs(.before) <= .after` must hold if `.before` is
+#' # negative. In this example, we look forward to elements in locations 2 and 3
+#' # but place the result in position 1 in the output.
+#' slide(1:5, ~.x, .before = -1, .after = 2)
+#'
+#' # `.after` can be negative as well to "look backwards"
+#' slide(1:5, ~.x, .before = 2, .after = -1)
 #'
 #' @export
 slide <- function(.x,
@@ -172,6 +190,7 @@ slide_dbl <- function(.x,
   )
 }
 
+#' @inheritParams vctrs::vec_rbind
 #' @rdname slide
 #' @export
 slide_dfr <- function(.x,
