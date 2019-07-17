@@ -7,7 +7,10 @@
 
 <!-- badges: end -->
 
-The goal of slurrr is to …
+The goal of slurrr is to provide a general purpose sliding window
+iterator, inspired heavily by SQL’s window functions.
+
+For examples and documentation, see `?slide`.
 
 ## Installation
 
