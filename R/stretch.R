@@ -7,11 +7,7 @@ stretch <- function(.x,
                    .partial = FALSE,
                    .dir = "forward") {
 
-  arg_match(.dir, valid_dir())
-  vec_assert(.dir, character(), 1L)
-  forward <- .dir == "forward"
-
-  if (forward) {
+  if (identical(.dir, "forward")) {
     .before <- unbounded()
     .after <- .extend
   } else {
