@@ -145,7 +145,7 @@
 #' slide(1:5, ~.x, .before = 2, .after = -1)
 #'
 #' @export
-slide <- function(.x,
+slide_old <- function(.x,
                   .f,
                   ...,
                   .before = 0L,

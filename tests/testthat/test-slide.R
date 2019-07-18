@@ -9,7 +9,7 @@ test_that("can use .before for right alignment", {
   expect_equal(
     slide(1:7, identity, .before = 1),
     list(
-      NULL,
+      1L,
       1:2,
       2:3,
       3:4,
@@ -22,8 +22,8 @@ test_that("can use .before for right alignment", {
   expect_equal(
     slide(1:7, identity, .before = 2),
     list(
-      NULL,
-      NULL,
+      1L,
+      1:2,
       1:3,
       2:4,
       3:5,
@@ -43,7 +43,7 @@ test_that("can use .after for left alignment", {
       4:5,
       5:6,
       6:7,
-      NULL
+      7L
     )
   )
 
@@ -55,8 +55,8 @@ test_that("can use .after for left alignment", {
       3:5,
       4:6,
       5:7,
-      NULL,
-      NULL
+      6:7,
+      7L
     )
   )
 })
@@ -65,26 +65,26 @@ test_that("can use .before / .after for center alignment", {
   expect_equal(
     slide(1:7, identity, .before = 1, .after = 1),
     list(
-      NULL,
+      1:2,
       1:3,
       2:4,
       3:5,
       4:6,
       5:7,
-      NULL
+      6:7
     )
   )
 
   expect_equal(
     slide(1:7, identity, .before = 2, .after = 2),
     list(
-      NULL,
-      NULL,
+      1:3,
+      1:4,
       1:5,
       2:6,
       3:7,
-      NULL,
-      NULL
+      4:7,
+      5:7
     )
   )
 })
@@ -93,13 +93,13 @@ test_that("can use .before / .after for center-left alignment", {
   expect_equal(
     slide(1:7, identity, .before = 2, .after = 1),
     list(
-      NULL,
-      NULL,
+      1:2,
+      1:3,
       1:4,
       2:5,
       3:6,
       4:7,
-      NULL
+      5:7
     )
   )
 })
@@ -108,13 +108,13 @@ test_that("can use .before / .after for center-right alignment", {
   expect_equal(
     slide(1:7, identity, .before = 1, .after = 2),
     list(
-      NULL,
+      1:3,
       1:4,
       2:5,
       3:6,
       4:7,
-      NULL,
-      NULL
+      5:7,
+      6:7
     )
   )
 })
@@ -227,47 +227,59 @@ test_that("can step to skip over function calls", {
       7
     )
   )
+
+  expect_equal(
+    slide(1:6, identity, .before = 1, .step = 2),
+    list(
+      1,
+      NULL,
+      2:3,
+      NULL,
+      4:5,
+      NULL
+    )
+  )
 })
 
 # ------------------------------------------------------------------------------
-# .partial
+# .complete
 
-test_that(".partial doesn't change the result if not required", {
+test_that(".complete doesn't change the result if not required", {
   expect_equal(
-    slide(1:7, identity, .partial = TRUE),
+    slide(1:7, identity, .complete = TRUE),
     slide(1:7, identity)
   )
 
   expect_equal(
-    slide(1:7, identity, .partial = TRUE, .step = 2L),
+    slide(1:7, identity, .complete = TRUE, .step = 2L),
     slide(1:7, identity, .step = 2L)
   )
 })
 
-test_that(".partial works when the size shrinks over the last iterations", {
+test_that(".complete works when the size shrinks over the last iterations", {
   expect_equal(
-    slide(1:7, identity, .partial = TRUE, .after = 2L),
+    slide(1:7, identity, .complete = TRUE, .after = 2L),
     list(
       1:3,
       2:4,
       3:5,
       4:6,
       5:7,
-      6:7,
-      7
+      NULL,
+      NULL
     )
   )
 })
 
-test_that(".partial works when doing center alignment", {
+test_that(".complete works when doing center alignment", {
   expect_equal(
-    slide(1:5, identity, .partial = TRUE, .before = 1, .after = 1),
+    slide(1:5, identity, .complete = TRUE, .before = 1, .after = 1),
     list(
       NULL,
       1:3,
       2:4,
       3:5,
-      4:5
+      NULL
     )
   )
 })
@@ -303,7 +315,7 @@ test_that(".dir keeps intuitive alignment with .before / .after", {
   expect_equal(
     slide(1:5, identity, .before = 1, .step = 2, .dir = "backward"),
     list(
-      NULL,
+      1L,
       NULL,
       3:2,
       NULL,
@@ -314,21 +326,21 @@ test_that(".dir keeps intuitive alignment with .before / .after", {
   expect_equal(
     slide(1:5, identity, .after = 1, .step = 2, .dir = "backward"),
     list(
+      2:1,
       NULL,
-      3:2,
+      4:3,
       NULL,
-      5:4,
-      NULL
+      5L
     )
   )
 })
 
-test_that(".dir backwards + .partial is meaningful with `.before > 0`", {
+test_that(".dir backwards + .complete is meaningful with `.before > 0`", {
   expect_equal(
-    slide(1:5, identity, .partial = TRUE, .before = 2L, .dir = "backward"),
+    slide(1:5, identity, .complete = TRUE, .before = 2L, .dir = "backward"),
     list(
-      1,
-      2:1,
+      NULL,
+      NULL,
       3:1,
       4:2,
       5:3
@@ -385,37 +397,101 @@ test_that(".offset shifts starting point", {
   )
 })
 
-test_that(".offset with .before/.after cannot imply a location larger than the size of .x", {
-  expect_error(
-    slide(1:5, identity, .offset = 5),
-    "`.offset` and `.after` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+test_that(".offset can be smaller than .before/.after", {
+  expect_equal(
+    slide(1:5, identity, .offset = 3, .before = 4),
+    list(
+      NULL,
+      NULL,
+      NULL,
+      1:4,
+      1:5
+    )
   )
 
-  expect_error(
-    slide(1:5, identity, .offset = 2, .after = 3),
-    "`.offset` and `.after` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  expect_equal(
+    slide(1:5, identity, .offset = 3, .after = 4, .dir = "backward"),
+    list(
+      5:1,
+      5:2,
+      NULL,
+      NULL,
+      NULL
+    )
   )
 
-  expect_error(
-    slide(1:5, identity, .offset = 5, .dir = "backward"),
-    "`.offset` and `.before` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
-  )
-
-  expect_error(
-    slide(1:5, identity, .offset = 2, .before = 3, .dir = "backward"),
-    "`.offset` and `.before` imply a location [(]6[)] outside the size of `.x` [(]5[)]"
+  expect_equal(
+    slide(1:5, identity, .offset = 1, .before = 3, .after = 3),
+    list(
+      NULL,
+      1:5,
+      1:5,
+      1:5,
+      2:5
+    )
   )
 })
 
-test_that(".offset must be at least .before/.after", {
-  expect_error(
-    slide(1:5, identity, .offset = 3, .before = 4),
-    "`.offset` [(]3[)] must be at least as large as `.before` [(]4[)]"
+test_that(".offset can be smaller in magnitude than .after and is adjusted automatically", {
+  expect_equal(
+    slide(1:5, ~.x, .before = 3, .after = -2, .offset = 1),
+    list(
+      NULL,
+      NULL,
+      1L,
+      1:2,
+      2:3
+    )
+  )
+})
+
+test_that(".offset can be smaller in magnitude than .before and is adjusted automatically", {
+  expect_equal(
+    slide(1:5, ~.x, .after = 3, .before = -2, .offset = 1, .dir = "backward"),
+    list(
+      4:3,
+      5:4,
+      5L,
+      NULL,
+      NULL
+    )
+  )
+})
+
+test_that(".offset is allowed to be completely outside of .x", {
+  expect_equal(
+    slide(1:5, ~.x, .offset = 5),
+    list(
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    )
   )
 
-  expect_error(
-    slide(1:5, identity, .offset = 3, .after = 4, .dir = "backward"),
-    "`.offset` [(]3[)] must be at least as large as `.after` [(]4[)]"
+  expect_equal(
+    slide(1:5, identity, .offset = 5, .dir = "backward"),
+    list(
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    )
+  )
+})
+
+test_that(".offset + .before + .complete can result in all NULLs", {
+  expect_equal(
+    slide(1:5, ~.x, .before = 5, .offset = 3, .complete = TRUE),
+    list(
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    )
   )
 })
 
@@ -443,7 +519,7 @@ test_that("can use unbounded() in .before + set .after", {
       1:3,
       1:4,
       1:5,
-      NULL
+      1:5
     )
   )
 
@@ -475,6 +551,17 @@ test_that("can use unbounded() in .after for cumulative sliding", {
 test_that("can use unbounded() in .after + set .before", {
   expect_equal(
     slide(1:5, identity, .after = unbounded(), .before = 1L),
+    list(
+      1:5,
+      1:5,
+      2:5,
+      3:5,
+      4:5
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .before = 1L, .complete = TRUE),
     list(
       NULL,
       1:5,
@@ -526,12 +613,34 @@ test_that("can use unbounded() when going backwards", {
       3:1,
       4:1,
       5:1,
+      5:1
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = 1L, .dir = "backward", .complete = TRUE),
+    list(
+      2:1,
+      3:1,
+      4:1,
+      5:1,
       NULL
     )
   )
 
   expect_equal(
     slide(1:5, identity, .after = unbounded(), .before = 1L, .dir = "backward"),
+    list(
+      5:1,
+      5:1,
+      5:2,
+      5:3,
+      5:4
+    )
+  )
+
+  expect_equal(
+    slide(1:5, identity, .after = unbounded(), .before = 1L, .dir = "backward", .complete = TRUE),
     list(
       NULL,
       5:1,
@@ -621,6 +730,17 @@ test_that("can be doubly unbounded()", {
       1:5
     )
   )
+
+  expect_equal(
+    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .complete = TRUE),
+    list(
+      1:5,
+      1:5,
+      1:5,
+      1:5,
+      1:5
+    )
+  )
 })
 
 # ------------------------------------------------------------------------------
@@ -640,6 +760,15 @@ test_that("slide() is a rowwise iterator", {
 
   expect_equal(
     slide(x, identity, .before = 1L),
+    list(
+      vec_slice(x, 1L),
+      vec_slice(x, 1:2),
+      vec_slice(x, 2:3)
+    )
+  )
+
+  expect_equal(
+    slide(x, identity, .before = 1L, .complete = TRUE),
     list(
       NULL,
       vec_slice(x, 1:2),
@@ -685,40 +814,6 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
 })
 
 # ------------------------------------------------------------------------------
-# complex combinations
-
-test_that(".partial is only activated when an endpoint lands inside the output vector", {
-  # here, partial is not active because the final step would place the endpoint at position -1
-  expect_equal(
-    slide(1:7, identity, .partial = TRUE, .before = 1L, .after = 1L, .dir = "backward", .step = 2L),
-    list(
-      NULL,
-      3:1,
-      NULL,
-      5:3,
-      NULL,
-      7:5,
-      NULL
-    )
-  )
-
-  # now partial is activated because the last point lands at 0
-  expect_equal(
-    slide(1:8, identity, .partial = TRUE, .before = 1L, .after = 1L, .dir = "backward", .step = 2L),
-    list(
-      2:1,
-      NULL,
-      4:2,
-      NULL,
-      6:4,
-      NULL,
-      8:6,
-      NULL
-    )
-  )
-})
-
-# ------------------------------------------------------------------------------
 # validation
 
 test_that("cannot use invalid .before", {
@@ -732,8 +827,6 @@ test_that("cannot use invalid .after", {
 })
 
 test_that("cannot use invalid .offset", {
-  expect_error(slide(1, identity, .offset = -1), "at least 0, not -1")
-
   expect_error(slide(1, identity, .offset = c(1, 2)), class = "vctrs_error_assert_size")
   expect_error(slide(1, identity, .offset = "x"), class = "vctrs_error_cast_lossy")
 })
@@ -755,7 +848,7 @@ test_that("cannot use invalid .dir", {
   expect_error(slide(1, identity, .dir = 1), "must be a character vector", class = "rlang_error")
 })
 
-test_that("cannot use invalid .partial", {
-  expect_error(slide(1, identity, .partial = c(TRUE, TRUE)), class = "vctrs_error_assert_size")
-  expect_error(slide(1, identity, .partial = 1), class = "vctrs_error_assert_ptype")
+test_that("cannot use invalid .complete", {
+  expect_error(slide(1, identity, .complete = c(TRUE, TRUE)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .complete = 1), class = "vctrs_error_assert_ptype")
 })
