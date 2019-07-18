@@ -4,7 +4,7 @@ tile <- function(.x,
                  .before = 0L,
                  .after = 0L,
                  .offset = NULL,
-                 .partial = FALSE,
+                 .complete = FALSE,
                  .dir = "forward",
                  .ptype = list()) {
 
@@ -18,7 +18,7 @@ tile <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
     .ptype = .ptype
   )
