@@ -7,14 +7,14 @@
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .partial = FALSE, .dir = "forward",
+  .offset = NULL, .complete = FALSE, .dir = "forward",
   .ptype = list())
 
 slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .partial = FALSE, .dir = "forward")
+  .offset = NULL, .complete = FALSE, .dir = "forward")
 
 slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .partial = FALSE, .dir = "forward",
+  .offset = NULL, .complete = FALSE, .dir = "forward",
   .names_to = NULL, .name_repair = c("unique", "universal",
   "check_unique"))
 }
@@ -50,10 +50,9 @@ window forward (or backward, depending on \code{.dir}) between function calls.}
 the output vector. If \code{NULL}, this is computed automatically as the first
 location where a complete sliding window can be generated.}
 
-\item{.partial}{\code{[logical]} Should partial results be computed?
-If sliding \code{"forward"}, this may result in partial results at the
-\emph{end} of the vector. If sliding \code{"backwards"}, this may result in partial
-results at the \emph{start} of the vector.}
+\item{.complete}{\code{[logical]} Should the sliding be restricted to complete
+windows only? If \code{FALSE}, the default, then partial computations will be
+allowed.}
 
 \item{.dir}{\code{["forward", "backward"]} The direction to slide.}
 
@@ -129,16 +128,16 @@ slide(1:10, ~.x, .before = 2, .step = 3)
 
 # The `.offset` let's you shift the initial placement of results
 # in the output. In this example, the offset is set to place the first
-# element at position 3, even though a result could have been computed
-# and inserted at position 2.
+# element at position 3, even though results could have been computed and
+# placed at locations 1 and 2.
 slide(1:5, ~.x, .before = 1, .offset = 2)
 slide(1:5, ~.x, .before = 1)
 
-# `.partial` controls the behavior at the end of the iterations. Here,
-# where normally a `NULL` would be placed at the end because there are not
-# 2 values available to construct a complete window, a partial result
-# computed with only 1 value is instead allowed.
-slide(1:5, ~.x, .after = 1, .partial = TRUE)
+# `.complete` controls whether or not partial results are computed.
+# By default, they are, but setting `.complete = TRUE` restricts
+# `slide()` to only evaluate the function where a complete window exists.
+slide(1:5, ~.x, .before = 2, .after = 1)
+slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
 
 # `.dir` controls the actual direction of sliding, and controls the
 # order in which the sub-window of `.x` is actually sliced out (notice
