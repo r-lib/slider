@@ -5,7 +5,7 @@ pslide <- function(.l,
                    .after = 0L,
                    .step = 1L,
                    .offset = NULL,
-                   .partial = FALSE,
+                   .complete = FALSE,
                    .dir = "forward") {
   pslide_impl(
     .l,
@@ -15,7 +15,7 @@ pslide <- function(.l,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
     .ptype = list()
   )
