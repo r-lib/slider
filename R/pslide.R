@@ -6,7 +6,8 @@ pslide <- function(.l,
                    .step = 1L,
                    .offset = NULL,
                    .complete = FALSE,
-                   .dir = "forward") {
+                   .dir = "forward",
+                   .ptype = list()) {
   pslide_impl(
     .l,
     .f,
@@ -17,6 +18,6 @@ pslide <- function(.l,
     .offset = .offset,
     .complete = .complete,
     .dir = .dir,
-    .ptype = list()
+    .ptype = .ptype
   )
 }
