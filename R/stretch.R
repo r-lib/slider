@@ -4,7 +4,7 @@ stretch <- function(.x,
                    .offset = 0L,
                    .extend = 0L,
                    .step = 1L,
-                   .partial = FALSE,
+                   .complete = FALSE,
                    .dir = "forward",
                    .ptype = list()) {
 
@@ -24,7 +24,7 @@ stretch <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
     .ptype = .ptype
   )
