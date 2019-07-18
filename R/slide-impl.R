@@ -70,24 +70,7 @@ slide_impl <- function(.x,
     }
   }
 
-  before_negative <- .before < 0L
-  after_negative <- .after < 0L
-
-  if (before_negative && after_negative) {
-    glubort("`.before` ({.before}) and `.after` ({.after}) cannot both be negative.")
-  }
-
-  if (before_negative && abs(.before) > .after) {
-    glubort("When `.before` ({.before}) is negative, it's absolute value ({abs(.before)}) cannot be greater than `.after` ({.after}).")
-  }
-
-  if (after_negative && abs(.after) > .before) {
-    glubort("When `.after` ({.after}) is negative, it's absolute value ({abs(.after)}) cannot be greater than `.before` ({.before}).")
-  }
-
-  out <- vec_init(.ptype, n = .x_n)
-  vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
-  .ptype_is_list <- vctrs::vec_is(.ptype, list())
+  validate_before_after_negativeness(.before, .after)
 
   if (forward) {
     startpoint <- 1L
@@ -100,7 +83,7 @@ slide_impl <- function(.x,
   else {
     startpoint <- .x_n
     endpoint <- 1L
-    start <- startpoint - .offset + .after
+    start <- startpoint + .after - .offset
     stop <- start - (.before + .after)
     entry_step <- -.step
     entry_offset <- -.offset
@@ -116,7 +99,16 @@ slide_impl <- function(.x,
     .complete <- FALSE
   }
 
-  n_iter <- iterations(startpoint, endpoint, .before, .after, .step, .offset, .complete, forward)
+  n_iter <- iterations(
+    startpoint,
+    endpoint,
+    .before,
+    .after,
+    .step,
+    .offset,
+    .complete,
+    forward
+  )
 
   start_step <- entry_step
   stop_step <- entry_step
@@ -144,10 +136,17 @@ slide_impl <- function(.x,
     bound_stop <- max
   }
 
-  for (j in seq_len(n_iter)) {
-    # must be inside the loop since unbounded-ness could affect the length of i
-    i <- seq(from = bound_start(start, startpoint), to = bound_stop(stop, endpoint))
-    elt <- .f(vec_slice(.x, i), ...)
+  out <- vec_init(.ptype, n = .x_n)
+  vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
+  .ptype_is_list <- vctrs::vec_is(.ptype, list())
+
+  for (i in seq_len(n_iter)) {
+    index <- seq(
+      from = bound_start(start, startpoint),
+      to = bound_stop(stop, endpoint)
+    )
+
+    elt <- .f(vec_slice(.x, index), ...)
 
     # will be way more efficient at the C level with `copy = FALSE`
     if (.ptype_is_list) {
@@ -167,21 +166,31 @@ slide_impl <- function(.x,
 # ------------------------------------------------------------------------------
 
 # Terms:
-# `frame_pos` = the current position in the output vector along .x
-# `frame_end` = the location of the end of the current window along .x (farthest from `startpoint`)
-# `frame_start` = the location of the start of the current window along .x (closest to `startpoint`)
+# `frame_pos`      = the current position in the output vector along .x
+# `frame_end`      = the location of the end of the current window along
+#                    .x (farthest from `startpoint`)
+# `frame_start`    = the location of the start of the current window
+#                    along .x (closest to `startpoint`)
 # `frame_boundary` = partial ? frame_start : frame_end
-# OOR = "out of range"
+# OOR              = "out of range"
 
-# If `partial = FALSE`, we stop if either:
+# If `complete = TRUE`, we stop if either:
 # - The `frame_pos` gets OOR
 # - The `frame_end` gets OOR
 
-# If `partial = TRUE` we stop if either:
+# If `complete = FALSE` we stop if either:
 # - The `frame_pos` gets OOR
 # - The `frame_start` gets OOR
 
-iterations <- function(startpoint, endpoint, before, after, step, offset, complete, forward) {
+iterations <- function(startpoint,
+                       endpoint,
+                       before,
+                       after,
+                       step,
+                       offset,
+                       complete,
+                       forward) {
+
   if (forward) {
     frame_pos_adjustment <- offset
   } else {
@@ -235,7 +244,14 @@ valid_dir <- function() {
 
 # ------------------------------------------------------------------------------
 
-compute_offset <- function(offset, before, after, before_unbounded, after_unbounded, complete, forward) {
+compute_offset <- function(offset,
+                           before,
+                           after,
+                           before_unbounded,
+                           after_unbounded,
+                           complete,
+                           forward) {
+
   null_offset <- is.null(offset)
 
   if (!null_offset) {
@@ -256,7 +272,8 @@ compute_offset <- function(offset, before, after, before_unbounded, after_unboun
   }
 
   # - Checking if the end of the frame is out of range when going forward
-  # - Ensure that if `after < 0`, then `abs(after) <= offset` so we have some data to partially compute on
+  # - Ensure that if `after < 0`, then `abs(after) <= offset`
+  #   so we have some data to partially compute on
   if (!complete && forward && !after_unbounded && after < 0L) {
     if (null_offset || offset < -after) {
       offset <- -after
@@ -264,7 +281,8 @@ compute_offset <- function(offset, before, after, before_unbounded, after_unboun
   }
 
   # - Checking if the end of the frame is out of range when going backward
-  # - Ensure that if `before < 0`, then `abs(before) <= offset` so we have some data to partially compute on
+  # - Ensure that if `before < 0`, then `abs(before) <= offset` so we have
+  #   some data to partially compute on
   if (!complete && !forward && !before_unbounded && before < 0L) {
     if (null_offset || offset < -before) {
       offset <- -before
@@ -278,4 +296,39 @@ compute_offset <- function(offset, before, after, before_unbounded, after_unboun
   }
 
   offset
+}
+
+# ------------------------------------------------------------------------------
+
+validate_before_after_negativeness <- function(before, after) {
+  before_negative <- before < 0L
+  after_negative <- after < 0L
+
+  if (!before_negative && !after_negative) {
+    return(invisible())
+  }
+
+  if (before_negative && after_negative) {
+    glubort(
+      "`.before` ({before}) and `.after` ({after}) cannot both be negative."
+    )
+  }
+
+  if (before_negative && abs(before) > after) {
+    glubort(
+      "When `.before` ({before}) is negative, ",
+      "it's absolute value ({abs(before)}) ",
+      "cannot be greater than `.after` ({after})."
+    )
+  }
+
+  if (after_negative && abs(after) > before) {
+    glubort(
+      "When `.after` ({after}) is negative, ",
+      "it's absolute value ({abs(after)}) ",
+      "cannot be greater than `.before` ({before})."
+    )
+  }
+
+  invisible()
 }
