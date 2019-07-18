@@ -175,6 +175,11 @@ functions
 
 <https://www.postgresql.org/docs/9.1/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS>
 
+With a
+flowchart
+
+<https://www.sqlite.org/windowfunctions.html>
+
 dbplyr
 
 <https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions>
