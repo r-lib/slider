@@ -6,8 +6,9 @@ slide2 <- function(.x,
                    .after = 0L,
                    .step = 1L,
                    .offset = NULL,
-                   .partial = FALSE,
-                   .dir = "forward") {
+                   .complete = FALSE,
+                   .dir = "forward",
+                   .ptype = list()) {
   slide2_impl(
     .x,
     .y,
@@ -17,8 +18,8 @@ slide2 <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
-    .ptype = list()
+    .ptype = .ptype
   )
 }
