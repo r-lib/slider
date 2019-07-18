@@ -35,10 +35,9 @@
 #'   the output vector. If `NULL`, this is computed automatically as the first
 #'   location where a complete sliding window can be generated.
 #'
-#' @param .partial `[logical]` Should partial results be computed?
-#'   If sliding `"forward"`, this may result in partial results at the
-#'   _end_ of the vector. If sliding `"backwards"`, this may result in partial
-#'   results at the _start_ of the vector.
+#' @param .complete `[logical]` Should the sliding be restricted to complete
+#'   windows only? If `FALSE`, the default, then partial computations will be
+#'   allowed.
 #'
 #' @param .dir `["forward", "backward"]` The direction to slide.
 #'
@@ -90,16 +89,16 @@
 #'
 #' # The `.offset` let's you shift the initial placement of results
 #' # in the output. In this example, the offset is set to place the first
-#' # element at position 3, even though a result could have been computed
-#' # and inserted at position 2.
+#' # element at position 3, even though results could have been computed and
+#' # placed at locations 1 and 2.
 #' slide(1:5, ~.x, .before = 1, .offset = 2)
 #' slide(1:5, ~.x, .before = 1)
 #'
-#' # `.partial` controls the behavior at the end of the iterations. Here,
-#' # where normally a `NULL` would be placed at the end because there are not
-#' # 2 values available to construct a complete window, a partial result
-#' # computed with only 1 value is instead allowed.
-#' slide(1:5, ~.x, .after = 1, .partial = TRUE)
+#' # `.complete` controls whether or not partial results are computed.
+#' # By default, they are, but setting `.complete = TRUE` restricts
+#' # `slide()` to only evaluate the function where a complete window exists.
+#' slide(1:5, ~.x, .before = 2, .after = 1)
+#' slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
 #'
 #' # `.dir` controls the actual direction of sliding, and controls the
 #' # order in which the sub-window of `.x` is actually sliced out (notice
@@ -145,14 +144,14 @@
 #' slide(1:5, ~.x, .before = 2, .after = -1)
 #'
 #' @export
-slide_old <- function(.x,
+slide <- function(.x,
                   .f,
                   ...,
                   .before = 0L,
                   .after = 0L,
                   .step = 1L,
                   .offset = NULL,
-                  .partial = FALSE,
+                  .complete = FALSE,
                   .dir = "forward",
                   .ptype = list()) {
 
@@ -171,7 +170,7 @@ slide_old <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
     .ptype = .ptype
   )
@@ -192,7 +191,7 @@ slide_dbl <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .offset = NULL,
-                      .partial = FALSE,
+                      .complete = FALSE,
                       .dir = "forward") {
   slide(
     .x,
@@ -202,7 +201,7 @@ slide_dbl <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir,
     .ptype = dbl()
   )
@@ -218,7 +217,7 @@ slide_dfr <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .offset = NULL,
-                      .partial = FALSE,
+                      .complete = FALSE,
                       .dir = "forward",
                       .names_to = NULL,
                       .name_repair = c("unique", "universal", "check_unique")) {
@@ -230,7 +229,7 @@ slide_dfr <- function(.x,
     .after = .after,
     .step = .step,
     .offset = .offset,
-    .partial = .partial,
+    .complete = .complete,
     .dir = .dir
   )
 

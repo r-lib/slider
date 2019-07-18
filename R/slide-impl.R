@@ -5,7 +5,7 @@ slide_impl <- function(.x,
                        .after,
                        .step,
                        .offset,
-                       .partial,
+                       .complete,
                        .dir,
                        .ptype) {
 
@@ -18,14 +18,17 @@ slide_impl <- function(.x,
   vec_assert(.dir, size = 1L)
   forward <- .dir == "forward"
 
+  vec_assert(.complete, logical(), 1L)
+
   vec_assert(.step, size = 1L)
   .step <- vec_cast(.step, integer())
 
-  vec_assert(.partial, logical(), 1L)
+  if (.step < 1L) {
+    glubort("`.step` must be at least 1, not {.step}.")
+  }
 
   before_unbounded <- is_unbounded(.before)
   after_unbounded <- is_unbounded(.after)
-  doubly_unbounded <- before_unbounded && after_unbounded
 
   if (!before_unbounded) {
     vec_assert(.before, size = 1L)
@@ -37,42 +40,15 @@ slide_impl <- function(.x,
     .after <- vec_cast(.after, integer())
   }
 
-  # If we are unbounded in the direction we are sliding, we compute the number
-  # of complete iterations as the maximum number of iterations. This implies
-  # we set `partial = TRUE` in iterations()
-  partial_unbounded <- FALSE
-  if (forward && after_unbounded | !forward && before_unbounded) {
-    partial_unbounded <- TRUE
-  }
-
-  # It's complex to figure out the default offset if it is NULL.
-  # - If doubly unbounded, its just 0
-  # - If forward and before is unbounded, its normally 0 but if after < 0 you account for that
-  # - If forward and before is not unbounded, its normally before but if before < 0 set a minimum at 0
-  # - If backward and after is unbounded, its normally 0 but if before < 0 you account for that
-  # - If backward and after is not unbounded, its normally after but if after < 0 set a minimum at 0
-  if (is.null(.offset)) {
-    if (doubly_unbounded) {
-      .offset <- 0L
-    } else {
-      if (forward) {
-        if (before_unbounded) {
-          .offset <- abs(min(.after, 0L))
-        } else {
-          .offset <- max(.before, 0L)
-        }
-      } else {
-        if (after_unbounded) {
-          .offset <- abs(min(.before, 0L))
-        } else {
-          .offset <- max(.after, 0L)
-        }
-      }
-    }
-  }
-
-  vec_assert(.offset, size = 1L)
-  .offset <- vec_cast(.offset, integer())
+  .offset <- compute_offset(
+    .offset,
+    .before,
+    .after,
+    before_unbounded,
+    after_unbounded,
+    .complete,
+    forward
+  )
 
   # The order of checks are important here and are done so they they work even
   # if both .before/.after are unbounded(). The goal is to set unbounded()
@@ -83,24 +59,15 @@ slide_impl <- function(.x,
       .before <- .offset
     }
     if (after_unbounded) {
-      .after <- .x_n - 1L - max(.before, .offset)
+      .after <- .x_n - 1L - .offset
     }
   } else {
     if (after_unbounded) {
       .after <- .offset
     }
     if (before_unbounded) {
-      .before <- .x_n - 1L - max(.after, .offset)
+      .before <- .x_n - 1L - .offset
     }
-  }
-
-
-  if (.offset < 0L) {
-    glubort("`.offset` must be at least 0, not {.offset}.")
-  }
-
-  if (.step < 1L) {
-    glubort("`.step` must be at least 1, not {.step}.")
   }
 
   before_negative <- .before < 0L
@@ -116,28 +83,6 @@ slide_impl <- function(.x,
 
   if (after_negative && abs(.after) > .before) {
     glubort("When `.after` ({.after}) is negative, it's absolute value ({abs(.after)}) cannot be greater than `.before` ({.before}).")
-  }
-
-  width <- .before + .after + 1L
-  if (width > .x_n) {
-    glubort("The width of the rolling interval ({width}) must be less than or equal to the size of `.x` ({.x_n}).")
-  }
-
-  if (forward) {
-    if (.offset < .before) {
-      glubort("`.offset` ({.offset}) must be at least as large as `.before` ({.before}).")
-    }
-    if (.offset + .after + 1L > .x_n) {
-      # improve message
-      glubort("`.offset` and `.after` imply a location ({.offset + .after + 1}) outside the size of `.x` ({.x_n}).")
-    }
-  } else {
-    if (.offset < .after) {
-      glubort("`.offset` ({.offset}) must be at least as large as `.after` ({.after}).")
-    }
-    if (.offset + .before + 1L > .x_n) {
-      glubort("`.offset` and `.before` imply a location ({.offset + .before + 1}) outside the size of `.x` ({.x_n}).")
-    }
   }
 
   out <- vec_init(.ptype, n = .x_n)
@@ -163,14 +108,15 @@ slide_impl <- function(.x,
 
   entry <- startpoint + entry_offset
 
-  # Number of "complete" iterations
-  complete_iterations_n <- iterations(startpoint, endpoint, .before, .after, .step, .offset, partial_unbounded, forward)
-
-  # compute before adjustments are made to .step/.offset
-  if (.partial) {
-    max_iterations_n <- iterations(startpoint, endpoint, .before, .after, .step, .offset, .partial, forward)
-    partial_iterations_n <- max_iterations_n - complete_iterations_n
+  # We check to see if we are unbounded() in the direction that we are sliding.
+  # If so, we force `.complete = FALSE` to compute the correct number of iterations
+  # (This must be done after we compute the .offset, because the .complete-ness
+  # does affect the partial results at the beginning)
+  if ((after_unbounded && forward) || (before_unbounded && !forward)) {
+    .complete <- FALSE
   }
+
+  n_iter <- iterations(startpoint, endpoint, .before, .after, .step, .offset, .complete, forward)
 
   start_step <- entry_step
   stop_step <- entry_step
@@ -190,40 +136,17 @@ slide_impl <- function(.x,
     }
   }
 
-  for (j in seq_len(complete_iterations_n)) {
+  if (forward) {
+    bound_start <- max
+    bound_stop <- min
+  } else {
+    bound_start <- min
+    bound_stop <- max
+  }
+
+  for (j in seq_len(n_iter)) {
     # must be inside the loop since unbounded-ness could affect the length of i
-    i <- seq(from = start, to = stop)
-    elt <- .f(vec_slice(.x, i), ...)
-
-    # will be way more efficient at the C level with `copy = FALSE`
-    if (.ptype_is_list) {
-      out <- vec_assign(out, entry, list(elt))
-    } else {
-      out <- vec_assign(out, entry, elt)
-    }
-
-    start <- start + start_step
-    stop <- stop + stop_step
-    entry <- entry + entry_step
-  }
-
-  # Done if no `.partial`
-  if (!.partial) {
-    return(out)
-  }
-
-  # can't compute any partial iterations
-  if (partial_iterations_n == 0L) {
-    return(out)
-  }
-
-  # Pin `stop` to the endpoint of `.x`
-  stop <- endpoint
-  stop_step <- 0L
-
-  for (j in seq_len(partial_iterations_n)) {
-    # cannot extract outside the loop, length of `i` is possibly shrinking each iteration
-    i <- seq(from = start, to = stop)
+    i <- seq(from = bound_start(start, startpoint), to = bound_stop(stop, endpoint))
     elt <- .f(vec_slice(.x, i), ...)
 
     # will be way more efficient at the C level with `copy = FALSE`
@@ -258,14 +181,14 @@ slide_impl <- function(.x,
 # - The `frame_pos` gets OOR
 # - The `frame_start` gets OOR
 
-iterations <- function(startpoint, endpoint, before, after, step, offset, partial, forward) {
+iterations <- function(startpoint, endpoint, before, after, step, offset, complete, forward) {
   if (forward) {
     frame_pos_adjustment <- offset
   } else {
     frame_pos_adjustment <- -offset
   }
 
-  if (partial) {
+  if (!complete) {
     # boundary = start of frame
     if (forward) {
       frame_boundary_adjustment <- -before
@@ -284,18 +207,75 @@ iterations <- function(startpoint, endpoint, before, after, step, offset, partia
   frame_pos <- startpoint + frame_pos_adjustment
   frame_boundary <- frame_pos + frame_boundary_adjustment
 
-  n_iter_frame_pos <- compute_n_iter(endpoint, frame_pos, step)
-  n_iter_frame_boundary <- compute_n_iter(endpoint, frame_boundary, step)
+  n_iter_frame_pos <- compute_iterations(endpoint, frame_pos, step, forward)
+  n_iter_frame_boundary <- compute_iterations(endpoint, frame_boundary, step, forward)
 
   min(n_iter_frame_pos, n_iter_frame_boundary)
 }
 
-compute_n_iter <- function(endpoint, loc, step) {
-  (abs(endpoint - loc) %/% step) + 1L
+# It is possible to set a combination of .offset/.after/.complete such that
+# this difference ends up out of bounds so we pin it to 0L if that is the case.
+compute_iterations <- function(endpoint, loc, step, forward) {
+  diff <- endpoint - loc
+
+  if (!forward) {
+    diff <- -diff
+  }
+
+  n_iter <- (diff %/% step) + 1L
+
+  max(n_iter, 0L)
 }
 
 # ------------------------------------------------------------------------------
 
 valid_dir <- function() {
   c("forward", "backward")
+}
+
+# ------------------------------------------------------------------------------
+
+compute_offset <- function(offset, before, after, before_unbounded, after_unbounded, complete, forward) {
+  null_offset <- is.null(offset)
+
+  if (!null_offset) {
+    vec_assert(offset, size = 1L)
+    offset <- vec_cast(offset, integer())
+  }
+
+  # - Checking if the start of the frame is out of range when going forward
+  # - Ensure `before <= offset` so we can create a full window
+  if (complete && forward && !before_unbounded && (null_offset || before > offset)) {
+    offset <- before
+  }
+
+  # - Checking if the start of the frame is out of range when going backward
+  # - Ensure `after <= offset` so we can create a full window
+  if (complete && !forward && !after_unbounded && (null_offset || after > offset)) {
+    offset <- after
+  }
+
+  # - Checking if the end of the frame is out of range when going forward
+  # - Ensure that if `after < 0`, then `abs(after) <= offset` so we have some data to partially compute on
+  if (!complete && forward && !after_unbounded && after < 0L) {
+    if (null_offset || offset < -after) {
+      offset <- -after
+    }
+  }
+
+  # - Checking if the end of the frame is out of range when going backward
+  # - Ensure that if `before < 0`, then `abs(before) <= offset` so we have some data to partially compute on
+  if (!complete && !forward && !before_unbounded && before < 0L) {
+    if (null_offset || offset < -before) {
+      offset <- -before
+    }
+  }
+
+  # If offset is still NULL, meaning that we have a usable window, then
+  # set offset to 0
+  if (is.null(offset)) {
+    offset <- 0L
+  }
+
+  offset
 }
