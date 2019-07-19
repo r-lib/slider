@@ -14,6 +14,7 @@ pslide_impl <- function(.l,
 
   .l <- vec_recycle_common(!!!.l)
 
+  # TODO - Check if .l has at least 1 element?
   .n <- vec_size(.l[[1]])
 
   .f <- as_function(.f)
