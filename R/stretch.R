@@ -1,12 +1,13 @@
+#' @export
 stretch <- function(.x,
-                   .f,
-                   ...,
-                   .offset = 0L,
-                   .extend = 0L,
-                   .step = 1L,
-                   .complete = FALSE,
-                   .dir = "forward",
-                   .ptype = list()) {
+                    .f,
+                    ...,
+                    .offset = 0L,
+                    .extend = 0L,
+                    .step = 1L,
+                    .complete = FALSE,
+                    .dir = "forward",
+                    .ptype = list()) {
 
   if (identical(.dir, "forward")) {
     .before <- unbounded()

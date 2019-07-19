@@ -1,3 +1,4 @@
+#' @export
 slide2 <- function(.x,
                    .y,
                    .f,

@@ -1,3 +1,4 @@
+#' @export
 tile <- function(.x,
                  .f,
                  ...,
