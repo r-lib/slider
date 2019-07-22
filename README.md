@@ -38,15 +38,15 @@ control the width of the window and the alignment.
 ``` r
 # Moving average (Aligned right)
 slide_dbl(1:5, ~mean(.x), .before = 2)
-#> [1] NA NA  2  3  4
+#> [1] 1.0 1.5 2.0 3.0 4.0
 
 # Align left
 slide_dbl(1:5, ~mean(.x), .after = 2)
-#> [1]  2  3  4 NA NA
+#> [1] 2.0 3.0 4.0 4.5 5.0
 
 # Center aligned
 slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
-#> [1] NA  2  3  4 NA
+#> [1] 1.5 2.0 3.0 4.0 4.5
 ```
 
 With `unbounded()`, you can do a “cumulative slide” to compute
@@ -66,42 +66,10 @@ slide(1:4, ~.x, .before = unbounded())
 #> [[4]]
 #> [1] 1 2 3 4
 
-# De-cumulative (?) sliding + start at position 2
-slide(1:4, ~.x, .before = 1, .after = unbounded())
+# De-cumulative (?) sliding
+slide(1:4, ~.x, .after = unbounded())
 #> [[1]]
-#> NULL
-#> 
-#> [[2]]
 #> [1] 1 2 3 4
-#> 
-#> [[3]]
-#> [1] 2 3 4
-#> 
-#> [[4]]
-#> [1] 3 4
-```
-
-With the `.partial` argument, you can compute on partial results even if
-they don’t make up a complete sliding window as defined by `.before` and
-`.after`.
-
-``` r
-slide(1:4, ~.x, .after = 2)
-#> [[1]]
-#> [1] 1 2 3
-#> 
-#> [[2]]
-#> [1] 2 3 4
-#> 
-#> [[3]]
-#> NULL
-#> 
-#> [[4]]
-#> NULL
-
-slide(1:4, ~.x, .after = 2, .partial = TRUE)
-#> [[1]]
-#> [1] 1 2 3
 #> 
 #> [[2]]
 #> [1] 2 3 4
@@ -111,6 +79,39 @@ slide(1:4, ~.x, .after = 2, .partial = TRUE)
 #> 
 #> [[4]]
 #> [1] 4
+```
+
+With `.complete`, you can decide whether or not `.f` should be evaluated
+on incomplete windows. In the following example, the requested window
+size is 3, but the first two results are computed on windows of size 1
+and 2 because partial results are allowed by default.
+
+``` r
+slide(1:4, ~.x, .before = 2)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 2 3 4
+
+slide(1:4, ~.x, .before = 2, .complete = TRUE)
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 2 3 4
 ```
 
 ## Data frames
@@ -150,10 +151,13 @@ slide over data frames too:
 ``` r
 slide(cars, ~.x, .before = 2)
 #> [[1]]
-#> NULL
+#>           mpg cyl disp  hp drat   wt  qsec vs am gear carb
+#> Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4
 #> 
 #> [[2]]
-#> NULL
+#>               mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4      21   6  160 110  3.9 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
 #> 
 #> [[3]]
 #>                mpg cyl disp  hp drat    wt  qsec vs am gear carb

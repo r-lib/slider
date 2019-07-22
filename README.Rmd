@@ -59,16 +59,16 @@ With `unbounded()`, you can do a "cumulative slide" to compute cumulative expres
 ```{r}
 slide(1:4, ~.x, .before = unbounded())
 
-# De-cumulative (?) sliding + start at position 2
-slide(1:4, ~.x, .before = 1, .after = unbounded())
+# De-cumulative (?) sliding
+slide(1:4, ~.x, .after = unbounded())
 ```
 
-With the `.partial` argument, you can compute on partial results even if they don't make up a complete sliding window as defined by `.before` and `.after`.
+With `.complete`, you can decide whether or not `.f` should be evaluated on incomplete windows. In the following example, the requested window size is 3, but the first two results are computed on windows of size 1 and 2 because partial results are allowed by default.
 
 ```{r}
-slide(1:4, ~.x, .after = 2)
+slide(1:4, ~.x, .before = 2)
 
-slide(1:4, ~.x, .after = 2, .partial = TRUE)
+slide(1:4, ~.x, .before = 2, .complete = TRUE)
 ```
 
 ## Data frames
