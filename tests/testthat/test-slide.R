@@ -778,38 +778,22 @@ test_that("slide() is a rowwise iterator", {
 })
 
 # ------------------------------------------------------------------------------
-# .ptype
+# type / size relaxed-ness
 
-test_that(".ptype is respected", {
-  expect_equal(slide(1, ~.x), list(1))
-  expect_equal(slide(1, ~.x, .ptype = int()), 1L)
-  expect_error(slide(1, ~.x, .ptype = new_date()), class = "vctrs_error_incompatible_type")
-})
-
-test_that("`.ptype = NULL` results in 'guessed' .ptype", {
+test_that("slide() doesn't require `size = 1`", {
   expect_equal(
-    slide(1, ~.x, .ptype = NULL),
-    slide(1, ~.x, .ptype = dbl())
+    slide(1:2, ~c(.x, 1)),
+    list(
+      c(1L, 1L),
+      c(2L, 1L)
+    )
   )
+})
 
-  # failure = list()
+test_that("`slide()` doesn't require a common inner type", {
   expect_equal(
-    slide(1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-    list("hello", 1)
-  )
-})
-
-test_that("`.ptype = NULL` validates that element lengths are 1", {
-  expect_error(
-    slide(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "Result 1 is length 2."
-  )
-})
-
-test_that(".ptypes with a vec_proxy() are restored to original type", {
-  expect_is(
-    slide(Sys.Date() + 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),
-    "POSIXlt"
+    slide(1:2, ~if (.x == 1L) {1} else {"hi"}),
+    list(1, "hi")
   )
 })
 
@@ -852,3 +836,4 @@ test_that("cannot use invalid .complete", {
   expect_error(slide(1, identity, .complete = c(TRUE, TRUE)), class = "vctrs_error_assert_size")
   expect_error(slide(1, identity, .complete = 1), class = "vctrs_error_assert_ptype")
 })
+

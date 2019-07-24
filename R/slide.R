@@ -61,6 +61,8 @@
 #'
 #'  * `vec_size(.x) == vec_size(slide(.x, .f))`
 #'
+#'  * `vec_size(slide_vec(.x, .f)[[i]]) == 1L`
+#'
 #' @examples
 #'
 #' # The defaults work similarly to `map()`
@@ -152,17 +154,52 @@ slide <- function(.x,
                   .step = 1L,
                   .offset = NULL,
                   .complete = FALSE,
-                  .dir = "forward",
-                  .ptype = list()) {
+                  .dir = "forward") {
+  slide_impl(
+    .x,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .dir = .dir,
+    .ptype = list(),
+    .constrain = FALSE
+  )
+}
+
+#' @rdname slide
+#' @export
+slide_vec <- function(.x,
+                      .f,
+                      ...,
+                      .before = 0L,
+                      .after = 0L,
+                      .step = 1L,
+                      .offset = NULL,
+                      .complete = FALSE,
+                      .dir = "forward",
+                      .ptype = list()) {
 
   if (is.null(.ptype)) {
-    .ptype <- list()
-    simplify <- TRUE
-  } else {
-    simplify <- FALSE
+    out <- slide_vec_simplify(
+      .x,
+      .f,
+      ...,
+      .before = .before,
+      .after = .after,
+      .step = .step,
+      .offset = .offset,
+      .complete = .complete,
+      .dir = .dir
+    )
+
+    return(out)
   }
 
-  out <- slide_impl(
+  slide_impl(
     .x,
     .f,
     ...,
@@ -174,12 +211,54 @@ slide <- function(.x,
     .dir = .dir,
     .ptype = .ptype
   )
+}
 
-  if (simplify) {
-    out <- vec_simplify(out)
+slide_vec_simplify <- function(.x,
+                               .f,
+                               ...,
+                               .before,
+                               .after,
+                               .step,
+                               .offset,
+                               .complete,
+                               .dir) {
+  out <- slide(
+    .x,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .dir = .dir
+  )
+
+  if (vec_size_common(!!!out) != 1L) {
+    glubort("The size of all results from `.f` must be 1.")
   }
 
-  out
+  vec_c(!!!out)
+}
+
+slide_vec_handoff <- function(.ptype, ..., .env = caller_env()) {
+  args <- env_get_list(
+    env = .env,
+    nms = c(
+      ".x",
+      ".f",
+      ".before",
+      ".after",
+      ".step",
+      ".offset",
+      ".complete",
+      ".dir"
+    )
+  )
+
+  slide_vec_call <- expr(slide_vec(!!! args, ..., .ptype = .ptype))
+
+  eval_bare(slide_vec_call)
 }
 
 #' @rdname slide
@@ -193,18 +272,7 @@ slide_dbl <- function(.x,
                       .offset = NULL,
                       .complete = FALSE,
                       .dir = "forward") {
-  slide(
-    .x,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .dir = .dir,
-    .ptype = dbl()
-  )
+  slide_vec_handoff(dbl(), ...)
 }
 
 #' @inheritParams vctrs::vec_rbind

@@ -7,6 +7,7 @@ slide_core <- function(.f_call,
                        .complete,
                        .dir,
                        .ptype,
+                       .constrain,
                        .env) {
 
   arg_match(.dir, valid_dir())
@@ -132,7 +133,18 @@ slide_core <- function(.f_call,
   }
 
   out <- vec_init(.ptype, n = .n)
-  .ptype_is_list <- vctrs::vec_is(.ptype, list())
+
+  if (.constrain) {
+    elt_assign <- function(x, i, value) {
+      value <- vec_cast(value, x, x_arg = "value", to_arg = ".ptype")
+      vec_assign(x, i, value)
+    }
+  } else {
+    elt_assign <- function(x, i, value) {
+      x[[i]] <- value
+      x
+    }
+  }
 
   for (i in seq_len(n_iter)) {
     index <- seq(
@@ -144,12 +156,7 @@ slide_core <- function(.f_call,
 
     elt <- eval_bare(.f_call, env = .env)
 
-    # will be way more efficient at the C level with `copy = FALSE`
-    if (.ptype_is_list) {
-      out <- vec_assign(out, entry, list(elt))
-    } else {
-      out <- vec_assign(out, entry, elt)
-    }
+    out <- elt_assign(out, entry, elt)
 
     start <- start + start_step
     stop <- stop + stop_step

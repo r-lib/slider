@@ -7,9 +7,12 @@ pslide_impl <- function(.l,
                         .offset,
                         .complete,
                         .dir,
-                        .ptype) {
+                        .ptype,
+                        .constrain = TRUE) {
 
-  vec_assert(.l, ptype = list())
+  # TODO - too strict, `pslide(list(min = 2:3, n = 1), runif)` fails
+  #vec_assert(.l, ptype = list())
+
   lapply(.l, vec_assert)
 
   .l <- vec_recycle_common(!!!.l)
@@ -26,6 +29,10 @@ pslide_impl <- function(.l,
     }
   )
 
+  # Ensure names of `.l` are kept so they can be spliced
+  # into `.f` as argument names
+  names(slicers) <- names(.l)
+
   .f_call <- expr(.f(!!! slicers, ...))
 
   out <- slide_core(
@@ -38,6 +45,7 @@ pslide_impl <- function(.l,
     .complete = .complete,
     .dir = .dir,
     .ptype = .ptype,
+    .constrain = .constrain,
     .env = environment()
   )
 

@@ -2,11 +2,15 @@
 % Please edit documentation in R/slide.R
 \name{slide}
 \alias{slide}
+\alias{slide_vec}
 \alias{slide_dbl}
 \alias{slide_dfr}
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .dir = "forward")
+
+slide_vec(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .dir = "forward",
   .ptype = list())
 
@@ -61,8 +65,8 @@ output. Defaults to a \code{list()}.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify
-which row comes from which input. If supplied, \code{...} must be
-named.}
+which row comes from which input. If supplied and \code{...} is not named,
+an integer column is used to identify the rows.}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
 \code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
@@ -97,6 +101,7 @@ to the type required by the version of \code{slide_*()} being used.
 
 \itemize{
 \item \code{vec_size(.x) == vec_size(slide(.x, .f))}
+\item \code{vec_size(slide_vec(.x, .f)[[i]]) == 1L}
 }
 }
 

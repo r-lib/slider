@@ -7,7 +7,8 @@ slide_impl <- function(.x,
                        .offset,
                        .complete,
                        .dir,
-                       .ptype) {
+                       .ptype,
+                       .constrain = TRUE) {
 
   vec_assert(.x)
   .n <- vec_size(.x)
@@ -25,6 +26,7 @@ slide_impl <- function(.x,
     .complete = .complete,
     .dir = .dir,
     .ptype = .ptype,
+    .constrain = .constrain,
     .env = environment()
   )
 
