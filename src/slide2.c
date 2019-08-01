@@ -50,14 +50,22 @@ SEXP slurrr_slide2(
 
   int inputs = r_int_get(inputs_, 0);
   int size = r_int_get(size_, 0);
-  int before = r_int_get(before_, 0);
-  int after = r_int_get(after_, 0);
   int step = r_int_get(step_, 0);
   bool complete = r_lgl_get(complete_, 0);
   bool forward = r_lgl_get(forward_, 0);
   bool before_unbounded = r_lgl_get(before_unbounded_, 0);
   bool after_unbounded = r_lgl_get(after_unbounded_, 0);
   bool constrain = r_lgl_get(constrain_, 0);
+
+  int before = 0;
+  if (!before_unbounded) {
+    before = r_int_get(before_, 0);
+  }
+
+  int after = 0;
+  if (!after_unbounded) {
+    after = r_int_get(after_, 0);
+  }
 
   int offset = compute_offset(
     offset_,
