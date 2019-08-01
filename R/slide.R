@@ -274,7 +274,18 @@ slide_dbl <- function(.x,
                       .offset = NULL,
                       .complete = FALSE,
                       .dir = "forward") {
-  slide_vec_handoff(dbl(), ...)
+  slide_vec(
+    .x,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .dir = .dir,
+    .ptype = dbl()
+  )
 }
 
 #' @inheritParams vctrs::vec_rbind
