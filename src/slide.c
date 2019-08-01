@@ -26,7 +26,7 @@ int iterations(int x_start,
 
 SEXP slice_container(int n);
 
-void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n);
+void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n);
 
 // -----------------------------------------------------------------------------
 
@@ -180,10 +180,8 @@ SEXP slurrr_slide(SEXP x,
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
   // The current slice of x, defined as syms_slice in the env
-  PROTECT_INDEX slice_prot_idx;
-  SEXP slice = slice_container(inputs);
-  PROTECT_WITH_INDEX(slice, &slice_prot_idx);
-  SEXP* p_slice = &slice;
+  SEXP slices = PROTECT(slice_container(inputs));
+  SEXP* p_slices = &slices;
 
   int seq_start;
   int seq_end;
@@ -203,7 +201,7 @@ SEXP slurrr_slide(SEXP x,
       init_compact_seq(p_index, seq_start, seq_size, false);
     }
 
-    slice_loop(p_slice, x, index, env, inputs);
+    slice_loop(p_slices, x, index, env, inputs);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
@@ -248,32 +246,32 @@ SEXP slice_container(int n) {
   return Rf_allocVector(VECSXP, n);
 }
 
-void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n) {
+void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
   // slide()
   if (n == SLIDE) {
-    *p_slice = vec_slice_impl(x, index);
-    Rf_defineVar(syms_dot_x, *p_slice, env);
+    *p_slices = vec_slice_impl(x, index);
+    Rf_defineVar(syms_dot_x, *p_slices, env);
     return;
   }
 
   // slide2()
   if (n == SLIDE2) {
-    *p_slice = vec_slice_impl(VECTOR_ELT(x, 0), index);
-    Rf_defineVar(syms_dot_x, *p_slice, env);
-    *p_slice = vec_slice_impl(VECTOR_ELT(x, 1), index);
-    Rf_defineVar(syms_dot_y, *p_slice, env);
+    *p_slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
+    Rf_defineVar(syms_dot_x, *p_slices, env);
+    *p_slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
+    Rf_defineVar(syms_dot_y, *p_slices, env);
     return;
   }
 
-  SEXP elt;
+  SEXP slice;
 
   // pslide()
   for (int i = 0; i < n; ++i) {
-    elt = vec_slice_impl(VECTOR_ELT(x, i), index);
-    SET_VECTOR_ELT(*p_slice, i, elt);
+    slice = vec_slice_impl(VECTOR_ELT(x, i), index);
+    SET_VECTOR_ELT(*p_slices, i, slice);
   }
 
-  Rf_defineVar(syms_dot_l, *p_slice, env);
+  Rf_defineVar(syms_dot_l, *p_slices, env);
 }
 
 #undef SLIDE
