@@ -243,26 +243,6 @@ slide_vec_simplify <- function(.x,
   vec_c(!!!out)
 }
 
-slide_vec_handoff <- function(.ptype, ..., .env = caller_env()) {
-  args <- env_get_list(
-    env = .env,
-    nms = c(
-      ".x",
-      ".f",
-      ".before",
-      ".after",
-      ".step",
-      ".offset",
-      ".complete",
-      ".dir"
-    )
-  )
-
-  slide_vec_call <- expr(slide_vec(!!! args, ..., .ptype = .ptype))
-
-  eval_bare(slide_vec_call)
-}
-
 #' @rdname slide
 #' @export
 slide_dbl <- function(.x,
