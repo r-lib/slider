@@ -9,25 +9,27 @@ slide2_impl <- function(.x,
                         .complete,
                         .dir,
                         .ptype,
-                        .constrain = TRUE) {
+                        .constrain) {
 
   vec_assert(.x)
   vec_assert(.y)
 
+  # TODO - Do more efficiently internally by reusing rather than recycling
+  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
+  # But use `vec_size_common()` to check sizes and get `.size`
   args <- vec_recycle_common(.x, .y)
 
-  .x <- args[[1]]
-  .y <- args[[2]]
-
-  .n <- vec_size(.x)
+  .size <- vec_size(args[[1]])
 
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(vec_slice(.x, index), vec_slice(.y, index), ...))
+  .f_call <- expr(.f(slice, slice2, ...))
 
   out <- slide_core(
+    .x = args,
+    .inputs = -2L,
     .f_call = .f_call,
-    .n = .n,
+    .size = .size,
     .before = .before,
     .after = .after,
     .step = .step,
@@ -39,7 +41,7 @@ slide2_impl <- function(.x,
     .env = environment()
   )
 
-  vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
+  #vctrs:::vec_names(out) <- vctrs:::vec_names(args[[1]])
 
   out
 }

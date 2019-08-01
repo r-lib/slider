@@ -3,236 +3,437 @@
 #include <vctrs.h>
 
 // -----------------------------------------------------------------------------
+// All defined below
 
-// Defined below
-int iterations(int n, int before, int after, int step, int offset, bool partial, bool forward);
+int compute_offset(SEXP offset_,
+                   int before,
+                   int after,
+                   bool before_unbounded,
+                   bool after_unbounded,
+                   bool complete,
+                   bool forward);
 
-void* get_assigner(SEXP x);
+void validate_before_after_negativeness(int before, int after);
+
+int iterations(int x_start,
+               int x_end,
+               int before,
+               int after,
+               int step,
+               int offset,
+               bool complete,
+               bool forward);
+
+SEXP slice_container(int n);
+
+void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n);
 
 // -----------------------------------------------------------------------------
 
-// just to test if it works
-SEXP slurrr_slide(SEXP env,
-                  SEXP x,
+SEXP slurrr_slide(SEXP x,
+                  SEXP inputs_,
+                  SEXP f_call,
+                  SEXP size_,
                   SEXP before_,
                   SEXP after_,
                   SEXP step_,
                   SEXP offset_,
-                  SEXP partial_,
+                  SEXP complete_,
                   SEXP forward_,
                   SEXP ptype,
                   SEXP before_unbounded_,
-                  SEXP after_unbounded_) {
+                  SEXP after_unbounded_,
+                  SEXP constrain_,
+                  SEXP env) {
 
-  int before = r_int_get(before_, 0);
-  int after = r_int_get(after_, 0);
+  int inputs = r_int_get(inputs_, 0);
+  int size = r_int_get(size_, 0);
   int step = r_int_get(step_, 0);
-  int offset = r_int_get(offset_, 0);
-  bool partial = r_lgl_get(partial_, 0);
+  bool complete = r_lgl_get(complete_, 0);
   bool forward = r_lgl_get(forward_, 0);
   bool before_unbounded = r_lgl_get(before_unbounded_, 0);
   bool after_unbounded = r_lgl_get(after_unbounded_, 0);
+  bool constrain = r_lgl_get(constrain_, 0);
 
-  R_len_t x_n = vec_size(x);
+  int before = 0;
+  if (!before_unbounded) {
+    before = r_int_get(before_, 0);
+  }
+
+  int after = 0;
+  if (!after_unbounded) {
+    after = r_int_get(after_, 0);
+  }
+
+  int offset = compute_offset(
+    offset_,
+    before,
+    after,
+    before_unbounded,
+    after_unbounded,
+    complete,
+    forward
+  );
+
+  // The order of checks are important here and are done so they they work even
+  // if both .before/.after are unbounded(). The goal is to set unbounded()
+  // .before/.after values to values such that the width of the first
+  // iteration's window frame is correct
+  if (forward) {
+    if (before_unbounded) {
+      before = offset;
+    }
+    if (after_unbounded) {
+      after = size - 1 - offset;
+    }
+  } else {
+    if (after_unbounded) {
+      after = offset;
+    }
+    if (before_unbounded) {
+      before = size - 1 - offset;
+    }
+  }
+
+  validate_before_after_negativeness(before, after);
+
+  int x_start;
+  int x_end;
+  int window_start;
+  int window_end;
+  int entry_step;
+  int entry_offset;
+
+  if (forward) {
+    x_start = 0;
+    x_end = size - 1;
+    window_start = x_start - before + offset;
+    window_end = window_start + (before + after);
+    entry_step = step;
+    entry_offset = offset;
+  }
+  else {
+    x_start = size - 1;
+    x_end = 0;
+    window_start = x_start + after - offset;
+    window_end = window_start - (before + after);
+    entry_step = -step;
+    entry_offset = -offset;
+  }
+
+  // `entry` has to be 1-based for `vec_assign_impl()`
+  SEXP entry = PROTECT(r_int(x_start + entry_offset + 1));
+  int* p_entry = INTEGER(entry);
+
+  // We check to see if we are unbounded() in the direction that we are sliding.
+  // If so, we force `.complete = FALSE` to compute the correct number of iterations
+  // (This must be done after we compute the .offset, because the .complete-ness
+  // does affect the partial results at the beginning)
+  if ((after_unbounded && forward) || (before_unbounded && !forward)) {
+    complete = false;
+  }
+
+  int n_iter = iterations(
+    x_start,
+    x_end,
+    before,
+    after,
+    step,
+    offset,
+    complete,
+    forward
+  );
+
+  int window_start_step = entry_step;
+  int window_end_step = entry_step;
+  if (forward) {
+    if (before_unbounded) {
+      window_start_step = 0;
+    }
+    if (after_unbounded) {
+      window_end_step = 0;
+    }
+  } else {
+    if (before_unbounded) {
+      window_end_step = 0;
+    }
+    if (after_unbounded) {
+      window_start_step = 0;
+    }
+  }
 
   // Init and proxy our `out` container
   PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, x_n);
+  SEXP out = vec_init(ptype, size);
   PROTECT_WITH_INDEX(out, &out_prot_idx);
   out = vec_proxy(out);
   REPROTECT(out, out_prot_idx);
 
-  // Get assignment function
-  void (*assigner)(SEXP, SEXP, SEXP, PROTECT_INDEX, SEXP) = NULL;
-  assigner = (void (*)(SEXP, SEXP, SEXP, PROTECT_INDEX, SEXP)) get_assigner(ptype);
-
-  bool partial_unbounded = false;
-  if (forward && after_unbounded | !forward && before_unbounded) {
-    partial_unbounded = true;
-  }
-
-  // Number of "complete" iterations
-  int complete_iterations_n = iterations(x_n, before, after, step, offset, partial_unbounded, forward);
-
-  // Compute this before adjustments are made to .step/.offset
-  int partial_iterations_n;
-  if (partial) {
-    int max_iterations_n = iterations(x_n, before, after, step, offset, partial, forward);
-    partial_iterations_n = max_iterations_n - complete_iterations_n;
-  }
-
-  int startpoint;
-  int endpoint;
-  int start;
-  int stop;
-
-  // R indices for `vec_assign()`
-  if (forward) {
-    startpoint = 1;
-    endpoint = x_n;
-    start = startpoint - before + offset;
-    stop = start + (before + after);
-  }
-  else {
-    startpoint = x_n;
-    endpoint = 1;
-    start = startpoint - offset + after;
-    stop = start - (before + after);
-    step = -step;
-    offset = -offset;
-  }
-
-  SEXP entry = PROTECT(r_int(startpoint + offset));
-  int* entry_data = INTEGER(entry);
-
-  int start_step = step;
-  int stop_step = step;
-
-  if (forward) {
-    if (before_unbounded) {
-      start_step = 0;
-    }
-    if (after_unbounded) {
-      stop_step = 0;
-    }
-  } else {
-    if (before_unbounded) {
-      stop_step = 0;
-    }
-    if (after_unbounded) {
-      start_step = 0;
-    }
-  }
-
   // The indices to slice x with
-  PROTECT_INDEX i_prot_idx;
-  SEXP i = R_NilValue;
-  PROTECT_WITH_INDEX(i, &i_prot_idx);
-
-  // The current slice of x, defined as syms_slice in the env
-  PROTECT_INDEX slice_prot_idx;
-  SEXP slice = R_NilValue;
-  PROTECT_WITH_INDEX(slice, &slice_prot_idx);
+  SEXP index = PROTECT(compact_seq(0, 0, true));
+  int* p_index = INTEGER(index);
+  Rf_defineVar(Rf_install("index"), index, env);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
-  // The symbolic form of `.f(slice, ...)`
-  SEXP f_call = PROTECT(Rf_lang3(syms_dot_f, syms_slice, syms_dots));
+  // The current slice of x, defined as syms_slice in the env
+  PROTECT_INDEX slice_prot_idx;
+  SEXP slice = slice_container(inputs);
+  PROTECT_WITH_INDEX(slice, &slice_prot_idx);
+  SEXP* p_slice = &slice;
 
-  for (int j = 0; j < complete_iterations_n; ++j) {
-    i = r_seq(start, stop);
-    REPROTECT(i, i_prot_idx);
+  int seq_start;
+  int seq_end;
+  int seq_size;
 
-    //slice = vec_slice(x, i);
-    //REPROTECT(slice, slice_prot_idx);
-    //Rf_defineVar(syms_slice, slice, env);
+  for (int i = 0; i < n_iter; ++i) {
 
-    elt = Rf_eval(f_call, env);
-    REPROTECT(elt, elt_prot_idx);
+    if (forward) {
+      seq_start = max(window_start, x_start);
+      seq_end = min(window_end, x_end);
+      seq_size = seq_end - seq_start + 1;
+      init_compact_seq(p_index, seq_start, seq_size, true);
+    } else {
+      seq_start = min(window_start, x_start);
+      seq_end = max(window_end, x_end);
+      seq_size = seq_start - seq_end + 1;
+      init_compact_seq(p_index, seq_start, seq_size, false);
+    }
 
-    assigner(out, entry, elt, elt_prot_idx, ptype);
-
-    start += start_step;
-    stop += stop_step;
-    *entry_data += step;
-  }
-
-  // Done if no `.partial`
-  if (!partial) {
-    UNPROTECT(6);
-    return vec_restore(out, ptype, R_NilValue);
-  }
-
-  // can't compute any partial iterations
-  if (partial_iterations_n == 0) {
-    UNPROTECT(6);
-    return vec_restore(out, ptype, R_NilValue);
-  }
-
-  for (int j = 0; j < partial_iterations_n; ++j) {
-    i = r_seq(start, endpoint);
-    REPROTECT(i, i_prot_idx);
-
-    slice = vec_slice(x, i);
-    REPROTECT(slice, slice_prot_idx);
+    slice_loop(p_slice, x, index, env, inputs);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    assigner(out, entry, elt, elt_prot_idx, ptype);
+    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
+    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
-    start += start_step;
-    *entry_data += step;
+    if (constrain) {
+      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
+      REPROTECT(elt, elt_prot_idx);
+      elt = vec_proxy(elt);
+      REPROTECT(elt, elt_prot_idx);
+
+      if (vec_size(elt) != 1) {
+        Rf_errorcall(R_NilValue, "Incompatible lengths: %i, %i", vec_size(elt), 1);
+      }
+
+      vec_assign_impl(out, entry, elt, false);
+    } else {
+      SET_VECTOR_ELT(out, *p_entry - 1, elt);
+    }
+
+    window_start += window_start_step;
+    window_end += window_end_step;
+    *p_entry += step;
   }
 
-  UNPROTECT(6);
+  UNPROTECT(5);
   return vec_restore(out, ptype, R_NilValue);
 }
 
 // -----------------------------------------------------------------------------
 
-// Two assignment functions. One for assigning directly into lists, and one
-// for assigning everything else (including data frame rows)
+#define SLIDE -1
+#define SLIDE2 -2
 
-void slurrr_assign_list(SEXP x, SEXP i, SEXP value, PROTECT_INDEX value_prot_idx, SEXP ptype) {
-  int loc = INTEGER(i)[0] - 1;
-  SET_VECTOR_ELT(x, loc, value);
-}
-
-void slurrr_assign(SEXP x, SEXP i, SEXP value, PROTECT_INDEX value_prot_idx, SEXP ptype) {
-  value = vctrs_cast(value, ptype, strings_empty, strings_empty);
-  REPROTECT(value, value_prot_idx);
-  value = vec_proxy(value);
-  REPROTECT(value, value_prot_idx);
-
-  if (vec_size(value) != 1) {
-    Rf_errorcall(R_NilValue, "The size of each element must be 1 if .ptype is not a list");
+SEXP slice_container(int n) {
+  if (n == SLIDE || n == SLIDE2) {
+    return R_NilValue;
   }
 
-  vec_assign_impl(x, i, value, false);
+  return Rf_allocVector(VECSXP, n);
 }
 
-bool is_bare_list(SEXP x) {
-  return OBJECT(x) != 1 && TYPEOF(x) == VECSXP;
+void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n) {
+  // slide()
+  if (n == SLIDE) {
+    *p_slice = vec_slice_impl(x, index);
+    Rf_defineVar(syms_slice, *p_slice, env);
+    return;
+  }
+
+  // slide2()
+  if (n == SLIDE2) {
+    *p_slice = vec_slice_impl(VECTOR_ELT(x, 0), index);
+    Rf_defineVar(syms_slice, *p_slice, env);
+    *p_slice = vec_slice_impl(VECTOR_ELT(x, 1), index);
+    Rf_defineVar(syms_slice2, *p_slice, env);
+    return;
+  }
+
+  SEXP elt;
+
+  // pslide()
+  for (int i = 0; i < n; ++i) {
+    elt = vec_slice_impl(VECTOR_ELT(x, i), index);
+    SET_VECTOR_ELT(*p_slice, i, elt);
+  }
+
+  Rf_defineVar(syms_slice, *p_slice, env);
 }
 
-void* get_assigner(SEXP x) {
-  if (is_bare_list(x)) {
-    return slurrr_assign_list;
-  } else {
-    return slurrr_assign;
+#undef SLIDE
+#undef SLIDE2
+
+// -----------------------------------------------------------------------------
+
+int compute_offset(SEXP offset_,
+                   int before,
+                   int after,
+                   bool before_unbounded,
+                   bool after_unbounded,
+                   bool complete,
+                   bool forward) {
+
+  bool null_offset = offset_ == R_NilValue;
+
+  int offset;
+  if (!null_offset) {
+    offset = r_int_get(offset_, 0);
+  }
+
+  // - Checking if the start of the frame is out of range when going forward
+  // - Ensure `before <= offset` so we can create a full window
+  if (complete && forward && !before_unbounded && (null_offset || before > offset)) {
+    return(before);
+  }
+
+  // - Checking if the start of the frame is out of range when going backward
+  // - Ensure `after <= offset` so we can create a full window
+  if (complete && !forward && !after_unbounded && (null_offset || after > offset)) {
+    return(after);
+  }
+
+  // - Checking if the end of the frame is out of range when going forward
+  // - Ensure that if `after < 0`, then `abs(after) <= offset`
+  //   so we have some data to partially compute on
+  if (!complete && forward && !after_unbounded && after < 0L) {
+    if (null_offset || offset < -after) {
+      return(-after);
+    }
+  }
+
+  // - Checking if the end of the frame is out of range when going backward
+  // - Ensure that if `before < 0`, then `abs(before) <= offset` so we have
+  //   some data to partially compute on
+  if (!complete && !forward && !before_unbounded && before < 0L) {
+    if (null_offset || offset < -before) {
+      return(-before);
+    }
+  }
+
+  // If offset was NULL and none of these conditions were met,
+  // meaning that we have a usable window, then set offset to 0
+  if (null_offset) {
+    return(0);
+  }
+
+  return offset;
+}
+
+// -----------------------------------------------------------------------------
+
+void validate_before_after_negativeness(int before, int after) {
+  bool before_negative = before < 0;
+  bool after_negative = after < 0;
+
+  if (!before_negative && !after_negative) {
+    return;
+  }
+
+  if (before_negative && after_negative) {
+    Rf_errorcall(
+      R_NilValue,
+      "`.before` (%i) and `.after` (%i) cannot both be negative.",
+      before,
+      after
+    );
+  }
+
+  if (before_negative && abs(before) > after) {
+    int abs_before = abs(before);
+    Rf_errorcall(
+      R_NilValue,
+      "When `.before` (%i) is negative, it's absolute value (%i) cannot be greater than `.after` (%i).",
+      before,
+      abs_before,
+      after
+    );
+  }
+
+  if (after_negative && abs(after) > before) {
+    int abs_after = abs(after);
+    Rf_errorcall(
+      R_NilValue,
+      "When `.after` (%i) is negative, it's absolute value (%i) cannot be greater than `.before` (%i).",
+      after,
+      abs_after,
+      before
+    );
   }
 }
 
 // -----------------------------------------------------------------------------
 
-int adjust_partial(bool partial, bool forward, int before, int after) {
-  if (partial) {
+// It is possible to set a combination of .offset/.after/.complete such that
+// this difference ends up out of bounds so we pin it to 0L if that is the case.
+int compute_iterations(int x_end, int loc, int step, bool forward) {
+  int diff = x_end - loc;
+
+  if (!forward) {
+    diff *= -1;
+  }
+
+  // Purposeful integer division
+  int n_iter = (diff / step) + 1;
+
+  return max(n_iter, 0);
+}
+
+int iterations(int x_start,
+               int x_end,
+               int before,
+               int after,
+               int step,
+               int offset,
+               bool complete,
+               bool forward) {
+
+  int frame_pos_adjustment;
+
+  if (forward) {
+    frame_pos_adjustment = offset;
+  } else {
+    frame_pos_adjustment = -offset;
+  }
+
+  int frame_boundary_adjustment;
+
+  if (!complete) {
+    // boundary = start of frame
     if (forward) {
-      return after + 1;
+      frame_boundary_adjustment = -before;
     } else {
-      return before + 1;
+      frame_boundary_adjustment = after;
     }
   } else {
-    return 1;
+    // boundary = end of frame
+    if (forward) {
+      frame_boundary_adjustment = after;
+    } else {
+      frame_boundary_adjustment = -before;
+    }
   }
-}
 
-// number of positions lost to `.offset`
-int adjust_n(bool forward, int offset, int before, int after) {
-  if (forward) {
-    return offset - before;
-  } else {
-    return offset - after;
-  }
-}
+  int frame_pos = x_start + frame_pos_adjustment;
+  int frame_boundary = frame_pos + frame_boundary_adjustment;
 
-int iterations(int n, int before, int after, int step, int offset, bool partial, bool forward) {
-  int width = before + after + 1;
-  int adjust = adjust_partial(partial, forward, before, after);
-  n = n - adjust_n(forward, offset, before, after);
-  return ceil((n - width + adjust) / step);
+  int n_iter_frame_pos = compute_iterations(x_end, frame_pos, step, forward);
+  int n_iter_frame_boundary = compute_iterations(x_end, frame_boundary, step, forward);
+
+  return min(n_iter_frame_pos, n_iter_frame_boundary);
 }

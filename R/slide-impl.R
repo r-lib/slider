@@ -8,17 +8,19 @@ slide_impl <- function(.x,
                        .complete,
                        .dir,
                        .ptype,
-                       .constrain = TRUE) {
+                       .constrain) {
 
   vec_assert(.x)
-  .n <- vec_size(.x)
+  .size <- vec_size(.x)
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(vec_slice(.x, index), ...))
+  .f_call <- expr(.f(slice, ...))
 
   out <- slide_core(
+    .x = .x,
+    .inputs = -1L,
     .f_call = .f_call,
-    .n = .n,
+    .size = .size,
     .before = .before,
     .after = .after,
     .step = .step,
@@ -30,7 +32,7 @@ slide_impl <- function(.x,
     .env = environment()
   )
 
-  vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
+  #vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
 
   out
 }

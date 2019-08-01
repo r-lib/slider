@@ -15,17 +15,22 @@ pslide_impl <- function(.l,
 
   lapply(.l, vec_assert)
 
+  # TODO - Do more efficiently internally by reusing rather than recycling
+  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
+  # But use `vec_size_common()` to check sizes and get `.size`
   .l <- vec_recycle_common(!!!.l)
 
   # TODO - Check if .l has at least 1 element?
-  .n <- vec_size(.l[[1]])
+  .size <- vec_size(.l[[1]])
 
   .f <- as_function(.f)
 
+  .inputs <- vec_size(.l)
+
   slicers <- lapply(
-    seq_along(.l),
+    seq_len(.inputs),
     function(.i) {
-      expr(vec_slice(.l[[!!.i]], index))
+      expr(slice[[!!.i]])
     }
   )
 
@@ -36,8 +41,10 @@ pslide_impl <- function(.l,
   .f_call <- expr(.f(!!! slicers, ...))
 
   out <- slide_core(
+    .x = .l,
+    .inputs = .inputs,
     .f_call = .f_call,
-    .n = .n,
+    .size = .size,
     .before = .before,
     .after = .after,
     .step = .step,
@@ -49,7 +56,7 @@ pslide_impl <- function(.l,
     .env = environment()
   )
 
-  vctrs:::vec_names(out) <- vctrs:::vec_names(.l[[1]])
+  #vctrs:::vec_names(out) <- vctrs:::vec_names(.l[[1]])
 
   out
 }

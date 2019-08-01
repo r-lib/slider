@@ -83,7 +83,8 @@ slide2_vec <- function(.x,
     .offset = .offset,
     .complete = .complete,
     .dir = .dir,
-    .ptype = .ptype
+    .ptype = .ptype,
+    .constrain = TRUE
   )
 }
 
