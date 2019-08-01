@@ -23,7 +23,7 @@ slide2_impl <- function(.x,
 
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(slice, slice2, ...))
+  .f_call <- expr(.f(.x, .y, ...))
 
   out <- slide_core(
     .x = args,

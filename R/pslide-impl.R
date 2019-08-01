@@ -30,7 +30,7 @@ pslide_impl <- function(.l,
   slicers <- lapply(
     seq_len(.inputs),
     function(.i) {
-      expr(slice[[!!.i]])
+      expr(.l[[!!.i]])
     }
   )
 

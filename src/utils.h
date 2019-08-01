@@ -12,10 +12,9 @@ static inline int max(int x, int y) {
 
 SEXP strings_empty;
 
-SEXP syms_slice;
-SEXP syms_slice2;
-SEXP syms_dot_f;
-SEXP syms_dots;
+SEXP syms_dot_x;
+SEXP syms_dot_y;
+SEXP syms_dot_l;
 
 int r_int_get(SEXP x, int i);
 bool r_lgl_get(SEXP x, int i);

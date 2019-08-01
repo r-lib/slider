@@ -2,10 +2,9 @@
 
 SEXP strings_empty = NULL;
 
-SEXP syms_slice = NULL;
-SEXP syms_slice2 = NULL;
-SEXP syms_dot_f = NULL;
-SEXP syms_dots = NULL;
+SEXP syms_dot_x = NULL;
+SEXP syms_dot_y = NULL;
+SEXP syms_dot_l = NULL;
 
 // -----------------------------------------------------------------------------
 
@@ -61,10 +60,9 @@ bool r_lgl_get(SEXP x, int i) {
 
 // [[register()]]
 void slurrr_init_utils() {
-  syms_slice = Rf_install("slice");
-  syms_slice2 = Rf_install("slice2");
-  syms_dot_f = Rf_install(".f");
-  syms_dots = Rf_install("...");
+  syms_dot_x = Rf_install(".x");
+  syms_dot_y = Rf_install(".y");
+  syms_dot_l = Rf_install(".l");
 
   strings_empty = Rf_allocVector(STRSXP, 1);
   R_PreserveObject(strings_empty);

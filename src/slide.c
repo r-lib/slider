@@ -252,16 +252,16 @@ void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n) {
   // slide()
   if (n == SLIDE) {
     *p_slice = vec_slice_impl(x, index);
-    Rf_defineVar(syms_slice, *p_slice, env);
+    Rf_defineVar(syms_dot_x, *p_slice, env);
     return;
   }
 
   // slide2()
   if (n == SLIDE2) {
     *p_slice = vec_slice_impl(VECTOR_ELT(x, 0), index);
-    Rf_defineVar(syms_slice, *p_slice, env);
+    Rf_defineVar(syms_dot_x, *p_slice, env);
     *p_slice = vec_slice_impl(VECTOR_ELT(x, 1), index);
-    Rf_defineVar(syms_slice2, *p_slice, env);
+    Rf_defineVar(syms_dot_y, *p_slice, env);
     return;
   }
 
@@ -273,7 +273,7 @@ void slice_loop(SEXP* p_slice, SEXP x, SEXP index, SEXP env, int n) {
     SET_VECTOR_ELT(*p_slice, i, elt);
   }
 
-  Rf_defineVar(syms_slice, *p_slice, env);
+  Rf_defineVar(syms_dot_l, *p_slice, env);
 }
 
 #undef SLIDE

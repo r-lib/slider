@@ -14,7 +14,7 @@ slide_impl <- function(.x,
   .size <- vec_size(.x)
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(slice, ...))
+  .f_call <- expr(.f(.x, ...))
 
   out <- slide_core(
     .x = .x,
