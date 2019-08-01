@@ -62,3 +62,9 @@ slide_core <- function(.x,
     .env
   )
 }
+
+# ------------------------------------------------------------------------------
+
+valid_dir <- function() {
+  c("forward", "backward")
+}
