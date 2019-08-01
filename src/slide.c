@@ -126,9 +126,9 @@ SEXP slurrr_slide(SEXP env,
     i = r_seq(start, stop);
     REPROTECT(i, i_prot_idx);
 
-    slice = vec_slice(x, i);
-    REPROTECT(slice, slice_prot_idx);
-    Rf_defineVar(syms_slice, slice, env);
+    //slice = vec_slice(x, i);
+    //REPROTECT(slice, slice_prot_idx);
+    //Rf_defineVar(syms_slice, slice, env);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);

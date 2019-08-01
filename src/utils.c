@@ -3,6 +3,7 @@
 SEXP strings_empty = NULL;
 
 SEXP syms_slice = NULL;
+SEXP syms_slice2 = NULL;
 SEXP syms_dot_f = NULL;
 SEXP syms_dots = NULL;
 
@@ -65,6 +66,7 @@ void slurrr_init_utils(SEXP ns) {
   slurrr_ns_env = ns;
 
   syms_slice = Rf_install("slice");
+  syms_slice2 = Rf_install("slice2");
   syms_dot_f = Rf_install(".f");
   syms_dots = Rf_install("...");
 
