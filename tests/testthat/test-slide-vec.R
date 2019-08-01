@@ -49,7 +49,7 @@ test_that("`.ptype = NULL` fails if no common type is found", {
 test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_error(
     slide_vec(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "must be 1"
+    "Incompatible lengths"
   )
 })
 
