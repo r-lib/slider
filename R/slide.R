@@ -235,8 +235,9 @@ slide_vec_simplify <- function(.x,
     .dir = .dir
   )
 
-  if (vec_size_common(!!!out) != 1L) {
-    glubort("The size of all results from `.f` must be 1.")
+  size <- vec_size_common(!!!out)
+  if (size != 1L) {
+    glubort("Incompatible lengths: {size}, 1")
   }
 
   vec_c(!!!out)
