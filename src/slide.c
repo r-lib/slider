@@ -228,7 +228,7 @@ SEXP slurrr_slide(SEXP x,
 
     window_start += window_start_step;
     window_end += window_end_step;
-    *p_entry += step;
+    *p_entry += entry_step;
   }
 
   UNPROTECT(5);
