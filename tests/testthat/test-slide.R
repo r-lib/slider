@@ -798,6 +798,47 @@ test_that("`slide()` doesn't require a common inner type", {
 })
 
 # ------------------------------------------------------------------------------
+# input names
+
+test_that("input names are retained with atomics", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  expect_equal(names(slide(x, ~.x)), names)
+})
+
+test_that("input names are retained from proxied objects", {
+  names <- letters[1:5]
+  x <- as.POSIXlt(new_datetime(0:4 + 0))
+  x <- set_names(x, names)
+  expect_equal(names(slide(x, ~.x)), names)
+})
+
+test_that("row names are not extracted from data frames", {
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  expect_equal(names(slide(x, ~.x)), NULL)
+})
+
+test_that("row names are extracted from arrays", {
+  x <- array(1:4, c(2, 2), dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(names(slide(x, ~.x)), c("r1", "r2"))
+})
+
+test_that("names are retained on inner sliced object", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide(x, ~names(.x)), exp)
+
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  expect_equal(slide(x, ~rownames(.x)), as.list(rownames(x)))
+
+  names <- c("r1", "r2")
+  x <- array(1:4, c(2, 2), dimnames = list(names, c("c1", "c2")))
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide(x, ~rownames(.x)), exp)
+})
+
+# ------------------------------------------------------------------------------
 # validation
 
 test_that("cannot use invalid .before", {

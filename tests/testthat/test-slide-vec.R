@@ -59,3 +59,43 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
     "POSIXlt"
   )
 })
+
+# ------------------------------------------------------------------------------
+# input names
+
+test_that("names exist on inner sliced elements", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide_vec(x, ~list(names(.x))), exp)
+})
+
+test_that("names can be placed on atomics", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  expect_equal(names(slide_vec(x, ~.x)), names)
+  expect_equal(names(slide_vec(x, ~.x, .ptype = int())), names)
+  expect_equal(names(slide_vec(x, ~.x, .ptype = dbl())), names)
+})
+
+test_that("names are not placed on data frames rownames", {
+  names <- letters[1:2]
+  x <- set_names(1:2, names)
+  out <- slide_vec(x, ~data.frame(x = .x), .ptype = data.frame(x = int()))
+  expect_equal(rownames(out), c("1", "2"))
+})
+
+test_that("names can be placed on arrays", {
+  names <- letters[1:2]
+  x <- set_names(1:2, names)
+  out <- slide_vec(x, ~array(.x, c(1, 1)), .ptype = array(int(), dim = c(0, 1)))
+  expect_equal(rownames(out), names)
+})
+
+test_that("names can be placed correctly on proxied objects", {
+  names <- letters[1:2]
+  x <- set_names(1:2, names)
+  datetime_lt <- as.POSIXlt(new_datetime(0))
+  out <- slide_vec(x, ~datetime_lt, .ptype = datetime_lt)
+  expect_equal(names(out), names)
+})

@@ -2,6 +2,9 @@
 #include "utils.h"
 #include <vctrs.h>
 
+#define SLIDE -1
+#define SLIDE2 -2
+
 // -----------------------------------------------------------------------------
 // All defined below
 
@@ -27,6 +30,8 @@ int iterations(int x_start,
 SEXP slice_container(int n);
 
 void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n);
+
+SEXP copy_names(SEXP out, SEXP x, int n);
 
 // -----------------------------------------------------------------------------
 
@@ -179,7 +184,7 @@ SEXP slurrr_slide(SEXP x,
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
-  // The current slice of x, defined as syms_slice in the env
+  // The container you get from slicing all elements of `x`
   SEXP slices = PROTECT(slice_container(inputs));
   SEXP* p_slices = &slices;
 
@@ -229,14 +234,88 @@ SEXP slurrr_slide(SEXP x,
     *p_entry += entry_step;
   }
 
+  out = vec_restore(out, ptype, R_NilValue);
+  REPROTECT(out, out_prot_idx);
+
+  out = copy_names(out, x, inputs);
+  REPROTECT(out, out_prot_idx);
+
   UNPROTECT(5);
-  return vec_restore(out, ptype, R_NilValue);
+  return out;
 }
 
 // -----------------------------------------------------------------------------
 
-#define SLIDE -1
-#define SLIDE2 -2
+// Sets `names` on `x` in the vctrs style
+// Will make a copy of `x` as necessary to be consistent
+// with the fallback `names()<-` methods
+
+SEXP vec_set_names(SEXP x, SEXP names) {
+  if (names == R_NilValue) {
+    return x;
+  }
+
+  // Never on a data frame
+  if (OBJECT(x) && Rf_inherits(x, "data.frame")) {
+    return x;
+  }
+
+  // rownames(x) <- names
+  if (vec_dim_n(x) > 1) {
+    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
+
+    Rf_defineVar(syms_set_rownames, fns_set_rownames, env);
+    Rf_defineVar(syms_x, x, env);
+    Rf_defineVar(syms_names, names, env);
+
+    SEXP call = PROTECT(Rf_lang3(syms_set_rownames, syms_x, syms_names));
+
+    UNPROTECT(2);
+    return Rf_eval(call, env);
+  }
+
+  // names(x) <- names
+  if (OBJECT(x)) {
+    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
+
+    Rf_defineVar(syms_set_names, fns_set_names, env);
+    Rf_defineVar(syms_x, x, env);
+    Rf_defineVar(syms_names, names, env);
+
+    SEXP call = PROTECT(Rf_lang3(syms_set_names, syms_x, syms_names));
+
+    UNPROTECT(2);
+    return Rf_eval(call, env);
+  }
+
+  x = PROTECT(r_maybe_duplicate(x));
+
+  Rf_setAttrib(x, R_NamesSymbol, names);
+
+  UNPROTECT(1);
+  return x;
+}
+
+SEXP copy_names(SEXP out, SEXP x, int n) {
+  SEXP names;
+  if (n == SLIDE) {
+    names = PROTECT(vec_names(x));
+  } else {
+    names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
+  }
+
+  UNPROTECT(1);
+  return vec_set_names(out, names);
+}
+
+// -----------------------------------------------------------------------------
+
+// The slice_loop() works by repeatedly overwriting the `slices` SEXP with the
+// slices from `x`. If we are calling slide() or slide2(), it just overwrites
+// `slices` directly and immediately assigns the result into an environment.
+// If we are calling pslide(), then `slices` is a list and each element of the
+// list is overwritten with the current slice of the i-th pslide element.
+// Then that entire list is defined in the environment.
 
 SEXP slice_container(int n) {
   if (n == SLIDE || n == SLIDE2) {
@@ -273,9 +352,6 @@ void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
 
   Rf_defineVar(syms_dot_l, *p_slices, env);
 }
-
-#undef SLIDE
-#undef SLIDE2
 
 // -----------------------------------------------------------------------------
 
@@ -435,3 +511,7 @@ int iterations(int x_start,
 
   return min(n_iter_frame_pos, n_iter_frame_boundary);
 }
+
+
+#undef SLIDE
+#undef SLIDE2
