@@ -32,7 +32,5 @@ slide_impl <- function(.x,
     .env = environment()
   )
 
-  #vctrs:::vec_names(out) <- vctrs:::vec_names(.x)
-
   out
 }

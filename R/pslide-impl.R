@@ -56,7 +56,5 @@ pslide_impl <- function(.l,
     .env = environment()
   )
 
-  #vctrs:::vec_names(out) <- vctrs:::vec_names(.l[[1]])
-
   out
 }
