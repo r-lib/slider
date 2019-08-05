@@ -193,6 +193,9 @@ SEXP slurrr_slide(SEXP x,
   int seq_size;
 
   for (int i = 0; i < n_iter; ++i) {
+    if (i % 1024 == 0) {
+      R_CheckUserInterrupt();
+    }
 
     if (forward) {
       seq_start = max(window_start, x_start);
