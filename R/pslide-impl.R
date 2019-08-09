@@ -40,20 +40,24 @@ pslide_impl <- function(.l,
 
   f_call <- expr(.f(!!! slicers, ...))
 
+  param_list <- list(
+    type,
+    .size,
+    .constrain,
+    .before,
+    .after,
+    .step,
+    .complete,
+    .forward,
+    .offset
+  )
+
   out <- slide_core(
     x = .l,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
-    type = type,
-    .size = .size,
-    .constrain = .constrain,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .complete = .complete,
-    .forward = .forward,
-    .offset = .offset
+    param_list = param_list
   )
 
   out

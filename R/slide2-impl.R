@@ -25,20 +25,26 @@ slide2_impl <- function(.x,
 
   f_call <- expr(.f(.x, .y, ...))
 
+  type <- -2L
+
+  param_list <- list(
+    type,
+    .size,
+    .constrain,
+    .before,
+    .after,
+    .step,
+    .complete,
+    .forward,
+    .offset
+  )
+
   out <- slide_core(
     x = args,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
-    type = -2L,
-    .size = .size,
-    .constrain = .constrain,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .complete = .complete,
-    .forward = .forward,
-    .offset = .offset
+    param_list = param_list
   )
 
   out
