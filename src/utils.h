@@ -49,7 +49,3 @@ SEXP fns_set_names;
 
 extern SEXP slurrr_shared_empty_lgl;
 extern SEXP slurrr_shared_empty_int;
-
-SEXP r_maybe_duplicate(SEXP x);
-
-SEXP r_new_environment(SEXP parent, R_len_t size);
