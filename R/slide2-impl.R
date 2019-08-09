@@ -27,7 +27,7 @@ slide2_impl <- function(.x,
 
   out <- slide_core(
     .x = args,
-    .inputs = -2L,
+    type = -2L,
     .f_call = .f_call,
     .size = .size,
     .before = .before,

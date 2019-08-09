@@ -25,7 +25,7 @@ pslide_impl <- function(.l,
 
   .f <- as_function(.f)
 
-  .inputs <- vec_size(.l)
+  type <- vec_size(.l)
 
   slicers <- lapply(
     seq_len(.inputs),
@@ -42,7 +42,7 @@ pslide_impl <- function(.l,
 
   out <- slide_core(
     .x = .l,
-    .inputs = .inputs,
+    type = type,
     .f_call = .f_call,
     .size = .size,
     .before = .before,

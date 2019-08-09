@@ -1,5 +1,5 @@
 slide_core <- function(.x,
-                       .inputs,
+                       type,
                        .f_call,
                        .size,
                        .before,
@@ -13,7 +13,7 @@ slide_core <- function(.x,
                        .env) {
 
   param_list <- list(
-    .inputs, # type
+    type, # type
     .size,
     .constrain,
     .before,
