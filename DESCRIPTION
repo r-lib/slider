@@ -1,13 +1,15 @@
 Package: slurrr
-Title: What the Package Does (One Line, Title Case)
+Title: Sliding Window Functions
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    c(person(given = "Davis",
+             family = "Vaughan",
+             role = c("aut", "cre"),
+             email = "davis@rstudio.com"),
+      person(given = "RStudio",
+             role = "cph"))
+Description: Provides type stable rolling and cumulative window functions 
+    over any R data type.
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
