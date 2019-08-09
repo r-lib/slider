@@ -7,7 +7,7 @@
 
 SEXP slice_container(int type);
 
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
+void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
 
 SEXP copy_names(SEXP out, SEXP x, int type);
 
@@ -91,7 +91,10 @@ SEXP slide(SEXP x,
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
-  // The container you get from slicing all elements of `x`
+  // The container that temporarily holds the results
+  // of `vec_slice(x, index)` in the `slide()` case and
+  // `list(vec_slice(x[[1]], index), vec_slice(x[[2]], index), ...)`
+  // in the `slide2()` and `pslide()` cases
   SEXP slices = PROTECT(slice_container(p.type));
   SEXP* p_slices = &slices;
 
@@ -116,7 +119,8 @@ SEXP slide(SEXP x,
       init_compact_seq(p_index, seq_start, seq_size, false);
     }
 
-    slice_loop(p_slices, x, index, env, p.type);
+    // Update the `f_call` variables in `env`
+    update_slices(p_slices, x, index, env, p.type);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
@@ -227,7 +231,7 @@ SEXP copy_names(SEXP out, SEXP x, int type) {
 
 // -----------------------------------------------------------------------------
 
-// The slice_loop() works by repeatedly overwriting the `slices` SEXP with the
+// update_slices() works by repeatedly overwriting the `slices` SEXP with the
 // slices from `x`. If we are calling slide() or slide2(), it just overwrites
 // `slices` directly and immediately assigns the result into an environment.
 // If we are calling pslide(), then `slices` is a list and each element of the
@@ -242,7 +246,7 @@ SEXP slice_container(int type) {
   return Rf_allocVector(VECSXP, type);
 }
 
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
+void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
   // slide()
   if (type == SLIDE) {
     *p_slices = vec_slice_impl(x, index);
