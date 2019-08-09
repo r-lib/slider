@@ -26,6 +26,11 @@ SEXP slide(SEXP x,
            SEXP env,
            struct slide_params p) {
 
+  // Bail if inputs are size 0
+  if (p.size == 0) {
+    return vec_init(ptype, 0);
+  }
+
   int x_start;
   int x_end;
   int window_start;
