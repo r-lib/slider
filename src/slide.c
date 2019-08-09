@@ -144,7 +144,7 @@ SEXP slide(SEXP x,
     *p_entry += entry_step;
   }
 
-  out = vec_restore(out, ptype, R_NilValue);
+  out = vec_restore(out, ptype, Rf_ScalarInteger(p.size));
   REPROTECT(out, out_prot_idx);
 
   out = copy_names(out, x, p.type);
