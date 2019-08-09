@@ -1,4 +1,3 @@
-#' @export
 stretch <- function(.x,
                     .f,
                     ...,
