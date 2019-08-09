@@ -167,56 +167,6 @@ SEXP slurrr_slide(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
 
 // -----------------------------------------------------------------------------
 
-// Sets `names` on `x` in the vctrs style
-// Will make a copy of `x` as necessary to be consistent
-// with the fallback `names()<-` methods
-
-SEXP vec_set_names(SEXP x, SEXP names) {
-  if (names == R_NilValue) {
-    return x;
-  }
-
-  // Never on a data frame
-  if (OBJECT(x) && Rf_inherits(x, "data.frame")) {
-    return x;
-  }
-
-  // rownames(x) <- names
-  if (vec_dim_n(x) > 1) {
-    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
-
-    Rf_defineVar(syms_set_rownames, fns_set_rownames, env);
-    Rf_defineVar(syms_x, x, env);
-    Rf_defineVar(syms_names, names, env);
-
-    SEXP call = PROTECT(Rf_lang3(syms_set_rownames, syms_x, syms_names));
-
-    UNPROTECT(2);
-    return Rf_eval(call, env);
-  }
-
-  // names(x) <- names
-  if (OBJECT(x)) {
-    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
-
-    Rf_defineVar(syms_set_names, fns_set_names, env);
-    Rf_defineVar(syms_x, x, env);
-    Rf_defineVar(syms_names, names, env);
-
-    SEXP call = PROTECT(Rf_lang3(syms_set_names, syms_x, syms_names));
-
-    UNPROTECT(2);
-    return Rf_eval(call, env);
-  }
-
-  x = PROTECT(r_maybe_duplicate(x));
-
-  Rf_setAttrib(x, R_NamesSymbol, names);
-
-  UNPROTECT(1);
-  return x;
-}
-
 SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
   if (type == SLIDE) {
