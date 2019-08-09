@@ -10,7 +10,6 @@ slide2_impl <- function(.x,
                         .forward,
                         .ptype,
                         .constrain) {
-
   vec_assert(.x)
   vec_assert(.y)
 

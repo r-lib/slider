@@ -9,7 +9,6 @@ slide_impl <- function(.x,
                        .forward,
                        .ptype,
                        .constrain) {
-
   vec_assert(.x)
   .size <- vec_size(.x)
   .f <- as_function(.f)

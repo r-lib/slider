@@ -9,7 +9,6 @@ pslide_impl <- function(.l,
                         .forward,
                         .ptype,
                         .constrain = TRUE) {
-
   # TODO - too strict, `pslide(list(min = 2:3, n = 1), runif)` fails
   #vec_assert(.l, ptype = list())
 
