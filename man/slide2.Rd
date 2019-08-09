@@ -8,6 +8,12 @@
 \alias{slide2}
 \alias{slide2_vec}
 \alias{slide2_dbl}
+\alias{slide2_int}
+\alias{slide2_lgl}
+\alias{slide2_chr}
+\alias{slide2_raw}
+\alias{slide2_dfr}
+\alias{slide2_dfc}
 \title{Slide over multiple inputs simultaneously}
 \usage{
 pslide(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
@@ -34,6 +40,27 @@ slide2_vec(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
 
 slide2_dbl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide2_int(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide2_lgl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide2_chr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide2_raw(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide2_dfr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE,
+  .names_to = NULL, .name_repair = c("unique", "universal",
+  "check_unique"))
+
+slide2_dfc(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.l}{\code{[list]} A list of vectors. The length of \code{.l} determines the
@@ -109,6 +136,12 @@ permissive minimal names repair.}
 
 \item{.x, .y}{\code{[vector]} Vectors to iterate over. Vectors of size 1 will
 be recycled.}
+
+\item{.size}{If, \code{NULL}, the default, will determine the number of
+rows in \code{vec_cbind()} output by using the standard recycling rules.
+
+Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.}
 }
 \description{
 These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in

@@ -141,6 +141,176 @@ slide2_dbl <- function(.x,
     .offset = .offset,
     .complete = .complete,
     .forward = .forward,
-    .ptype = dbl()
+    .ptype = double()
   )
+}
+
+#' @rdname slide2
+#' @export
+slide2_int <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE) {
+  slide2_vec(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward,
+    .ptype = integer()
+  )
+}
+
+#' @rdname slide2
+#' @export
+slide2_lgl <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE) {
+  slide2_vec(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward,
+    .ptype = logical()
+  )
+}
+
+#' @rdname slide2
+#' @export
+slide2_chr <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE) {
+  slide2_vec(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward,
+    .ptype = character()
+  )
+}
+
+#' @rdname slide2
+#' @export
+slide2_raw <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE) {
+  slide2_vec(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward,
+    .ptype = raw()
+  )
+}
+
+#' @inheritParams vctrs::vec_rbind
+#' @rdname slide2
+#' @export
+slide2_dfr <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE,
+                       .names_to = NULL,
+                       .name_repair = c("unique", "universal", "check_unique")) {
+  out <- slide2(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward
+  )
+
+  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
+}
+
+#' @inheritParams vctrs::vec_cbind
+#' @rdname slide2
+#' @export
+slide2_dfc <- function(.x,
+                       .y,
+                       .f,
+                       ...,
+                       .before = 0L,
+                       .after = 0L,
+                       .step = 1L,
+                       .offset = NULL,
+                       .complete = FALSE,
+                       .forward = TRUE,
+                       .size = NULL,
+                       .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+  out <- slide2(
+    .x,
+    .y,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward
+  )
+
+  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
