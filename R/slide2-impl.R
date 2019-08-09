@@ -18,7 +18,7 @@ slide2_impl <- function(.x,
   # But use `vec_size_common()` to check sizes and get `.size`
   args <- vec_recycle_common(.x, .y)
 
-  .size <- vec_size(args[[1]])
+  size <- vec_size(args[[1]])
 
   .f <- as_function(.f)
 
@@ -28,7 +28,7 @@ slide2_impl <- function(.x,
 
   param_list <- list(
     type,
-    .size,
+    size,
     .constrain,
     .before,
     .after,
