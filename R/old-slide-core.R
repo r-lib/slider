@@ -1,3 +1,5 @@
+# nocov start
+
 old_slide_core <- function(.f_call,
                            .n,
                            .before,
@@ -335,3 +337,5 @@ validate_before_after_negativeness <- function(before, after) {
 
   invisible()
 }
+
+# nocov end

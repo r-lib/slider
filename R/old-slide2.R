@@ -1,3 +1,5 @@
+# nocov start
+
 old_slide2 <- function(.x,
                        .y,
                        .f,
@@ -143,3 +145,5 @@ old_slide2_impl <- function(.x,
 
   out
 }
+
+# nocov end

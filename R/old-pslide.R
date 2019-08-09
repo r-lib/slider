@@ -1,3 +1,5 @@
+# nocov start
+
 old_pslide <- function(.l,
                        .f,
                        ...,
@@ -147,3 +149,4 @@ old_pslide_impl <- function(.l,
   out
 }
 
+# nocov end
