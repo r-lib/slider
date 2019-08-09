@@ -34,8 +34,6 @@ SEXP fns_set_names;
 extern SEXP slurrr_shared_empty_lgl;
 extern SEXP slurrr_shared_empty_int;
 
-int r_int_get(SEXP x, int i);
-bool r_lgl_get(SEXP x, int i);
 SEXP r_lst_get(SEXP x, int i);
 
 int r_scalar_int_get(SEXP x);

@@ -26,14 +26,6 @@ SEXP slurrr_shared_empty_int = NULL;
 
 // -----------------------------------------------------------------------------
 
-int r_int_get(SEXP x, int i) {
-  return INTEGER(x)[i];
-}
-
-bool r_lgl_get(SEXP x, int i) {
-  return LOGICAL(x)[i];
-}
-
 SEXP r_lst_get(SEXP x, int i) {
   return VECTOR_ELT(x, i);
 }
