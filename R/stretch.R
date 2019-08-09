@@ -1,3 +1,5 @@
+# nocov start
+
 stretch <- function(.x,
                     .f,
                     ...,
@@ -27,3 +29,5 @@ stretch <- function(.x,
     .forward = .forward
   )
 }
+
+# nocov end

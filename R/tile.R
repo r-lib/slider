@@ -1,3 +1,5 @@
+# nocov start
+
 tile <- function(.x,
                  .f,
                  ...,
@@ -21,3 +23,5 @@ tile <- function(.x,
     .forward = .forward
   )
 }
+
+# nocov end
