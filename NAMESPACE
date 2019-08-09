@@ -2,8 +2,13 @@
 
 S3method(print,slurrr_box_unbounded)
 export(pslide)
+export(pslide_chr)
 export(pslide_dbl)
+export(pslide_dfc)
 export(pslide_dfr)
+export(pslide_int)
+export(pslide_lgl)
+export(pslide_raw)
 export(pslide_vec)
 export(slide)
 export(slide2)

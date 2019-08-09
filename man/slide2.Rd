@@ -4,7 +4,12 @@
 \alias{pslide}
 \alias{pslide_vec}
 \alias{pslide_dbl}
+\alias{pslide_int}
+\alias{pslide_lgl}
+\alias{pslide_chr}
+\alias{pslide_raw}
 \alias{pslide_dfr}
+\alias{pslide_dfc}
 \alias{slide2}
 \alias{slide2_vec}
 \alias{slide2_dbl}
@@ -26,10 +31,26 @@ pslide_vec(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
 pslide_dbl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE)
 
+pslide_int(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+pslide_lgl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+pslide_chr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+pslide_raw(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
 pslide_dfr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE,
   .names_to = NULL, .name_repair = c("unique", "universal",
   "check_unique"))
+
+pslide_dfc(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal"))
 
 slide2(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE)
@@ -134,14 +155,14 @@ repair function after all inputs have been concatenated together
 in a final data frame. Hence \code{vec_cbind()} allows the more
 permissive minimal names repair.}
 
-\item{.x, .y}{\code{[vector]} Vectors to iterate over. Vectors of size 1 will
-be recycled.}
-
 \item{.size}{If, \code{NULL}, the default, will determine the number of
 rows in \code{vec_cbind()} output by using the standard recycling rules.
 
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
+
+\item{.x, .y}{\code{[vector]} Vectors to iterate over. Vectors of size 1 will
+be recycled.}
 }
 \description{
 These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in
