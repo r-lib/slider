@@ -26,6 +26,7 @@ SEXP slurrr_shared_empty_int = NULL;
 
 // -----------------------------------------------------------------------------
 
+// [[ include("utils.h") ]]
 SEXP r_maybe_duplicate(SEXP x) {
   if (MAYBE_REFERENCED(x)) {
     return Rf_shallow_duplicate(x);
@@ -74,6 +75,7 @@ static SEXP new_env_call = NULL;
 static SEXP new_env__parent_node = NULL;
 static SEXP new_env__size_node = NULL;
 
+// [[ include("utils.h") ]]
 SEXP r_new_environment(SEXP parent, R_len_t size) {
   parent = parent ? parent : R_EmptyEnv;
   SETCAR(new_env__parent_node, parent);

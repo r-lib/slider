@@ -19,6 +19,7 @@ static void validate_before_after_negativeness(const struct slide_params params)
 
 // -----------------------------------------------------------------------------
 
+// [[ include("slurrr.h") ]]
 struct slide_params init_params(SEXP x, SEXP param_list) {
   struct slide_params params;
 
