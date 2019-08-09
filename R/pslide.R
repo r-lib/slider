@@ -8,7 +8,7 @@ pslide <- function(.l,
                    .step = 1L,
                    .offset = NULL,
                    .complete = FALSE,
-                   .dir = "forward") {
+                   .forward = TRUE) {
   pslide_impl(
     .l,
     .f,
@@ -18,7 +18,7 @@ pslide <- function(.l,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -34,7 +34,7 @@ pslide_vec <- function(.l,
                        .step = 1L,
                        .offset = NULL,
                        .complete = FALSE,
-                       .dir = "forward",
+                       .forward = TRUE,
                        .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -47,7 +47,7 @@ pslide_vec <- function(.l,
       .step = .step,
       .offset = .offset,
       .complete = .complete,
-      .dir = .dir
+      .forward = .forward
     )
 
     return(out)
@@ -62,7 +62,7 @@ pslide_vec <- function(.l,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = .ptype
   )
 }
@@ -75,7 +75,7 @@ pslide_vec_simplify <- function(.l,
                                 .step,
                                 .offset,
                                 .complete,
-                                .dir) {
+                                .forward) {
   out <- pslide(
     .l,
     .f,
@@ -85,7 +85,7 @@ pslide_vec_simplify <- function(.l,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir
+    .forward = .forward
   )
 
   if (vec_size_common(!!!out) != 1L) {
@@ -106,7 +106,7 @@ pslide_vec_handoff <- function(.ptype, ..., .env = caller_env()) {
       ".step",
       ".offset",
       ".complete",
-      ".dir"
+      ".forward"
     )
   )
 
@@ -125,7 +125,7 @@ pslide_dbl <- function(.l,
                        .step = 1L,
                        .offset = NULL,
                        .complete = FALSE,
-                       .dir = "forward") {
+                       .forward = TRUE) {
   pslide_vec_handoff(dbl(), ...)
 }
 
@@ -140,7 +140,7 @@ pslide_dfr <- function(.l,
                       .step = 1L,
                       .offset = NULL,
                       .complete = FALSE,
-                      .dir = "forward",
+                      .forward = TRUE,
                       .names_to = NULL,
                       .name_repair = c("unique", "universal", "check_unique")) {
   out <- pslide(
@@ -152,7 +152,7 @@ pslide_dfr <- function(.l,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir
+    .forward = .forward
   )
 
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)

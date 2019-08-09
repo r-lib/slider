@@ -6,7 +6,7 @@ pslide_impl <- function(.l,
                         .step,
                         .offset,
                         .complete,
-                        .dir,
+                        .forward,
                         .ptype,
                         .constrain = TRUE) {
 
@@ -50,7 +50,7 @@ pslide_impl <- function(.l,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = .ptype,
     .constrain = .constrain,
     .env = environment()

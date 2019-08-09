@@ -7,14 +7,10 @@ slide_core <- function(.x,
                        .step,
                        .offset,
                        .complete,
-                       .dir,
+                       .forward,
                        .ptype,
                        .constrain,
                        .env) {
-
-  # change to `.forward`
-  arg_match(.dir, valid_dir())
-  forward <- .dir == "forward"
 
   param_list <- list(
     .inputs, # type
@@ -24,15 +20,9 @@ slide_core <- function(.x,
     .after,
     .step,
     .complete,
-    forward,
+    .forward,
     .offset
   )
 
   .Call(slurrr_slide, .x, .f_call, .ptype, .env, param_list)
-}
-
-# ------------------------------------------------------------------------------
-
-valid_dir <- function() {
-  c("forward", "backward")
 }

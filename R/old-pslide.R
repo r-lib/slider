@@ -22,8 +22,6 @@ old_pslide <- function(.l,
   )
 }
 
-#' @rdname slide2
-#' @export
 old_pslide_vec <- function(.l,
                            .f,
                            ...,

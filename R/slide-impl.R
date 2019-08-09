@@ -6,7 +6,7 @@ slide_impl <- function(.x,
                        .step,
                        .offset,
                        .complete,
-                       .dir,
+                       .forward,
                        .ptype,
                        .constrain) {
 
@@ -26,7 +26,7 @@ slide_impl <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = .ptype,
     .constrain = .constrain,
     .env = environment()

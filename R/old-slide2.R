@@ -24,8 +24,6 @@ old_slide2 <- function(.x,
   )
 }
 
-#' @rdname old_slide2
-#' @export
 old_slide2_vec <- function(.x,
                            .y,
                            .f,
