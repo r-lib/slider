@@ -1,6 +1,6 @@
 slide_core <- function(.x,
-                       type,
                        f_call,
+                       type,
                        .size,
                        .before,
                        .after,

@@ -42,8 +42,8 @@ pslide_impl <- function(.l,
 
   out <- slide_core(
     .x = .l,
-    type = type,
     f_call = f_call,
+    type = type,
     .size = .size,
     .before = .before,
     .after = .after,
