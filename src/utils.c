@@ -1,6 +1,12 @@
 #include "slurrr.h"
 
 SEXP strings_empty = NULL;
+SEXP strings_dot_before = NULL;
+SEXP strings_dot_after = NULL;
+SEXP strings_dot_step = NULL;
+SEXP strings_dot_offset = NULL;
+SEXP strings_dot_complete = NULL;
+SEXP strings_dot_forward = NULL;
 
 SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
@@ -14,6 +20,9 @@ SEXP syms_set_rownames = NULL;
 SEXP fns_set_names = NULL;
 SEXP fns_set_rownames = NULL;
 
+SEXP slurrr_shared_empty_lgl = NULL;
+SEXP slurrr_shared_empty_int = NULL;
+
 // -----------------------------------------------------------------------------
 
 int r_int_get(SEXP x, int i) {
@@ -22,6 +31,22 @@ int r_int_get(SEXP x, int i) {
 
 bool r_lgl_get(SEXP x, int i) {
   return LOGICAL(x)[i];
+}
+
+SEXP r_lst_get(SEXP x, int i) {
+  return VECTOR_ELT(x, i);
+}
+
+int r_scalar_int_get(SEXP x) {
+  return INTEGER(x)[0];
+}
+
+bool r_scalar_lgl_get(SEXP x) {
+  return LOGICAL(x)[0];
+}
+
+const char* r_scalar_chr_get(SEXP x) {
+  return CHAR(STRING_ELT(x, 0));
 }
 
 // -----------------------------------------------------------------------------
@@ -105,9 +130,43 @@ void slurrr_init_utils() {
   syms_set_rownames = Rf_install("rownames<-");
   fns_set_rownames = Rf_findVar(syms_set_rownames, R_BaseEnv);
 
+
   strings_empty = Rf_allocVector(STRSXP, 1);
   R_PreserveObject(strings_empty);
   SET_STRING_ELT(strings_empty, 0, Rf_mkChar(""));
+
+  strings_dot_before = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_before);
+  SET_STRING_ELT(strings_dot_before, 0, Rf_mkChar(".before"));
+
+  strings_dot_after = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_after);
+  SET_STRING_ELT(strings_dot_after, 0, Rf_mkChar(".after"));
+
+  strings_dot_step = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_step);
+  SET_STRING_ELT(strings_dot_step, 0, Rf_mkChar(".step"));
+
+  strings_dot_offset = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_offset);
+  SET_STRING_ELT(strings_dot_offset, 0, Rf_mkChar(".offset"));
+
+  strings_dot_complete = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_complete);
+  SET_STRING_ELT(strings_dot_complete, 0, Rf_mkChar(".complete"));
+
+  strings_dot_forward = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_forward);
+  SET_STRING_ELT(strings_dot_forward, 0, Rf_mkChar(".forward"));
+
+  slurrr_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
+  R_PreserveObject(slurrr_shared_empty_lgl);
+  MARK_NOT_MUTABLE(slurrr_shared_empty_lgl);
+
+  slurrr_shared_empty_int = Rf_allocVector(INTSXP, 0);
+  R_PreserveObject(slurrr_shared_empty_int);
+  MARK_NOT_MUTABLE(slurrr_shared_empty_int);
+
 
   new_env_call = r_parse_eval("as.call(list(new.env, TRUE, NULL, NULL))", R_BaseEnv);
   R_PreserveObject(new_env_call);
