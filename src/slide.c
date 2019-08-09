@@ -256,9 +256,9 @@ void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
 
   // slide2()
   if (type == SLIDE2) {
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
+    *p_slices = vec_slice_impl(r_lst_get(x, 0), index);
     Rf_defineVar(syms_dot_x, *p_slices, env);
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
+    *p_slices = vec_slice_impl(r_lst_get(x, 1), index);
     Rf_defineVar(syms_dot_y, *p_slices, env);
     return;
   }
@@ -267,7 +267,7 @@ void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
 
   // pslide()
   for (int i = 0; i < type; ++i) {
-    slice = vec_slice_impl(VECTOR_ELT(x, i), index);
+    slice = vec_slice_impl(r_lst_get(x, i), index);
     SET_VECTOR_ELT(*p_slices, i, slice);
   }
 

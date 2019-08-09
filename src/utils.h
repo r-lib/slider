@@ -10,6 +10,22 @@ static inline int max(int x, int y) {
   return x > y ? x : y;
 };
 
+static inline SEXP r_lst_get(SEXP x, int i) {
+  return VECTOR_ELT(x, i);
+}
+
+static inline int r_scalar_int_get(SEXP x) {
+  return INTEGER(x)[0];
+}
+
+static inline bool r_scalar_lgl_get(SEXP x) {
+  return LOGICAL(x)[0];
+}
+
+static inline const char* r_scalar_chr_get(SEXP x) {
+  return CHAR(STRING_ELT(x, 0));
+}
+
 SEXP strings_empty;
 SEXP strings_dot_before;
 SEXP strings_dot_after;
@@ -33,12 +49,6 @@ SEXP fns_set_names;
 
 extern SEXP slurrr_shared_empty_lgl;
 extern SEXP slurrr_shared_empty_int;
-
-SEXP r_lst_get(SEXP x, int i);
-
-int r_scalar_int_get(SEXP x);
-bool r_scalar_lgl_get(SEXP x);
-const char* r_scalar_chr_get(SEXP x);
 
 SEXP r_maybe_duplicate(SEXP x);
 

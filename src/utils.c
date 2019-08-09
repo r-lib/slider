@@ -26,24 +26,6 @@ SEXP slurrr_shared_empty_int = NULL;
 
 // -----------------------------------------------------------------------------
 
-SEXP r_lst_get(SEXP x, int i) {
-  return VECTOR_ELT(x, i);
-}
-
-int r_scalar_int_get(SEXP x) {
-  return INTEGER(x)[0];
-}
-
-bool r_scalar_lgl_get(SEXP x) {
-  return LOGICAL(x)[0];
-}
-
-const char* r_scalar_chr_get(SEXP x) {
-  return CHAR(STRING_ELT(x, 0));
-}
-
-// -----------------------------------------------------------------------------
-
 SEXP r_maybe_duplicate(SEXP x) {
   if (MAYBE_REFERENCED(x)) {
     return Rf_shallow_duplicate(x);
