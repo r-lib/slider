@@ -95,26 +95,6 @@ pslide_vec_simplify <- function(.l,
   vec_c(!!!out)
 }
 
-pslide_vec_handoff <- function(.ptype, ..., .env = caller_env()) {
-  args <- env_get_list(
-    env = .env,
-    nms = c(
-      ".l",
-      ".f",
-      ".before",
-      ".after",
-      ".step",
-      ".offset",
-      ".complete",
-      ".forward"
-    )
-  )
-
-  pslide_vec_call <- expr(pslide_vec(!!! args, ..., .ptype = .ptype))
-
-  eval_bare(pslide_vec_call)
-}
-
 #' @rdname slide2
 #' @export
 pslide_dbl <- function(.l,
@@ -126,7 +106,18 @@ pslide_dbl <- function(.l,
                        .offset = NULL,
                        .complete = FALSE,
                        .forward = TRUE) {
-  pslide_vec_handoff(dbl(), ...)
+  pslide_vec(
+    .l,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .offset = .offset,
+    .complete = .complete,
+    .forward = .forward,
+    .ptype = dbl()
+  )
 }
 
 #' @inheritParams vctrs::vec_rbind
