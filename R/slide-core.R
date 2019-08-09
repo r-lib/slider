@@ -1,6 +1,6 @@
 slide_core <- function(.x,
                        type,
-                       .f_call,
+                       f_call,
                        .size,
                        .before,
                        .after,
@@ -24,5 +24,5 @@ slide_core <- function(.x,
     .offset
   )
 
-  .Call(slurrr_slide, .x, .f_call, .ptype, .env, param_list)
+  .Call(slurrr_slide, .x, f_call, .ptype, .env, param_list)
 }

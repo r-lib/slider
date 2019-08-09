@@ -23,12 +23,12 @@ slide2_impl <- function(.x,
 
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(.x, .y, ...))
+  f_call <- expr(.f(.x, .y, ...))
 
   out <- slide_core(
     .x = args,
     type = -2L,
-    .f_call = .f_call,
+    f_call = f_call,
     .size = .size,
     .before = .before,
     .after = .after,

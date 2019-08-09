@@ -14,12 +14,12 @@ slide_impl <- function(.x,
   .size <- vec_size(.x)
   .f <- as_function(.f)
 
-  .f_call <- expr(.f(.x, ...))
+  f_call <- expr(.f(.x, ...))
 
   out <- slide_core(
     .x = .x,
     type = -1L,
-    .f_call = .f_call,
+    f_call = f_call,
     .size = .size,
     .before = .before,
     .after = .after,
