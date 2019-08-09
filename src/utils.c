@@ -15,12 +15,6 @@ SEXP syms_x = NULL;
 SEXP syms_names = NULL;
 SEXP syms_index = NULL;
 
-SEXP syms_set_names = NULL;
-SEXP syms_set_rownames = NULL;
-
-SEXP fns_set_names = NULL;
-SEXP fns_set_rownames = NULL;
-
 SEXP slurrr_shared_empty_lgl = NULL;
 SEXP slurrr_shared_empty_int = NULL;
 

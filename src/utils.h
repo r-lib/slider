@@ -41,11 +41,5 @@ SEXP syms_x;
 SEXP syms_names;
 SEXP syms_index;
 
-SEXP syms_set_names;
-SEXP syms_set_rownames;
-
-SEXP fns_set_rownames;
-SEXP fns_set_names;
-
 extern SEXP slurrr_shared_empty_lgl;
 extern SEXP slurrr_shared_empty_int;
