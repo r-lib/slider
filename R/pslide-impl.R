@@ -47,13 +47,13 @@ pslide_impl <- function(.l,
     env = environment(),
     type = type,
     .size = .size,
+    .constrain = .constrain,
     .before = .before,
     .after = .after,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
-    .constrain = .constrain
+    .forward = .forward
   )
 
   out

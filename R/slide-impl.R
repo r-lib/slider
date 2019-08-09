@@ -23,13 +23,13 @@ slide_impl <- function(.x,
     env = environment(),
     type = -1L,
     .size = .size,
+    .constrain = .constrain,
     .before = .before,
     .after = .after,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
-    .constrain = .constrain
+    .forward = .forward
   )
 
   out

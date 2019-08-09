@@ -4,13 +4,13 @@ slide_core <- function(x,
                        env,
                        type,
                        .size,
+                       .constrain,
                        .before,
                        .after,
                        .step,
                        .offset,
                        .complete,
-                       .forward,
-                       .constrain) {
+                       .forward) {
 
   param_list <- list(
     type, # type
