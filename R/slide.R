@@ -65,7 +65,6 @@
 #'  * `vec_size(slide_vec(.x, .f)[[i]]) == 1L`
 #'
 #' @examples
-#'
 #' # The defaults work similarly to `map()`
 #' slide(1:10, ~.x)
 #'

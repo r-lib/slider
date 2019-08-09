@@ -134,7 +134,6 @@ to the type required by the version of \code{slide_*()} being used.
 }
 
 \examples{
-
 # The defaults work similarly to `map()`
 slide(1:10, ~.x)
 
