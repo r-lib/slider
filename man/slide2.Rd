@@ -159,3 +159,26 @@ parallel. They are parallel in the sense that each input is processed in
 parallel with the others, not in the sense of multicore computing. These
 functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 }
+\examples{
+# Slide along two inputs at once
+slide2(1:5, 6:10, ~list(.x, .y), .before = 2)
+
+# Or, for more than two, use `pslide()`
+pslide(list(1:5, 6:10, 11:15), ~list(.x, .y, ..3), .before = 2)
+
+# You can even slide along the rows of multiple data frames of
+# equal size at once
+x <- data.frame(a = rnorm(10), b = rnorm(10))
+y <- data.frame(c = letters[1:10], d = letters[11:20])
+
+row_return <- function(x_rows, y_rows) {
+  if (sum(x_rows$a) < 0) {
+    x_rows
+  } else {
+    y_rows
+  }
+}
+
+slide2(x, y, row_return, .before = 1, .after = 2)
+
+}
