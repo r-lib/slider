@@ -44,6 +44,7 @@ pslide_impl <- function(.l,
     .x = .l,
     f_call = f_call,
     ptype = .ptype,
+    env = environment(),
     type = type,
     .size = .size,
     .before = .before,
@@ -52,8 +53,7 @@ pslide_impl <- function(.l,
     .offset = .offset,
     .complete = .complete,
     .forward = .forward,
-    .constrain = .constrain,
-    .env = environment()
+    .constrain = .constrain
   )
 
   out

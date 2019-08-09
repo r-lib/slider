@@ -29,6 +29,7 @@ slide2_impl <- function(.x,
     .x = args,
     f_call = f_call,
     ptype = .ptype,
+    env = environment(),
     type = -2L,
     .size = .size,
     .before = .before,
@@ -37,8 +38,7 @@ slide2_impl <- function(.x,
     .offset = .offset,
     .complete = .complete,
     .forward = .forward,
-    .constrain = .constrain,
-    .env = environment()
+    .constrain = .constrain
   )
 
   out
