@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/DavisVaughan/slurrr.svg?branch=master)](https://travis-ci.org/DavisVaughan/slurrr)
 <!-- badges: end -->
 
 The goal of slurrr is to provide a general purpose sliding window
