@@ -4,7 +4,12 @@
 \alias{slide}
 \alias{slide_vec}
 \alias{slide_dbl}
+\alias{slide_int}
+\alias{slide_lgl}
+\alias{slide_chr}
+\alias{slide_raw}
 \alias{slide_dfr}
+\alias{slide_dfc}
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
@@ -17,10 +22,26 @@ slide_vec(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
 slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE)
 
+slide_int(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide_lgl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide_chr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
+slide_raw(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
+
 slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   .offset = NULL, .complete = FALSE, .forward = TRUE,
   .names_to = NULL, .name_repair = c("unique", "universal",
   "check_unique"))
+
+slide_dfc(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
+  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.x}{\code{[vector]} The vector to iterate over.}
@@ -80,6 +101,12 @@ have unique names. On the other hand, \code{vec_cbind()} applies the
 repair function after all inputs have been concatenated together
 in a final data frame. Hence \code{vec_cbind()} allows the more
 permissive minimal names repair.}
+
+\item{.size}{If, \code{NULL}, the default, will determine the number of
+rows in \code{vec_cbind()} output by using the standard recycling rules.
+
+Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.}
 }
 \description{
 \code{slide()} iterates through \code{.x} using a sliding window, applying \code{.f} to each
