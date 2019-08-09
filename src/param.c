@@ -63,15 +63,8 @@ static void check_scalar(SEXP x, SEXP arg) {
 }
 
 static SEXP check_scalar_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
-  x = PROTECT(vctrs_cast(
-    x,
-    ptype,
-    x_arg,
-    strings_empty
-  ));
-
+  x = PROTECT(vctrs_cast(x, ptype, x_arg, strings_empty));
   check_scalar(x, x_arg);
-
   UNPROTECT(1);
   return x;
 }
