@@ -51,9 +51,9 @@ pslide_impl <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward
+    .forward = .forward,
+    .offset = .offset
   )
 
   out

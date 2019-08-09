@@ -8,9 +8,9 @@ slide_core <- function(x,
                        .before,
                        .after,
                        .step,
-                       .offset,
                        .complete,
-                       .forward) {
+                       .forward,
+                       .offset) {
 
   param_list <- list(
     type, # type
