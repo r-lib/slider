@@ -5,21 +5,21 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-SEXP slice_container(int type);
+static SEXP slice_container(int type);
 
-void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
+static void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
 
-SEXP copy_names(SEXP out, SEXP x, int type);
+static SEXP copy_names(SEXP out, SEXP x, int type);
 
-int iterations(int x_start, int x_end, const struct slide_params params);
+static int iterations(int x_start, int x_end, const struct slide_params params);
 
 // -----------------------------------------------------------------------------
 
-SEXP slide(SEXP x,
-           SEXP f_call,
-           SEXP ptype,
-           SEXP env,
-           struct slide_params p) {
+static SEXP slide(SEXP x,
+                  SEXP f_call,
+                  SEXP ptype,
+                  SEXP env,
+                  struct slide_params p) {
 
   // Bail if inputs are size 0
   if (p.size == 0) {
@@ -167,7 +167,7 @@ SEXP slurrr_slide(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
 
 // -----------------------------------------------------------------------------
 
-SEXP copy_names(SEXP out, SEXP x, int type) {
+static SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
   if (type == SLIDE) {
     names = PROTECT(vec_names(x));
@@ -188,7 +188,7 @@ SEXP copy_names(SEXP out, SEXP x, int type) {
 // list is overwritten with the current slice of the i-th pslide element.
 // Then that entire list is defined in the environment.
 
-SEXP slice_container(int type) {
+static SEXP slice_container(int type) {
   if (type == SLIDE || type == SLIDE2) {
     return R_NilValue;
   }
@@ -196,7 +196,7 @@ SEXP slice_container(int type) {
   return Rf_allocVector(VECSXP, type);
 }
 
-void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
+static void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
   // slide()
   if (type == SLIDE) {
     *p_slices = vec_slice_impl(x, index);
@@ -228,7 +228,7 @@ void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
 
 // It is possible to set a combination of .offset/.after/.complete such that
 // this difference ends up out of bounds so we pin it to 0L if that is the case.
-int compute_iterations(int x_end, int loc, int step, bool forward) {
+static int compute_iterations(int x_end, int loc, int step, bool forward) {
   int diff = x_end - loc;
 
   if (!forward) {
@@ -241,9 +241,7 @@ int compute_iterations(int x_end, int loc, int step, bool forward) {
   return max(n_iter, 0);
 }
 
-int iterations(int x_start,
-               int x_end,
-               const struct slide_params params) {
+static int iterations(int x_start, int x_end, const struct slide_params params) {
 
   int frame_pos_adjustment;
 
