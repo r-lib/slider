@@ -19,6 +19,7 @@ slide_impl <- function(.x,
   out <- slide_core(
     .x = .x,
     f_call = f_call,
+    ptype = .ptype,
     type = -1L,
     .size = .size,
     .before = .before,
@@ -27,7 +28,6 @@ slide_impl <- function(.x,
     .offset = .offset,
     .complete = .complete,
     .forward = .forward,
-    .ptype = .ptype,
     .constrain = .constrain,
     .env = environment()
   )

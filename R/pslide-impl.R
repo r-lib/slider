@@ -43,6 +43,7 @@ pslide_impl <- function(.l,
   out <- slide_core(
     .x = .l,
     f_call = f_call,
+    ptype = .ptype,
     type = type,
     .size = .size,
     .before = .before,
@@ -51,7 +52,6 @@ pslide_impl <- function(.l,
     .offset = .offset,
     .complete = .complete,
     .forward = .forward,
-    .ptype = .ptype,
     .constrain = .constrain,
     .env = environment()
   )
