@@ -37,8 +37,6 @@ SEXP strings_dot_forward;
 SEXP syms_dot_x;
 SEXP syms_dot_y;
 SEXP syms_dot_l;
-SEXP syms_x;
-SEXP syms_names;
 SEXP syms_index;
 
 extern SEXP slurrr_shared_empty_lgl;

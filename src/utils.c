@@ -11,8 +11,6 @@ SEXP strings_dot_forward = NULL;
 SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
-SEXP syms_x = NULL;
-SEXP syms_names = NULL;
 SEXP syms_index = NULL;
 
 SEXP slurrr_shared_empty_lgl = NULL;
@@ -25,8 +23,6 @@ void slurrr_init_utils() {
   syms_dot_x = Rf_install(".x");
   syms_dot_y = Rf_install(".y");
   syms_dot_l = Rf_install(".l");
-  syms_x = Rf_install("x");
-  syms_names = Rf_install("names");
   syms_index = Rf_install("index");
 
   strings_empty = Rf_allocVector(STRSXP, 1);
