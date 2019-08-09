@@ -5,13 +5,13 @@
 #include <vctrs.h>
 
 /* .Call calls */
-extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
 SEXP slurrr_init();
 
 static const R_CallMethodDef CallEntries[] = {
-  {"slurrr_slide",     (DL_FUNC) &slurrr_slide, 15},
+  {"slurrr_slide",     (DL_FUNC) &slurrr_slide, 5},
   {"slurrr_init",      (DL_FUNC) &slurrr_init, 0},
   {NULL, NULL, 0}
 };

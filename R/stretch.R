@@ -6,9 +6,9 @@ stretch <- function(.x,
                     .extend = 0L,
                     .step = 1L,
                     .complete = FALSE,
-                    .dir = "forward") {
+                    .forward = TRUE) {
 
-  if (identical(.dir, "forward")) {
+  if (isTRUE(.forward)) {
     .before <- unbounded()
     .after <- .extend
   } else {
@@ -25,6 +25,6 @@ stretch <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir
+    .forward = .forward
   )
 }

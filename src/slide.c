@@ -2,105 +2,29 @@
 #include "utils.h"
 #include <vctrs.h>
 
-#define SLIDE -1
-#define SLIDE2 -2
-
 // -----------------------------------------------------------------------------
 // All defined below
 
-int compute_offset(SEXP offset_,
-                   int before,
-                   int after,
-                   bool before_unbounded,
-                   bool after_unbounded,
-                   bool complete,
-                   bool forward);
+SEXP slice_container(int type);
 
-void validate_before_after_negativeness(int before, int after);
+void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
 
-int iterations(int x_start,
-               int x_end,
-               int before,
-               int after,
-               int step,
-               int offset,
-               bool complete,
-               bool forward);
+SEXP copy_names(SEXP out, SEXP x, int type);
 
-SEXP slice_container(int n);
-
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n);
-
-SEXP copy_names(SEXP out, SEXP x, int n);
+int iterations(int x_start, int x_end, const struct slide_params params);
 
 // -----------------------------------------------------------------------------
 
-SEXP slurrr_slide(SEXP x,
-                  SEXP inputs_,
-                  SEXP f_call,
-                  SEXP size_,
-                  SEXP before_,
-                  SEXP after_,
-                  SEXP step_,
-                  SEXP offset_,
-                  SEXP complete_,
-                  SEXP forward_,
-                  SEXP ptype,
-                  SEXP before_unbounded_,
-                  SEXP after_unbounded_,
-                  SEXP constrain_,
-                  SEXP env) {
+SEXP slide(SEXP x,
+           SEXP f_call,
+           SEXP ptype,
+           SEXP env,
+           struct slide_params p) {
 
-  int inputs = r_int_get(inputs_, 0);
-  int size = r_int_get(size_, 0);
-  int step = r_int_get(step_, 0);
-  bool complete = r_lgl_get(complete_, 0);
-  bool forward = r_lgl_get(forward_, 0);
-  bool before_unbounded = r_lgl_get(before_unbounded_, 0);
-  bool after_unbounded = r_lgl_get(after_unbounded_, 0);
-  bool constrain = r_lgl_get(constrain_, 0);
-
-  int before = 0;
-  if (!before_unbounded) {
-    before = r_int_get(before_, 0);
+  // Bail if inputs are size 0
+  if (p.size == 0) {
+    return vec_init(ptype, 0);
   }
-
-  int after = 0;
-  if (!after_unbounded) {
-    after = r_int_get(after_, 0);
-  }
-
-  int offset = compute_offset(
-    offset_,
-    before,
-    after,
-    before_unbounded,
-    after_unbounded,
-    complete,
-    forward
-  );
-
-  // The order of checks are important here and are done so they they work even
-  // if both .before/.after are unbounded(). The goal is to set unbounded()
-  // .before/.after values to values such that the width of the first
-  // iteration's window frame is correct
-  if (forward) {
-    if (before_unbounded) {
-      before = offset;
-    }
-    if (after_unbounded) {
-      after = size - 1 - offset;
-    }
-  } else {
-    if (after_unbounded) {
-      after = offset;
-    }
-    if (before_unbounded) {
-      before = size - 1 - offset;
-    }
-  }
-
-  validate_before_after_negativeness(before, after);
 
   int x_start;
   int x_end;
@@ -109,67 +33,50 @@ SEXP slurrr_slide(SEXP x,
   int entry_step;
   int entry_offset;
 
-  if (forward) {
+  if (p.forward) {
     x_start = 0;
-    x_end = size - 1;
-    window_start = x_start - before + offset;
-    window_end = window_start + (before + after);
-    entry_step = step;
-    entry_offset = offset;
+    x_end = p.size - 1;
+    window_start = x_start - p.before + p.offset;
+    window_end = window_start + (p.before + p.after);
+    entry_step = p.step;
+    entry_offset = p.offset;
   }
   else {
-    x_start = size - 1;
+    x_start = p.size - 1;
     x_end = 0;
-    window_start = x_start + after - offset;
-    window_end = window_start - (before + after);
-    entry_step = -step;
-    entry_offset = -offset;
+    window_start = x_start + p.after - p.offset;
+    window_end = window_start - (p.before + p.after);
+    entry_step = -p.step;
+    entry_offset = -p.offset;
   }
 
   // `entry` has to be 1-based for `vec_assign_impl()`
   SEXP entry = PROTECT(r_int(x_start + entry_offset + 1));
   int* p_entry = INTEGER(entry);
 
-  // We check to see if we are unbounded() in the direction that we are sliding.
-  // If so, we force `.complete = FALSE` to compute the correct number of iterations
-  // (This must be done after we compute the .offset, because the .complete-ness
-  // does affect the partial results at the beginning)
-  if ((after_unbounded && forward) || (before_unbounded && !forward)) {
-    complete = false;
-  }
-
-  int n_iter = iterations(
-    x_start,
-    x_end,
-    before,
-    after,
-    step,
-    offset,
-    complete,
-    forward
-  );
+  int n = iterations(x_start, x_end, p);
 
   int window_start_step = entry_step;
   int window_end_step = entry_step;
-  if (forward) {
-    if (before_unbounded) {
+  if (p.forward) {
+    if (p.before_unbounded) {
       window_start_step = 0;
     }
-    if (after_unbounded) {
+    if (p.after_unbounded) {
       window_end_step = 0;
     }
   } else {
-    if (before_unbounded) {
+    if (p.before_unbounded) {
       window_end_step = 0;
     }
-    if (after_unbounded) {
+    if (p.after_unbounded) {
       window_start_step = 0;
     }
   }
 
   // Init and proxy our `out` container
   PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, size);
+  SEXP out = vec_init(ptype, p.size);
   PROTECT_WITH_INDEX(out, &out_prot_idx);
   out = vec_proxy(out);
   REPROTECT(out, out_prot_idx);
@@ -177,27 +84,30 @@ SEXP slurrr_slide(SEXP x,
   // The indices to slice x with
   SEXP index = PROTECT(compact_seq(0, 0, true));
   int* p_index = INTEGER(index);
-  Rf_defineVar(Rf_install("index"), index, env);
+  Rf_defineVar(syms_index, index, env);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
-  // The container you get from slicing all elements of `x`
-  SEXP slices = PROTECT(slice_container(inputs));
+  // The container that temporarily holds the results
+  // of `vec_slice(x, index)` in the `slide()` case and
+  // `list(vec_slice(x[[1]], index), vec_slice(x[[2]], index), ...)`
+  // in the `slide2()` and `pslide()` cases
+  SEXP slices = PROTECT(slice_container(p.type));
   SEXP* p_slices = &slices;
 
   int seq_start;
   int seq_end;
   int seq_size;
 
-  for (int i = 0; i < n_iter; ++i) {
+  for (int i = 0; i < n; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    if (forward) {
+    if (p.forward) {
       seq_start = max(window_start, x_start);
       seq_end = min(window_end, x_end);
       seq_size = seq_end - seq_start + 1;
@@ -209,7 +119,8 @@ SEXP slurrr_slide(SEXP x,
       init_compact_seq(p_index, seq_start, seq_size, false);
     }
 
-    slice_loop(p_slices, x, index, env, inputs);
+    // Update the `f_call` variables in `env`
+    update_slices(p_slices, x, index, env, p.type);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
@@ -217,7 +128,7 @@ SEXP slurrr_slide(SEXP x,
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
-    if (constrain) {
+    if (p.constrain) {
       elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
       REPROTECT(elt, elt_prot_idx);
       elt = vec_proxy(elt);
@@ -237,10 +148,10 @@ SEXP slurrr_slide(SEXP x,
     *p_entry += entry_step;
   }
 
-  out = vec_restore(out, ptype, R_NilValue);
+  out = vec_restore(out, ptype, r_int(p.size));
   REPROTECT(out, out_prot_idx);
 
-  out = copy_names(out, x, inputs);
+  out = copy_names(out, x, p.type);
   REPROTECT(out, out_prot_idx);
 
   UNPROTECT(5);
@@ -249,59 +160,16 @@ SEXP slurrr_slide(SEXP x,
 
 // -----------------------------------------------------------------------------
 
-// Sets `names` on `x` in the vctrs style
-// Will make a copy of `x` as necessary to be consistent
-// with the fallback `names()<-` methods
-
-SEXP vec_set_names(SEXP x, SEXP names) {
-  if (names == R_NilValue) {
-    return x;
-  }
-
-  // Never on a data frame
-  if (OBJECT(x) && Rf_inherits(x, "data.frame")) {
-    return x;
-  }
-
-  // rownames(x) <- names
-  if (vec_dim_n(x) > 1) {
-    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
-
-    Rf_defineVar(syms_set_rownames, fns_set_rownames, env);
-    Rf_defineVar(syms_x, x, env);
-    Rf_defineVar(syms_names, names, env);
-
-    SEXP call = PROTECT(Rf_lang3(syms_set_rownames, syms_x, syms_names));
-
-    UNPROTECT(2);
-    return Rf_eval(call, env);
-  }
-
-  // names(x) <- names
-  if (OBJECT(x)) {
-    SEXP env = PROTECT(r_new_environment(R_GlobalEnv, 3));
-
-    Rf_defineVar(syms_set_names, fns_set_names, env);
-    Rf_defineVar(syms_x, x, env);
-    Rf_defineVar(syms_names, names, env);
-
-    SEXP call = PROTECT(Rf_lang3(syms_set_names, syms_x, syms_names));
-
-    UNPROTECT(2);
-    return Rf_eval(call, env);
-  }
-
-  x = PROTECT(r_maybe_duplicate(x));
-
-  Rf_setAttrib(x, R_NamesSymbol, names);
-
-  UNPROTECT(1);
-  return x;
+SEXP slurrr_slide(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
+  struct slide_params params = init_params(x, param_list);
+  return slide(x, f_call, ptype, env, params);
 }
 
-SEXP copy_names(SEXP out, SEXP x, int n) {
+// -----------------------------------------------------------------------------
+
+SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
-  if (n == SLIDE) {
+  if (type == SLIDE) {
     names = PROTECT(vec_names(x));
   } else {
     names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
@@ -313,34 +181,34 @@ SEXP copy_names(SEXP out, SEXP x, int n) {
 
 // -----------------------------------------------------------------------------
 
-// The slice_loop() works by repeatedly overwriting the `slices` SEXP with the
+// update_slices() works by repeatedly overwriting the `slices` SEXP with the
 // slices from `x`. If we are calling slide() or slide2(), it just overwrites
 // `slices` directly and immediately assigns the result into an environment.
 // If we are calling pslide(), then `slices` is a list and each element of the
 // list is overwritten with the current slice of the i-th pslide element.
 // Then that entire list is defined in the environment.
 
-SEXP slice_container(int n) {
-  if (n == SLIDE || n == SLIDE2) {
+SEXP slice_container(int type) {
+  if (type == SLIDE || type == SLIDE2) {
     return R_NilValue;
   }
 
-  return Rf_allocVector(VECSXP, n);
+  return Rf_allocVector(VECSXP, type);
 }
 
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
+void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
   // slide()
-  if (n == SLIDE) {
+  if (type == SLIDE) {
     *p_slices = vec_slice_impl(x, index);
     Rf_defineVar(syms_dot_x, *p_slices, env);
     return;
   }
 
   // slide2()
-  if (n == SLIDE2) {
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
+  if (type == SLIDE2) {
+    *p_slices = vec_slice_impl(r_lst_get(x, 0), index);
     Rf_defineVar(syms_dot_x, *p_slices, env);
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
+    *p_slices = vec_slice_impl(r_lst_get(x, 1), index);
     Rf_defineVar(syms_dot_y, *p_slices, env);
     return;
   }
@@ -348,110 +216,12 @@ void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
   SEXP slice;
 
   // pslide()
-  for (int i = 0; i < n; ++i) {
-    slice = vec_slice_impl(VECTOR_ELT(x, i), index);
+  for (int i = 0; i < type; ++i) {
+    slice = vec_slice_impl(r_lst_get(x, i), index);
     SET_VECTOR_ELT(*p_slices, i, slice);
   }
 
   Rf_defineVar(syms_dot_l, *p_slices, env);
-}
-
-// -----------------------------------------------------------------------------
-
-int compute_offset(SEXP offset_,
-                   int before,
-                   int after,
-                   bool before_unbounded,
-                   bool after_unbounded,
-                   bool complete,
-                   bool forward) {
-
-  bool null_offset = offset_ == R_NilValue;
-
-  int offset;
-  if (!null_offset) {
-    offset = r_int_get(offset_, 0);
-  }
-
-  // - Checking if the start of the frame is out of range when going forward
-  // - Ensure `before <= offset` so we can create a full window
-  if (complete && forward && !before_unbounded && (null_offset || before > offset)) {
-    return(before);
-  }
-
-  // - Checking if the start of the frame is out of range when going backward
-  // - Ensure `after <= offset` so we can create a full window
-  if (complete && !forward && !after_unbounded && (null_offset || after > offset)) {
-    return(after);
-  }
-
-  // - Checking if the end of the frame is out of range when going forward
-  // - Ensure that if `after < 0`, then `abs(after) <= offset`
-  //   so we have some data to partially compute on
-  if (!complete && forward && !after_unbounded && after < 0L) {
-    if (null_offset || offset < -after) {
-      return(-after);
-    }
-  }
-
-  // - Checking if the end of the frame is out of range when going backward
-  // - Ensure that if `before < 0`, then `abs(before) <= offset` so we have
-  //   some data to partially compute on
-  if (!complete && !forward && !before_unbounded && before < 0L) {
-    if (null_offset || offset < -before) {
-      return(-before);
-    }
-  }
-
-  // If offset was NULL and none of these conditions were met,
-  // meaning that we have a usable window, then set offset to 0
-  if (null_offset) {
-    return(0);
-  }
-
-  return offset;
-}
-
-// -----------------------------------------------------------------------------
-
-void validate_before_after_negativeness(int before, int after) {
-  bool before_negative = before < 0;
-  bool after_negative = after < 0;
-
-  if (!before_negative && !after_negative) {
-    return;
-  }
-
-  if (before_negative && after_negative) {
-    Rf_errorcall(
-      R_NilValue,
-      "`.before` (%i) and `.after` (%i) cannot both be negative.",
-      before,
-      after
-    );
-  }
-
-  if (before_negative && abs(before) > after) {
-    int abs_before = abs(before);
-    Rf_errorcall(
-      R_NilValue,
-      "When `.before` (%i) is negative, it's absolute value (%i) cannot be greater than `.after` (%i).",
-      before,
-      abs_before,
-      after
-    );
-  }
-
-  if (after_negative && abs(after) > before) {
-    int abs_after = abs(after);
-    Rf_errorcall(
-      R_NilValue,
-      "When `.after` (%i) is negative, it's absolute value (%i) cannot be greater than `.before` (%i).",
-      after,
-      abs_after,
-      before
-    );
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -473,48 +243,39 @@ int compute_iterations(int x_end, int loc, int step, bool forward) {
 
 int iterations(int x_start,
                int x_end,
-               int before,
-               int after,
-               int step,
-               int offset,
-               bool complete,
-               bool forward) {
+               const struct slide_params params) {
 
   int frame_pos_adjustment;
 
-  if (forward) {
-    frame_pos_adjustment = offset;
+  if (params.forward) {
+    frame_pos_adjustment = params.offset;
   } else {
-    frame_pos_adjustment = -offset;
+    frame_pos_adjustment = -params.offset;
   }
 
   int frame_boundary_adjustment;
 
-  if (!complete) {
+  if (!params.complete) {
     // boundary = start of frame
-    if (forward) {
-      frame_boundary_adjustment = -before;
+    if (params.forward) {
+      frame_boundary_adjustment = -params.before;
     } else {
-      frame_boundary_adjustment = after;
+      frame_boundary_adjustment = params.after;
     }
   } else {
     // boundary = end of frame
-    if (forward) {
-      frame_boundary_adjustment = after;
+    if (params.forward) {
+      frame_boundary_adjustment = params.after;
     } else {
-      frame_boundary_adjustment = -before;
+      frame_boundary_adjustment = -params.before;
     }
   }
 
   int frame_pos = x_start + frame_pos_adjustment;
   int frame_boundary = frame_pos + frame_boundary_adjustment;
 
-  int n_iter_frame_pos = compute_iterations(x_end, frame_pos, step, forward);
-  int n_iter_frame_boundary = compute_iterations(x_end, frame_boundary, step, forward);
+  int n_iter_frame_pos = compute_iterations(x_end, frame_pos, params.step, params.forward);
+  int n_iter_frame_boundary = compute_iterations(x_end, frame_boundary, params.step, params.forward);
 
   return min(n_iter_frame_pos, n_iter_frame_boundary);
 }
-
-
-#undef SLIDE
-#undef SLIDE2

@@ -6,7 +6,7 @@ tile <- function(.x,
                  .after = 0L,
                  .offset = NULL,
                  .complete = FALSE,
-                 .dir = "forward") {
+                 .forward = TRUE) {
 
   .step <- .before + .after + 1L
 
@@ -19,6 +19,6 @@ tile <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir
+    .forward = .forward
   )
 }

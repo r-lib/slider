@@ -20,7 +20,7 @@ old_slide_core <- function(.f_call,
   .step <- vec_cast(.step, integer())
 
   if (.step < 1L) {
-    glubort("`.step` must be at least 1, not {.step}.")
+    abort("`.step` must be at least 1, not {.step}.")
   }
 
   before_unbounded <- is_unbounded(.before)
@@ -312,13 +312,13 @@ validate_before_after_negativeness <- function(before, after) {
   }
 
   if (before_negative && after_negative) {
-    glubort(
+    abort(
       "`.before` ({before}) and `.after` ({after}) cannot both be negative."
     )
   }
 
   if (before_negative && abs(before) > after) {
-    glubort(
+    abort(
       "When `.before` ({before}) is negative, ",
       "it's absolute value ({abs(before)}) ",
       "cannot be greater than `.after` ({after})."
@@ -326,7 +326,7 @@ validate_before_after_negativeness <- function(before, after) {
   }
 
   if (after_negative && abs(after) > before) {
-    glubort(
+    abort(
       "When `.after` ({after}) is negative, ",
       "it's absolute value ({abs(after)}) ",
       "cannot be greater than `.before` ({before})."

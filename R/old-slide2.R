@@ -24,8 +24,6 @@ old_slide2 <- function(.x,
   )
 }
 
-#' @rdname old_slide2
-#' @export
 old_slide2_vec <- function(.x,
                            .y,
                            .f,
@@ -94,7 +92,7 @@ old_slide2_vec_simplify <- function(.x,
   )
 
   if (vec_size_common(!!!out) != 1L) {
-    glubort("The size of all results from `.f` must be 1.")
+    abort("The size of all results from `.f` must be 1.")
   }
 
   vec_c(!!!out)

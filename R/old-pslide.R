@@ -22,8 +22,6 @@ old_pslide <- function(.l,
   )
 }
 
-#' @rdname slide2
-#' @export
 old_pslide_vec <- function(.l,
                            .f,
                            ...,
@@ -87,7 +85,7 @@ old_pslide_vec_simplify <- function(.l,
   )
 
   if (vec_size_common(!!!out) != 1L) {
-    glubort("The size of all results from `.f` must be 1.")
+    abort("The size of all results from `.f` must be 1.")
   }
 
   vec_c(!!!out)
