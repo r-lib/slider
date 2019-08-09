@@ -41,7 +41,7 @@ pslide_impl <- function(.l,
   f_call <- expr(.f(!!! slicers, ...))
 
   out <- slide_core(
-    .x = .l,
+    x = .l,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),

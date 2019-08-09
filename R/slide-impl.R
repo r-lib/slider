@@ -17,7 +17,7 @@ slide_impl <- function(.x,
   f_call <- expr(.f(.x, ...))
 
   out <- slide_core(
-    .x = .x,
+    x = .x,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
