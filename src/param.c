@@ -11,27 +11,29 @@ static void update_step(SEXP x, struct slide_params* params);
 static void update_complete(SEXP x, struct slide_params* params);
 static void update_forward(SEXP x, struct slide_params* params);
 static void update_offset(SEXP x, struct slide_params* params);
+static void update_size(SEXP x, struct slide_params* params);
 
 static void update_before_after_if_unbounded(struct slide_params* params);
 static void validate_before_after_negativeness(const struct slide_params params);
 
 // -----------------------------------------------------------------------------
 
-struct slide_params init_params(SEXP x) {
+struct slide_params init_params(SEXP x, SEXP param_list) {
   struct slide_params params;
 
-  params.type = r_scalar_int_get(r_lst_get(x, 0));
-  params.size = r_scalar_int_get(r_lst_get(x, 1));
-  params.constrain = r_scalar_lgl_get(r_lst_get(x, 2));
+  params.type = r_scalar_int_get(r_lst_get(param_list, 0));
+  params.constrain = r_scalar_lgl_get(r_lst_get(param_list, 1));
 
-  update_before(x, &params);
-  update_after(x, &params);
-  update_step(x, &params);
-  update_complete(x, &params);
-  update_forward(x, &params);
+  update_before(param_list, &params);
+  update_after(param_list, &params);
+  update_step(param_list, &params);
+  update_complete(param_list, &params);
+  update_forward(param_list, &params);
 
   // Must be done after all of: before/after/complete/forward
-  update_offset(x, &params);
+  update_offset(param_list, &params);
+
+  update_size(x, &params);
 
   update_before_after_if_unbounded(&params);
   validate_before_after_negativeness(params);
@@ -87,8 +89,8 @@ static bool is_unbounded(SEXP x) {
   return OBJECT(x) && Rf_inherits(x, "slurrr_box_unbounded");
 }
 
-static void update_before(SEXP x, struct slide_params* params) {
-  SEXP before = r_lst_get(x, 3);
+static void update_before(SEXP param_list, struct slide_params* params) {
+  SEXP before = r_lst_get(param_list, 2);
 
   if (is_unbounded(before)) {
     params->before = 0;
@@ -104,8 +106,8 @@ static void update_before(SEXP x, struct slide_params* params) {
   UNPROTECT(1);
 }
 
-static void update_after(SEXP x, struct slide_params* params) {
-  SEXP after = r_lst_get(x, 4);
+static void update_after(SEXP param_list, struct slide_params* params) {
+  SEXP after = r_lst_get(param_list, 3);
 
   if (is_unbounded(after)) {
     params->after = 0;
@@ -121,8 +123,8 @@ static void update_after(SEXP x, struct slide_params* params) {
   UNPROTECT(1);
 }
 
-static void update_step(SEXP x, struct slide_params* params) {
-  SEXP step = r_lst_get(x, 5);
+static void update_step(SEXP param_list, struct slide_params* params) {
+  SEXP step = r_lst_get(param_list, 4);
 
   step = PROTECT(check_scalar_int(step, strings_dot_step));
 
@@ -135,8 +137,8 @@ static void update_step(SEXP x, struct slide_params* params) {
   UNPROTECT(1);
 }
 
-static void update_complete(SEXP x, struct slide_params* params) {
-  SEXP complete = r_lst_get(x, 6);
+static void update_complete(SEXP param_list, struct slide_params* params) {
+  SEXP complete = r_lst_get(param_list, 5);
 
   complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
 
@@ -145,8 +147,8 @@ static void update_complete(SEXP x, struct slide_params* params) {
   UNPROTECT(1);
 }
 
-static void update_forward(SEXP x, struct slide_params* params) {
-  SEXP forward = r_lst_get(x, 7);
+static void update_forward(SEXP param_list, struct slide_params* params) {
+  SEXP forward = r_lst_get(param_list, 6);
 
   forward = PROTECT(check_scalar_lgl(forward, strings_dot_forward));
 
@@ -155,8 +157,8 @@ static void update_forward(SEXP x, struct slide_params* params) {
   UNPROTECT(1);
 }
 
-static void update_offset(SEXP x, struct slide_params* params) {
-  SEXP offset = r_lst_get(x, 8);
+static void update_offset(SEXP param_list, struct slide_params* params) {
+  SEXP offset = r_lst_get(param_list, 7);
 
   bool null_offset = offset == R_NilValue;
 
@@ -213,6 +215,19 @@ static void update_offset(SEXP x, struct slide_params* params) {
   }
 
   return;
+}
+
+static void update_size(SEXP x, struct slide_params* params) {
+  switch (params->type) {
+  case SLIDE:
+    params->size = vec_size(x);
+    break;
+  case PSLIDE_EMPTY:
+    params->size = 0;
+    break;
+  default:
+    params->size = vec_size(r_lst_get(x, 0));
+  }
 }
 
 // -----------------------------------------------------------------------------

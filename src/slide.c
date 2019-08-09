@@ -2,9 +2,6 @@
 #include "utils.h"
 #include <vctrs.h>
 
-#define SLIDE -1
-#define SLIDE2 -2
-
 // -----------------------------------------------------------------------------
 // All defined below
 
@@ -168,7 +165,7 @@ SEXP slide(SEXP x,
 // -----------------------------------------------------------------------------
 
 SEXP slurrr_slide(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
-  struct slide_params params = init_params(param_list);
+  struct slide_params params = init_params(x, param_list);
   return slide(x, f_call, ptype, env, params);
 }
 
@@ -336,7 +333,3 @@ int iterations(int x_start,
 
   return min(n_iter_frame_pos, n_iter_frame_boundary);
 }
-
-
-#undef SLIDE
-#undef SLIDE2

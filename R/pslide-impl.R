@@ -19,9 +19,6 @@ pslide_impl <- function(.l,
   # But use `vec_size_common()` to check sizes and get `.size`
   .l <- vec_recycle_common(!!!.l)
 
-  # TODO - Check if .l has at least 1 element?
-  size <- vec_size(.l[[1]])
-
   .f <- as_function(.f)
 
   type <- vec_size(.l)
@@ -41,7 +38,6 @@ pslide_impl <- function(.l,
 
   param_list <- list(
     type,
-    size,
     .constrain,
     .before,
     .after,

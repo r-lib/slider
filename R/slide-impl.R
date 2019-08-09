@@ -10,7 +10,6 @@ slide_impl <- function(.x,
                        .ptype,
                        .constrain) {
   vec_assert(.x)
-  size <- vec_size(.x)
   .f <- as_function(.f)
 
   f_call <- expr(.f(.x, ...))
@@ -19,7 +18,6 @@ slide_impl <- function(.x,
 
   param_list <- list(
     type,
-    size,
     .constrain,
     .before,
     .after,
