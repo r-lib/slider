@@ -107,7 +107,7 @@
 #' # order in which the sub-window of `.x` is actually sliced out (notice
 #' # the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
 #' slide(1:5, ~.x, .before = 1, .step = 2)
-#' slide(1:5, ~.x, .before = 1, .step = 2, .forward = "backward")
+#' slide(1:5, ~.x, .before = 1, .step = 2, .forward = FALSE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Data frames
