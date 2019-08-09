@@ -7,7 +7,7 @@
 
 static SEXP slice_container(int type);
 
-static void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
+static void update_slices(SEXP slices, SEXP x, SEXP index, SEXP env, int type);
 
 static SEXP copy_names(SEXP out, SEXP x, int type);
 
@@ -96,7 +96,6 @@ static SEXP slide(SEXP x,
   // `list(vec_slice(x[[1]], index), vec_slice(x[[2]], index), ...)`
   // in the `slide2()` and `pslide()` cases
   SEXP slices = PROTECT(slice_container(p.type));
-  SEXP* p_slices = &slices;
 
   int seq_start;
   int seq_end;
@@ -120,7 +119,7 @@ static SEXP slide(SEXP x,
     }
 
     // Update the `f_call` variables in `env`
-    update_slices(p_slices, x, index, env, p.type);
+    update_slices(slices, x, index, env, p.type);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
@@ -196,20 +195,20 @@ static SEXP slice_container(int type) {
   return Rf_allocVector(VECSXP, type);
 }
 
-static void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
+static void update_slices(SEXP slices, SEXP x, SEXP index, SEXP env, int type) {
   // slide()
   if (type == SLIDE) {
-    *p_slices = vec_slice_impl(x, index);
-    Rf_defineVar(syms_dot_x, *p_slices, env);
+    slices = vec_slice_impl(x, index);
+    Rf_defineVar(syms_dot_x, slices, env);
     return;
   }
 
   // slide2()
   if (type == SLIDE2) {
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
-    Rf_defineVar(syms_dot_x, *p_slices, env);
-    *p_slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
-    Rf_defineVar(syms_dot_y, *p_slices, env);
+    slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
+    Rf_defineVar(syms_dot_x, slices, env);
+    slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
+    Rf_defineVar(syms_dot_y, slices, env);
     return;
   }
 
@@ -218,10 +217,10 @@ static void update_slices(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type
   // pslide()
   for (int i = 0; i < type; ++i) {
     slice = vec_slice_impl(VECTOR_ELT(x, i), index);
-    SET_VECTOR_ELT(*p_slices, i, slice);
+    SET_VECTOR_ELT(slices, i, slice);
   }
 
-  Rf_defineVar(syms_dot_l, *p_slices, env);
+  Rf_defineVar(syms_dot_l, slices, env);
 }
 
 // -----------------------------------------------------------------------------
