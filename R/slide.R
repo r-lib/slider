@@ -238,7 +238,7 @@ slide_vec_simplify <- function(.x,
 
   size <- vec_size_common(!!!out)
   if (size != 1L) {
-    glubort("Incompatible lengths: {size}, 1")
+    abort("Incompatible lengths: {size}, 1")
   }
 
   vec_c(!!!out)
