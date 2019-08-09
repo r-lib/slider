@@ -10,11 +10,11 @@
 
 void validate_before_after_negativeness(int before, int after);
 
-SEXP slice_container(int n);
+SEXP slice_container(int type);
 
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n);
+void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
 
-SEXP copy_names(SEXP out, SEXP x, int n);
+SEXP copy_names(SEXP out, SEXP x, int type);
 
 int iterations(int x_start, int x_end, const struct slide_params params);
 
@@ -226,9 +226,9 @@ SEXP vec_set_names(SEXP x, SEXP names) {
   return x;
 }
 
-SEXP copy_names(SEXP out, SEXP x, int n) {
+SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
-  if (n == SLIDE) {
+  if (type == SLIDE) {
     names = PROTECT(vec_names(x));
   } else {
     names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
@@ -247,24 +247,24 @@ SEXP copy_names(SEXP out, SEXP x, int n) {
 // list is overwritten with the current slice of the i-th pslide element.
 // Then that entire list is defined in the environment.
 
-SEXP slice_container(int n) {
-  if (n == SLIDE || n == SLIDE2) {
+SEXP slice_container(int type) {
+  if (type == SLIDE || type == SLIDE2) {
     return R_NilValue;
   }
 
-  return Rf_allocVector(VECSXP, n);
+  return Rf_allocVector(VECSXP, type);
 }
 
-void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
+void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type) {
   // slide()
-  if (n == SLIDE) {
+  if (type == SLIDE) {
     *p_slices = vec_slice_impl(x, index);
     Rf_defineVar(syms_dot_x, *p_slices, env);
     return;
   }
 
   // slide2()
-  if (n == SLIDE2) {
+  if (type == SLIDE2) {
     *p_slices = vec_slice_impl(VECTOR_ELT(x, 0), index);
     Rf_defineVar(syms_dot_x, *p_slices, env);
     *p_slices = vec_slice_impl(VECTOR_ELT(x, 1), index);
@@ -275,7 +275,7 @@ void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int n) {
   SEXP slice;
 
   // pslide()
-  for (int i = 0; i < n; ++i) {
+  for (int i = 0; i < type; ++i) {
     slice = vec_slice_impl(VECTOR_ELT(x, i), index);
     SET_VECTOR_ELT(*p_slices, i, slice);
   }
