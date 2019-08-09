@@ -13,8 +13,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     rlang,
-    vctrs,
-    glue
+    vctrs
 LinkingTo:
     vctrs
 RoxygenNote: 6.1.1

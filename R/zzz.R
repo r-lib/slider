@@ -1,4 +1,7 @@
 .onLoad <- function(libname, pkgname) {
+  # Load vctrs namespace for access to C callables
   requireNamespace("vctrs", quietly = TRUE)
-  .Call(slurrr_init, ns_env("slurrr"))
+
+  # Initialize slurrr C globals
+  .Call(slurrr_init)
 }

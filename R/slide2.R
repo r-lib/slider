@@ -24,7 +24,7 @@ slide2 <- function(.x,
                    .step = 1L,
                    .offset = NULL,
                    .complete = FALSE,
-                   .dir = "forward") {
+                   .forward = TRUE) {
   slide2_impl(
     .x,
     .y,
@@ -35,7 +35,7 @@ slide2 <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -52,7 +52,7 @@ slide2_vec <- function(.x,
                        .step = 1L,
                        .offset = NULL,
                        .complete = FALSE,
-                       .dir = "forward",
+                       .forward = TRUE,
                        .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -66,7 +66,7 @@ slide2_vec <- function(.x,
       .step = .step,
       .offset = .offset,
       .complete = .complete,
-      .dir = .dir
+      .forward = .forward
     )
 
     return(out)
@@ -82,8 +82,9 @@ slide2_vec <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
-    .ptype = .ptype
+    .forward = .forward,
+    .ptype = .ptype,
+    .constrain = TRUE
   )
 }
 
@@ -96,7 +97,7 @@ slide2_vec_simplify <- function(.x,
                                 .step,
                                 .offset,
                                 .complete,
-                                .dir) {
+                                .forward) {
   out <- slide2(
     .x,
     .y,
@@ -107,11 +108,11 @@ slide2_vec_simplify <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir
+    .forward = .forward
   )
 
   if (vec_size_common(!!!out) != 1L) {
-    glubort("The size of all results from `.f` must be 1.")
+    abort("The size of all results from `.f` must be 1.")
   }
 
   vec_c(!!!out)
@@ -128,7 +129,7 @@ slide2_dbl <- function(.x,
                        .step = 1L,
                        .offset = NULL,
                        .complete = FALSE,
-                       .dir = "forward") {
+                       .forward = TRUE) {
   slide2_vec(
     .x,
     .y,
@@ -139,7 +140,7 @@ slide2_dbl <- function(.x,
     .step = .step,
     .offset = .offset,
     .complete = .complete,
-    .dir = .dir,
+    .forward = .forward,
     .ptype = dbl()
   )
 }

@@ -8,17 +8,17 @@
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .dir = "forward")
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
 
 slide_vec(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .dir = "forward",
+  .offset = NULL, .complete = FALSE, .forward = TRUE,
   .ptype = list())
 
 slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .dir = "forward")
+  .offset = NULL, .complete = FALSE, .forward = TRUE)
 
 slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .dir = "forward",
+  .offset = NULL, .complete = FALSE, .forward = TRUE,
   .names_to = NULL, .name_repair = c("unique", "universal",
   "check_unique"))
 }
@@ -47,10 +47,11 @@ to select all elements after the current position. A negative value
 is allowed, and allows you to "look backward" as well.}
 
 \item{.step}{\code{[positive integer]} The number of elements to shift the
-window forward (or backward, depending on \code{.dir}) between function calls.}
+window forward (or backward, depending on \code{.forward}) between
+function calls.}
 
 \item{.offset}{\code{[NULL / positive integer]} An offset from the beginning
-(or end, depending on \code{.dir}) of \code{.x} to place the first element in
+(or end, depending on \code{.forward}) of \code{.x} to place the first element in
 the output vector. If \code{NULL}, this is computed automatically as the first
 location where a complete sliding window can be generated.}
 
@@ -58,7 +59,7 @@ location where a complete sliding window can be generated.}
 windows only? If \code{FALSE}, the default, then partial computations will be
 allowed.}
 
-\item{.dir}{\code{["forward", "backward"]} The direction to slide.}
+\item{.forward}{\code{[logical]} The direction to slide.}
 
 \item{.ptype}{\code{[vector]} The prototype corresponding to the type of the
 output. Defaults to a \code{list()}.}
@@ -144,11 +145,11 @@ slide(1:5, ~.x, .before = 1)
 slide(1:5, ~.x, .before = 2, .after = 1)
 slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
 
-# `.dir` controls the actual direction of sliding, and controls the
+# `.forward` controls the actual direction of sliding, and controls the
 # order in which the sub-window of `.x` is actually sliced out (notice
 # the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
 slide(1:5, ~.x, .before = 1, .step = 2)
-slide(1:5, ~.x, .before = 1, .step = 2, .dir = "backward")
+slide(1:5, ~.x, .before = 1, .step = 2, .forward = "backward")
 
 # ---------------------------------------------------------------------------
 # Data frames

@@ -2,16 +2,17 @@
 #include <Rinternals.h>
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
+#include <vctrs.h>
 
 /* .Call calls */
-extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
-SEXP slurrr_init(SEXP);
+SEXP slurrr_init();
 
 static const R_CallMethodDef CallEntries[] = {
-  {"slurrr_slide", (DL_FUNC) &slurrr_slide, 11},
-  {"slurrr_init", (DL_FUNC) &slurrr_init, 1},
+  {"slurrr_slide",     (DL_FUNC) &slurrr_slide, 5},
+  {"slurrr_init",      (DL_FUNC) &slurrr_init, 0},
   {NULL, NULL, 0}
 };
 
@@ -22,9 +23,9 @@ void R_init_slurrr(DllInfo *dll)
 }
 
 // utils.c
-void slurrr_init_utils(SEXP ns);
+void slurrr_init_utils();
 
-SEXP slurrr_init(SEXP ns) {
-  slurrr_init_utils(ns);
+SEXP slurrr_init() {
+  slurrr_init_utils();
   return R_NilValue;
 }

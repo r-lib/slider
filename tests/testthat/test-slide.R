@@ -285,35 +285,35 @@ test_that(".complete works when doing center alignment", {
 })
 
 # ------------------------------------------------------------------------------
-# .dir
+# .forward
 
-test_that(".dir backward is equivalent to .dir forward if .size = 1", {
+test_that("`.forward == FALSE` is equivalent to `.forward == TRUE` if `.size == 1`", {
   expect_equal(
-    slide(1:5, identity, .dir = "backward"),
+    slide(1:5, identity, .forward = FALSE),
     slide(1:5, identity)
   )
 
   expect_equal(
-    slide(1:5, identity, .dir = "backward", .step = 2),
+    slide(1:5, identity, .forward = FALSE, .step = 2),
     slide(1:5, identity, .step = 2)
   )
 })
 
-test_that(".dir with only altered size is equivalent to reversed forward .dir", {
+test_that("`.forward == FALSE` with only altered size is equivalent to reversed `.forward == TRUE`", {
   expect_equal(
-    slide(1:5, identity, .dir = "backward", .before = 1),
+    slide(1:5, identity, .forward = FALSE, .before = 1),
     lapply(slide(1:5, identity, .before = 1), rev)
   )
 
   expect_equal(
-    slide(1:5, identity, .dir = "backward", .before = 1, .after = 2),
+    slide(1:5, identity, .forward = FALSE, .before = 1, .after = 2),
     lapply(slide(1:5, identity, .before = 1, .after = 2), rev)
   )
 })
 
-test_that(".dir keeps intuitive alignment with .before / .after", {
+test_that("backwards sliding keeps intuitive alignment with .before / .after", {
   expect_equal(
-    slide(1:5, identity, .before = 1, .step = 2, .dir = "backward"),
+    slide(1:5, identity, .before = 1, .step = 2, .forward = FALSE),
     list(
       1L,
       NULL,
@@ -324,7 +324,7 @@ test_that(".dir keeps intuitive alignment with .before / .after", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = 1, .step = 2, .dir = "backward"),
+    slide(1:5, identity, .after = 1, .step = 2, .forward = FALSE),
     list(
       2:1,
       NULL,
@@ -335,9 +335,9 @@ test_that(".dir keeps intuitive alignment with .before / .after", {
   )
 })
 
-test_that(".dir backwards + .complete is meaningful with `.before > 0`", {
+test_that("backwards + .complete is meaningful with `.before > 0`", {
   expect_equal(
-    slide(1:5, identity, .complete = TRUE, .before = 2L, .dir = "backward"),
+    slide(1:5, identity, .complete = TRUE, .before = 2L, .forward = FALSE),
     list(
       NULL,
       NULL,
@@ -375,7 +375,7 @@ test_that(".offset shifts starting point", {
   )
 
   expect_equal(
-    slide(1:5, identity, .offset = 1, .dir = "backward"),
+    slide(1:5, identity, .offset = 1, .forward = FALSE),
     list(
       1,
       2,
@@ -386,7 +386,7 @@ test_that(".offset shifts starting point", {
   )
 
   expect_equal(
-    slide(1:5, identity, .offset = 4, .dir = "backward"),
+    slide(1:5, identity, .offset = 4, .forward = FALSE),
     list(
       1,
       NULL,
@@ -410,7 +410,7 @@ test_that(".offset can be smaller than .before/.after", {
   )
 
   expect_equal(
-    slide(1:5, identity, .offset = 3, .after = 4, .dir = "backward"),
+    slide(1:5, identity, .offset = 3, .after = 4, .forward = FALSE),
     list(
       5:1,
       5:2,
@@ -447,7 +447,7 @@ test_that(".offset can be smaller in magnitude than .after and is adjusted autom
 
 test_that(".offset can be smaller in magnitude than .before and is adjusted automatically", {
   expect_equal(
-    slide(1:5, ~.x, .after = 3, .before = -2, .offset = 1, .dir = "backward"),
+    slide(1:5, ~.x, .after = 3, .before = -2, .offset = 1, .forward = FALSE),
     list(
       4:3,
       5:4,
@@ -471,7 +471,7 @@ test_that(".offset is allowed to be completely outside of .x", {
   )
 
   expect_equal(
-    slide(1:5, identity, .offset = 5, .dir = "backward"),
+    slide(1:5, identity, .offset = 5, .forward = FALSE),
     list(
       NULL,
       NULL,
@@ -585,7 +585,7 @@ test_that("can use unbounded() in .after + set .before", {
 
 test_that("can use unbounded() when going backwards", {
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .dir = "backward"),
+    slide(1:5, identity, .before = unbounded(), .forward = FALSE),
     list(
       1L,
       2:1,
@@ -596,7 +596,7 @@ test_that("can use unbounded() when going backwards", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .dir = "backward"),
+    slide(1:5, identity, .after = unbounded(), .forward = FALSE),
     list(
       5:1,
       5:2,
@@ -607,7 +607,7 @@ test_that("can use unbounded() when going backwards", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = 1L, .dir = "backward"),
+    slide(1:5, identity, .before = unbounded(), .after = 1L, .forward = FALSE),
     list(
       2:1,
       3:1,
@@ -618,7 +618,7 @@ test_that("can use unbounded() when going backwards", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = 1L, .dir = "backward", .complete = TRUE),
+    slide(1:5, identity, .before = unbounded(), .after = 1L, .forward = FALSE, .complete = TRUE),
     list(
       2:1,
       3:1,
@@ -629,7 +629,7 @@ test_that("can use unbounded() when going backwards", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L, .dir = "backward"),
+    slide(1:5, identity, .after = unbounded(), .before = 1L, .forward = FALSE),
     list(
       5:1,
       5:1,
@@ -640,7 +640,7 @@ test_that("can use unbounded() when going backwards", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L, .dir = "backward", .complete = TRUE),
+    slide(1:5, identity, .after = unbounded(), .before = 1L, .forward = FALSE, .complete = TRUE),
     list(
       NULL,
       5:1,
@@ -675,7 +675,7 @@ test_that("can use unbounded() with .offset", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .dir = "backward", .offset = 1L),
+    slide(1:5, identity, .before = unbounded(), .forward = FALSE, .offset = 1L),
     list(
       1L,
       2:1,
@@ -686,7 +686,7 @@ test_that("can use unbounded() with .offset", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .dir = "backward", .offset = 1L),
+    slide(1:5, identity, .after = unbounded(), .forward = FALSE, .offset = 1L),
     list(
       5:1,
       5:2,
@@ -710,7 +710,7 @@ test_that("can be doubly unbounded()", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .dir = "backward"),
+    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .forward = FALSE),
     list(
       5:1,
       5:1,
@@ -798,20 +798,61 @@ test_that("`slide()` doesn't require a common inner type", {
 })
 
 # ------------------------------------------------------------------------------
+# input names
+
+test_that("input names are retained with atomics", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  expect_equal(names(slide(x, ~.x)), names)
+})
+
+test_that("input names are retained from proxied objects", {
+  names <- letters[1:5]
+  x <- as.POSIXlt(new_datetime(0:4 + 0))
+  x <- set_names(x, names)
+  expect_equal(names(slide(x, ~.x)), names)
+})
+
+test_that("row names are not extracted from data frames", {
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  expect_equal(names(slide(x, ~.x)), NULL)
+})
+
+test_that("row names are extracted from arrays", {
+  x <- array(1:4, c(2, 2), dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  expect_equal(names(slide(x, ~.x)), c("r1", "r2"))
+})
+
+test_that("names are retained on inner sliced object", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide(x, ~names(.x)), exp)
+
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  expect_equal(slide(x, ~rownames(.x)), as.list(rownames(x)))
+
+  names <- c("r1", "r2")
+  x <- array(1:4, c(2, 2), dimnames = list(names, c("c1", "c2")))
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide(x, ~rownames(.x)), exp)
+})
+
+# ------------------------------------------------------------------------------
 # validation
 
 test_that("cannot use invalid .before", {
-  expect_error(slide(1, identity, .before = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .before = c(1, 2)), regexp = "1, not 2")
   expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .after", {
-  expect_error(slide(1, identity, .after = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .after = c(1, 2)), regexp = "1, not 2")
   expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .offset", {
-  expect_error(slide(1, identity, .offset = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .offset = c(1, 2)), regexp = "1, not 2")
   expect_error(slide(1, identity, .offset = "x"), class = "vctrs_error_cast_lossy")
 })
 
@@ -819,21 +860,17 @@ test_that("cannot use invalid .step", {
   expect_error(slide(1, identity, .step = -1), "at least 1, not -1")
   expect_error(slide(1, identity, .step = 0), "at least 1, not 0")
 
-  expect_error(slide(1, identity, .step = c(1, 2)), class = "vctrs_error_assert_size")
+  expect_error(slide(1, identity, .step = c(1, 2)), regexp = "1, not 2")
   expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_cast_lossy")
 })
 
-test_that("cannot use invalid .dir", {
-  expect_error(slide(1, identity, .dir = "stuff"), "must be one of")
-  expect_error(slide(1, identity, .dir = "for"), 'Did you mean "forward"?')
-
-  expect_error(slide(1, identity, .dir = c("forward", "backward")), class = "vctrs_error_assert_size")
-
-  expect_error(slide(1, identity, .dir = 1), "must be a character vector", class = "rlang_error")
+test_that("cannot use invalid .forward", {
+  expect_error(slide(1, identity, .forward = c(TRUE, TRUE)), regexp = "1, not 2")
+  expect_error(slide(1, identity, .forward = "hi"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .complete", {
-  expect_error(slide(1, identity, .complete = c(TRUE, TRUE)), class = "vctrs_error_assert_size")
-  expect_error(slide(1, identity, .complete = 1), class = "vctrs_error_assert_ptype")
+  expect_error(slide(1, identity, .complete = c(TRUE, TRUE)), regexp = "1, not 2")
+  expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_cast_lossy")
 })
 
