@@ -54,7 +54,7 @@ SEXP slide(SEXP x,
   SEXP entry = PROTECT(r_int(x_start + entry_offset + 1));
   int* p_entry = INTEGER(entry);
 
-  int n_iter = iterations(x_start, x_end, p);
+  int n = iterations(x_start, x_end, p);
 
   int window_start_step = entry_step;
   int window_end_step = entry_step;
@@ -102,7 +102,7 @@ SEXP slide(SEXP x,
   int seq_end;
   int seq_size;
 
-  for (int i = 0; i < n_iter; ++i) {
+  for (int i = 0; i < n; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
