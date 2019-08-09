@@ -4,9 +4,10 @@
 \name{slurrr-package}
 \alias{slurrr}
 \alias{slurrr-package}
-\title{slurrr: What the Package Does (One Line, Title Case)}
+\title{slurrr: Sliding Window Functions}
 \description{
-What the package does (one paragraph).
+Provides type stable rolling and cumulative window functions 
+    over any R data type.
 }
 \seealso{
 Useful links:
@@ -17,7 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (YOUR-ORCID-ID)
+\strong{Maintainer}: Davis Vaughan \email{davis@rstudio.com}
+
+Other contributors:
+\itemize{
+  \item RStudio [copyright holder]
+}
 
 }
 \keyword{internal}
