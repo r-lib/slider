@@ -8,8 +8,6 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-void validate_before_after_negativeness(int before, int after);
-
 SEXP slice_container(int type);
 
 void slice_loop(SEXP* p_slices, SEXP x, SEXP index, SEXP env, int type);
