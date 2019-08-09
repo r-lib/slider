@@ -14,6 +14,7 @@ static void update_offset(SEXP x, struct slide_params* params);
 static void update_size(SEXP x, struct slide_params* params);
 
 static void update_before_after_if_unbounded(struct slide_params* params);
+static void update_complete_if_directionally_unbounded(struct slide_params* params);
 static void validate_before_after_negativeness(const struct slide_params params);
 
 // -----------------------------------------------------------------------------
@@ -36,6 +37,7 @@ struct slide_params init_params(SEXP x, SEXP param_list) {
   update_size(x, &params);
 
   update_before_after_if_unbounded(&params);
+  update_complete_if_directionally_unbounded(&params);
   validate_before_after_negativeness(params);
 
   return params;
@@ -253,6 +255,17 @@ static void update_before_after_if_unbounded(struct slide_params* params) {
     if (params->before_unbounded) {
       params->before = params->size - 1 - params->offset;
     }
+  }
+}
+
+// We check to see if we are unbounded() in the direction that we are sliding.
+// If so, we force `.complete = FALSE` to compute the correct number of iterations
+// (This must be done after we compute the .offset, because the .complete-ness
+// does affect the partial results at the beginning)
+static void update_complete_if_directionally_unbounded(struct slide_params* params) {
+  if ((params->after_unbounded && params->forward) ||
+      (params->before_unbounded && !params->forward)) {
+    params->complete = false;
   }
 }
 

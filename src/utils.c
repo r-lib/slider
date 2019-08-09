@@ -13,6 +13,7 @@ SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
 SEXP syms_x = NULL;
 SEXP syms_names = NULL;
+SEXP syms_index = NULL;
 
 SEXP syms_set_names = NULL;
 SEXP syms_set_rownames = NULL;
@@ -123,6 +124,7 @@ void slurrr_init_utils() {
   syms_dot_l = Rf_install(".l");
   syms_x = Rf_install("x");
   syms_names = Rf_install("names");
+  syms_index = Rf_install("index");
 
   syms_set_names = Rf_install("names<-");
   fns_set_names = Rf_findVar(syms_set_names, R_BaseEnv);

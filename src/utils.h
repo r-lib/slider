@@ -23,6 +23,7 @@ SEXP syms_dot_y;
 SEXP syms_dot_l;
 SEXP syms_x;
 SEXP syms_names;
+SEXP syms_index;
 
 SEXP syms_set_names;
 SEXP syms_set_rownames;

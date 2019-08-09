@@ -54,14 +54,6 @@ SEXP slide(SEXP x,
   SEXP entry = PROTECT(r_int(x_start + entry_offset + 1));
   int* p_entry = INTEGER(entry);
 
-  // We check to see if we are unbounded() in the direction that we are sliding.
-  // If so, we force `.complete = FALSE` to compute the correct number of iterations
-  // (This must be done after we compute the .offset, because the .complete-ness
-  // does affect the partial results at the beginning)
-  if ((p.after_unbounded && p.forward) || (p.before_unbounded && !p.forward)) {
-    p.complete = false;
-  }
-
   int n_iter = iterations(x_start, x_end, p);
 
   int window_start_step = entry_step;
@@ -92,7 +84,7 @@ SEXP slide(SEXP x,
   // The indices to slice x with
   SEXP index = PROTECT(compact_seq(0, 0, true));
   int* p_index = INTEGER(index);
-  Rf_defineVar(Rf_install("index"), index, env);
+  Rf_defineVar(syms_index, index, env);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
