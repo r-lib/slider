@@ -17,3 +17,22 @@ test_that("Recycling is carried out using tidyverse recycling rules", {
   expect_equal(pslide(list(x1, x2), ~.x), list(x1, x1))
   expect_error(pslide(list(x2, x3), ~.x), class = "vctrs_error_incompatible_size")
 })
+
+test_that("pslide() can iterate over a data frame", {
+  x <- data.frame(x = 1:5, y = 6:10)
+  expect_equal(pslide(x, ~.x + .y), as.list(x$x + x$y))
+})
+
+test_that("pslide() can iterate over a data frame with a data frame column", {
+  x <- data.frame(c1 = 1:2)
+  x$x <- x
+
+  expect_equal(
+    pslide(x, ~list(...)),
+    list(as.list(vec_slice(x, 1)), as.list(vec_slice(x, 2)))
+  )
+})
+
+test_that("pslide() requires a list-like input", {
+  expect_error(pslide(1:5, ~.x), "list, not integer")
+})
