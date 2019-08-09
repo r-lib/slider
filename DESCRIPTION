@@ -27,3 +27,16 @@ Suggests:
     covr
 Remotes:
     DavisVaughan/vctrs@export
+Collate: 
+    'pslide-impl.R'
+    'slide2.R'
+    'pslide.R'
+    'slide-core.R'
+    'slide-impl.R'
+    'slide.R'
+    'slide2-impl.R'
+    'slurrr-package.R'
+    'stretch.R'
+    'tile.R'
+    'unbounded.R'
+    'zzz.R'

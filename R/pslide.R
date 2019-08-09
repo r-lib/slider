@@ -1,3 +1,4 @@
+#' @include slide2.R
 #' @rdname slide2
 #' @export
 pslide <- function(.l,
