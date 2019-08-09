@@ -28,7 +28,7 @@ pslide_impl <- function(.l,
   type <- vec_size(.l)
 
   slicers <- lapply(
-    seq_len(.inputs),
+    seq_len(type),
     function(.i) {
       expr(.l[[!!.i]])
     }
