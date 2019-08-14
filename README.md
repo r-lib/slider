@@ -11,7 +11,7 @@ status](https://travis-ci.org/DavisVaughan/slurrr.svg?branch=master)](https://tr
 coverage](https://codecov.io/gh/DavisVaughan/slurrr/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slurrr?branch=master)
 <!-- badges: end -->
 
-slurrr provides a family of general purposes “sliding window” functions.
+slurrr provides a family of general purpose “sliding window” functions.
 The API is purposefully *very* similar to purrr, with functions such as
 `slide()`, `slide_dbl()`, `slide2()` and `pslide()`.
 

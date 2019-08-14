@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/DavisVaughan/slurrr/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slurrr?branch=master)
 <!-- badges: end -->
 
-slurrr provides a family of general purposes "sliding window" functions. The API is purposefully _very_ similar to purrr, with functions such as `slide()`, `slide_dbl()`, `slide2()` and `pslide()`.
+slurrr provides a family of general purpose "sliding window" functions. The API is purposefully _very_ similar to purrr, with functions such as `slide()`, `slide_dbl()`, `slide2()` and `pslide()`.
 
 For a large number of examples and to find documentation, see [`?slide`](https://davisvaughan.github.io/slurrr/reference/slide.html).
 
