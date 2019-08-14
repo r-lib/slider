@@ -223,6 +223,11 @@
 </ul>
 <p>To be clear, I do not want to overshadow the work done by these packages. My preference would be to work with Earo to coordinate an upgrade path for users from the current version of <code>tsibble::slide()</code> to <code><a href="reference/slide.html">slurrr::slide()</a></code>.</p>
 </div>
+<div id="performance" class="section level2">
+<h2 class="hasAnchor">
+<a href="#performance" class="anchor"></a>Performance</h2>
+<p>In terms of performance, be aware that any specialized package that shifts the function calls to C are going to be faster than slurrr. For example, <code>RcppRoll::roll_mean()</code> computes the rolling mean <em>at the C level</em>, which is bound to be faster. The purpose of slurrr is to be <em>general purpose</em>, while still being as fast as possible. This means that it can be used for more abstract things, like rolling regressions, or any other custom function that you want to use in a rolling fashion.</p>
+</div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
