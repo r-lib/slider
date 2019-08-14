@@ -218,6 +218,16 @@ packages. My preference would be to work with Earo to coordinate an
 upgrade path for users from the current version of `tsibble::slide()` to
 `slurrr::slide()`.
 
+## Performance
+
+In terms of performance, be aware that any specialized package that
+shifts the function calls to C are going to be faster than slurrr. For
+example, `RcppRoll::roll_mean()` computes the rolling mean *at the C
+level*, which is bound to be faster. The purpose of slurrr is to be
+*general purpose*, while still being as fast as possible. This means
+that it can be used for more abstract things, like rolling regressions,
+or any other custom function that you want to use in a rolling fashion.
+
 ## References
 
 A good explanation of window
