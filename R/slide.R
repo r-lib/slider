@@ -1,8 +1,7 @@
 #' Slide
 #'
 #' `slide()` iterates through `.x` using a sliding window, applying `.f` to each
-#' sub-window of `.x`. In slurrr, `slide()` is the most generic of the iterating
-#' functions, and `tile()` and `stretch()` are just special cases of `slide()`.
+#' sub-window of `.x`.
 #'
 #' @param .x `[vector]` The vector to iterate over.
 #'

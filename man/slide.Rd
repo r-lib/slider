@@ -110,8 +110,7 @@ of length 1 will be recycled appropriately.}
 }
 \description{
 \code{slide()} iterates through \code{.x} using a sliding window, applying \code{.f} to each
-sub-window of \code{.x}. In slurrr, \code{slide()} is the most generic of the iterating
-functions, and \code{tile()} and \code{stretch()} are just special cases of \code{slide()}.
+sub-window of \code{.x}.
 }
 \details{
 Unlike \code{lapply()} / \code{purrr::map()}, which construct calls
