@@ -21,7 +21,7 @@ void R_init_slurrr(DllInfo *dll)
   R_useDynamicSymbols(dll, FALSE);
 }
 
-// init-vctrs.c
+// slurrr-vctrs.c
 void slurrr_init_vctrs();
 
 // utils.c

@@ -1,4 +1,5 @@
 #include "slurrr.h"
+#include "slurrr-vctrs.h"
 #include "utils.h"
 #include <vctrs.h>
 
