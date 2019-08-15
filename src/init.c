@@ -2,7 +2,6 @@
 #include <Rinternals.h>
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
-#include <vctrs.h>
 
 /* .Call calls */
 extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -22,10 +21,14 @@ void R_init_slurrr(DllInfo *dll)
   R_useDynamicSymbols(dll, FALSE);
 }
 
+// init-vctrs.c
+void slurrr_init_vctrs();
+
 // utils.c
 void slurrr_init_utils();
 
 SEXP slurrr_init() {
+  slurrr_init_vctrs();
   slurrr_init_utils();
   return R_NilValue;
 }
