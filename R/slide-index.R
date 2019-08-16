@@ -182,12 +182,12 @@ separate_before <- function(params) {
   }
 
   params$after_positive <- FALSE
-  params$before <- before[[2]]
-  params$after <- before[[1]]
+  params$before <- before[[1]]
+  params$after <- before[[2]]
 
   if (is.numeric(params$before) && is.numeric(params$after)) {
     if (params$after > params$before) {
-      abort(sprintf("When `.after` is `NULL`, the first `.before` value (%i) must be less than or equal to the second (%i).", params$after, params$before))
+      abort(sprintf("When `.after` is `NULL`, the first `.before` value (%i) must be greater than or equal to the second (%i).", params$after, params$before))
     }
   }
 
@@ -272,6 +272,12 @@ slide_index_impl <- function(.x,
   while(position <= n) {
     range_start <- range_starts[[position]]
     range_stop <- range_stops[[position]]
+
+    if (isTRUE(range_start > range_stop)) {
+      range_start <- as.character(range_start)
+      range_stop <- as.character(range_stop)
+      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
+    }
 
     window_start <- locate_window_start(position, .i, range_start, n, params$before_positive)
     window_stop <- locate_window_stop(position, .i, range_stop, n, params$after_positive)
