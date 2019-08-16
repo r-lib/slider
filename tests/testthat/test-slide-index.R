@@ -611,6 +611,84 @@ test_that("can use Durations/Periods to handle daylight savings differently", {
 })
 
 # ------------------------------------------------------------------------------
+# .after - list (.after = NULL)
+
+test_that("can use a negative .before by providing 2 .after values", {
+  i <- 1:5
+  x <- i
+
+  expect_equal(
+    slide_index(x, i, identity, .after = c(0, 0), .before = NULL),
+    slide_index(x, i, identity, .after = 0, .before = 0)
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .after = c(-1, 0), .before = NULL),
+    slide_index(x, i, identity, .after = 0, .before = 1)
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
+    list(
+      2:3,
+      3:4,
+      4:5,
+      5L,
+      NULL
+    )
+  )
+})
+
+test_that("can provide a function in the list for .after", {
+  i <- 1:5
+  x <- i
+
+  expect_equal(
+    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
+    slide_index(x, i, identity, .after = c(~.x + 1, 2), .before = NULL)
+  )
+
+  fn <- function(x) x + 2L
+
+  expect_equal(
+    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
+    slide_index(x, i, identity, .after = c(1, fn), .before = NULL)
+  )
+})
+
+test_that("error if 2 .before values are provided and .after is not NULL", {
+  expect_error(
+    slide_index(1, 1, identity, .before = list(1, 2), .after = 0),
+    class = "vctrs_error_assert_size"
+  )
+})
+
+test_that("error if .after is NULL and .before hasn't provided 2 values", {
+  expect_error(
+    slide_index(1, 1, identity, .before = 1, .after = NULL),
+    "`.after` is `NULL`, `.before`"
+  )
+})
+
+test_that("error if .after is NULL and .before is a single formula/function", {
+  expect_error(
+    slide_index(1, 1, identity, .before = ~.x, .after = NULL),
+    "`.after` is `NULL`, `.before` must have type list"
+  )
+
+  expect_error(
+    slide_index(1, 1, identity, .before = function(x) x, .after = NULL),
+    "`.after` is `NULL`, `.before` must have type list"
+  )
+})
+
+test_that("error if .after is NULL and the first .before value is < the second", {
+  expect_error(
+    slide_index(1, 1, identity, .before = c(1, 2), .after = NULL)
+  )
+})
+
+# ------------------------------------------------------------------------------
 
 test_that("repeated index values are grouped with the same values", {
   i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)
