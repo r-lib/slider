@@ -406,9 +406,101 @@ test_that("can use nanotime resolution", {
 # ------------------------------------------------------------------------------
 # .before - function
 
+test_that("can use a lambda function in .before", {
+  i <- 1:5
+  x <- i
+
+  expect_equal(
+    slide_index(x, i, identity, .before = ~.x),
+    slide_index(x, i, identity, .before = 0L)
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = ~.x - 2),
+    slide_index(x, i, identity, .before = 2L)
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = ~ifelse(.x == 4L, .x - 1L, .x - 2L)),
+    list(
+      1L,
+      1:2,
+      1:3,
+      3:4,
+      3:5
+    )
+  )
+})
+
+test_that("can use a function in .before", {
+  i <- 1:5
+  x <- i
+
+  fn <- function(x) x - 2L
+
+  expect_equal(
+    slide_index(x, i, identity, .before = fn),
+    slide_index(x, i, identity, .before = 2L)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # .before - function - lubridate
 
+test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issues", {
+  requireNamespace("lubridate", quietly = TRUE)
+  `%m-%` <- lubridate::`%m-%`
+
+  i <- vec_c(as.Date("2019-02-27") + 0:3, as.Date("2019-03-27") + 0:5)
+  x <- seq_along(i)
+
+  # 3/27 rollback to 2/27
+  # 3/28 rollback to 2/28
+  # 3/29 rollback to 2/28
+  # 3/30 rollback to 2/28
+  # 3/31 rollback to 2/28
+  # 4/01 rollback to 3/01
+  expect_equal(
+    slide_index(x, i, identity, .before = ~.x %m-% months(1)),
+    list(
+      1L,
+      1:2,
+      1:3,
+      1:4,
+      1:5,
+      2:6,
+      2:7,
+      2:8,
+      2:9,
+      3:10
+    )
+  )
+
+  # 3/27 rollback to 2/27
+  # 3/28 rollback to 2/28
+  # 3/29 rollback to 2/28 then forward to 3/01
+  # 3/30 rollback to 2/28 then forward to 3/01
+  # 3/31 rollback to 2/28 then forward to 3/01
+  # 4/01 rollback to 3/01
+  expect_equal(
+    slide_index(
+      x, i, identity,
+      .before = ~lubridate::add_with_rollback(.x, -months(1), roll_to_first = TRUE)
+    ),
+    list(
+      1L,
+      1:2,
+      1:3,
+      1:4,
+      1:5,
+      2:6,
+      3:7,
+      3:8,
+      3:9,
+      3:10
+    )
+  )
+})
 
 # ------------------------------------------------------------------------------
 # .before - list (.after = NULL)
@@ -423,7 +515,7 @@ test_that("can use a negative .after by providing 2 .before values", {
   )
 
   expect_equal(
-    slide_index(x, i, identity, .before = c(1, 2), .after = NULL),
+    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
     list(
       NULL,
       1L,
@@ -431,6 +523,23 @@ test_that("can use a negative .after by providing 2 .before values", {
       2:3,
       3:4
     )
+  )
+})
+
+test_that("can provide a function in the list for .before", {
+  i <- 1:5
+  x <- i
+
+  expect_equal(
+    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
+    slide_index(x, i, identity, .before = c(~.x - 2, 1), .after = NULL)
+  )
+
+  fn <- function(x) x - 2L
+
+  expect_equal(
+    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
+    slide_index(x, i, identity, .before = c(fn, 1), .after = NULL)
   )
 })
 
@@ -460,9 +569,9 @@ test_that("error if .after is NULL and .before is a single formula/function", {
   )
 })
 
-test_that("error if .after is NULL and the first .before value is > the second", {
+test_that("error if .after is NULL and the first .before value is < the second", {
   expect_error(
-    slide_index(1, 1, identity, .before = c(2, 1), .after = NULL)
+    slide_index(1, 1, identity, .before = c(1, 2), .after = NULL)
   )
 })
 
