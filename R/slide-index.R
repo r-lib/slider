@@ -178,8 +178,8 @@ separate_before <- function(params) {
   }
 
   params$after_positive <- FALSE
-  params$before <- before[[1]]
-  params$after <- before[[2]]
+  params$before <- before[[2]]
+  params$after <- before[[1]]
 
   params
 }
