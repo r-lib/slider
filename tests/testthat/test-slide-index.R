@@ -612,6 +612,41 @@ test_that("can use Durations/Periods to handle daylight savings differently", {
 
 # ------------------------------------------------------------------------------
 
+test_that("repeated index values are grouped with the same values", {
+  i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity),
+    as.list(vec_slice(vec_split(x, i)$val, i))
+  )
+})
+
+test_that("repeated date index values are grouped with the same values", {
+  i <- new_date(c(0, 0, 1))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity),
+    list(
+      1:2,
+      1:2,
+      3L
+    )
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = 1L),
+    list(
+      1:2,
+      1:2,
+      1:3
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
+
 test_that("indexing by vec_seq_along(.x) is the same as slide()", {
   expect_equal(
     slide(1:5, ~.x),
