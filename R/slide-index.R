@@ -1,10 +1,10 @@
+# ------------------------------------------------------------------------------
+
 # Look backwards until index[[i]] is past current_index, then add 1 to position
 # Additional check to see if the start of our window is
 # already outside the last value (no data here)
 locate_window_start_positive <- function(position, i, range_start, finish) {
-  if (position == finish) {
-    return(position)
-  }
+  check_na_range(range_start, ".i - .before")
 
   while (i[[position]] >= range_start) {
     if (position == finish) {
@@ -20,12 +20,10 @@ locate_window_start_positive <- function(position, i, range_start, finish) {
 
 # Look forward until index[[i]] is at or past current_index
 locate_window_start_negative <- function(position, i, range_start, finish) {
+  check_na_range(range_start, ".i + .before")
+
   if (range_start > i[[finish]]) {
     return(NA_integer_)
-  }
-
-  if (position == finish) {
-    return(position)
   }
 
   while (i[[position]] < range_start) {
@@ -41,9 +39,7 @@ locate_window_start_negative <- function(position, i, range_start, finish) {
 
 # Look forward until index[[i]] is past current_index, then subtract 1 from position
 locate_window_stop_positive <- function(position, i, range_stop, finish) {
-  if (position == finish) {
-    return(position)
-  }
+  check_na_range(range_stop, ".i + .after")
 
   while (i[[position]] <= range_stop) {
     if (position == finish) {
@@ -61,12 +57,10 @@ locate_window_stop_positive <- function(position, i, range_stop, finish) {
 # Additional check to see if the end of our window is
 # already outside the first value (no data here)
 locate_window_stop_negative <- function(position, i, range_stop, finish) {
+  check_na_range(range_stop, ".i - .after")
+
   if (range_stop < i[[finish]]) {
     return(NA_integer_)
-  }
-
-  if (position == finish) {
-    return(position)
   }
 
   while (i[[position]] > range_stop) {
@@ -78,6 +72,14 @@ locate_window_stop_negative <- function(position, i, range_stop, finish) {
   }
 
   position
+}
+
+check_na_range <- function(x, what) {
+  if (is.na(x)) {
+    abort(sprintf("`NA` value detected in the `%s` calculation.", what))
+  }
+
+  invisible(x)
 }
 
 # ------------------------------------------------------------------------------
