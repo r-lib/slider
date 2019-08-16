@@ -689,6 +689,32 @@ test_that("error if .after is NULL and the first .before value is < the second",
 })
 
 # ------------------------------------------------------------------------------
+# .before / .after interaction
+
+test_that("can technically select 0 elements with a negative .before/after", {
+  i <- new_date(c(0, 2, 3))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .before = 1, .after = -1, .complete = TRUE),
+    list(
+      NULL,
+      integer(),
+      2L
+    )
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -1, .after = 1, .complete = TRUE),
+    list(
+      integer(),
+      3L,
+      NULL
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
 
 test_that("repeated index values are grouped with the same values", {
   i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)
@@ -720,6 +746,82 @@ test_that("repeated date index values are grouped with the same values", {
       1:2,
       1:3
     )
+  )
+})
+
+# ------------------------------------------------------------------------------
+# .complete
+
+test_that("can match slide() usage of .complete", {
+  x <- 1:5
+
+  expect_equal(
+    slide_index(x, x, identity, .before = 1, .complete = TRUE),
+    slide(x, identity, .before = 1, .complete = TRUE)
+  )
+
+  expect_equal(
+    slide_index(x, x, identity, .before = 1, .after = 2L, .complete = TRUE),
+    slide(x, identity, .before = 1, .after = 2L, .complete = TRUE)
+  )
+})
+
+test_that("can filter for .complete date ranges", {
+  i <- new_date(c(0, 1, 2, 2, 3))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .before = 1, .complete = TRUE),
+    list(
+      NULL,
+      1:2,
+      2:4,
+      2:4,
+      3:5
+    )
+  )
+})
+
+test_that(".complete only ensures that there is at least 1 value before that could have been used", {
+  i <- new_date(c(0, 2, 3, 4, 5))
+  x <- seq_along(i)
+
+  # i.e., even though element 2 doesn't have a "complete" window of size 2,
+  # it theoretically _could_ have because 1970-01-03 - 1 day = 1970-01-02
+  # which is above the boundary value of 1970-01-01, and that is what matters
+  # when computing completeness
+  expect_equal(
+    slide_index(x, i, identity, .before = 1, .complete = TRUE),
+    list(
+      NULL,
+      2L,
+      2:3,
+      3:4,
+      4:5
+    )
+  )
+
+  # same idea here:
+  # even though element 1 doesn't have a "complete" window of size 2,
+  # it theoretically _could_ have because 1970-01-01 + 1 day = 1970-01-02
+  # which is below the boundary value of 1970-01-06, and that is what matters
+  # when computing completeness
+  expect_equal(
+    slide_index(x, i, identity, .after = 1, .complete = TRUE),
+    list(
+      1L,
+      2:3,
+      3:4,
+      4:5,
+      NULL
+    )
+  )
+})
+
+test_that("cannot use an invalid .complete value", {
+  expect_error(
+    slide_index(1, 1, identity, .complete = "hi"),
+    class = "vctrs_error_cast_lossy"
   )
 })
 

@@ -1,9 +1,13 @@
 # ------------------------------------------------------------------------------
 
-# Look backwards until index[[i]] is past current_index, then add 1 to position
+# Look backwards until index[[i]] is past range_start, then add 1 to position
 # Additional check to see if the start of our window is
 # already outside the last value (no data here)
-locate_window_start_positive <- function(position, i, range_start, finish) {
+locate_window_start_positive <- function(position, i, range_start, finish, complete) {
+  if (complete && range_start < i[[finish]]) {
+    return(NA_integer_)
+  }
+
   while (i[[position]] >= range_start) {
     if (position == finish) {
       return(position)
@@ -16,7 +20,7 @@ locate_window_start_positive <- function(position, i, range_start, finish) {
   position + 1L
 }
 
-# Look forward until index[[i]] is at or past current_index
+# Look forward until index[[i]] is at or past range_start
 locate_window_start_negative <- function(position, i, range_start, finish) {
   if (range_start > i[[finish]]) {
     return(NA_integer_)
@@ -33,8 +37,12 @@ locate_window_start_negative <- function(position, i, range_start, finish) {
   position
 }
 
-# Look forward until index[[i]] is past current_index, then subtract 1 from position
-locate_window_stop_positive <- function(position, i, range_stop, finish) {
+# Look forward until index[[i]] is past range_stop, then subtract 1 from position
+locate_window_stop_positive <- function(position, i, range_stop, finish, complete) {
+  if (complete && range_stop > i[[finish]]) {
+    return(NA_integer_)
+  }
+
   while (i[[position]] <= range_stop) {
     if (position == finish) {
       return(position)
@@ -47,7 +55,7 @@ locate_window_stop_positive <- function(position, i, range_stop, finish) {
   position - 1L
 }
 
-# Look backwards until index[[i]] is at or past current_index
+# Look backwards until index[[i]] is at or past range_stop
 # Additional check to see if the end of our window is
 # already outside the first value (no data here)
 locate_window_stop_negative <- function(position, i, range_stop, finish) {
@@ -76,17 +84,17 @@ check_na_range <- function(x, what) {
 
 # ------------------------------------------------------------------------------
 
-locate_window_start <- function(position, i, range_start, n, positive) {
+locate_window_start <- function(position, i, range_start, n, positive, complete) {
   if (positive) {
-    locate_window_start_positive(position, i, range_start, 1L)
+    locate_window_start_positive(position, i, range_start, 1L, complete)
   } else {
     locate_window_start_negative(position, i, range_start, n)
   }
 }
 
-locate_window_stop <- function(position, i, range_stop, n, positive) {
+locate_window_stop <- function(position, i, range_stop, n, positive, complete) {
   if (positive) {
-    locate_window_stop_positive(position, i, range_stop, n)
+    locate_window_stop_positive(position, i, range_stop, n, complete)
   } else {
     locate_window_stop_negative(position, i, range_stop, 1L)
   }
@@ -223,14 +231,21 @@ check_before_after <- function(params) {
 }
 
 check_step <- function(params) {
-  params$step <- vec_cast(params$step, integer())
+  params$step <- vec_cast(params$step, integer(), x_arg = ".step")
   vec_assert(params$step, size = 1L, arg = ".step")
+  params
+}
+
+check_complete <- function(params) {
+  params$complete <- vec_cast(params$complete, logical(), x_arg = ".complete")
+  vec_assert(params$complete, size = 1L, arg = ".complete")
   params
 }
 
 check_params <- function(params) {
   params <- check_before_after(params)
   params <- check_step(params)
+  params <- check_complete(params)
   params
 }
 
@@ -244,17 +259,20 @@ slide_index_impl <- function(.x,
                              .after,
                              .step,
                              #.offset,
-                             #.complete,
+                             .complete,
                              #.forward,
                              .constrain,
                              .ptype) {
   n <- vec_size(.x)
   .f <- as_function(.f)
 
+  check_index_size(n, .i)
+
   params <- list(
     before = .before,
     after = .after,
-    step = .step
+    step = .step,
+    complete = .complete
   )
 
   params <- check_params(params)
@@ -284,8 +302,8 @@ slide_index_impl <- function(.x,
       abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
     }
 
-    window_start <- locate_window_start(position, .i, range_start, n, range_start_positive)
-    window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive)
+    window_start <- locate_window_start(position, .i, range_start, n, range_start_positive, params$complete)
+    window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive, params$complete)
 
     if (is.na(window_start) || is.na(window_stop)) {
       # Step forward
@@ -326,9 +344,9 @@ slide_index <- function(.x,
                         ...,
                         .before = 0L,
                         .after = 0L,
-                        .step = 1L
+                        .step = 1L,
                         #.offset = NULL,
-                        #.complete = FALSE,
+                        .complete = FALSE
                         #.forward = TRUE
                         ) {
   slide_index_impl(
@@ -340,7 +358,7 @@ slide_index <- function(.x,
     .after = .after,
     .step = .step,
     # .offset = .offset,
-    # .complete = .complete,
+     .complete = .complete,
     # .forward = .forward,
     .constrain = FALSE,
     .ptype = list()
