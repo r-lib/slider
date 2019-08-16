@@ -146,8 +146,7 @@ separate_after <- function(params) {
   after <- params$after
 
   if (!vec_is(after)) {
-    ptype <- vec_ptype_full(after)
-    abort(sprintf("When `.before` is `NULL`, `.after` must have type list, not %s.", ptype))
+    abort("When `.before` is `NULL`, `.after` must have type list.")
   }
 
   n <- vec_size(after)
@@ -160,6 +159,12 @@ separate_after <- function(params) {
   params$before <- after[[1]]
   params$after <- after[[2]]
 
+  if (is.numeric(params$before) && is.numeric(params$after)) {
+    if (params$before > params$after) {
+      abort(sprintf("When `.before` is `NULL`, the first `.after` value (%i) must be less than or equal to the second (%i).", params$before, params$after))
+    }
+  }
+
   params
 }
 
@@ -167,8 +172,7 @@ separate_before <- function(params) {
   before <- params$before
 
   if (!vec_is(before)) {
-    ptype <- vec_ptype_full(before)
-    abort(sprintf("When `.after` is `NULL`, `.before` must have type list, not %s.", ptype))
+    abort("When `.after` is `NULL`, `.before` must have type list.")
   }
 
   n <- vec_size(before)
@@ -180,6 +184,12 @@ separate_before <- function(params) {
   params$after_positive <- FALSE
   params$before <- before[[2]]
   params$after <- before[[1]]
+
+  if (is.numeric(params$before) && is.numeric(params$after)) {
+    if (params$after > params$before) {
+      abort(sprintf("When `.after` is `NULL`, the first `.before` value (%i) must be less than or equal to the second (%i).", params$after, params$before))
+    }
+  }
 
   params
 }
