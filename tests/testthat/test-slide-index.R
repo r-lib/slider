@@ -20,6 +20,10 @@ test_that("defaults work with `.i`", {
   )
 })
 
+test_that(".x must be the same size as .i", {
+  expect_error(slide_index(1, 1:2, identity), "must be the same")
+})
+
 # ------------------------------------------------------------------------------
 # .before - integer
 
