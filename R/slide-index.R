@@ -144,42 +144,57 @@ check_index_size <- function(n, i) {
   invisible()
 }
 
-check_before_after <- function(params) {
-  if (is_formula(params$before, scoped = TRUE, lhs = FALSE)) {
-    params$before <- as_function(params$before)
+check_before <- function(before) {
+  if (is_unbounded(before)) {
+    return(before)
   }
 
-  if (is_formula(params$after, scoped = TRUE, lhs = FALSE)) {
-    params$after <- as_function(params$after)
+  if (is_formula(before, scoped = TRUE, lhs = FALSE)) {
+    before <- as_function(before)
+    return(before)
   }
 
-  if (!is_function(params$before)) {
-    vec_assert(params$before, size = 1L, arg = ".before")
+  if (!is_function(before)) {
+    vec_assert(before, size = 1L, arg = ".before")
   }
 
-  if (!is_function(params$after)) {
-    vec_assert(params$after, size = 1L, arg = ".after")
-  }
-
-  params
+  before
 }
 
-check_step <- function(params) {
-  params$step <- vec_cast(params$step, integer(), x_arg = ".step")
-  vec_assert(params$step, size = 1L, arg = ".step")
-  params
+check_after <- function(after) {
+  if (is_unbounded(after)) {
+    return(after)
+  }
+
+  if (is_formula(after, scoped = TRUE, lhs = FALSE)) {
+    after <- as_function(after)
+    return(after)
+  }
+
+  if (!is_function(after)) {
+    vec_assert(after, size = 1L, arg = ".after")
+  }
+
+  after
 }
 
-check_complete <- function(params) {
-  params$complete <- vec_cast(params$complete, logical(), x_arg = ".complete")
-  vec_assert(params$complete, size = 1L, arg = ".complete")
-  params
+check_step <- function(step) {
+  step <- vec_cast(step, integer(), x_arg = ".step")
+  vec_assert(step, size = 1L, arg = ".step")
+  step
+}
+
+check_complete <- function(complete) {
+  complete <- vec_cast(complete, logical(), x_arg = ".complete")
+  vec_assert(complete, size = 1L, arg = ".complete")
+  complete
 }
 
 check_params <- function(params) {
-  params <- check_before_after(params)
-  params <- check_step(params)
-  params <- check_complete(params)
+  params$before <- check_before(params$before)
+  params$after <- check_after(params$after)
+  params$step <- check_step(params$step)
+  params$complete <- check_complete(params$complete)
   params
 }
 
