@@ -48,24 +48,30 @@ slide_new_impl <- function(.x,
   if (is_unbounded(params$before)) {
     window_start_step <- 0L
     window_start <- 1L
+    before_negative <- FALSE
   } else {
     window_start_step <- params$step
     window_start <- 1L - params$before
+    before_negative <- params$before < 0L
   }
 
   if (is_unbounded(params$after)) {
     window_stop_step <- params$step
     window_stop <- params$n
+    after_negative <- FALSE
   } else {
     window_stop_step <- 1L
     window_stop <- 1L + params$after
+    after_negative <- params$after < 0L
   }
 
   window_params <- list(
     window_start = window_start,
     window_stop = window_stop,
     window_start_step = window_start_step,
-    window_stop_step = window_stop_step
+    window_stop_step = window_stop_step,
+    before_negative = before_negative,
+    after_negative = after_negative
   )
 
   params <- c(params, window_params)
@@ -78,21 +84,18 @@ slide_new_impl <- function(.x,
 loop_new <- function(x, f, params, ...) {
   out <- vec_init(params$ptype, params$n)
 
-  before_negative <- params$before < 0L
-  after_negative <- params$after < 0L
-
   while(params$position <= params$n) {
     if (params$complete && (params$window_start < 1L || params$window_stop > params$n)) {
       params <- increment_by_one_new(params)
       next
     }
 
-    if (before_negative && params$window_start > params$n) {
+    if (params$before_negative && params$window_start > params$n) {
       params <- increment_by_one_new(params)
       next
     }
 
-    if (after_negative && params$window_stop < 1L) {
+    if (params$after_negative && params$window_stop < 1L) {
       params <- increment_by_one_new(params)
       next
     }
