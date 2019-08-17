@@ -912,6 +912,13 @@ test_that("cannot use an invalid .complete value", {
 
 # ------------------------------------------------------------------------------
 
+test_that("can select 0 values if before/after are completely out of range", {
+  expect_equal(
+    slide_index(1:5, 1:5, identity, .before = 10, .after = -10),
+    rep(list(NULL), 5)
+  )
+})
+
 test_that("indexing by vec_seq_along(.x) is the same as slide()", {
   expect_equal(
     slide(1:5, ~.x),
