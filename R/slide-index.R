@@ -306,9 +306,8 @@ slide_index_impl <- function(.x,
     window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive, params$complete)
 
     if (is.na(window_start) || is.na(window_stop)) {
-      # Step forward
-      position <- position + params$step
-      entry <- entry + params$step
+      position <- position + 1L
+      entry <- entry + 1L
       next
     }
 

@@ -689,6 +689,39 @@ test_that("error if .after is NULL and the first .before value is < the second",
 })
 
 # ------------------------------------------------------------------------------
+# .step
+
+test_that(".step works with defaults", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .step = 2),
+    list(
+      1L,
+      NULL,
+      3L,
+      NULL
+    )
+  )
+})
+
+test_that(".step kicks in after first allowed value when using .before and .complete", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .before = 1, .step = 2, .complete = T),
+    list(
+      NULL,
+      1:2,
+      NULL,
+      3:4
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
 # .before / .after interaction
 
 test_that("can technically select 0 elements with a negative .before/after", {
