@@ -144,73 +144,7 @@ check_index_size <- function(n, i) {
   invisible()
 }
 
-separate_after <- function(params) {
-  after <- params$after
-
-  if (!vec_is(after)) {
-    abort("When `.before` is `NULL`, `.after` must have type list.")
-  }
-
-  n <- vec_size(after)
-
-  if (n != 2L) {
-    abort(sprintf("When `.before` is `NULL`, `.after` must have size 2, not %i.", n))
-  }
-
-  params$before <- after[[1]]
-  params$after <- after[[2]]
-
-  if (is.numeric(params$before) && is.numeric(params$after)) {
-    if (params$before > params$after) {
-      abort(sprintf("When `.before` is `NULL`, the first `.after` value (%i) must be less than or equal to the second (%i).", params$before, params$after))
-    }
-  }
-
-  if (!is_formula(params$before) && !is_function(params$before)) {
-    params$before <- -params$before
-  }
-
-  params
-}
-
-separate_before <- function(params) {
-  before <- params$before
-
-  if (!vec_is(before)) {
-    abort("When `.after` is `NULL`, `.before` must have type list.")
-  }
-
-  n <- vec_size(before)
-
-  if (n != 2L) {
-    abort(sprintf("When `.after` is `NULL`, `.before` must have size 2, not %i.", n))
-  }
-
-  params$before <- before[[1]]
-  params$after <- before[[2]]
-
-  if (is.numeric(params$before) && is.numeric(params$after)) {
-    if (params$after > params$before) {
-      abort(sprintf("When `.after` is `NULL`, the first `.before` value (%i) must be greater than or equal to the second (%i).", params$after, params$before))
-    }
-  }
-
-  if (!is_formula(params$after) && !is_function(params$after)) {
-    params$after <- -params$after
-  }
-
-  params
-}
-
 check_before_after <- function(params) {
-  if (is.null(params$before)) {
-    params <- separate_after(params)
-  }
-
-  if (is.null(params$after)) {
-    params <- separate_before(params)
-  }
-
   if (is_formula(params$before, scoped = TRUE, lhs = FALSE)) {
     params$before <- as_function(params$before)
   }

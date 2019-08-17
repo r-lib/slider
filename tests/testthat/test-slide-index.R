@@ -85,6 +85,81 @@ test_that(".before must be size 1 if .after is not NULL", {
   )
 })
 
+test_that("error if .before is NULL", {
+  expect_error(
+    slide_index(1, 1, identity, .before = NULL),
+    class = "vctrs_error_scalar_type"
+  )
+})
+
+# ------------------------------------------------------------------------------
+# .before - negative
+
+test_that("can use a negative .before with a date index", {
+  i <- new_datetime(c(0, 1, 2, 3))
+  x <- 1:4
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -1L, .after = 1L),
+    list(
+      2L,
+      3L,
+      4L,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -1L, .after = 2L),
+    list(
+      2:3,
+      3:4,
+      4L,
+      NULL
+    )
+  )
+})
+
+test_that("can use a negative .before with an irregular date index", {
+  i <- new_datetime(c(0, 1, 1, 3))
+  x <- 1:4
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -1L, .after = 2L),
+    list(
+      2:3,
+      4L,
+      4L,
+      NULL
+    )
+  )
+})
+
+test_that("can select no elements when using a negative .before", {
+  i <- new_datetime(c(0, 1, 1, 3))
+  x <- 1:4
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -1L, .after = 1L),
+    list(
+      2:3,
+      integer(),
+      integer(),
+      NULL
+    )
+  )
+})
+
+test_that("negative .before errors if its absolute value is past .after", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- i
+
+  expect_error(
+    slide_index(x, i, identity, .before = -1, .after = 0),
+    "cannot be after the end of the range"
+  )
+})
+
 # ------------------------------------------------------------------------------
 # .before - numeric
 
@@ -194,6 +269,41 @@ test_that("can use year Durations with Dates", {
       1:2,
       2:3
     )
+  )
+})
+
+test_that("can use negative Durations with Dates", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = lubridate::ddays(1)),
+    list(
+      2L,
+      3L,
+      4L,
+      NULL
+    )
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = lubridate::ddays(2)),
+    list(
+      2:3,
+      3:4,
+      4L,
+      NULL
+    )
+  )
+})
+
+test_that("errors if negative .before Duration is further than .after", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- seq_along(i)
+
+  expect_error(
+    slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = 0),
+    "cannot be after the end of the range"
   )
 })
 
@@ -444,6 +554,30 @@ test_that("can use a function in .before", {
   )
 })
 
+test_that("can use a function in .before that looks forward (like negative .before)", {
+  i <- 1:5
+  x <- i
+
+  fn <- function(x) x + 1L
+
+  expect_equal(
+    slide_index(x, i, identity, .before = fn, .after = 2L),
+    slide_index(x, i, identity, .before = -1L, .after = 2L)
+  )
+})
+
+test_that("errors if look forward function looks past .after value", {
+  i <- 1:5
+  x <- i
+
+  fn <- function(x) x + 2L
+
+  expect_error(
+    slide_index(x, i, identity, .before = fn, .after = 1L),
+    "cannot be after the end of the range"
+  )
+})
+
 # ------------------------------------------------------------------------------
 # .before - function - lubridate
 
@@ -503,79 +637,6 @@ test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issu
 })
 
 # ------------------------------------------------------------------------------
-# .before - list (.after = NULL)
-
-test_that("can use a negative .after by providing 2 .before values", {
-  i <- 1:5
-  x <- i
-
-  expect_equal(
-    slide_index(x, i, identity, .before = c(0, 0), .after = NULL),
-    slide_index(x, i, identity, .before = 0, .after = 0)
-  )
-
-  expect_equal(
-    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
-    list(
-      NULL,
-      1L,
-      1:2,
-      2:3,
-      3:4
-    )
-  )
-})
-
-test_that("can provide a function in the list for .before", {
-  i <- 1:5
-  x <- i
-
-  expect_equal(
-    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
-    slide_index(x, i, identity, .before = c(~.x - 2, 1), .after = NULL)
-  )
-
-  fn <- function(x) x - 2L
-
-  expect_equal(
-    slide_index(x, i, identity, .before = c(2, 1), .after = NULL),
-    slide_index(x, i, identity, .before = c(fn, 1), .after = NULL)
-  )
-})
-
-test_that("error if 2 .before values are provided and .after is not NULL", {
-  expect_error(
-    slide_index(1, 1, identity, .before = list(1, 2), .after = 0),
-    class = "vctrs_error_assert_size"
-  )
-})
-
-test_that("error if .after is NULL and .before hasn't provided 2 values", {
-  expect_error(
-    slide_index(1, 1, identity, .before = 1, .after = NULL),
-    "`.after` is `NULL`, `.before`"
-  )
-})
-
-test_that("error if .after is NULL and .before is a single formula/function", {
-  expect_error(
-    slide_index(1, 1, identity, .before = ~.x, .after = NULL),
-    "`.after` is `NULL`, `.before` must have type list"
-  )
-
-  expect_error(
-    slide_index(1, 1, identity, .before = function(x) x, .after = NULL),
-    "`.after` is `NULL`, `.before` must have type list"
-  )
-})
-
-test_that("error if .after is NULL and the first .before value is < the second", {
-  expect_error(
-    slide_index(1, 1, identity, .before = c(1, 2), .after = NULL)
-  )
-})
-
-# ------------------------------------------------------------------------------
 # .after - lubridate - Leap Years / DST
 
 test_that("can use Durations/Periods to handle daylight savings differently", {
@@ -611,80 +672,93 @@ test_that("can use Durations/Periods to handle daylight savings differently", {
 })
 
 # ------------------------------------------------------------------------------
-# .after - list (.after = NULL)
+# .after - negative
 
-test_that("can use a negative .before by providing 2 .after values", {
-  i <- 1:5
-  x <- i
-
-  expect_equal(
-    slide_index(x, i, identity, .after = c(0, 0), .before = NULL),
-    slide_index(x, i, identity, .after = 0, .before = 0)
-  )
+test_that("can use a negative .after with a date index", {
+  i <- new_datetime(c(0, 1, 2, 3))
+  x <- 1:4
 
   expect_equal(
-    slide_index(x, i, identity, .after = c(-1, 0), .before = NULL),
-    slide_index(x, i, identity, .after = 0, .before = 1)
-  )
-
-  expect_equal(
-    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
+    slide_index(x, i, identity, .after = -1L, .before = 1L),
     list(
-      2:3,
-      3:4,
-      4:5,
-      5L,
-      NULL
+      NULL,
+      1L,
+      2L,
+      3L
+    )
+  )
+
+  expect_equal(
+    slide_index(x, i, identity, .after = -1L, .before = 2L),
+    list(
+      NULL,
+      1L,
+      1:2,
+      2:3
     )
   )
 })
 
-test_that("can provide a function in the list for .after", {
+test_that("can use a negative .after with an irregular date index", {
+  i <- new_datetime(c(0, 1, 1, 3))
+  x <- 1:4
+
+  expect_equal(
+    slide_index(x, i, identity, .after = -1L, .before = 2L),
+    list(
+      NULL,
+      1L,
+      1L,
+      2:3
+    )
+  )
+})
+
+test_that("can select no elements when using a negative .after", {
+  i <- new_datetime(c(0, 1, 1, 3))
+  x <- 1:4
+
+  expect_equal(
+    slide_index(x, i, identity, .after = -1L, .before = 1L),
+    list(
+      NULL,
+      1,
+      1,
+      integer()
+    )
+  )
+})
+
+test_that("negative .after errors if its absolute value is past .before", {
+  i <- new_date(c(0, 1, 2, 3))
+  x <- i
+
+  expect_error(
+    slide_index(x, i, identity, .after = -1, .before = 0),
+    "cannot be after the end of the range"
+  )
+})
+
+test_that("can use a negative .after", {
   i <- 1:5
   x <- i
 
   expect_equal(
-    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
-    slide_index(x, i, identity, .after = c(~.x + 1, 2), .before = NULL)
-  )
-
-  fn <- function(x) x + 2L
-
-  expect_equal(
-    slide_index(x, i, identity, .after = c(1, 2), .before = NULL),
-    slide_index(x, i, identity, .after = c(1, fn), .before = NULL)
-  )
-})
-
-test_that("error if 2 .before values are provided and .after is not NULL", {
-  expect_error(
-    slide_index(1, 1, identity, .before = list(1, 2), .after = 0),
-    class = "vctrs_error_assert_size"
+    slide_index(x, i, identity, .before = 2L, .after = -1L),
+    list(
+      NULL,
+      1L,
+      1:2,
+      2:3,
+      3:4
+    )
   )
 })
 
-test_that("error if .after is NULL and .before hasn't provided 2 values", {
+test_that("error if .after is NULL", {
   expect_error(
-    slide_index(1, 1, identity, .before = 1, .after = NULL),
-    "`.after` is `NULL`, `.before`"
-  )
-})
-
-test_that("error if .after is NULL and .before is a single formula/function", {
-  expect_error(
-    slide_index(1, 1, identity, .before = ~.x, .after = NULL),
-    "`.after` is `NULL`, `.before` must have type list"
-  )
-
-  expect_error(
-    slide_index(1, 1, identity, .before = function(x) x, .after = NULL),
-    "`.after` is `NULL`, `.before` must have type list"
-  )
-})
-
-test_that("error if .after is NULL and the first .before value is < the second", {
-  expect_error(
-    slide_index(1, 1, identity, .before = c(1, 2), .after = NULL)
+    slide_index(1, 1, identity, .after = NULL),
+    class = "vctrs_error_scalar_type"
   )
 })
 
@@ -717,32 +791,6 @@ test_that(".step kicks in after first allowed value when using .before and .comp
       1:2,
       NULL,
       3:4
-    )
-  )
-})
-
-# ------------------------------------------------------------------------------
-# .before / .after interaction
-
-test_that("can technically select 0 elements with a negative .before/after", {
-  i <- new_date(c(0, 2, 3))
-  x <- seq_along(i)
-
-  expect_equal(
-    slide_index(x, i, identity, .before = 1, .after = -1, .complete = TRUE),
-    list(
-      NULL,
-      integer(),
-      2L
-    )
-  )
-
-  expect_equal(
-    slide_index(x, i, identity, .before = -1, .after = 1, .complete = TRUE),
-    list(
-      integer(),
-      3L,
-      NULL
     )
   )
 })
