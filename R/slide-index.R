@@ -224,24 +224,42 @@ slide_index_impl <- function(.x,
 
   params <- check_params(params)
 
-  range_starts <- compute_range_starts(.i, params$before)
-  range_stops <- compute_range_stops(.i, params$after)
+  before_bounded <- !is_unbounded(params$before)
+  after_bounded <- !is_unbounded(params$after)
+
+  if (before_bounded) {
+    range_starts <- compute_range_starts(.i, params$before)
+  }
+
+  if (after_bounded) {
+    range_stops <- compute_range_stops(.i, params$after)
+  }
 
   position <- 1L
   entry <- 1L
 
   out <- vec_init(.ptype, n)
 
+  window_start <- 1L
+  window_stop <- n
+
+  # Pre-initialize in case we are unbounded, in which case we are pinned to
+  # these values
+  range_start <- .i[[1L]]
+  range_stop <- .i[[n]]
+
   while(position <= n) {
     i_position <- .i[[position]]
-    range_start <- range_starts[[position]]
-    range_stop <- range_stops[[position]]
 
-    check_na_range(range_start, ".before")
-    check_na_range(range_stop, ".after")
+    if (before_bounded) {
+      range_start <- range_starts[[position]]
+      check_na_range(range_start, ".before")
+    }
 
-    range_start_positive <- is_range_start_positive(i_position, range_start)
-    range_stop_positive <- is_range_stop_positive(i_position, range_stop)
+    if (after_bounded) {
+      range_stop <- range_stops[[position]]
+      check_na_range(range_stop, ".after")
+    }
 
     if (range_start > range_stop) {
       range_start <- as.character(range_start)
@@ -249,13 +267,26 @@ slide_index_impl <- function(.x,
       abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
     }
 
-    window_start <- locate_window_start(position, .i, range_start, n, range_start_positive, params$complete)
-    window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive, params$complete)
+    if (before_bounded) {
+      range_start_positive <- is_range_start_positive(i_position, range_start)
+      window_start <- locate_window_start(position, .i, range_start, n, range_start_positive, params$complete)
 
-    if (is.na(window_start) || is.na(window_stop)) {
-      position <- position + 1L
-      entry <- entry + 1L
-      next
+      if (is.na(window_start)) {
+        position <- position + 1L
+        entry <- entry + 1L
+        next
+      }
+    }
+
+    if (after_bounded) {
+      range_stop_positive <- is_range_stop_positive(i_position, range_stop)
+      window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive, params$complete)
+
+      if (is.na(window_stop)) {
+        position <- position + 1L
+        entry <- entry + 1L
+        next
+      }
     }
 
     slice <- vec_slice(.x, seq2(window_start, window_stop))
