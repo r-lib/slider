@@ -192,9 +192,7 @@ slide_index_impl <- function(.x,
                              .before,
                              .after,
                              .step,
-                             #.offset,
                              .complete,
-                             #.forward,
                              .constrain,
                              .ptype) {
   n <- vec_size(.x)
@@ -278,9 +276,7 @@ slide_index <- function(.x,
                         .before = 0L,
                         .after = 0L,
                         .step = 1L,
-                        #.offset = NULL,
                         .complete = FALSE
-                        #.forward = TRUE
                         ) {
   slide_index_impl(
     .x,
@@ -290,9 +286,7 @@ slide_index <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    # .offset = .offset,
-     .complete = .complete,
-    # .forward = .forward,
+    .complete = .complete,
     .constrain = FALSE,
     .ptype = list()
   )
