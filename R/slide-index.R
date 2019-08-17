@@ -219,92 +219,180 @@ slide_index_impl <- function(.x,
     before = .before,
     after = .after,
     step = .step,
-    complete = .complete
+    complete = .complete,
+    ptype = .ptype,
+    constrain = .constrain,
+    entry = 1L,
+    position = 1L,
+    n = n
   )
 
   params <- check_params(params)
 
-  before_bounded <- !is_unbounded(params$before)
-  after_bounded <- !is_unbounded(params$after)
+  before_unbounded <- is_unbounded(params$before)
+  after_unbounded <- is_unbounded(params$after)
 
-  if (before_bounded) {
-    range_starts <- compute_range_starts(.i, params$before)
+  if (before_unbounded && after_unbounded) {
+    loop_double_unbounded(.x, .f, params, ...)
+  } else if (before_unbounded) {
+    loop_before_unbounded(.x, .i, .f, params, ...)
+  } else if (after_unbounded) {
+    loop_after_unbounded(.x, .i, .f, params, ...)
+  } else {
+    loop_bounded(.x, .i, .f, params, ...)
+  }
+}
+
+# ------------------------------------------------------------------------------
+
+loop_bounded <- function(x, i, f, params, ...) {
+  range_starts <- compute_range_starts(i, params$before)
+  range_stops <- compute_range_stops(i, params$after)
+
+  out <- vec_init(params$ptype, params$n)
+
+  while(params$position <= params$n) {
+    i_position <- i[[params$position]]
+
+    range_start <- range_starts[[params$position]]
+    check_na_range(range_start, ".before")
+
+    range_stop <- range_stops[[params$position]]
+    check_na_range(range_stop, ".after")
+
+    if (range_start > range_stop) {
+      range_start <- as.character(range_start)
+      range_stop <- as.character(range_stop)
+      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position, range_start, range_stop))
+    }
+
+    range_start_positive <- is_range_start_positive(i_position, range_start)
+    window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
+
+    if (is.na(window_start)) {
+      params <- increment_by_one(params)
+      next
+    }
+
+    range_stop_positive <- is_range_stop_positive(i_position, range_stop)
+    window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
+
+    if (is.na(window_stop)) {
+      params <- increment_by_one(params)
+      next
+    }
+
+    out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
+
+    params <- increment_by_step(params)
   }
 
-  if (after_bounded) {
-    range_stops <- compute_range_stops(.i, params$after)
+  out
+}
+
+loop_after_unbounded <- function(x, i, f, params, ...) {
+  range_starts <- compute_range_starts(i, params$before)
+
+  out <- vec_init(params$ptype, params$n)
+
+  window_stop <- params$n
+
+  while(params$position <= params$n) {
+    i_position <- i[[params$position]]
+
+    range_start <- range_starts[[params$position]]
+    check_na_range(range_start, ".before")
+
+    range_start_positive <- is_range_start_positive(i_position, range_start)
+    window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
+
+    if (is.na(window_start)) {
+      params <- increment_by_one(params)
+      next
+    }
+
+    out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
+
+    params <- increment_by_step(params)
   }
 
-  position <- 1L
-  entry <- 1L
+  out
+}
 
-  out <- vec_init(.ptype, n)
+loop_before_unbounded <- function(x, i, f, params, ...) {
+  range_stops <- compute_range_stops(i, params$after)
+
+  out <- vec_init(params$ptype, params$n)
 
   window_start <- 1L
-  window_stop <- n
 
-  while(position <= n) {
-    i_position <- .i[[position]]
+  while(params$position <= params$n) {
+    i_position <- i[[params$position]]
 
-    if (before_bounded) {
-      range_start <- range_starts[[position]]
-      check_na_range(range_start, ".before")
+    range_stop <- range_stops[[params$position]]
+    check_na_range(range_stop, ".after")
+
+    range_stop_positive <- is_range_stop_positive(i_position, range_stop)
+    window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
+
+    if (is.na(window_stop)) {
+      params <- increment_by_one(params)
+      next
     }
 
-    if (after_bounded) {
-      range_stop <- range_stops[[position]]
-      check_na_range(range_stop, ".after")
+    out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
+
+    params <- increment_by_step(params)
+  }
+
+  out
+}
+
+loop_double_unbounded <- function(x, f, params, ...) {
+  out <- vec_init(params$ptype, params$n)
+
+  window_start <- 1L
+  window_stop <- params$n
+
+  while(params$position <= params$n) {
+    out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
+    params <- increment_by_step(params)
+  }
+
+  out
+}
+
+# ------------------------------------------------------------------------------
+
+increment_by_one <- function(params) {
+  params$position <- params$position + 1L
+  params$entry <- params$entry + 1L
+  params
+}
+
+increment_by_step <- function(params) {
+  params$position <- params$position + params$step
+  params$entry <- params$entry + params$step
+  params
+}
+
+# ------------------------------------------------------------------------------
+
+slice_eval_assign <- function(out, x, f, window_start, window_stop, params, ...) {
+  slice <- vec_slice(x, seq2(window_start, window_stop))
+
+  elt <- f(slice, ...)
+
+  if (params$constrain) {
+    elt <- vec_cast(elt, ptype)
+
+    if (vec_size(elt) != 1L) {
+      abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", params$position, vec_size(elt)))
     }
 
-    if (before_bounded && after_bounded) {
-      if (range_start > range_stop) {
-        range_start <- as.character(range_start)
-        range_stop <- as.character(range_stop)
-        abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
-      }
-    }
-
-    if (before_bounded) {
-      range_start_positive <- is_range_start_positive(i_position, range_start)
-      window_start <- locate_window_start(position, .i, range_start, n, range_start_positive, params$complete)
-
-      if (is.na(window_start)) {
-        position <- position + 1L
-        entry <- entry + 1L
-        next
-      }
-    }
-
-    if (after_bounded) {
-      range_stop_positive <- is_range_stop_positive(i_position, range_stop)
-      window_stop <- locate_window_stop(position, .i, range_stop, n, range_stop_positive, params$complete)
-
-      if (is.na(window_stop)) {
-        position <- position + 1L
-        entry <- entry + 1L
-        next
-      }
-    }
-
-    slice <- vec_slice(.x, seq2(window_start, window_stop))
-
-    elt <- .f(slice, ...)
-
-    if (.constrain) {
-      elt <- vec_cast(elt, .ptype)
-
-      if (vec_size(elt) != 1L) {
-        abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", position, vec_size(elt)))
-      }
-
-      out <- vec_assign(out, entry, elt)
-    } else {
-      out[[entry]] <- elt
-    }
-
-    # Step forward
-    position <- position + params$step
-    entry <- entry + params$step
+    out <- vec_assign(out, params$entry, elt)
+  } else {
+    out[[params$entry]] <- elt
   }
 
   out
