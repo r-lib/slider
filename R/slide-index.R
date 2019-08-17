@@ -243,11 +243,6 @@ slide_index_impl <- function(.x,
   window_start <- 1L
   window_stop <- n
 
-  # Pre-initialize in case we are unbounded, in which case we are pinned to
-  # these values
-  range_start <- .i[[1L]]
-  range_stop <- .i[[n]]
-
   while(position <= n) {
     i_position <- .i[[position]]
 
@@ -261,10 +256,12 @@ slide_index_impl <- function(.x,
       check_na_range(range_stop, ".after")
     }
 
-    if (range_start > range_stop) {
-      range_start <- as.character(range_start)
-      range_stop <- as.character(range_stop)
-      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
+    if (before_bounded && after_bounded) {
+      if (range_start > range_stop) {
+        range_start <- as.character(range_start)
+        range_stop <- as.character(range_stop)
+        abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", position, range_start, range_stop))
+      }
     }
 
     if (before_bounded) {
