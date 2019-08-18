@@ -270,7 +270,7 @@ loop_bounded <- function(x, i, f, params, ...) {
     window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       next
     }
 
@@ -278,13 +278,13 @@ loop_bounded <- function(x, i, f, params, ...) {
     window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
   }
 
   out
@@ -307,13 +307,13 @@ loop_after_unbounded <- function(x, i, f, params, ...) {
     window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
   }
 
   out
@@ -336,13 +336,13 @@ loop_before_unbounded <- function(x, i, f, params, ...) {
     window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
   }
 
   out
@@ -356,7 +356,7 @@ loop_double_unbounded <- function(x, f, params, ...) {
 
   while(params$position <= params$n) {
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
   }
 
   out
@@ -364,13 +364,13 @@ loop_double_unbounded <- function(x, f, params, ...) {
 
 # ------------------------------------------------------------------------------
 
-increment_by_one <- function(params) {
+increment_params_by_one <- function(params) {
   params$position <- params$position + 1L
   params$entry <- params$entry + 1L
   params
 }
 
-increment_by_step <- function(params) {
+increment_params_by_step <- function(params) {
   params$position <- params$position + params$step
   params$entry <- params$entry + params$step
   params

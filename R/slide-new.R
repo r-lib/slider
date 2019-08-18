@@ -152,38 +152,6 @@ is_window_stop_ahead_of_last <- function(params, window_params) {
   window_params$window_stop > params$n
 }
 
-is_complete_and_out_of_bounds <- function(params, window_params) {
-  if (!params$complete) {
-    return(FALSE)
-  }
-
-  if (is_window_start_behind_first(params, window_params)) {
-    return(TRUE)
-  }
-
-  if (is_window_stop_ahead_of_last(params, window_params)) {
-    return(TRUE)
-  }
-
-  FALSE
-}
-
-is_out_of_bounds <- function(params, window_params) {
-  if (is_complete_and_out_of_bounds(params, window_params)) {
-    return(TRUE)
-  }
-
-  if (is_window_start_ahead_of_last(params, window_params)) {
-    return(TRUE)
-  }
-
-  if (is_window_stop_behind_first(params, window_params)) {
-    return(TRUE)
-  }
-
-  FALSE
-}
-
 # ------------------------------------------------------------------------------
 
 loop_bounded_new <- function(x, f, params, window_params, ...) {
@@ -192,26 +160,26 @@ loop_bounded_new <- function(x, f, params, window_params, ...) {
   while(params$position <= params$n) {
     if (params$complete) {
       if (is_window_start_behind_first(params, window_params)) {
-        params <- increment_by_one(params)
+        params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
 
       if (is_window_stop_ahead_of_last(params, window_params)) {
-        params <- increment_by_one(params)
+        params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
     if (is_window_start_ahead_of_last(params, window_params)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
     }
 
     if (is_window_stop_behind_first(params, window_params)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
     }
@@ -221,7 +189,7 @@ loop_bounded_new <- function(x, f, params, window_params, ...) {
 
     out <- slice_eval_assign(out, x, f, bounded_window_start, bounded_window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
   }
 
@@ -234,14 +202,14 @@ loop_before_unbounded_new <- function(x, f, params, window_params, ...) {
   while(params$position <= params$n) {
     if (params$complete) {
       if (is_window_stop_ahead_of_last(params, window_params)) {
-        params <- increment_by_one(params)
+        params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
     if (is_window_stop_behind_first(params, window_params)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
     }
@@ -250,7 +218,7 @@ loop_before_unbounded_new <- function(x, f, params, window_params, ...) {
 
     out <- slice_eval_assign(out, x, f, window_params$window_start, bounded_window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
   }
 
@@ -263,14 +231,14 @@ loop_after_unbounded_new <- function(x, f, params, window_params, ...) {
   while(params$position <= params$n) {
     if (params$complete) {
       if (is_window_start_behind_first(params, window_params)) {
-        params <- increment_by_one(params)
+        params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
     if (is_window_start_ahead_of_last(params, window_params)) {
-      params <- increment_by_one(params)
+      params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
     }
@@ -279,7 +247,7 @@ loop_after_unbounded_new <- function(x, f, params, window_params, ...) {
 
     out <- slice_eval_assign(out, x, f, bounded_window_start, window_params$window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
   }
 
@@ -292,7 +260,7 @@ loop_double_unbounded_new <- function(x, f, params, window_params, ...) {
   while(params$position <= params$n) {
     out <- slice_eval_assign(out, x, f, window_params$window_start, window_params$window_stop, params, ...)
 
-    params <- increment_by_step(params)
+    params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
   }
 
