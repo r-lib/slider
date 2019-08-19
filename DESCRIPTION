@@ -28,7 +28,7 @@ Suggests:
     lubridate,
     nanotime
 Remotes:
-    DavisVaughan/vctrs@export
+    DavisVaughan/vctrs@c-exports
 Collate: 
     'pslide-impl.R'
     'slide2.R'
