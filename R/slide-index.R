@@ -409,6 +409,54 @@ loop_double_unbounded <- function(x, f, params, ...) {
 
 # ------------------------------------------------------------------------------
 
+# Conceptually there are 4 ways to get out of bounds, and in these cases no
+# evalution of the function should be made, and the parameters should be
+# incremented by 1, not by the step value.
+
+# 1. Start of the window is past the last data point
+# slide(1:5, ~.x, .before = -1, .after = 1)
+# 1 2 3 4 5 . . .
+# . . . . . | - |
+#           ^
+#           |- Start of window outside range
+
+is_start_ahead_of_last <- function(start, last, start_ahead) {
+  start_ahead && start > last
+}
+
+# 2. End of the window is before the first data point
+# slide(1:5, ~.x, .before = 1, .after = -1)
+# . . . 1 2 3 4 5
+# | - | . . . . .
+#     ^
+#     |- End of window outside range
+
+is_stop_behind_first <- function(stop, first, stop_behind) {
+  stop_behind && stop < first
+}
+
+# 3. Start of the window is before the first data point, and `.complete = TRUE`
+# slide(1:5, ~.x, .before = 1, .complete = TRUE)
+# . 1 2 3 4 5 . .
+# | - | . . . . .
+# ^
+# |- Start of window outside range
+
+is_start_behind_first <- function(start, first) {
+  start < first
+}
+
+# 4. End of the window is after the last data point, and `.complete = TRUE`
+# slide(1:5, ~.x, .after = 1, .complete = TRUE)
+# 1 2 3 4 5 . . .
+# . . . | - | . .
+#           ^
+#           |- End of window outside range
+
+is_stop_ahead_of_last <- function(stop, last) {
+  stop > last
+}
+
 is_range_start_ahead_of_last <- function(range_params) {
   is_start_ahead_of_last(range_params$start, range_params$last, range_params$start_ahead)
 }
