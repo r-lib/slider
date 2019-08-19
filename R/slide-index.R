@@ -382,10 +382,10 @@ slice_eval_assign <- function(out, x, f, window_start, window_stop, params, ...)
   elt <- f(slice, ...)
 
   if (params$constrain) {
-    elt <- vec_cast(elt, ptype)
+    elt <- vec_cast(elt, params$ptype)
 
     if (vec_size(elt) != 1L) {
-      abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", params$position, vec_size(elt)))
+      abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", params$position_index, vec_size(elt)))
     }
 
     out <- vec_assign(out, params$entry, elt)
