@@ -767,39 +767,6 @@ test_that("error if .after is NULL", {
 })
 
 # ------------------------------------------------------------------------------
-# .step
-
-test_that(".step works with defaults", {
-  i <- new_date(c(0, 1, 2, 3))
-  x <- seq_along(i)
-
-  expect_equal(
-    slide_index(x, i, identity, .step = 2),
-    list(
-      1L,
-      NULL,
-      3L,
-      NULL
-    )
-  )
-})
-
-test_that(".step kicks in after first allowed value when using .before and .complete", {
-  i <- new_date(c(0, 1, 2, 3))
-  x <- seq_along(i)
-
-  expect_equal(
-    slide_index(x, i, identity, .before = 1, .step = 2, .complete = T),
-    list(
-      NULL,
-      1:2,
-      NULL,
-      3:4
-    )
-  )
-})
-
-# ------------------------------------------------------------------------------
 
 test_that("repeated index values are grouped with the same values", {
   i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)

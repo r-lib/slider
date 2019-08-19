@@ -178,12 +178,6 @@ check_after <- function(after) {
   after
 }
 
-check_step <- function(step) {
-  step <- vec_cast(step, integer(), x_arg = ".step")
-  vec_assert(step, size = 1L, arg = ".step")
-  step
-}
-
 check_complete <- function(complete) {
   complete <- vec_cast(complete, logical(), x_arg = ".complete")
   vec_assert(complete, size = 1L, arg = ".complete")
@@ -193,7 +187,6 @@ check_complete <- function(complete) {
 check_params <- function(params) {
   params$before <- check_before(params$before)
   params$after <- check_after(params$after)
-  params$step <- check_step(params$step)
   params$complete <- check_complete(params$complete)
   params
 }
@@ -206,25 +199,31 @@ slide_index_impl <- function(.x,
                              ...,
                              .before,
                              .after,
-                             .step,
                              .complete,
                              .constrain,
                              .ptype) {
-  n <- vec_size(.x)
+  n_out <- vec_size(.x)
   .f <- as_function(.f)
 
-  check_index_size(n, .i)
+  check_index_size(n_out, .i)
+
+  split <- vec_split_id(.i)
+  split$sizes <- vapply(split$id, vec_size, integer(1))
+
+  # Number of unique index values
+  n_index <- vec_size(split$key)
 
   params <- list(
     before = .before,
     after = .after,
-    step = .step,
     complete = .complete,
     ptype = .ptype,
     constrain = .constrain,
     entry = 1L,
-    position = 1L,
-    n = n
+    position_out = 1L,
+    position_index = 1L,
+    n_out = n_out,
+    n_index = n_index
   )
 
   params <- check_params(params)
@@ -233,146 +232,145 @@ slide_index_impl <- function(.x,
   after_unbounded <- is_unbounded(params$after)
 
   if (before_unbounded && after_unbounded) {
-    loop_double_unbounded(.x, .f, params, ...)
+    loop_double_unbounded(.x, .f, params, split, ...)
   } else if (before_unbounded) {
-    loop_before_unbounded(.x, .i, .f, params, ...)
+    loop_before_unbounded(.x, .i, .f, params, split, ...)
   } else if (after_unbounded) {
-    loop_after_unbounded(.x, .i, .f, params, ...)
+    loop_after_unbounded(.x, .i, .f, params, split, ...)
   } else {
-    loop_bounded(.x, .i, .f, params, ...)
+    loop_bounded(.x, .i, .f, params, split, ...)
   }
 }
 
 # ------------------------------------------------------------------------------
 
-loop_bounded <- function(x, i, f, params, ...) {
-  range_starts <- compute_range_starts(i, params$before)
-  range_stops <- compute_range_stops(i, params$after)
+loop_bounded <- function(x, i, f, params, split, ...) {
+  range_starts <- compute_range_starts(split$key, params$before)
+  range_stops <- compute_range_stops(split$key, params$after)
 
-  out <- vec_init(params$ptype, params$n)
+  out <- vec_init(params$ptype, params$n_out)
 
-  while(params$position <= params$n) {
-    i_position <- i[[params$position]]
+  while(params$position_index <= params$n_index) {
+    i_current <- split$key[[params$position_index]]
 
-    range_start <- range_starts[[params$position]]
+    params$entry <- split$id[[params$position_index]]
+
+    range_start <- range_starts[[params$position_index]]
     check_na_range(range_start, ".before")
 
-    range_stop <- range_stops[[params$position]]
+    range_stop <- range_stops[[params$position_index]]
     check_na_range(range_stop, ".after")
 
     if (range_start > range_stop) {
       range_start <- as.character(range_start)
       range_stop <- as.character(range_stop)
-      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position, range_start, range_stop))
+      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position_index, range_start, range_stop))
     }
 
-    range_start_positive <- is_range_start_positive(i_position, range_start)
-    window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
+    range_start_positive <- is_range_start_positive(i_current, range_start)
+    window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_params_by_one(params)
+      params <- increment_params_by_one(params, split)
       next
     }
 
-    range_stop_positive <- is_range_stop_positive(i_position, range_stop)
-    window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
+    range_stop_positive <- is_range_stop_positive(i_current, range_stop)
+    window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_params_by_one(params)
+      params <- increment_params_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_step(params)
+    params <- increment_params_by_one(params, split)
   }
 
   out
 }
 
-loop_after_unbounded <- function(x, i, f, params, ...) {
-  range_starts <- compute_range_starts(i, params$before)
+loop_after_unbounded <- function(x, i, f, params, split, ...) {
+  range_starts <- compute_range_starts(split$key, params$before)
 
-  out <- vec_init(params$ptype, params$n)
+  out <- vec_init(params$ptype, params$n_out)
 
-  window_stop <- params$n
+  window_stop <- params$n_out
 
-  while(params$position <= params$n) {
-    i_position <- i[[params$position]]
+  while(params$position_index <= params$n_index) {
+    i_current <- split$key[[params$position_index]]
 
-    range_start <- range_starts[[params$position]]
+    params$entry <- split$id[[params$position_index]]
+
+    range_start <- range_starts[[params$position_index]]
     check_na_range(range_start, ".before")
 
-    range_start_positive <- is_range_start_positive(i_position, range_start)
-    window_start <- locate_window_start(params$position, i, range_start, params$n, range_start_positive, params$complete)
+    range_start_positive <- is_range_start_positive(i_current, range_start)
+    window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_params_by_one(params)
+      params <- increment_params_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_step(params)
+    params <- increment_params_by_one(params, split)
   }
 
   out
 }
 
-loop_before_unbounded <- function(x, i, f, params, ...) {
-  range_stops <- compute_range_stops(i, params$after)
+loop_before_unbounded <- function(x, i, f, params, split, ...) {
+  range_stops <- compute_range_stops(split$key, params$after)
 
-  out <- vec_init(params$ptype, params$n)
+  out <- vec_init(params$ptype, params$n_out)
 
   window_start <- 1L
 
-  while(params$position <= params$n) {
-    i_position <- i[[params$position]]
+  while(params$position_index <= params$n_index) {
+    i_current <- split$key[[params$position_index]]
 
-    range_stop <- range_stops[[params$position]]
+    params$entry <- split$id[[params$position_index]]
+
+    range_stop <- range_stops[[params$position_index]]
     check_na_range(range_stop, ".after")
 
-    range_stop_positive <- is_range_stop_positive(i_position, range_stop)
-    window_stop <- locate_window_stop(params$position, i, range_stop, params$n, range_stop_positive, params$complete)
+    range_stop_positive <- is_range_stop_positive(i_current, range_stop)
+    window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_params_by_one(params)
+      params <- increment_params_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_step(params)
+    params <- increment_params_by_one(params, split)
   }
 
   out
 }
 
-loop_double_unbounded <- function(x, f, params, ...) {
-  out <- vec_init(params$ptype, params$n)
+loop_double_unbounded <- function(x, f, params, entries, ...) {
+  out <- vec_init(params$ptype, params$n_out)
 
   window_start <- 1L
-  window_stop <- params$n
+  window_stop <- params$n_out
 
-  while(params$position <= params$n) {
-    out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
-    params <- increment_params_by_step(params)
-  }
+  params$entry <- seq(window_start, window_stop)
+
+  out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
   out
 }
 
 # ------------------------------------------------------------------------------
 
-increment_params_by_one <- function(params) {
-  params$position <- params$position + 1L
-  params$entry <- params$entry + 1L
-  params
-}
-
-increment_params_by_step <- function(params) {
-  params$position <- params$position + params$step
-  params$entry <- params$entry + params$step
+increment_params_by_one <- function(params, split) {
+  params$position_out <- params$position_out + split$sizes[[params$position_index]]
+  params$position_index <- params$position_index + 1L
   params
 }
 
@@ -392,7 +390,9 @@ slice_eval_assign <- function(out, x, f, window_start, window_stop, params, ...)
 
     out <- vec_assign(out, params$entry, elt)
   } else {
-    out[[params$entry]] <- elt
+    for (i in params$entry) {
+      out[[i]] <- elt
+    }
   }
 
   out
@@ -406,7 +406,6 @@ slide_index <- function(.x,
                         ...,
                         .before = 0L,
                         .after = 0L,
-                        .step = 1L,
                         .complete = FALSE
                         ) {
   slide_index_impl(
@@ -416,7 +415,6 @@ slide_index <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .constrain = FALSE,
     .ptype = list()
