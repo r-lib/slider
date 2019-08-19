@@ -35,6 +35,8 @@ Collate:
     'pslide.R'
     'slide-core.R'
     'slide-impl.R'
+    'slide-index.R'
+    'slide-new.R'
     'slide.R'
     'slide2-impl.R'
     'slurrr-package.R'
