@@ -65,38 +65,38 @@ slide_new_impl <- function(.x,
 
 init_window_params <- function(params) {
   if (is_unbounded(params$before)) {
-    window_start <- 1L
-    window_start_step <- 0L
-    window_start_step_one <- 0L
-    window_start_ahead <- FALSE
+    start <- 1L
+    start_step <- 0L
+    start_step_one <- 0L
+    start_ahead <- FALSE
   } else {
-    window_start <- 1L - params$before
-    window_start_step <- params$step
-    window_start_step_one <- 1L
-    window_start_ahead <- params$before < 0L
+    start <- 1L - params$before
+    start_step <- params$step
+    start_step_one <- 1L
+    start_ahead <- params$before < 0L
   }
 
   if (is_unbounded(params$after)) {
-    window_stop <- params$n
-    window_stop_step <- 0L
-    window_stop_step_one <- 0L
-    window_stop_behind <- FALSE
+    stop <- params$n
+    stop_step <- 0L
+    stop_step_one <- 0L
+    stop_behind <- FALSE
   } else {
-    window_stop <- 1L + params$after
-    window_stop_step <- params$step
-    window_stop_step_one <- 1L
-    window_stop_behind <- params$after < 0L
+    stop <- 1L + params$after
+    stop_step <- params$step
+    stop_step_one <- 1L
+    stop_behind <- params$after < 0L
   }
 
   window_params <- list(
-    window_start = window_start,
-    window_stop = window_stop,
-    window_start_step = window_start_step,
-    window_stop_step = window_stop_step,
-    window_start_step_one = window_start_step_one,
-    window_stop_step_one = window_stop_step_one,
-    window_start_ahead = window_start_ahead,
-    window_stop_behind = window_stop_behind
+    start = start,
+    stop = stop,
+    start_step = start_step,
+    stop_step = stop_step,
+    start_step_one = start_step_one,
+    stop_step_one = stop_step_one,
+    start_ahead = start_ahead,
+    stop_behind = stop_behind
   )
 
   window_params
@@ -116,7 +116,7 @@ init_window_params <- function(params) {
 #           |- Start of window outside range
 
 is_window_start_ahead_of_last <- function(params, window_params) {
-  window_params$window_start_ahead && window_params$window_start > params$n
+  window_params$start_ahead && window_params$start > params$n
 }
 
 # 2. End of the window is before the first data point
@@ -127,7 +127,7 @@ is_window_start_ahead_of_last <- function(params, window_params) {
 #     |- End of window outside range
 
 is_window_stop_behind_first <- function(params, window_params) {
-  window_params$window_stop_behind && window_params$window_stop < 1L
+  window_params$stop_behind && window_params$stop < 1L
 }
 
 # 3. Start of the window is before the first data point, and `.complete = TRUE`
@@ -138,7 +138,7 @@ is_window_stop_behind_first <- function(params, window_params) {
 # |- Start of window outside range
 
 is_window_start_behind_first <- function(params, window_params) {
-  window_params$window_start < 1L
+  window_params$start < 1L
 }
 
 # 3. End of the window is after the last data point, and `.complete = TRUE`
@@ -149,7 +149,7 @@ is_window_start_behind_first <- function(params, window_params) {
 #           |- End of window outside range
 
 is_window_stop_ahead_of_last <- function(params, window_params) {
-  window_params$window_stop > params$n
+  window_params$stop > params$n
 }
 
 # ------------------------------------------------------------------------------
@@ -184,8 +184,8 @@ loop_bounded_new <- function(x, f, params, window_params, ...) {
       next
     }
 
-    bounded_window_start <- max(window_params$window_start, 1L)
-    bounded_window_stop <- min(window_params$window_stop, params$n)
+    bounded_window_start <- max(window_params$start, 1L)
+    bounded_window_stop <- min(window_params$stop, params$n)
 
     out <- slice_eval_assign(out, x, f, bounded_window_start, bounded_window_stop, params, ...)
 
@@ -214,9 +214,9 @@ loop_before_unbounded_new <- function(x, f, params, window_params, ...) {
       next
     }
 
-    bounded_window_stop <- min(window_params$window_stop, params$n)
+    bounded_window_stop <- min(window_params$stop, params$n)
 
-    out <- slice_eval_assign(out, x, f, window_params$window_start, bounded_window_stop, params, ...)
+    out <- slice_eval_assign(out, x, f, window_params$start, bounded_window_stop, params, ...)
 
     params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
@@ -243,9 +243,9 @@ loop_after_unbounded_new <- function(x, f, params, window_params, ...) {
       next
     }
 
-    bounded_window_start <- max(window_params$window_start, 1L)
+    bounded_window_start <- max(window_params$start, 1L)
 
-    out <- slice_eval_assign(out, x, f, bounded_window_start, window_params$window_stop, params, ...)
+    out <- slice_eval_assign(out, x, f, bounded_window_start, window_params$stop, params, ...)
 
     params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
@@ -258,7 +258,7 @@ loop_double_unbounded_new <- function(x, f, params, window_params, ...) {
   out <- vec_init(params$ptype, params$n)
 
   while(params$position <= params$n) {
-    out <- slice_eval_assign(out, x, f, window_params$window_start, window_params$window_stop, params, ...)
+    out <- slice_eval_assign(out, x, f, window_params$start, window_params$stop, params, ...)
 
     params <- increment_params_by_step(params)
     window_params <- increment_window_by_step(window_params)
@@ -282,14 +282,14 @@ increment_params_by_step <- function(params) {
 }
 
 increment_window_by_one <- function(window_params) {
-  window_params$window_start <- window_params$window_start + window_params$window_start_step_one
-  window_params$window_stop <- window_params$window_stop + window_params$window_stop_step_one
+  window_params$start <- window_params$start + window_params$start_step_one
+  window_params$stop <- window_params$stop + window_params$stop_step_one
   window_params
 }
 
 increment_window_by_step <- function(window_params) {
-  window_params$window_start <- window_params$window_start + window_params$window_start_step
-  window_params$window_stop <- window_params$window_stop + window_params$window_stop_step
+  window_params$start <- window_params$start + window_params$start_step
+  window_params$stop <- window_params$stop + window_params$stop_step
   window_params
 }
 
