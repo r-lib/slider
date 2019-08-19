@@ -271,7 +271,7 @@ loop_bounded <- function(x, i, f, params, split, ...) {
     window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_params_by_one(params, split)
+      params <- increment_position_by_one(params, split)
       next
     }
 
@@ -279,13 +279,13 @@ loop_bounded <- function(x, i, f, params, split, ...) {
     window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_params_by_one(params, split)
+      params <- increment_position_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_one(params, split)
+    params <- increment_position_by_one(params, split)
   }
 
   out
@@ -310,13 +310,13 @@ loop_after_unbounded <- function(x, i, f, params, split, ...) {
     window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
 
     if (is.na(window_start)) {
-      params <- increment_params_by_one(params, split)
+      params <- increment_position_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_one(params, split)
+    params <- increment_position_by_one(params, split)
   }
 
   out
@@ -341,13 +341,13 @@ loop_before_unbounded <- function(x, i, f, params, split, ...) {
     window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
 
     if (is.na(window_stop)) {
-      params <- increment_params_by_one(params, split)
+      params <- increment_position_by_one(params, split)
       next
     }
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
-    params <- increment_params_by_one(params, split)
+    params <- increment_position_by_one(params, split)
   }
 
   out
@@ -368,7 +368,7 @@ loop_double_unbounded <- function(x, f, params, entries, ...) {
 
 # ------------------------------------------------------------------------------
 
-increment_params_by_one <- function(params, split) {
+increment_position_by_one <- function(params, split) {
   params$position_out <- params$position_out + split$sizes[[params$position_index]]
   params$position_index <- params$position_index + 1L
   params

@@ -269,6 +269,18 @@ loop_double_unbounded_new <- function(x, f, params, window_params, ...) {
 
 # ------------------------------------------------------------------------------
 
+increment_params_by_one <- function(params) {
+  params$position <- params$position + 1L
+  params$entry <- params$entry + 1L
+  params
+}
+
+increment_params_by_step <- function(params) {
+  params$position <- params$position + params$step
+  params$entry <- params$entry + params$step
+  params
+}
+
 increment_window_by_one <- function(window_params) {
   window_params$window_start <- window_params$window_start + window_params$window_start_step_one
   window_params$window_stop <- window_params$window_stop + window_params$window_stop_step_one
