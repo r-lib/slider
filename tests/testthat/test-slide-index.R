@@ -646,7 +646,7 @@ test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issu
 test_that("can use Durations/Periods to handle daylight savings differently", {
   i <- lubridate::ymd_hms("2009-03-08 01:59:59", tz = "America/Chicago")
   i <- i + lubridate::days(0:1)
-  i <- c(i, i[2] + lubridate::hours(1))
+  i <- vec_c(i, i[2] + lubridate::hours(1))
   x <- seq_along(i)
 
   # When 1 days() is added to the boundary, it keeps the same hour value
