@@ -88,6 +88,9 @@ init_window_params <- function(params) {
     stop_behind <- params$after < 0L
   }
 
+  first <- 1L
+  last <- params$n
+
   window_params <- list(
     start = start,
     stop = stop,
@@ -96,7 +99,9 @@ init_window_params <- function(params) {
     start_step_one = start_step_one,
     stop_step_one = stop_step_one,
     start_ahead = start_ahead,
-    stop_behind = stop_behind
+    stop_behind = stop_behind,
+    first = first,
+    last = last
   )
 
   window_params
@@ -115,8 +120,12 @@ init_window_params <- function(params) {
 #           ^
 #           |- Start of window outside range
 
-is_window_start_ahead_of_last <- function(params, window_params) {
-  window_params$start_ahead && window_params$start > params$n
+is_start_ahead_of_last <- function(start, last, start_ahead) {
+  start_ahead && start > last
+}
+
+is_window_start_ahead_of_last <- function(window_params) {
+  is_start_ahead_of_last(window_params$start, window_params$last, window_params$start_ahead)
 }
 
 # 2. End of the window is before the first data point
@@ -126,8 +135,12 @@ is_window_start_ahead_of_last <- function(params, window_params) {
 #     ^
 #     |- End of window outside range
 
-is_window_stop_behind_first <- function(params, window_params) {
-  window_params$stop_behind && window_params$stop < 1L
+is_stop_behind_first <- function(stop, first, stop_behind) {
+  stop_behind && stop < first
+}
+
+is_window_stop_behind_first <- function(window_params) {
+  is_stop_behind_first(window_params$stop, window_params$first, window_params$stop_behind)
 }
 
 # 3. Start of the window is before the first data point, and `.complete = TRUE`
@@ -137,8 +150,12 @@ is_window_stop_behind_first <- function(params, window_params) {
 # ^
 # |- Start of window outside range
 
-is_window_start_behind_first <- function(params, window_params) {
-  window_params$start < 1L
+is_start_behind_first <- function(start, first) {
+  start < first
+}
+
+is_window_start_behind_first <- function(window_params) {
+  is_start_behind_first(window_params$start, window_params$first)
 }
 
 # 3. End of the window is after the last data point, and `.complete = TRUE`
@@ -148,8 +165,12 @@ is_window_start_behind_first <- function(params, window_params) {
 #           ^
 #           |- End of window outside range
 
-is_window_stop_ahead_of_last <- function(params, window_params) {
-  window_params$stop > params$n
+is_stop_ahead_of_last <- function(stop, last) {
+  stop > last
+}
+
+is_window_stop_ahead_of_last <- function(window_params) {
+  is_stop_ahead_of_last(window_params$stop, window_params$last)
 }
 
 # ------------------------------------------------------------------------------
@@ -159,26 +180,26 @@ loop_bounded_new <- function(x, f, params, window_params, ...) {
 
   while(params$position <= params$n) {
     if (params$complete) {
-      if (is_window_start_behind_first(params, window_params)) {
+      if (is_window_start_behind_first(window_params)) {
         params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
 
-      if (is_window_stop_ahead_of_last(params, window_params)) {
+      if (is_window_stop_ahead_of_last(window_params)) {
         params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
-    if (is_window_start_ahead_of_last(params, window_params)) {
+    if (is_window_start_ahead_of_last(window_params)) {
       params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
     }
 
-    if (is_window_stop_behind_first(params, window_params)) {
+    if (is_window_stop_behind_first(window_params)) {
       params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
@@ -201,14 +222,14 @@ loop_before_unbounded_new <- function(x, f, params, window_params, ...) {
 
   while(params$position <= params$n) {
     if (params$complete) {
-      if (is_window_stop_ahead_of_last(params, window_params)) {
+      if (is_window_stop_ahead_of_last(window_params)) {
         params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
-    if (is_window_stop_behind_first(params, window_params)) {
+    if (is_window_stop_behind_first(window_params)) {
       params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
@@ -230,14 +251,14 @@ loop_after_unbounded_new <- function(x, f, params, window_params, ...) {
 
   while(params$position <= params$n) {
     if (params$complete) {
-      if (is_window_start_behind_first(params, window_params)) {
+      if (is_window_start_behind_first(window_params)) {
         params <- increment_params_by_one(params)
         window_params <- increment_window_by_one(window_params)
         next
       }
     }
 
-    if (is_window_start_ahead_of_last(params, window_params)) {
+    if (is_window_start_ahead_of_last(window_params)) {
       params <- increment_params_by_one(params)
       window_params <- increment_window_by_one(window_params)
       next
