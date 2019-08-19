@@ -3,13 +3,11 @@
 # Look backwards until index[[i]] is past range_start, then add 1 to position
 # Additional check to see if the start of our window is
 # already outside the last value (no data here)
-locate_window_start_positive <- function(position, i, range_start, finish, complete) {
-  if (complete && range_start < i[[finish]]) {
-    return(NA_integer_)
-  }
+locate_window_start_behind_current <- function(i, params, range_params) {
+  position <- params$position_out
 
-  while (i[[position]] >= range_start) {
-    if (position == finish) {
+  while (i[[position]] >= range_params$start) {
+    if (position == 1L) {
       return(position)
     }
 
@@ -21,13 +19,11 @@ locate_window_start_positive <- function(position, i, range_start, finish, compl
 }
 
 # Look forward until index[[i]] is at or past range_start
-locate_window_start_negative <- function(position, i, range_start, finish) {
-  if (range_start > i[[finish]]) {
-    return(NA_integer_)
-  }
+locate_window_start_ahead_of_current <- function(i, params, range_params) {
+  position <- params$position_out
 
-  while (i[[position]] < range_start) {
-    if (position == finish) {
+  while (i[[position]] < range_params$start) {
+    if (position == params$n_out) {
       return(position)
     }
 
@@ -38,13 +34,11 @@ locate_window_start_negative <- function(position, i, range_start, finish) {
 }
 
 # Look forward until index[[i]] is past range_stop, then subtract 1 from position
-locate_window_stop_positive <- function(position, i, range_stop, finish, complete) {
-  if (complete && range_stop > i[[finish]]) {
-    return(NA_integer_)
-  }
+locate_window_stop_ahead_of_current <- function(i, params, range_params) {
+  position <- params$position_out
 
-  while (i[[position]] <= range_stop) {
-    if (position == finish) {
+  while (i[[position]] <= range_params$stop) {
+    if (position == params$n_out) {
       return(position)
     }
 
@@ -58,13 +52,11 @@ locate_window_stop_positive <- function(position, i, range_stop, finish, complet
 # Look backwards until index[[i]] is at or past range_stop
 # Additional check to see if the end of our window is
 # already outside the first value (no data here)
-locate_window_stop_negative <- function(position, i, range_stop, finish) {
-  if (range_stop < i[[finish]]) {
-    return(NA_integer_)
-  }
+locate_window_stop_behind_current <- function(i, params, range_params) {
+  position <- params$position_out
 
-  while (i[[position]] > range_stop) {
-    if (position == finish) {
+  while (i[[position]] > range_params$stop) {
+    if (position == 1L) {
       return(position)
     }
 
@@ -84,19 +76,19 @@ check_na_range <- function(x, what) {
 
 # ------------------------------------------------------------------------------
 
-locate_window_start <- function(position, i, range_start, n, positive, complete) {
-  if (positive) {
-    locate_window_start_positive(position, i, range_start, 1L, complete)
+locate_window_start <- function(i, params, range_params) {
+  if (range_params$start_ahead) {
+    locate_window_start_ahead_of_current(i, params, range_params)
   } else {
-    locate_window_start_negative(position, i, range_start, n)
+    locate_window_start_behind_current(i, params, range_params)
   }
 }
 
-locate_window_stop <- function(position, i, range_stop, n, positive, complete) {
-  if (positive) {
-    locate_window_stop_positive(position, i, range_stop, n, complete)
+locate_window_stop <- function(i, params, range_params) {
+  if (range_params$stop_behind) {
+    locate_window_stop_behind_current(i, params, range_params)
   } else {
-    locate_window_stop_negative(position, i, range_stop, 1L)
+    locate_window_stop_ahead_of_current(i, params, range_params)
   }
 }
 
@@ -122,12 +114,12 @@ compute_range_stops <- function(i, after) {
 
 # ------------------------------------------------------------------------------
 
-is_range_start_positive <- function(i_position, range_start) {
-  i_position >= range_start
+is_range_start_ahead_of_current <- function(i_current, range_start) {
+  i_current < range_start
 }
 
-is_range_stop_positive <- function(i_position, range_stop) {
-  i_position <= range_stop
+is_range_stop_behind_current <- function(i_current, range_stop) {
+  i_current > range_stop
 }
 
 # ------------------------------------------------------------------------------
@@ -216,6 +208,8 @@ slide_index_impl <- function(.x,
   params <- list(
     before = .before,
     after = .after,
+    before_unbounded = is_unbounded(.before),
+    after_unbounded = is_unbounded(.after),
     complete = .complete,
     ptype = .ptype,
     constrain = .constrain,
@@ -227,24 +221,47 @@ slide_index_impl <- function(.x,
   )
 
   params <- check_params(params)
+  range_params <- init_range_params(params, .i)
 
-  before_unbounded <- is_unbounded(params$before)
-  after_unbounded <- is_unbounded(params$after)
-
-  if (before_unbounded && after_unbounded) {
-    loop_double_unbounded(.x, .f, params, split, ...)
-  } else if (before_unbounded) {
-    loop_before_unbounded(.x, .i, .f, params, split, ...)
-  } else if (after_unbounded) {
-    loop_after_unbounded(.x, .i, .f, params, split, ...)
+  if (params$before_unbounded && params$after_unbounded) {
+    loop_double_unbounded(.x, .f, params, ...)
+  } else if (params$before_unbounded) {
+    loop_before_unbounded(.x, .i, .f, params, range_params, split, ...)
+  } else if (params$after_unbounded) {
+    loop_after_unbounded(.x, .i, .f, params, range_params, split, ...)
   } else {
-    loop_bounded(.x, .i, .f, params, split, ...)
+    loop_bounded(.x, .i, .f, params, range_params, split, ...)
   }
 }
 
 # ------------------------------------------------------------------------------
 
-loop_bounded <- function(x, i, f, params, split, ...) {
+init_range_params <- function(params, i) {
+  list(
+    start = NULL,
+    stop = NULL,
+    start_ahead = NULL,
+    stop_behind = NULL,
+    first = i[[1L]],
+    last = i[[params$n_out]]
+  )
+}
+
+# ------------------------------------------------------------------------------
+
+check_range_start_past_stop <- function(params, range_params) {
+  if (range_params$start > range_params$stop) {
+    start <- as.character(range_params$start)
+    stop <- as.character(range_params$stop)
+    abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position_index, start, stop))
+  }
+
+  invisible()
+}
+
+# ------------------------------------------------------------------------------
+
+loop_bounded <- function(x, i, f, params, range_params, split, ...) {
   range_starts <- compute_range_starts(split$key, params$before)
   range_stops <- compute_range_stops(split$key, params$after)
 
@@ -255,33 +272,41 @@ loop_bounded <- function(x, i, f, params, split, ...) {
 
     params$entry <- split$id[[params$position_index]]
 
-    range_start <- range_starts[[params$position_index]]
-    check_na_range(range_start, ".before")
+    range_params$start <- range_starts[[params$position_index]]
+    check_na_range(range_params$start, ".before")
 
-    range_stop <- range_stops[[params$position_index]]
-    check_na_range(range_stop, ".after")
+    range_params$stop <- range_stops[[params$position_index]]
+    check_na_range(range_params$stop, ".after")
 
-    if (range_start > range_stop) {
-      range_start <- as.character(range_start)
-      range_stop <- as.character(range_stop)
-      abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position_index, range_start, range_stop))
+    check_range_start_past_stop(params, range_params)
+
+    range_params$start_ahead <- is_range_start_ahead_of_current(i_current, range_params$start)
+    range_params$stop_behind <- is_range_stop_behind_current(i_current, range_params$stop)
+
+    if (params$complete) {
+      if (is_range_start_behind_first(range_params)) {
+        params <- increment_position_by_one(params, split)
+        next
+      }
+
+      if (is_range_stop_ahead_of_last(range_params)) {
+        params <- increment_position_by_one(params, split)
+        next
+      }
     }
 
-    range_start_positive <- is_range_start_positive(i_current, range_start)
-    window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
-
-    if (is.na(window_start)) {
+    if (is_range_start_ahead_of_last(range_params)) {
       params <- increment_position_by_one(params, split)
       next
     }
 
-    range_stop_positive <- is_range_stop_positive(i_current, range_stop)
-    window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
-
-    if (is.na(window_stop)) {
+    if (is_range_stop_behind_first(range_params)) {
       params <- increment_position_by_one(params, split)
       next
     }
+
+    window_start <- locate_window_start(i, params, range_params)
+    window_stop <- locate_window_stop(i, params, range_params)
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
@@ -291,7 +316,7 @@ loop_bounded <- function(x, i, f, params, split, ...) {
   out
 }
 
-loop_after_unbounded <- function(x, i, f, params, split, ...) {
+loop_after_unbounded <- function(x, i, f, params, range_params, split, ...) {
   range_starts <- compute_range_starts(split$key, params$before)
 
   out <- vec_init(params$ptype, params$n_out)
@@ -303,16 +328,24 @@ loop_after_unbounded <- function(x, i, f, params, split, ...) {
 
     params$entry <- split$id[[params$position_index]]
 
-    range_start <- range_starts[[params$position_index]]
-    check_na_range(range_start, ".before")
+    range_params$start <- range_starts[[params$position_index]]
+    check_na_range(range_params$start, ".before")
 
-    range_start_positive <- is_range_start_positive(i_current, range_start)
-    window_start <- locate_window_start(params$position_out, i, range_start, params$n_out, range_start_positive, params$complete)
+    range_params$start_ahead <- is_range_start_ahead_of_current(i_current, range_params$start)
 
-    if (is.na(window_start)) {
+    if (params$complete) {
+      if (is_range_start_behind_first(range_params)) {
+        params <- increment_position_by_one(params, split)
+        next
+      }
+    }
+
+    if (is_range_start_ahead_of_last(range_params)) {
       params <- increment_position_by_one(params, split)
       next
     }
+
+    window_start <- locate_window_start(i, params, range_params)
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
@@ -322,7 +355,7 @@ loop_after_unbounded <- function(x, i, f, params, split, ...) {
   out
 }
 
-loop_before_unbounded <- function(x, i, f, params, split, ...) {
+loop_before_unbounded <- function(x, i, f, params, range_params, split, ...) {
   range_stops <- compute_range_stops(split$key, params$after)
 
   out <- vec_init(params$ptype, params$n_out)
@@ -334,16 +367,24 @@ loop_before_unbounded <- function(x, i, f, params, split, ...) {
 
     params$entry <- split$id[[params$position_index]]
 
-    range_stop <- range_stops[[params$position_index]]
-    check_na_range(range_stop, ".after")
+    range_params$stop <- range_stops[[params$position_index]]
+    check_na_range(range_params$stop, ".after")
 
-    range_stop_positive <- is_range_stop_positive(i_current, range_stop)
-    window_stop <- locate_window_stop(params$position_out, i, range_stop, params$n_out, range_stop_positive, params$complete)
+    range_params$stop_behind <- is_range_stop_behind_current(i_current, range_params$stop)
 
-    if (is.na(window_stop)) {
+    if (params$complete) {
+      if (is_range_stop_ahead_of_last(range_params)) {
+        params <- increment_position_by_one(params, split)
+        next
+      }
+    }
+
+    if (is_range_stop_behind_first(range_params)) {
       params <- increment_position_by_one(params, split)
       next
     }
+
+    window_stop <- locate_window_stop(i, params, range_params)
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
@@ -353,7 +394,7 @@ loop_before_unbounded <- function(x, i, f, params, split, ...) {
   out
 }
 
-loop_double_unbounded <- function(x, f, params, entries, ...) {
+loop_double_unbounded <- function(x, f, params, ...) {
   out <- vec_init(params$ptype, params$n_out)
 
   window_start <- 1L
@@ -364,6 +405,24 @@ loop_double_unbounded <- function(x, f, params, entries, ...) {
   out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
   out
+}
+
+# ------------------------------------------------------------------------------
+
+is_range_start_ahead_of_last <- function(range_params) {
+  is_start_ahead_of_last(range_params$start, range_params$last, range_params$start_ahead)
+}
+
+is_range_stop_behind_first <- function(range_params) {
+  is_stop_behind_first(range_params$stop, range_params$first, range_params$stop_behind)
+}
+
+is_range_start_behind_first <- function(range_params) {
+  is_start_behind_first(range_params$start, range_params$first)
+}
+
+is_range_stop_ahead_of_last <- function(range_params) {
+  is_stop_ahead_of_last(range_params$stop, range_params$last)
 }
 
 # ------------------------------------------------------------------------------
