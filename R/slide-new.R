@@ -34,6 +34,8 @@ slide_new_impl <- function(.x,
   params <- list(
     before = .before,
     after = .after,
+    before_unbounded = is_unbounded(.before),
+    after_unbounded = is_unbounded(.after),
     step = .step,
     complete = .complete,
     ptype = .ptype,
@@ -44,17 +46,13 @@ slide_new_impl <- function(.x,
   )
 
   params <- check_params(params)
-
   window_params <- init_window_params(params)
 
-  before_unbounded <- is_unbounded(params$before)
-  after_unbounded <- is_unbounded(params$after)
-
-  if (before_unbounded && after_unbounded) {
+  if (params$before_unbounded && params$after_unbounded) {
     loop_double_unbounded_new(.x, .f, params, window_params, ...)
-  } else if (before_unbounded) {
+  } else if (params$before_unbounded) {
     loop_before_unbounded_new(.x, .f, params, window_params, ...)
-  } else if (after_unbounded) {
+  } else if (params$after_unbounded) {
     loop_after_unbounded_new(.x, .f, params, window_params, ...)
   } else {
     loop_bounded_new(.x, .f, params, window_params, ...)
