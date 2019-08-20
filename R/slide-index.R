@@ -1,5 +1,5 @@
-make_locate_window_start_behind_current <- function() {
-  previous_position <- 1L
+make_locate_window_start_behind_current <- function(params) {
+  previous_position <- params$position_index
 
   function(i, params, range_params) {
     position <- previous_position
@@ -15,8 +15,8 @@ make_locate_window_start_behind_current <- function() {
   }
 }
 
-make_locate_window_start_ahead_of_current <- function() {
-  previous_position <- 1L
+make_locate_window_start_ahead_of_current <- function(params) {
+  previous_position <- params$position_index
 
   function(i, params, range_params) {
     position <- previous_position
@@ -44,7 +44,7 @@ make_locate_window_start_ahead_of_current <- function() {
 }
 
 make_locate_window_stop_behind_current <- function(params) {
-  previous_position <- min(2L, params$n_out)
+  previous_position <- params$position_index
 
   function(i, params, range_params) {
     position <- previous_position
@@ -62,7 +62,7 @@ make_locate_window_stop_behind_current <- function(params) {
 }
 
 make_locate_window_stop_ahead_of_current <- function(params) {
-  previous_position <- min(2L, params$n_out)
+  previous_position <- params$position_index
 
   function(i, params, range_params) {
     position <- previous_position
@@ -400,9 +400,9 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
   out <- vec_init(params$ptype, params$n_out)
 
-  locate_window_start_behind_current <- make_locate_window_start_behind_current()
+  locate_window_start_behind_current <- make_locate_window_start_behind_current(params)
   locate_window_stop_ahead_of_current <- make_locate_window_stop_ahead_of_current(params)
-  locate_window_start_ahead_of_current <-  make_locate_window_start_ahead_of_current()
+  locate_window_start_ahead_of_current <-  make_locate_window_start_ahead_of_current(params)
   locate_window_stop_behind_current <- make_locate_window_stop_behind_current(params)
 
   while(params$position_index <= params$n_index) {
