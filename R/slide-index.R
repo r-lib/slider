@@ -168,127 +168,104 @@ slide_index_impl <- function(.x,
   check_index_size(n_out, .i)
 
   split <- vec_split_id(.i)
+  key <- split$key
+  entries <- split$id
 
   # Number of unique index values
-  iteration_max <- vec_size(split$key)
+  iteration <- 1L
+  iteration_max <- vec_size(key)
 
-  params <- list(
-    before = .before,
-    after = .after,
-    before_unbounded = is_unbounded(.before),
-    after_unbounded = is_unbounded(.after),
-    complete = .complete,
-    ptype = .ptype,
-    constrain = .constrain,
-    entry = 1L,
-    n_out = n_out,
-    iteration = 1L,
-    iteration_max = iteration_max
-  )
+  before_unbounded = is_unbounded(.before)
+  after_unbounded = is_unbounded(.after)
 
-  params <- check_params(params)
+  # TODO
+  #params <- check_params(params)
+  if (is_formula(.before, scoped = TRUE, lhs = FALSE)) {
+    .before <- as_function(.before)
+  }
+
+  if (is_formula(.after, scoped = TRUE, lhs = FALSE)) {
+    .after <- as_function(.after)
+  }
 
   range_starts <- NULL
-  if (!params$before_unbounded) {
-    range_starts <- compute_range_starts(split$key, params$before)
+  if (!before_unbounded) {
+    range_starts <- compute_range_starts(key, .before)
   }
 
   range_stops <- NULL
-  if (!params$after_unbounded) {
-    range_stops <- compute_range_stops(split$key, params$after)
+  if (!after_unbounded) {
+    range_stops <- compute_range_stops(key, .after)
   }
 
-  ptype_range <- vec_ptype_common(split$key, range_starts, range_stops)
+  ptype_range <- vec_ptype_common(key, range_starts, range_stops)
 
-  if (!params$before_unbounded) {
+  if (!before_unbounded) {
     range_starts <- vec_cast(range_starts, ptype_range)
     range_starts <- vec_proxy_compare(range_starts)
   }
 
-  if (!params$after_unbounded) {
+  if (!after_unbounded) {
     range_stops <- vec_cast(range_stops, ptype_range)
     range_stops <- vec_proxy_compare(range_stops)
   }
 
-  if (!params$before_unbounded && !params$after_unbounded) {
-    check_range_start_past_stop(range_starts, range_stops)
+  if (!before_unbounded && !after_unbounded) {
+    check_range_start_not_past_stop(range_starts, range_stops)
   }
 
   .i <- vec_cast(.i, ptype_range)
   .i <- vec_proxy_compare(.i)
 
   i_first <- vec_slice(.i, 1L)
-  i_last <- vec_slice(.i, params$n_out)
+  i_last <- vec_slice(.i, n_out)
 
   # Iteration adjustment
-  if (params$complete) {
-    if (!params$before_unbounded) {
+  if (.complete) {
+    if (!before_unbounded) {
       range_starts_first <- vec_slice(range_starts, 1L)
 
       if (vec_gt(i_first, range_starts_first)) {
-        i_first <- vec_recycle(i_first, params$iteration_max)
+        i_first <- vec_recycle(i_first, iteration_max)
         range_starts_before <- vec_gt(i_first, range_starts)
         forward_adjustment <- sum(range_starts_before)
-        params$iteration <- params$iteration + forward_adjustment
+        iteration <- iteration + forward_adjustment
       }
     }
 
-    if (!params$after_unbounded) {
-      range_stops_last <- vec_slice(range_stops, params$iteration_max)
+    if (!after_unbounded) {
+      range_stops_last <- vec_slice(range_stops, iteration_max)
 
       if (vec_lt(i_last, range_stops_last)) {
-        i_last <- vec_recycle(i_last, params$iteration_max)
+        i_last <- vec_recycle(i_last, iteration_max)
         range_stops_after <- vec_lt(i_last, range_stops)
-        params$iteration_max <- params$iteration_max - sum(range_stops_after)
+        iteration_max <- iteration_max - sum(range_stops_after)
       }
     }
   } else {
-    if (!params$before_unbounded) {
-      range_starts_last <- vec_slice(range_starts, params$iteration_max)
+    if (!before_unbounded) {
+      range_starts_last <- vec_slice(range_starts, iteration_max)
 
       if (vec_lt(i_last, range_starts_last)) {
-        i_last <- vec_recycle(i_last, params$iteration_max)
+        i_last <- vec_recycle(i_last, iteration_max)
         range_starts_after <- vec_lt(i_last, range_starts)
-        params$iteration_max <- params$iteration_max - sum(range_starts_after)
+        iteration_max <- iteration_max - sum(range_starts_after)
       }
     }
 
-    if (!params$after_unbounded) {
+    if (!after_unbounded) {
       range_stops_first <- vec_slice(range_stops, 1L)
 
       if (vec_gt(i_first, range_stops_first)) {
-        i_first <- vec_recycle(i_first, params$iteration_max)
+        i_first <- vec_recycle(i_first, iteration_max)
         range_stops_before <- vec_gt(i_first, range_stops)
         forward_adjustment <- sum(range_stops_before)
-        params$iteration <- params$iteration + forward_adjustment
+        iteration <- iteration + forward_adjustment
       }
     }
   }
 
-  loop_bounded(.x, .i, .f, params, range_starts, range_stops, split, ...)
-}
-
-# ------------------------------------------------------------------------------
-
-# TODO - tell me where!
-check_range_start_past_stop <- function(starts, stops) {
-  not_ok <- any(vec_compare(starts, stops) == 1L)
-
-  if (not_ok) {
-    abort("In the ranges generated by `.before` and `.after`, the start of the range is after the end of the range.")
-  }
-
-  invisible()
-}
-
-# ------------------------------------------------------------------------------
-
-loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...) {
-  entries <- split$id
-
-  n_out <- params$n_out
-
-  out <- vec_init(params$ptype, n_out)
+  out <- vec_init(.ptype, n_out)
 
   locate_window_start <- make_locate_window_start()
   locate_window_stop <- make_locate_window_stop()
@@ -296,17 +273,15 @@ loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...)
   window_start <- 1L
   window_stop <- n_out
 
-  while(params$iteration <= params$iteration_max) {
-    params$entry <- entries[[params$iteration]]
-
-    if (!params$before_unbounded) {
-      range_start <- vec_slice(range_starts, params$iteration)
-      window_start <- locate_window_start(i, range_start, n_out)
+  while(iteration <= iteration_max) {
+    if (!before_unbounded) {
+      range_start <- vec_slice(range_starts, iteration)
+      window_start <- locate_window_start(.i, range_start, n_out)
     }
 
-    if (!params$after_unbounded) {
-      range_stop <- vec_slice(range_stops, params$iteration)
-      window_stop <- locate_window_stop(i, range_stop, n_out)
+    if (!after_unbounded) {
+      range_stop <- vec_slice(range_stops, iteration)
+      window_stop <- locate_window_stop(.i, range_stop, n_out)
     }
 
     # This can happen with an irregular index, and is a sign of the full window
@@ -316,28 +291,43 @@ loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...)
       window_stop <- 0L
     }
 
-    slice <- vec_slice(x, seq2(window_start, window_stop))
+    slice <- vec_slice(.x, seq2(window_start, window_stop))
 
-    elt <- f(slice, ...)
+    elt <- .f(slice, ...)
 
-    if (params$constrain) {
-      elt <- vec_cast(elt, params$ptype)
+    entry <- entries[[iteration]]
+
+    if (.constrain) {
+      elt <- vec_cast(elt, .ptype)
 
       if (vec_size(elt) != 1L) {
-        abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", params$iteration, vec_size(elt)))
+        abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", iteration, vec_size(elt)))
       }
 
-      out <- vec_assign(out, params$entry, elt)
+      out <- vec_assign(out, entry, elt)
     } else {
-      for (j in params$entry) {
+      for (j in entry) {
         out[[j]] <- elt
       }
     }
 
-    params$iteration <- params$iteration + 1L
+    iteration <- iteration + 1L
   }
 
   out
+}
+
+# ------------------------------------------------------------------------------
+
+# TODO - tell me where!
+check_range_start_not_past_stop <- function(starts, stops) {
+  not_ok <- any(vec_compare(starts, stops) == 1L)
+
+  if (not_ok) {
+    abort("In the ranges generated by `.before` and `.after`, the start of the range is after the end of the range.")
+  }
+
+  invisible()
 }
 
 # ------------------------------------------------------------------------------
