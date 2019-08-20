@@ -1,13 +1,13 @@
 make_locate_window_start <- function() {
   previous_position <- 1L
 
-  function(i, params, range_params) {
+  function(i, range_start, n) {
     position <- previous_position
 
     i_position <- vec_slice(i, position)
 
-    while (vec_lt(i_position, range_params$start)) {
-      if (position == params$n_out) {
+    while (vec_lt(i_position, range_start)) {
+      if (position == n) {
         previous_position <<- position
         return(position)
       }
@@ -25,12 +25,12 @@ make_locate_window_start <- function() {
 make_locate_window_stop <- function() {
   previous_position <- 1L
 
-  function(i, params, range_params) {
+  function(i, range_stop, n) {
     position <- previous_position
     i_position <- vec_slice(i, position)
 
-    while (vec_lte(i_position, range_params$stop)) {
-      if (position == params$n_out) {
+    while (vec_lte(i_position, range_stop)) {
+      if (position == n) {
         previous_position <<- position
         return(position)
       }
@@ -88,16 +88,6 @@ compute_range_stops <- function(i, after) {
   }
 
   out
-}
-
-# ------------------------------------------------------------------------------
-
-is_range_start_ahead_of_current <- function(key_start, range_start) {
-  vec_lt(key_start, range_start)
-}
-
-is_range_stop_behind_current <- function(key_stop, range_stop) {
-  vec_gt(key_stop, range_stop)
 }
 
 # ------------------------------------------------------------------------------
@@ -232,18 +222,12 @@ slide_index_impl <- function(.x,
   i_first <- vec_slice(.i, 1L)
   i_last <- vec_slice(.i, params$n_out)
 
-  range_params <- init_range_params()
-  range_params$starts <- range_starts
-  range_params$stops <- range_stops
-
   # Iteration adjustment
   if (params$complete) {
     if (!params$before_unbounded) {
       range_starts_first <- vec_slice(range_starts, 1L)
 
-      if (vec_lt(i_first, range_starts_first)) {
-        range_params$start_ahead <- TRUE
-      } else {
+      if (vec_gt(i_first, range_starts_first)) {
         i_first <- vec_recycle(i_first, params$iteration_max)
         range_starts_before <- vec_gt(i_first, range_starts)
         forward_adjustment <- sum(range_starts_before)
@@ -257,9 +241,7 @@ slide_index_impl <- function(.x,
     if (!params$after_unbounded) {
       range_stops_last <- vec_slice(range_stops, params$iteration_max)
 
-      if (vec_gt(i_last, range_stops_last)) {
-        range_params$stop_behind <- TRUE
-      } else {
+      if (vec_lt(i_last, range_stops_last)) {
         i_last <- vec_recycle(i_last, params$iteration_max)
         range_stops_after <- vec_lt(i_last, range_stops)
         params$iteration_max <- params$iteration_max - sum(range_stops_after)
@@ -270,7 +252,6 @@ slide_index_impl <- function(.x,
       range_starts_last <- vec_slice(range_starts, params$iteration_max)
 
       if (vec_lt(i_last, range_starts_last)) {
-        range_params$start_ahead <- TRUE
         i_last <- vec_recycle(i_last, params$iteration_max)
         range_starts_after <- vec_lt(i_last, range_starts)
         params$iteration_max <- params$iteration_max - sum(range_starts_after)
@@ -281,7 +262,6 @@ slide_index_impl <- function(.x,
       range_stops_first <- vec_slice(range_stops, 1L)
 
       if (vec_gt(i_first, range_stops_first)) {
-        range_params$stop_behind <- TRUE
         i_first <- vec_recycle(i_first, params$iteration_max)
         range_stops_before <- vec_gt(i_first, range_stops)
         forward_adjustment <- sum(range_stops_before)
@@ -293,18 +273,7 @@ slide_index_impl <- function(.x,
     }
   }
 
-  loop_bounded(.x, .i, .f, params, range_params, split, ...)
-}
-
-# ------------------------------------------------------------------------------
-
-init_range_params <- function() {
-  list(
-    starts = NULL,
-    stops = NULL,
-    start_ahead = FALSE,
-    stop_behind = FALSE
-  )
+  loop_bounded(.x, .i, .f, params, range_starts, range_stops, split, ...)
 }
 
 # ------------------------------------------------------------------------------
@@ -322,32 +291,31 @@ check_range_start_past_stop <- function(starts, stops) {
 
 # ------------------------------------------------------------------------------
 
-loop_bounded <- function(x, i, f, params, range_params, split, ...) {
+loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...) {
   entries <- split$id
   sizes <- split$sizes
 
-  out <- vec_init(params$ptype, params$n_out)
+  n_out <- params$n_out
+
+  out <- vec_init(params$ptype, n_out)
 
   locate_window_start <- make_locate_window_start()
   locate_window_stop <- make_locate_window_stop()
 
   window_start <- 1L
-  window_stop <- params$n_out
-
-  range_starts <- range_params$starts
-  range_stops <- range_params$stops
+  window_stop <- n_out
 
   while(params$iteration <= params$iteration_max) {
     params$entry <- entries[[params$iteration]]
 
     if (!params$before_unbounded) {
-      range_params$start <- vec_slice(range_starts, params$iteration)
-      window_start <- locate_window_start(i, params, range_params)
+      range_start <- vec_slice(range_starts, params$iteration)
+      window_start <- locate_window_start(i, range_start, n_out)
     }
 
     if (!params$after_unbounded) {
-      range_params$stop <- vec_slice(range_stops, params$iteration)
-      window_stop <- locate_window_stop(i, params, range_params)
+      range_stop <- vec_slice(range_stops, params$iteration)
+      window_stop <- locate_window_stop(i, range_stop, n_out)
     }
 
     # This can happen with an irregular index, and is a sign of the full window
