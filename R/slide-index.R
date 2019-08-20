@@ -1,4 +1,4 @@
-make_locate_window_start <- function() {
+make_locate_window_start_index <- function() {
   previous_position <- 1L
 
   function(i, range_start, n) {
@@ -22,7 +22,7 @@ make_locate_window_start <- function() {
   }
 }
 
-make_locate_window_stop <- function() {
+make_locate_window_stop_index <- function() {
   previous_position <- 1L
 
   function(i, range_stop, n) {
@@ -152,21 +152,27 @@ slide_index_impl <- function(.x,
                              .complete,
                              .constrain,
                              .ptype) {
-  n_out <- vec_size(.x)
+  x_size <- vec_size(.x)
   .f <- as_function(.f)
 
-  check_index_size(n_out, .i)
+  check_index_size(x_size, .i)
 
   split <- vec_split_id(.i)
-  key <- split$key
+
+  .i <- split$key
+  i_size <- vec_size(.i)
+
   entries <- split$id
+  window_sizes <- vapply(entries, vec_size, integer(1))
+  window_stops <- cumsum(window_sizes)
+  window_starts <- window_stops - window_sizes + 1L
 
   # Number of unique index values
-  iteration <- 1L
-  iteration_max <- vec_size(key)
+  iteration_min <- 1L
+  iteration_max <- i_size
 
-  before_unbounded = is_unbounded(.before)
-  after_unbounded = is_unbounded(.after)
+  before_unbounded <- is_unbounded(.before)
+  after_unbounded <- is_unbounded(.after)
 
   # TODO
   #params <- check_params(params)
@@ -180,15 +186,15 @@ slide_index_impl <- function(.x,
 
   range_starts <- NULL
   if (!before_unbounded) {
-    range_starts <- compute_range_starts(key, .before)
+    range_starts <- compute_range_starts(.i, .before)
   }
 
   range_stops <- NULL
   if (!after_unbounded) {
-    range_stops <- compute_range_stops(key, .after)
+    range_stops <- compute_range_stops(.i, .after)
   }
 
-  ptype_range <- vec_ptype_common(key, range_starts, range_stops)
+  ptype_range <- vec_ptype_common(.i, range_starts, range_stops)
 
   if (!before_unbounded) {
     range_starts <- vec_cast(range_starts, ptype_range)
@@ -208,7 +214,7 @@ slide_index_impl <- function(.x,
   .i <- vec_proxy_compare(.i)
 
   i_first <- vec_slice(.i, 1L)
-  i_last <- vec_slice(.i, n_out)
+  i_last <- vec_slice(.i, i_size)
 
   # Iteration adjustment
   if (.complete) {
@@ -216,28 +222,28 @@ slide_index_impl <- function(.x,
       range_starts_first <- vec_slice(range_starts, 1L)
 
       if (vec_gt(i_first, range_starts_first)) {
-        i_first <- vec_recycle(i_first, iteration_max)
+        i_first <- vec_recycle(i_first, i_size)
         range_starts_before <- vec_gt(i_first, range_starts)
         forward_adjustment <- sum(range_starts_before)
-        iteration <- iteration + forward_adjustment
+        iteration_min <- iteration_min + forward_adjustment
       }
     }
 
     if (!after_unbounded) {
-      range_stops_last <- vec_slice(range_stops, iteration_max)
+      range_stops_last <- vec_slice(range_stops, i_size)
 
       if (vec_lt(i_last, range_stops_last)) {
-        i_last <- vec_recycle(i_last, iteration_max)
+        i_last <- vec_recycle(i_last, i_size)
         range_stops_after <- vec_lt(i_last, range_stops)
         iteration_max <- iteration_max - sum(range_stops_after)
       }
     }
   } else {
     if (!before_unbounded) {
-      range_starts_last <- vec_slice(range_starts, iteration_max)
+      range_starts_last <- vec_slice(range_starts, i_size)
 
       if (vec_lt(i_last, range_starts_last)) {
-        i_last <- vec_recycle(i_last, iteration_max)
+        i_last <- vec_recycle(i_last, i_size)
         range_starts_after <- vec_lt(i_last, range_starts)
         iteration_max <- iteration_max - sum(range_starts_after)
       }
@@ -250,28 +256,30 @@ slide_index_impl <- function(.x,
         i_first <- vec_recycle(i_first, iteration_max)
         range_stops_before <- vec_gt(i_first, range_stops)
         forward_adjustment <- sum(range_stops_before)
-        iteration <- iteration + forward_adjustment
+        iteration_min <- iteration_min + forward_adjustment
       }
     }
   }
 
-  out <- vec_init(.ptype, n_out)
+  out <- vec_init(.ptype, x_size)
 
-  locate_window_start <- make_locate_window_start()
-  locate_window_stop <- make_locate_window_stop()
+  locate_window_start_index <- make_locate_window_start_index()
+  locate_window_stop_index <- make_locate_window_stop_index()
 
   window_start <- 1L
-  window_stop <- n_out
+  window_stop <- x_size
 
-  while(iteration <= iteration_max) {
+  for (iteration in seq2(iteration_min, iteration_max)) {
     if (!before_unbounded) {
       range_start <- vec_slice(range_starts, iteration)
-      window_start <- locate_window_start(.i, range_start, n_out)
+      window_start_index <- locate_window_start_index(.i, range_start, i_size)
+      window_start <- window_starts[[window_start_index]]
     }
 
     if (!after_unbounded) {
       range_stop <- vec_slice(range_stops, iteration)
-      window_stop <- locate_window_stop(.i, range_stop, n_out)
+      window_stop_index <- locate_window_stop_index(.i, range_stop, i_size)
+      window_stop <- window_stops[[window_stop_index]]
     }
 
     # This can happen with an irregular index, and is a sign of the full window
@@ -301,7 +309,6 @@ slide_index_impl <- function(.x,
       }
     }
 
-    iteration <- iteration + 1L
   }
 
   out
