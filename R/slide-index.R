@@ -5,13 +5,15 @@
 # already outside the last value (no data here)
 locate_window_start_behind_current <- function(i, params, range_params) {
   position <- params$position_out
+  i_position <- vec_slice(i, position)
 
-  while (i[[position]] >= range_params$start) {
+  while (vec_gte(i_position, range_params$start)) {
     if (position == 1L) {
       return(position)
     }
 
     position <- position - 1L
+    i_position <- vec_slice(i, position)
   }
 
   # Always goes 1 too far, so add it back afterwards
@@ -21,13 +23,15 @@ locate_window_start_behind_current <- function(i, params, range_params) {
 # Look forward until index[[i]] is at or past range_start
 locate_window_start_ahead_of_current <- function(i, params, range_params) {
   position <- params$position_out
+  i_position <- vec_slice(i, position)
 
-  while (i[[position]] < range_params$start) {
+  while (vec_lt(i_position, range_params$start)) {
     if (position == params$n_out) {
       return(position)
     }
 
     position <- position + 1L
+    i_position <- vec_slice(i, position)
   }
 
   position
@@ -36,13 +40,15 @@ locate_window_start_ahead_of_current <- function(i, params, range_params) {
 # Look forward until index[[i]] is past range_stop, then subtract 1 from position
 locate_window_stop_ahead_of_current <- function(i, params, range_params) {
   position <- params$position_out
+  i_position <- vec_slice(i, position)
 
-  while (i[[position]] <= range_params$stop) {
+  while (vec_lte(i_position, range_params$stop)) {
     if (position == params$n_out) {
       return(position)
     }
 
     position <- position + 1L
+    i_position <- vec_slice(i, position)
   }
 
   # Always goes 1 too far, so back it off afterwards
@@ -54,13 +60,15 @@ locate_window_stop_ahead_of_current <- function(i, params, range_params) {
 # already outside the first value (no data here)
 locate_window_stop_behind_current <- function(i, params, range_params) {
   position <- params$position_out
+  i_position <- vec_slice(i, position)
 
-  while (i[[position]] > range_params$stop) {
+  while (vec_gt(i_position, range_params$stop)) {
     if (position == 1L) {
       return(position)
     }
 
     position <- position - 1L
+    i_position <- vec_slice(i, position)
   }
 
   position
@@ -114,12 +122,12 @@ compute_range_stops <- function(i, after) {
 
 # ------------------------------------------------------------------------------
 
-is_range_start_ahead_of_current <- function(i_current, range_start) {
-  i_current < range_start
+is_range_start_ahead_of_current <- function(key_start, range_start) {
+  vec_lt(key_start, range_start)
 }
 
-is_range_stop_behind_current <- function(i_current, range_stop) {
-  i_current > range_stop
+is_range_stop_behind_current <- function(key_stop, range_stop) {
+  vec_gt(key_stop, range_stop)
 }
 
 # ------------------------------------------------------------------------------
@@ -221,7 +229,7 @@ slide_index_impl <- function(.x,
   )
 
   params <- check_params(params)
-  range_params <- init_range_params(params, .i)
+  range_params <- init_range_params()
 
   if (params$before_unbounded && params$after_unbounded) {
     loop_double_unbounded(.x, .f, params, ...)
@@ -236,21 +244,23 @@ slide_index_impl <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-init_range_params <- function(params, i) {
+init_range_params <- function() {
   list(
     start = NULL,
     stop = NULL,
     start_ahead = NULL,
     stop_behind = NULL,
-    first = i[[1L]],
-    last = i[[params$n_out]]
+    start_first = NULL,
+    start_last = NULL,
+    stop_first = NULL,
+    stop_last = NULL
   )
 }
 
 # ------------------------------------------------------------------------------
 
 check_range_start_past_stop <- function(params, range_params) {
-  if (range_params$start > range_params$stop) {
+  if (vec_gt(range_params$start, range_params$stop)) {
     start <- as.character(range_params$start)
     stop <- as.character(range_params$stop)
     abort(sprintf("In iteration %i, the start of the range, %s, cannot be after the end of the range, %s.", params$position_index, start, stop))
@@ -265,23 +275,45 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
   range_starts <- compute_range_starts(split$key, params$before)
   range_stops <- compute_range_stops(split$key, params$after)
 
+  ptype_range <- vec_ptype_common(split$key, range_starts, range_stops)
+
+  range_starts <- vec_cast(range_starts, ptype_range)
+  range_starts <- vec_proxy_compare(range_starts)
+  key_starts <- vec_cast(split$key, ptype_range)
+  key_starts <- vec_proxy_compare(key_starts)
+  i_starts <- vec_cast(i, ptype_range)
+  i_starts <- vec_proxy_compare(i_starts)
+
+  range_stops <- vec_cast(range_stops, ptype_range)
+  range_stops <- vec_proxy_compare(range_stops)
+  key_stops <- vec_cast(split$key, ptype_range)
+  key_stops <- vec_proxy_compare(key_stops)
+  i_stops <- vec_cast(i, ptype_range)
+  i_stops <- vec_proxy_compare(i_stops)
+
+  range_params$start_first <- vec_slice(key_starts, 1L)
+  range_params$start_last <- vec_slice(key_starts, params$n_index)
+  range_params$stop_first <- vec_slice(key_starts, 1L)
+  range_params$stop_last <- vec_slice(key_starts, params$n_index)
+
   out <- vec_init(params$ptype, params$n_out)
 
   while(params$position_index <= params$n_index) {
-    i_current <- split$key[[params$position_index]]
+    key_start <- vec_slice(key_starts, params$position_index)
+    key_stop <- vec_slice(key_stops, params$position_index)
 
     params$entry <- split$id[[params$position_index]]
 
-    range_params$start <- range_starts[[params$position_index]]
+    range_params$start <- vec_slice(range_starts, params$position_index)
     check_na_range(range_params$start, ".before")
 
-    range_params$stop <- range_stops[[params$position_index]]
+    range_params$stop <- vec_slice(range_stops, params$position_index)
     check_na_range(range_params$stop, ".after")
 
     check_range_start_past_stop(params, range_params)
 
-    range_params$start_ahead <- is_range_start_ahead_of_current(i_current, range_params$start)
-    range_params$stop_behind <- is_range_stop_behind_current(i_current, range_params$stop)
+    range_params$start_ahead <- is_range_start_ahead_of_current(key_start, range_params$start)
+    range_params$stop_behind <- is_range_stop_behind_current(key_stop, range_params$stop)
 
     if (params$complete) {
       if (is_range_start_behind_first(range_params)) {
@@ -305,8 +337,8 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
       next
     }
 
-    window_start <- locate_window_start(i, params, range_params)
-    window_stop <- locate_window_stop(i, params, range_params)
+    window_start <- locate_window_start(i_starts, params, range_params)
+    window_stop <- locate_window_stop(i_stops, params, range_params)
 
     out <- slice_eval_assign(out, x, f, window_start, window_stop, params, ...)
 
@@ -421,7 +453,7 @@ loop_double_unbounded <- function(x, f, params, ...) {
 #           |- Start of window outside range
 
 is_start_ahead_of_last <- function(start, last, start_ahead) {
-  start_ahead && start > last
+  start_ahead && vec_gt(start, last)
 }
 
 # 2. End of the window is before the first data point
@@ -432,7 +464,7 @@ is_start_ahead_of_last <- function(start, last, start_ahead) {
 #     |- End of window outside range
 
 is_stop_behind_first <- function(stop, first, stop_behind) {
-  stop_behind && stop < first
+  stop_behind && vec_lt(stop, first)
 }
 
 # 3. Start of the window is before the first data point, and `.complete = TRUE`
@@ -443,7 +475,7 @@ is_stop_behind_first <- function(stop, first, stop_behind) {
 # |- Start of window outside range
 
 is_start_behind_first <- function(start, first) {
-  start < first
+  vec_lt(start, first)
 }
 
 # 4. End of the window is after the last data point, and `.complete = TRUE`
@@ -454,23 +486,25 @@ is_start_behind_first <- function(start, first) {
 #           |- End of window outside range
 
 is_stop_ahead_of_last <- function(stop, last) {
-  stop > last
+  vec_gt(stop, last)
 }
 
+# ------------------------------------------------------------------------------
+
 is_range_start_ahead_of_last <- function(range_params) {
-  is_start_ahead_of_last(range_params$start, range_params$last, range_params$start_ahead)
+  is_start_ahead_of_last(range_params$start, range_params$start_last, range_params$start_ahead)
 }
 
 is_range_stop_behind_first <- function(range_params) {
-  is_stop_behind_first(range_params$stop, range_params$first, range_params$stop_behind)
+  is_stop_behind_first(range_params$stop, range_params$stop_first, range_params$stop_behind)
 }
 
 is_range_start_behind_first <- function(range_params) {
-  is_start_behind_first(range_params$start, range_params$first)
+  is_start_behind_first(range_params$start, range_params$start_first)
 }
 
 is_range_stop_ahead_of_last <- function(range_params) {
-  is_stop_ahead_of_last(range_params$stop, range_params$last)
+  is_stop_ahead_of_last(range_params$stop, range_params$stop_last)
 }
 
 # ------------------------------------------------------------------------------
@@ -479,6 +513,25 @@ increment_position_by_one <- function(params, split) {
   params$position_out <- params$position_out + split$sizes[[params$position_index]]
   params$position_index <- params$position_index + 1L
   params
+}
+
+# ------------------------------------------------------------------------------
+# Should only ever pass objects of size 1 through here
+
+vec_gt <- function(x, y) {
+  vec_compare(x, y) > 0L
+}
+
+vec_gte <- function(x, y) {
+  vec_compare(x, y) >= 0L
+}
+
+vec_lt <- function(x, y) {
+  vec_compare(x, y) < 0L
+}
+
+vec_lte <- function(x, y) {
+  vec_compare(x, y) <= 0L
 }
 
 # ------------------------------------------------------------------------------
