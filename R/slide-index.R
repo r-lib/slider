@@ -168,7 +168,6 @@ slide_index_impl <- function(.x,
   check_index_size(n_out, .i)
 
   split <- vec_split_id(.i)
-  split$sizes <- vapply(split$id, vec_size, integer(1))
 
   # Number of unique index values
   iteration_max <- vec_size(split$key)
@@ -182,7 +181,6 @@ slide_index_impl <- function(.x,
     ptype = .ptype,
     constrain = .constrain,
     entry = 1L,
-    position_out = 1L,
     n_out = n_out,
     iteration = 1L,
     iteration_max = iteration_max
@@ -232,9 +230,6 @@ slide_index_impl <- function(.x,
         range_starts_before <- vec_gt(i_first, range_starts)
         forward_adjustment <- sum(range_starts_before)
         params$iteration <- params$iteration + forward_adjustment
-        for (j in seq_len(forward_adjustment)) {
-          params$position_out <- params$position_out + split$sizes[[j]]
-        }
       }
     }
 
@@ -266,9 +261,6 @@ slide_index_impl <- function(.x,
         range_stops_before <- vec_gt(i_first, range_stops)
         forward_adjustment <- sum(range_stops_before)
         params$iteration <- params$iteration + forward_adjustment
-        for (j in seq_len(forward_adjustment)) {
-          params$position_out <- params$position_out + split$sizes[[j]]
-        }
       }
     }
   }
@@ -293,7 +285,6 @@ check_range_start_past_stop <- function(starts, stops) {
 
 loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...) {
   entries <- split$id
-  sizes <- split$sizes
 
   n_out <- params$n_out
 
@@ -343,7 +334,6 @@ loop_bounded <- function(x, i, f, params, range_starts, range_stops, split, ...)
       }
     }
 
-    params$position_out <- params$position_out + sizes[[params$iteration]]
     params$iteration <- params$iteration + 1L
   }
 
@@ -373,30 +363,6 @@ vec_lt <- function(x, y) {
 vec_lte <- function(x, y) {
   .Call(vctrs_compare, x, y, FALSE) <= 0L
   #vec_compare(x, y) <= 0L
-}
-
-# ------------------------------------------------------------------------------
-
-slice_eval_assign <- function(out, x, f, window_start, window_stop, params, ...) {
-  slice <- vec_slice(x, seq2(window_start, window_stop))
-
-  elt <- f(slice, ...)
-
-  if (params$constrain) {
-    elt <- vec_cast(elt, params$ptype)
-
-    if (vec_size(elt) != 1L) {
-      abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", params$iteration, vec_size(elt)))
-    }
-
-    out <- vec_assign(out, params$entry, elt)
-  } else {
-    for (i in params$entry) {
-      out[[i]] <- elt
-    }
-  }
-
-  out
 }
 
 # ------------------------------------------------------------------------------
