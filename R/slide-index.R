@@ -191,23 +191,21 @@ slide_index_impl <- function(.x,
   .i <- vec_cast(.i, range$ptype)
   .i <- vec_proxy_compare(.i)
 
-  i_first <- vec_slice(.i, 1L)
-  i_last <- vec_slice(.i, i_size)
-
   # Iteration adjustment
   if (.complete) {
     if (!before_unbounded) {
-      iteration_min <- adjust_iteration_min(iteration_min, range_starts, i_first, i_size)
+      iteration_min <- adjust_iteration_min(iteration_min, range_starts, .i, i_size)
     }
     if (!after_unbounded) {
-      iteration_max <- adjust_iteration_max(iteration_max, range_stops, i_last, i_size)
+      iteration_max <- adjust_iteration_max(iteration_max, range_stops, .i, i_size)
     }
   } else {
     if (!before_unbounded) {
-      iteration_max <- adjust_iteration_max(iteration_max, range_starts, i_last, i_size)
+      iteration_max <- adjust_iteration_max(iteration_max, range_starts, .i, i_size)
     }
     if (!after_unbounded) {
-      iteration_min <- adjust_iteration_min(iteration_min, range_stops, i_first, i_size)
+      i_first <- vec_slice(.i, 1L)
+      iteration_min <- adjust_iteration_min(iteration_min, range_stops, .i, i_size)
     }
   }
 
@@ -266,7 +264,8 @@ slide_index_impl <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-adjust_iteration_min <- function(iteration_min, range, i_first, size) {
+adjust_iteration_min <- function(iteration_min, range, i, size) {
+  i_first <- vec_slice(i, 1L)
   range_first <- vec_slice(range, 1L)
 
   if (vec_gt(i_first, range_first)) {
@@ -282,7 +281,8 @@ adjust_iteration_min <- function(iteration_min, range, i_first, size) {
   iteration_min
 }
 
-adjust_iteration_max <- function(iteration_max, range, i_last, size) {
+adjust_iteration_max <- function(iteration_max, range, i, size) {
+  i_last <- vec_slice(i, size)
   range_last <- vec_slice(range, size)
 
   if (vec_lt(i_last, range_last)) {
