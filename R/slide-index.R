@@ -162,8 +162,8 @@ slide_index_impl <- function(.x,
   .i <- split$key
   i_size <- vec_size(.i)
 
-  entries <- split$id
-  window_sizes <- vapply(entries, vec_size, integer(1))
+  out_indices <- split$id
+  window_sizes <- vapply(out_indices, vec_size, integer(1))
   window_stops <- cumsum(window_sizes)
   window_starts <- window_stops - window_sizes + 1L
 
@@ -293,7 +293,7 @@ slide_index_impl <- function(.x,
 
     elt <- .f(slice, ...)
 
-    entry <- entries[[iteration]]
+    out_index <- out_indices[[iteration]]
 
     if (.constrain) {
       elt <- vec_cast(elt, .ptype)
@@ -302,9 +302,9 @@ slide_index_impl <- function(.x,
         abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", iteration, vec_size(elt)))
       }
 
-      out <- vec_assign(out, entry, elt)
+      out <- vec_assign(out, out_index, elt)
     } else {
-      for (j in entry) {
+      for (j in out_index) {
         out[[j]] <- elt
       }
     }
