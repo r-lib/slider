@@ -157,25 +157,11 @@ slide_index_impl <- function(.x,
 
   check_index_size(x_size, .i)
 
-  split <- vec_split_id(.i)
-
-  .i <- split$key
-  i_size <- vec_size(.i)
-
-  out_indices <- split$id
-  window_sizes <- vapply(out_indices, vec_size, integer(1))
-  window_stops <- cumsum(window_sizes)
-  window_starts <- window_stops - window_sizes + 1L
-
-  # Number of unique index values
-  iteration_min <- 1L
-  iteration_max <- i_size
-
-  before_unbounded <- is_unbounded(.before)
-  after_unbounded <- is_unbounded(.after)
-
   # TODO
-  #params <- check_params(params)
+  # check_before()
+  # check_after()
+  # check_complete()
+
   if (is_formula(.before, scoped = TRUE, lhs = FALSE)) {
     .before <- as_function(.before)
   }
@@ -184,12 +170,32 @@ slide_index_impl <- function(.x,
     .after <- as_function(.after)
   }
 
+  split <- vec_split_id(.i)
+
+  .i <- split$key
+  i_size <- vec_size(.i)
+
+  before_unbounded <- is_unbounded(.before)
+  after_unbounded <- is_unbounded(.after)
+
   range <- compute_range_info(.i, .before, .after, before_unbounded, after_unbounded)
   range_starts <- range$starts
   range_stops <- range$stops
 
   .i <- vec_cast(.i, range$ptype)
   .i <- vec_proxy_compare(.i)
+
+  # TODO
+  # Do from here down in C
+
+  # Number of unique index values
+  iteration_min <- 1L
+  iteration_max <- i_size
+
+  out_indices <- split$id
+  window_sizes <- vapply(out_indices, vec_size, integer(1))
+  window_stops <- cumsum(window_sizes)
+  window_starts <- window_stops - window_sizes + 1L
 
   # Iteration adjustment
   if (.complete) {
