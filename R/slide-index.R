@@ -1,21 +1,4 @@
-make_locate_window_start_behind_current <- function(params) {
-  previous_position <- 1L
-
-  function(i, params, range_params) {
-    position <- previous_position
-    i_position <- vec_slice(i, position)
-
-    while (vec_lt(i_position, range_params$start)) {
-      position <- position + 1L
-      i_position <- vec_slice(i, position)
-    }
-
-    previous_position <<- position
-    position
-  }
-}
-
-make_locate_window_start_ahead_of_current <- function(params) {
+make_locate_window_start <- function() {
   previous_position <- 1L
 
   function(i, params, range_params) {
@@ -39,25 +22,7 @@ make_locate_window_start_ahead_of_current <- function(params) {
   }
 }
 
-make_locate_window_stop_behind_current <- function(params) {
-  previous_position <- 1L
-
-  function(i, params, range_params) {
-    position <- previous_position
-
-    i_position <- vec_slice(i, position)
-
-    while (vec_lte(i_position, range_params$stop)) {
-      position <- position + 1L
-      i_position <- vec_slice(i, position)
-    }
-
-    previous_position <<- position
-    position - 1L
-  }
-}
-
-make_locate_window_stop_ahead_of_current <- function(params) {
+make_locate_window_stop <- function() {
   previous_position <- 1L
 
   function(i, params, range_params) {
@@ -363,10 +328,8 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
   out <- vec_init(params$ptype, params$n_out)
 
-  locate_window_start_behind_current <- make_locate_window_start_behind_current(params)
-  locate_window_stop_ahead_of_current <- make_locate_window_stop_ahead_of_current(params)
-  locate_window_start_ahead_of_current <-  make_locate_window_start_ahead_of_current(params)
-  locate_window_stop_behind_current <- make_locate_window_stop_behind_current(params)
+  locate_window_start <- make_locate_window_start()
+  locate_window_stop <- make_locate_window_stop()
 
   window_start <- 1L
   window_stop <- params$n_out
@@ -379,26 +342,16 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
     if (!params$before_unbounded) {
       range_params$start <- vec_slice(range_starts, params$iteration)
-
-      if (range_params$start_ahead) {
-        window_start <- locate_window_start_ahead_of_current(i, params, range_params)
-      } else {
-        window_start <- locate_window_start_behind_current(i, params, range_params)
-      }
+      window_start <- locate_window_start(i, params, range_params)
     }
 
     if (!params$after_unbounded) {
       range_params$stop <- vec_slice(range_stops, params$iteration)
-
-      if (range_params$stop_behind) {
-        window_stop <- locate_window_stop_behind_current(i, params, range_params)
-      } else {
-        window_stop <- locate_window_stop_ahead_of_current(i, params, range_params)
-      }
+      window_stop <- locate_window_stop(i, params, range_params)
     }
 
     # This can happen with an irregular index, and is a sign of the full window
-    # being between two index points
+    # being between two index points and means we select nothing
     if (window_stop < window_start) {
       window_start <- 0L
       window_stop <- 0L
