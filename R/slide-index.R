@@ -184,33 +184,11 @@ slide_index_impl <- function(.x,
     .after <- as_function(.after)
   }
 
-  range_starts <- NULL
-  if (!before_unbounded) {
-    range_starts <- compute_range_starts(.i, .before)
-  }
+  range <- compute_range_info(.i, .before, .after, before_unbounded, after_unbounded)
+  range_starts <- range$starts
+  range_stops <- range$stops
 
-  range_stops <- NULL
-  if (!after_unbounded) {
-    range_stops <- compute_range_stops(.i, .after)
-  }
-
-  ptype_range <- vec_ptype_common(.i, range_starts, range_stops)
-
-  if (!before_unbounded) {
-    range_starts <- vec_cast(range_starts, ptype_range)
-    range_starts <- vec_proxy_compare(range_starts)
-  }
-
-  if (!after_unbounded) {
-    range_stops <- vec_cast(range_stops, ptype_range)
-    range_stops <- vec_proxy_compare(range_stops)
-  }
-
-  if (!before_unbounded && !after_unbounded) {
-    check_range_start_not_past_stop(range_starts, range_stops)
-  }
-
-  .i <- vec_cast(.i, ptype_range)
+  .i <- vec_cast(.i, range$ptype)
   .i <- vec_proxy_compare(.i)
 
   i_first <- vec_slice(.i, 1L)
@@ -315,6 +293,36 @@ slide_index_impl <- function(.x,
 }
 
 # ------------------------------------------------------------------------------
+
+compute_range_info <- function(i, before, after, before_unbounded, after_unbounded) {
+  starts <- NULL
+  if (!before_unbounded) {
+    starts <- compute_range_starts(i, before)
+  }
+
+  stops <- NULL
+  if (!after_unbounded) {
+    stops <- compute_range_stops(i, after)
+  }
+
+  ptype <- vec_ptype_common(i, starts, stops)
+
+  if (!before_unbounded) {
+    starts <- vec_cast(starts, ptype)
+    starts <- vec_proxy_compare(starts)
+  }
+
+  if (!after_unbounded) {
+    stops <- vec_cast(stops, ptype)
+    stops <- vec_proxy_compare(stops)
+  }
+
+  if (!before_unbounded && !after_unbounded) {
+    check_range_start_not_past_stop(starts, stops)
+  }
+
+  list(starts = starts, stops = stops, ptype = ptype)
+}
 
 # TODO - tell me where!
 check_range_start_not_past_stop <- function(starts, stops) {
