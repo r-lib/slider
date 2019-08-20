@@ -491,6 +491,8 @@ test_that("can use year Durations/Periods with Dates and leap years", {
 # .before - nanotime
 
 # TODO - vec_compare() can't handle nanotime objects
+# could provide a vec_proxy_compare
+# vctrs:::vec_proxy_compare.integer64(nanotime::nanotime(c(1, 2, 3, 6, 4)))
 
 # test_that("can use nanotime resolution", {
 #   i <- nanotime::nanotime(1:5)
@@ -947,6 +949,21 @@ test_that("can use unbounded .before with lubridate .after", {
 })
 
 # ------------------------------------------------------------------------------
+
+test_that("can have an irregular index where the window is completely within two index values", {
+  expect_equal(
+    slide_index(1:7, c(10, 11, 13, 17, 18, 19, 20), ~.x, .before = 3, .after = -2),
+    list(
+      NULL,
+      NULL,
+      1:2,
+      integer(),
+      integer(),
+      4L,
+      4:5
+    )
+  )
+})
 
 test_that("can select 0 values if before/after are completely out of range", {
   expect_equal(

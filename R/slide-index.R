@@ -1,3 +1,88 @@
+make_locate_window_start_behind_current <- function() {
+  previous_position <- 1L
+
+  function(i, params, range_params) {
+    position <- previous_position
+    i_position <- vec_slice(i, position)
+
+    while (vec_lt(i_position, range_params$start)) {
+      position <- position + 1L
+      i_position <- vec_slice(i, position)
+    }
+
+    previous_position <<- position
+    position
+  }
+}
+
+make_locate_window_start_ahead_of_current <- function() {
+  previous_position <- 1L
+
+  function(i, params, range_params) {
+    position <- previous_position
+
+    if (position == params$n_out) {
+      return(position)
+    }
+
+    i_position <- vec_slice(i, position)
+
+    while (vec_lt(i_position, range_params$start)) {
+      position <- position + 1L
+
+      if (position == params$n_out) {
+        previous_position <<- position
+        return(position)
+      }
+
+      i_position <- vec_slice(i, position)
+    }
+
+    previous_position <<- position
+    position
+  }
+}
+
+make_locate_window_stop_behind_current <- function(params) {
+  previous_position <- min(2L, params$n_out)
+
+  function(i, params, range_params) {
+    position <- previous_position
+
+    i_position <- vec_slice(i, position)
+
+    while (vec_lte(i_position, range_params$stop)) {
+      position <- position + 1L
+      i_position <- vec_slice(i, position)
+    }
+
+    previous_position <<- position
+    position - 1L
+  }
+}
+
+make_locate_window_stop_ahead_of_current <- function(params) {
+  previous_position <- min(2L, params$n_out)
+
+  function(i, params, range_params) {
+    position <- previous_position
+    i_position <- vec_slice(i, position)
+
+    while (vec_lte(i_position, range_params$stop)) {
+      if (position == params$n_out) {
+        previous_position <<- position
+        return(position)
+      }
+
+      position <- position + 1L
+      i_position <- vec_slice(i, position)
+    }
+
+    previous_position <<- position
+    position - 1L
+  }
+}
+
 # ------------------------------------------------------------------------------
 
 # Look backwards until index[[i]] is past range_start, then add 1 to position
@@ -310,10 +395,18 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
   start_aheads <- vec_lt(key_starts, range_starts)
   stop_behinds <- vec_gt(key_stops, range_stops)
 
+  entries <- split$id
+  sizes <- split$sizes
+
   out <- vec_init(params$ptype, params$n_out)
 
+  locate_window_start_behind_current <- make_locate_window_start_behind_current()
+  locate_window_stop_ahead_of_current <- make_locate_window_stop_ahead_of_current(params)
+  locate_window_start_ahead_of_current <-  make_locate_window_start_ahead_of_current()
+  locate_window_stop_behind_current <- make_locate_window_stop_behind_current(params)
+
   while(params$position_index <= params$n_index) {
-    params$entry <- split$id[[params$position_index]]
+    params$entry <- entries[[params$position_index]]
 
     range_params$start <- vec_slice(range_starts, params$position_index)
     range_params$stop <- vec_slice(range_stops, params$position_index)
@@ -323,28 +416,47 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
     if (params$complete) {
       if (is_range_start_behind_first(range_params)) {
-        params <- increment_position_by_one(params, split)
+        params <- increment_position_by_one(params, sizes)
         next
       }
 
       if (is_range_stop_ahead_of_last(range_params)) {
-        params <- increment_position_by_one(params, split)
+        params <- increment_position_by_one(params, sizes)
         next
       }
     }
 
     if (is_range_start_ahead_of_last(range_params)) {
-      params <- increment_position_by_one(params, split)
+      params <- increment_position_by_one(params, sizes)
       next
     }
 
     if (is_range_stop_behind_first(range_params)) {
-      params <- increment_position_by_one(params, split)
+      params <- increment_position_by_one(params, sizes)
       next
     }
 
-    window_start <- locate_window_start(i_starts, params, range_params)
-    window_stop <- locate_window_stop(i_stops, params, range_params)
+    # window_start <- locate_window_start(i_starts, params, range_params)
+    # window_stop <- locate_window_stop(i_stops, params, range_params)
+
+    if (range_params$start_ahead) {
+      window_start <- locate_window_start_ahead_of_current(i_starts, params, range_params)
+    } else {
+      window_start <- locate_window_start_behind_current(i_starts, params, range_params)
+    }
+
+    if (range_params$stop_behind) {
+      window_stop <- locate_window_stop_behind_current(i_stops, params, range_params)
+    } else {
+      window_stop <- locate_window_stop_ahead_of_current(i_stops, params, range_params)
+    }
+
+    # This can happen with an irregular index, and is a sign of the full window
+    # being between two index points
+    if (window_start < window_stop) {
+      window_start <- 0L
+      window_stop <- 0L
+    }
 
     slice <- vec_slice(x, seq2(window_start, window_stop))
 
@@ -366,7 +478,7 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
     out
 
-    params <- increment_position_by_one(params, split)
+    params <- increment_position_by_one(params, sizes)
   }
 
   out
@@ -533,8 +645,8 @@ is_range_stop_ahead_of_last <- function(range_params) {
 
 # ------------------------------------------------------------------------------
 
-increment_position_by_one <- function(params, split) {
-  params$position_out <- params$position_out + split$sizes[[params$position_index]]
+increment_position_by_one <- function(params, sizes) {
+  params$position_out <- params$position_out + sizes[[params$position_index]]
   params$position_index <- params$position_index + 1L
   params
 }
@@ -542,20 +654,26 @@ increment_position_by_one <- function(params, split) {
 # ------------------------------------------------------------------------------
 # Should only ever pass objects of size 1 through here
 
+vctrs_compare <- vctrs:::vctrs_compare
+
 vec_gt <- function(x, y) {
-  vec_compare(x, y) > 0L
+  .Call(vctrs_compare, x, y, FALSE) > 0L
+  #vec_compare(x, y) > 0L
 }
 
 vec_gte <- function(x, y) {
-  vec_compare(x, y) >= 0L
+  .Call(vctrs_compare, x, y, FALSE) >= 0L
+  #vec_compare(x, y) >= 0L
 }
 
 vec_lt <- function(x, y) {
-  vec_compare(x, y) < 0L
+  .Call(vctrs_compare, x, y, FALSE) < 0L
+  #vec_compare(x, y) < 0L
 }
 
 vec_lte <- function(x, y) {
-  vec_compare(x, y) <= 0L
+  .Call(vctrs_compare, x, y, FALSE) <= 0L
+  #vec_compare(x, y) <= 0L
 }
 
 # ------------------------------------------------------------------------------
