@@ -367,15 +367,14 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
   range_starts <- vec_proxy_compare(range_starts)
   key_starts <- vec_cast(split$key, ptype_range)
   key_starts <- vec_proxy_compare(key_starts)
-  i_starts <- vec_cast(i, ptype_range)
-  i_starts <- vec_proxy_compare(i_starts)
 
   range_stops <- vec_cast(range_stops, ptype_range)
   range_stops <- vec_proxy_compare(range_stops)
   key_stops <- vec_cast(split$key, ptype_range)
   key_stops <- vec_proxy_compare(key_stops)
-  i_stops <- vec_cast(i, ptype_range)
-  i_stops <- vec_proxy_compare(i_stops)
+
+  i <- vec_cast(i, ptype_range)
+  i <- vec_proxy_compare(i)
 
   range_params$start_first <- vec_slice(key_starts, 1L)
   range_params$start_last <- vec_slice(key_starts, params$n_index)
@@ -440,15 +439,15 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
     # window_stop <- locate_window_stop(i_stops, params, range_params)
 
     if (range_params$start_ahead) {
-      window_start <- locate_window_start_ahead_of_current(i_starts, params, range_params)
+      window_start <- locate_window_start_ahead_of_current(i, params, range_params)
     } else {
-      window_start <- locate_window_start_behind_current(i_starts, params, range_params)
+      window_start <- locate_window_start_behind_current(i, params, range_params)
     }
 
     if (range_params$stop_behind) {
-      window_stop <- locate_window_stop_behind_current(i_stops, params, range_params)
+      window_stop <- locate_window_stop_behind_current(i, params, range_params)
     } else {
-      window_stop <- locate_window_stop_ahead_of_current(i_stops, params, range_params)
+      window_stop <- locate_window_stop_ahead_of_current(i, params, range_params)
     }
 
     # This can happen with an irregular index, and is a sign of the full window
@@ -471,12 +470,10 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
       out <- vec_assign(out, params$entry, elt)
     } else {
-      for (i in params$entry) {
-        out[[i]] <- elt
+      for (j in params$entry) {
+        out[[j]] <- elt
       }
     }
-
-    out
 
     params <- increment_position_by_one(params, sizes)
   }
