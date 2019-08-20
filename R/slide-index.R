@@ -293,8 +293,8 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
   range_params$start_first <- vec_slice(key_starts, 1L)
   range_params$start_last <- vec_slice(key_starts, params$n_index)
-  range_params$stop_first <- vec_slice(key_starts, 1L)
-  range_params$stop_last <- vec_slice(key_starts, params$n_index)
+  range_params$stop_first <- vec_slice(key_stops, 1L)
+  range_params$stop_last <- vec_slice(key_stops, params$n_index)
 
   out <- vec_init(params$ptype, params$n_out)
 
