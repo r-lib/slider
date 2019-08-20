@@ -197,45 +197,17 @@ slide_index_impl <- function(.x,
   # Iteration adjustment
   if (.complete) {
     if (!before_unbounded) {
-      range_starts_first <- vec_slice(range_starts, 1L)
-
-      if (vec_gt(i_first, range_starts_first)) {
-        i_first <- vec_recycle(i_first, i_size)
-        range_starts_before <- vec_gt(i_first, range_starts)
-        forward_adjustment <- sum(range_starts_before)
-        iteration_min <- iteration_min + forward_adjustment
-      }
+      iteration_min <- adjust_iteration_min(iteration_min, range_starts, i_first, i_size)
     }
-
     if (!after_unbounded) {
-      range_stops_last <- vec_slice(range_stops, i_size)
-
-      if (vec_lt(i_last, range_stops_last)) {
-        i_last <- vec_recycle(i_last, i_size)
-        range_stops_after <- vec_lt(i_last, range_stops)
-        iteration_max <- iteration_max - sum(range_stops_after)
-      }
+      iteration_max <- adjust_iteration_max(iteration_max, range_stops, i_last, i_size)
     }
   } else {
     if (!before_unbounded) {
-      range_starts_last <- vec_slice(range_starts, i_size)
-
-      if (vec_lt(i_last, range_starts_last)) {
-        i_last <- vec_recycle(i_last, i_size)
-        range_starts_after <- vec_lt(i_last, range_starts)
-        iteration_max <- iteration_max - sum(range_starts_after)
-      }
+      iteration_max <- adjust_iteration_max(iteration_max, range_starts, i_last, i_size)
     }
-
     if (!after_unbounded) {
-      range_stops_first <- vec_slice(range_stops, 1L)
-
-      if (vec_gt(i_first, range_stops_first)) {
-        i_first <- vec_recycle(i_first, iteration_max)
-        range_stops_before <- vec_gt(i_first, range_stops)
-        forward_adjustment <- sum(range_stops_before)
-        iteration_min <- iteration_min + forward_adjustment
-      }
+      iteration_min <- adjust_iteration_min(iteration_min, range_stops, i_first, i_size)
     }
   }
 
@@ -291,6 +263,41 @@ slide_index_impl <- function(.x,
 
   out
 }
+
+# ------------------------------------------------------------------------------
+
+adjust_iteration_min <- function(iteration_min, range, i_first, size) {
+  range_first <- vec_slice(range, 1L)
+
+  if (vec_gt(i_first, range_first)) {
+    # should be able to optimize this away in C
+    i_first <- vec_recycle(i_first, size)
+
+    range_first_before <- vec_gt(i_first, range)
+    forward_adjustment <- sum(range_first_before)
+
+    iteration_min <- iteration_min + forward_adjustment
+  }
+
+  iteration_min
+}
+
+adjust_iteration_max <- function(iteration_max, range, i_last, size) {
+  range_last <- vec_slice(range, size)
+
+  if (vec_lt(i_last, range_last)) {
+    # should be able to optimize this away in C
+    i_last <- vec_recycle(i_last, size)
+
+    range_last_after <- vec_lt(i_last, range)
+    backward_adjustment <- sum(range_last_after)
+
+    iteration_max <- iteration_max - backward_adjustment
+  }
+
+  iteration_max
+}
+
 
 # ------------------------------------------------------------------------------
 
