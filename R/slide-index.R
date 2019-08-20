@@ -453,7 +453,7 @@ loop_bounded <- function(x, i, f, params, range_params, split, ...) {
 
     # This can happen with an irregular index, and is a sign of the full window
     # being between two index points
-    if (window_start < window_stop) {
+    if (window_stop < window_start) {
       window_start <- 0L
       window_stop <- 0L
     }
