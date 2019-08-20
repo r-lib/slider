@@ -21,19 +21,15 @@ make_locate_window_start_ahead_of_current <- function(params) {
   function(i, params, range_params) {
     position <- previous_position
 
-    if (position == params$n_out) {
-      return(position)
-    }
-
     i_position <- vec_slice(i, position)
 
     while (vec_lt(i_position, range_params$start)) {
-      position <- position + 1L
-
       if (position == params$n_out) {
         previous_position <<- position
         return(position)
       }
+
+      position <- position + 1L
 
       i_position <- vec_slice(i, position)
     }
