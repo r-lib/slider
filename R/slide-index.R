@@ -20,6 +20,69 @@ slide_index <- function(.x,
 
 # ------------------------------------------------------------------------------
 
+slide_index_vec <- function(.x,
+                            .i,
+                            .f,
+                            ...,
+                            .before = 0L,
+                            .after = 0L,
+                            .complete = FALSE,
+                            .ptype = list()) {
+
+  if (is.null(.ptype)) {
+    out <- slide_index_simplify(
+      .x,
+      .i,
+      .f,
+      ...,
+      .before = .before,
+      .after = .after,
+      .complete = .complete
+    )
+
+    return(out)
+  }
+
+  slide_index_impl(
+    .x,
+    .i,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .complete = .complete,
+    .constrain = TRUE,
+    .ptype = .ptype
+  )
+}
+
+slide_index_simplify <- function(.x,
+                                 .i,
+                                 .f,
+                                 ...,
+                                 .before,
+                                 .after,
+                                 .complete) {
+  out <- slide_index(
+    .x,
+    .i,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .complete = .complete
+  )
+
+  size <- vec_size_common(!!!out)
+  if (size != 1L) {
+    abort(paste0("Incompatible lengths: ", size, ", 1."))
+  }
+
+  vec_c(!!!out)
+}
+
+# ------------------------------------------------------------------------------
+
 slide_index_impl <- function(.x,
                              .i,
                              .f,
