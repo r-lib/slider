@@ -5,13 +5,15 @@
 
 /* .Call calls */
 extern SEXP slide_core_impl(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slide_index_core_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
 SEXP slide_init();
 
 static const R_CallMethodDef CallEntries[] = {
-  {"slide_core_impl",     (DL_FUNC) &slide_core_impl, 5},
-  {"slide_init",          (DL_FUNC) &slide_init, 0},
+  {"slide_core_impl",       (DL_FUNC) &slide_core_impl, 5},
+  {"slide_index_core_impl", (DL_FUNC) &slide_index_core_impl, 9},
+  {"slide_init",            (DL_FUNC) &slide_init, 0},
   {NULL, NULL, 0}
 };
 

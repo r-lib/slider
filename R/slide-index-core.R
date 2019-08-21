@@ -40,94 +40,94 @@ slide_index_core <- function(x,
 
   # TODO
   # Do from here down in C
-  # params <- list(type, complete, before_unbounded, after_unbounded, constrain)
-  # .Call(slide_index_core_impl, x, i, f_call, ptype, env, params)
+  params <- list(type, complete, before_unbounded, after_unbounded, constrain, size)
+  .Call(slide_index_core_impl, x, i, starts, stops, out_indices, f_call, ptype, env, params)
 
-  i_size <- vec_size(i)
-
-  # Will hopefully be able to do this quicker in C
-  if (!before_unbounded && !after_unbounded) {
-    check_range_start_not_past_stop(starts, stops)
-  }
-
-  # Number of unique index values
-  iteration_min <- 1L
-  iteration_max <- i_size
-
-  window_sizes <- vapply(out_indices, vec_size, integer(1))
-  window_stops <- cumsum(window_sizes)
-  window_starts <- window_stops - window_sizes + 1L
-
-  # Iteration adjustment
-  if (complete) {
-    if (!before_unbounded) {
-      iteration_min <- adjust_iteration_min(iteration_min, starts, i, i_size)
-    }
-    if (!after_unbounded) {
-      iteration_max <- adjust_iteration_max(iteration_max, stops, i, i_size)
-    }
-  } else {
-    if (!before_unbounded) {
-      iteration_max <- adjust_iteration_max(iteration_max, starts, i, i_size)
-    }
-    if (!after_unbounded) {
-      iteration_min <- adjust_iteration_min(iteration_min, stops, i, i_size)
-    }
-  }
-
-  out <- vec_init(ptype, size)
-
-  locate_window_start_index <- make_locate_window_start_index()
-  locate_window_stop_index <- make_locate_window_stop_index()
-
-  window_start <- 1L
-  window_stop <- size
-
-  for (iteration in seq2(iteration_min, iteration_max)) {
-    if (!before_unbounded) {
-      start <- vec_slice(starts, iteration)
-      window_start_index <- locate_window_start_index(i, start, i_size)
-      window_start <- window_starts[[window_start_index]]
-    }
-
-    if (!after_unbounded) {
-      stop <- vec_slice(stops, iteration)
-      window_stop_index <- locate_window_stop_index(i, stop, i_size)
-      window_stop <- window_stops[[window_stop_index]]
-    }
-
-    # This can happen with an irregular index, and is a sign of the full window
-    # being between two index points and means we select nothing
-    if (window_stop < window_start) {
-      window_start <- 0L
-      window_stop <- 0L
-    }
-
-    window <- seq2(window_start, window_stop)
-
-    env_bind(env, window = window)
-
-    elt <- eval_bare(f_call, env = env)
-
-    out_index <- out_indices[[iteration]]
-
-    if (constrain) {
-      elt <- vec_cast(elt, ptype)
-
-      if (vec_size(elt) != 1L) {
-        abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", iteration, vec_size(elt)))
-      }
-
-      out <- vec_assign(out, out_index, elt)
-    } else {
-      for (j in out_index) {
-        out[[j]] <- elt
-      }
-    }
-
-  }
-
-  out
+  # i_size <- vec_size(i)
+  #
+  # # Will hopefully be able to do this quicker in C
+  # if (!before_unbounded && !after_unbounded) {
+  #   check_range_start_not_past_stop(starts, stops)
+  # }
+  #
+  # # Number of unique index values
+  # iteration_min <- 1L
+  # iteration_max <- i_size
+  #
+  # window_sizes <- vapply(out_indices, vec_size, integer(1))
+  # window_stops <- cumsum(window_sizes)
+  # window_starts <- window_stops - window_sizes + 1L
+  #
+  # # Iteration adjustment
+  # if (complete) {
+  #   if (!before_unbounded) {
+  #     iteration_min <- adjust_iteration_min(iteration_min, starts, i, i_size)
+  #   }
+  #   if (!after_unbounded) {
+  #     iteration_max <- adjust_iteration_max(iteration_max, stops, i, i_size)
+  #   }
+  # } else {
+  #   if (!before_unbounded) {
+  #     iteration_max <- adjust_iteration_max(iteration_max, starts, i, i_size)
+  #   }
+  #   if (!after_unbounded) {
+  #     iteration_min <- adjust_iteration_min(iteration_min, stops, i, i_size)
+  #   }
+  # }
+  #
+  # out <- vec_init(ptype, size)
+  #
+  # locate_window_start_index <- make_locate_window_start_index()
+  # locate_window_stop_index <- make_locate_window_stop_index()
+  #
+  # window_start <- 1L
+  # window_stop <- size
+  #
+  # for (iteration in seq2(iteration_min, iteration_max)) {
+  #   if (!before_unbounded) {
+  #     start <- vec_slice(starts, iteration)
+  #     window_start_index <- locate_window_start_index(i, start, i_size)
+  #     window_start <- window_starts[[window_start_index]]
+  #   }
+  #
+  #   if (!after_unbounded) {
+  #     stop <- vec_slice(stops, iteration)
+  #     window_stop_index <- locate_window_stop_index(i, stop, i_size)
+  #     window_stop <- window_stops[[window_stop_index]]
+  #   }
+  #
+  #   # This can happen with an irregular index, and is a sign of the full window
+  #   # being between two index points and means we select nothing
+  #   if (window_stop < window_start) {
+  #     window_start <- 0L
+  #     window_stop <- 0L
+  #   }
+  #
+  #   window <- seq2(window_start, window_stop)
+  #
+  #   env_bind(env, window = window)
+  #
+  #   elt <- eval_bare(f_call, env = env)
+  #
+  #   out_index <- out_indices[[iteration]]
+  #
+  #   if (constrain) {
+  #     elt <- vec_cast(elt, ptype)
+  #
+  #     if (vec_size(elt) != 1L) {
+  #       abort(sprintf("The size of each result of `.f` must be size 1. Iteration %i was size %i.", iteration, vec_size(elt)))
+  #     }
+  #
+  #     out <- vec_assign(out, out_index, elt)
+  #   } else {
+  #     for (j in out_index) {
+  #       out[[j]] <- elt
+  #     }
+  #   }
+  #
+  # }
+  #
+  # out
 }
 
 # ------------------------------------------------------------------------------
@@ -184,6 +184,7 @@ compute_range_starts <- function(i, before) {
   if (is_function(before)) {
     out <- before(i)
     check_ascending(out, ".before")
+    check_range_size(out, i, ".before")
   } else {
     out <- i - before
   }
@@ -197,6 +198,7 @@ compute_range_stops <- function(i, after) {
   if (is_function(after)) {
     out <- after(i)
     check_ascending(out, ".after")
+    check_range_size(out, i, ".after")
   } else {
     out <- i + after
   }
@@ -230,6 +232,20 @@ check_range_not_na <- function(x, arg) {
     glubort(
       "The range generated by `{arg}` cannot have `NA` values, ",
       "which were found at location(s): {at}."
+    )
+  }
+
+  invisible(x)
+}
+
+check_range_size <- function(x, i, arg) {
+  size_x <- vec_size(x)
+  size_i <- vec_size(i)
+
+  if (size_x != size_i) {
+    glubort(
+      "The range generated by `{arg}` has size {size_x}, ",
+      "but must have the same size as the unique values of `.i`, {size_i}."
     )
   }
 

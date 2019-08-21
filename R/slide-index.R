@@ -96,7 +96,7 @@ slide_index_impl <- function(.x,
   vec_assert(.i)
   .f <- as_function(.f)
 
-  f_call <- expr(.f(vec_slice(.x, window), ...))
+  f_call <- expr(.f(.x, ...))
 
   type <- -1L
 

@@ -1,3 +1,6 @@
+#ifndef SLIDE_UTILS_H
+#define SLIDE_UTILS_H
+
 #include "slide.h"
 
 #define r_int Rf_ScalarInteger
@@ -41,3 +44,5 @@ SEXP syms_index;
 
 extern SEXP slide_shared_empty_lgl;
 extern SEXP slide_shared_empty_int;
+
+#endif
