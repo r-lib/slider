@@ -160,7 +160,7 @@ test_that("negative .before errors if its absolute value is past .after", {
 
   expect_error(
     slide_index(x, i, identity, .before = -1, .after = 0),
-    "cannot be after the end of the range"
+    "the start of the range is after the end of the range"
   )
 })
 
@@ -307,7 +307,7 @@ test_that("errors if negative .before Duration is further than .after", {
 
   expect_error(
     slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = 0),
-    "cannot be after the end of the range"
+    "the start of the range is after the end of the range"
   )
 })
 
@@ -582,7 +582,7 @@ test_that("errors if look forward function looks past .after value", {
 
   expect_error(
     slide_index(x, i, identity, .before = fn, .after = 1L),
-    "cannot be after the end of the range"
+    "the start of the range is after the end of the range"
   )
 })
 
@@ -743,7 +743,7 @@ test_that("negative .after errors if its absolute value is past .before", {
 
   expect_error(
     slide_index(x, i, identity, .after = -1, .before = 0),
-    "cannot be after the end of the range"
+    "the start of the range is after the end of the range"
   )
 })
 
