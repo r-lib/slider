@@ -290,25 +290,23 @@ check_range_start_not_past_stop <- function(starts, stops) {
 # ------------------------------------------------------------------------------
 # Should only ever pass objects of size 1 through here
 
-vctrs_compare <- vctrs:::vctrs_compare
-
 vec_gt <- function(x, y) {
-  .Call(vctrs_compare, x, y, FALSE) > 0L
+  .Call(vctrs:::vctrs_compare, x, y, FALSE) > 0L
   #vec_compare(x, y) > 0L
 }
 
 vec_gte <- function(x, y) {
-  .Call(vctrs_compare, x, y, FALSE) >= 0L
+  .Call(vctrs:::vctrs_compare, x, y, FALSE) >= 0L
   #vec_compare(x, y) >= 0L
 }
 
 vec_lt <- function(x, y) {
-  .Call(vctrs_compare, x, y, FALSE) < 0L
+  .Call(vctrs:::vctrs_compare, x, y, FALSE) < 0L
   #vec_compare(x, y) < 0L
 }
 
 vec_lte <- function(x, y) {
-  .Call(vctrs_compare, x, y, FALSE) <= 0L
+  .Call(vctrs:::vctrs_compare, x, y, FALSE) <= 0L
   #vec_compare(x, y) <= 0L
 }
 
