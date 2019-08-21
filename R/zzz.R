@@ -8,4 +8,7 @@
   .Call(slurrr_init)
 }
 
+# Used when building the slide_index() expression
+utils::globalVariables(c("window"))
+
 # nocov end
