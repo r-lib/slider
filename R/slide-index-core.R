@@ -39,7 +39,7 @@ slide_index_core <- function(x,
   # TODO
   # Do from here down in C
   # params <- list(type, complete, before_unbounded, after_unbounded, constrain)
-  # .Call(slurrr_slide_index, x, i, f_call, ptype, env, params)
+  # .Call(slide_index_core_impl, x, i, f_call, ptype, env, params)
 
   i_size <- vec_size(i)
 

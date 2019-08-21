@@ -1,4 +1,5 @@
 #' @keywords internal
+#' @aliases slide-package
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
@@ -6,6 +7,6 @@
 ## usethis namespace: start
 #' @import rlang
 #' @import vctrs
-#' @useDynLib slurrr, .registration = TRUE
+#' @useDynLib slide, .registration = TRUE
 ## usethis namespace: end
 NULL

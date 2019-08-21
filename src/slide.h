@@ -1,5 +1,5 @@
-#ifndef SLURRR_H
-#define SLURRR_H
+#ifndef SLIDE_H
+#define SLIDE_H
 
 #define R_NO_REMAP
 #include <R.h>

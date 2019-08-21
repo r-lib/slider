@@ -1,42 +1,42 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# slurrr
+# slide
 
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/DavisVaughan/slurrr.svg?branch=master)](https://travis-ci.org/DavisVaughan/slurrr)
+status](https://travis-ci.org/DavisVaughan/slide.svg?branch=master)](https://travis-ci.org/DavisVaughan/slide)
 [![Codecov test
-coverage](https://codecov.io/gh/DavisVaughan/slurrr/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slurrr?branch=master)
+coverage](https://codecov.io/gh/DavisVaughan/slide/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slide?branch=master)
 <!-- badges: end -->
 
-slurrr provides a family of general purpose “sliding window” functions.
+slide provides a family of general purpose “sliding window” functions.
 The API is purposefully *very* similar to purrr, with functions such as
 `slide()`, `slide_dbl()`, `slide2()` and `pslide()`.
 
 For a large number of examples and to find documentation, see
-[`?slide`](https://davisvaughan.github.io/slurrr/reference/slide.html).
+[`?slide`](https://davisvaughan.github.io/slide/reference/slide.html).
 
 ## Installation
 
-You can NOT install the released version of slurrr from
+You can NOT install the released version of slide from
 [CRAN](https://CRAN.R-project.org) yet.
 
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
-remotes::install_github("DavisVaughan/slurrr")
+remotes::install_github("DavisVaughan/slide")
 ```
 
 ## Examples
 
 The [help page for
-`slide()`](https://davisvaughan.github.io/slurrr/reference/slide.html)
+`slide()`](https://davisvaughan.github.io/slide/reference/slide.html)
 has many examples, but here are a few:
 
 ``` r
-library(slurrr)
+library(slide)
 ```
 
 The classic example would be to do a moving average. `slide()` handles
@@ -194,7 +194,7 @@ with [Earo Wang](https://github.com/earowang)).
   - `tibbletime::rollify()`
   - `tsibble::slide()`
 
-I believe that slurrr is the next iteration of these. There are a few
+I believe that slide is the next iteration of these. There are a few
 reasons for this:
 
   - To me, the API is more intuitive, and is more flexible because
@@ -216,14 +216,14 @@ reasons for this:
 To be clear, I do not want to overshadow the work done by these
 packages. My preference would be to work with Earo to coordinate an
 upgrade path for users from the current version of `tsibble::slide()` to
-`slurrr::slide()`.
+`slide::slide()`.
 
 ## Performance
 
 In terms of performance, be aware that any specialized package that
-shifts the function calls to C are going to be faster than slurrr. For
+shifts the function calls to C are going to be faster than slide. For
 example, `RcppRoll::roll_mean()` computes the rolling mean *at the C
-level*, which is bound to be faster. The purpose of slurrr is to be
+level*, which is bound to be faster. The purpose of slide is to be
 *general purpose*, while still being as fast as possible. This means
 that it can be used for more abstract things, like rolling regressions,
 or any other custom function that you want to use in a rolling fashion.

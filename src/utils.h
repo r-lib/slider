@@ -1,4 +1,4 @@
-#include "slurrr.h"
+#include "slide.h"
 
 #define r_int Rf_ScalarInteger
 
@@ -39,5 +39,5 @@ SEXP syms_dot_y;
 SEXP syms_dot_l;
 SEXP syms_index;
 
-extern SEXP slurrr_shared_empty_lgl;
-extern SEXP slurrr_shared_empty_int;
+extern SEXP slide_shared_empty_lgl;
+extern SEXP slide_shared_empty_int;

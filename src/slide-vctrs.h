@@ -1,7 +1,7 @@
-#ifndef SLURRR_VCTRS_H
-#define SLURRR_VCTRS_H
+#ifndef SLIDE_VCTRS_H
+#define SLIDE_VCTRS_H
 
-#include "slurrr.h"
+#include "slide.h"
 
 // Experimental exported but non-exposed vctrs API
 SEXP (*vctrs_cast)(SEXP, SEXP, SEXP, SEXP);

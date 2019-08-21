@@ -1,4 +1,4 @@
 library(testthat)
-library(slurrr)
+library(slide)
 
-test_check("slurrr")
+test_check("slide")

@@ -4,31 +4,31 @@
 #include <R_ext/Rdynload.h>
 
 /* .Call calls */
-extern SEXP slurrr_slide(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slide_core_impl(SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
-SEXP slurrr_init();
+SEXP slide_init();
 
 static const R_CallMethodDef CallEntries[] = {
-  {"slurrr_slide",     (DL_FUNC) &slurrr_slide, 5},
-  {"slurrr_init",      (DL_FUNC) &slurrr_init, 0},
+  {"slide_core_impl",     (DL_FUNC) &slide_core_impl, 5},
+  {"slide_init",          (DL_FUNC) &slide_init, 0},
   {NULL, NULL, 0}
 };
 
-void R_init_slurrr(DllInfo *dll)
+void R_init_slide(DllInfo *dll)
 {
   R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
   R_useDynamicSymbols(dll, FALSE);
 }
 
-// slurrr-vctrs.c
-void slurrr_init_vctrs();
+// slide-vctrs.c
+void slide_init_vctrs();
 
 // utils.c
-void slurrr_init_utils();
+void slide_init_utils();
 
-SEXP slurrr_init() {
-  slurrr_init_vctrs();
-  slurrr_init_utils();
+SEXP slide_init() {
+  slide_init_vctrs();
+  slide_init_utils();
   return R_NilValue;
 }
