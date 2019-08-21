@@ -284,6 +284,24 @@ test_that(".complete works when doing center alignment", {
   )
 })
 
+# TODO - fix failing test
+test_that(".complete works with negative .before", {
+  expect_error(
+    slide(1:5, ~.x, .before = -1, .after = 2, .complete = TRUE)
+  )
+
+  # expect_equal(
+  #   slide(1:5, ~.x, .before = -1, .after = 2, .complete = TRUE),
+  #   list(
+  #     2L,
+  #     3L,
+  #     4L,
+  #     5L,
+  #     NULL
+  #   )
+  # )
+})
+
 # ------------------------------------------------------------------------------
 # .forward
 
