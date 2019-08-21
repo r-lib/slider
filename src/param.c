@@ -1,5 +1,5 @@
-#include "slurrr.h"
-#include "slurrr-vctrs.h"
+#include "slide.h"
+#include "slide-vctrs.h"
 #include "utils.h"
 #include <vctrs.h>
 
@@ -20,7 +20,7 @@ static void validate_before_after_negativeness(const struct slide_params params)
 
 // -----------------------------------------------------------------------------
 
-// [[ include("slurrr.h") ]]
+// [[ include("slide.h") ]]
 struct slide_params init_params(SEXP x, SEXP param_list) {
   struct slide_params params;
 
@@ -72,18 +72,18 @@ static SEXP check_scalar_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
 }
 
 static SEXP check_scalar_int(SEXP x, SEXP x_arg) {
-  return check_scalar_ptype(x, slurrr_shared_empty_int, x_arg);
+  return check_scalar_ptype(x, slide_shared_empty_int, x_arg);
 }
 
 static SEXP check_scalar_lgl(SEXP x, SEXP x_arg) {
-  return check_scalar_ptype(x, slurrr_shared_empty_lgl, x_arg);
+  return check_scalar_ptype(x, slide_shared_empty_lgl, x_arg);
 }
 
 // -----------------------------------------------------------------------------
 // Checking and updating parameters in the struct
 
 static bool is_unbounded(SEXP x) {
-  return OBJECT(x) && Rf_inherits(x, "slurrr_box_unbounded");
+  return OBJECT(x) && Rf_inherits(x, "slide_box_unbounded");
 }
 
 static void update_before(SEXP param_list, struct slide_params* params) {

@@ -1,5 +1,5 @@
-#include "slurrr.h"
-#include "slurrr-vctrs.h"
+#include "slide.h"
+#include "slide-vctrs.h"
 #include "utils.h"
 #include <vctrs.h>
 
@@ -160,7 +160,7 @@ static SEXP slide(SEXP x,
 
 // -----------------------------------------------------------------------------
 
-SEXP slurrr_slide(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
+SEXP slide_core_impl(SEXP x, SEXP f_call, SEXP ptype, SEXP env, SEXP param_list) {
   struct slide_params params = init_params(x, param_list);
   return slide(x, f_call, ptype, env, params);
 }

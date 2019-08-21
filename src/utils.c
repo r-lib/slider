@@ -1,4 +1,4 @@
-#include "slurrr.h"
+#include "slide.h"
 
 SEXP strings_empty = NULL;
 SEXP strings_dot_before = NULL;
@@ -13,13 +13,13 @@ SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
 SEXP syms_index = NULL;
 
-SEXP slurrr_shared_empty_lgl = NULL;
-SEXP slurrr_shared_empty_int = NULL;
+SEXP slide_shared_empty_lgl = NULL;
+SEXP slide_shared_empty_int = NULL;
 
 // -----------------------------------------------------------------------------
 
 // [[register()]]
-void slurrr_init_utils() {
+void slide_init_utils() {
   syms_dot_x = Rf_install(".x");
   syms_dot_y = Rf_install(".y");
   syms_dot_l = Rf_install(".l");
@@ -53,11 +53,11 @@ void slurrr_init_utils() {
   R_PreserveObject(strings_dot_forward);
   SET_STRING_ELT(strings_dot_forward, 0, Rf_mkChar(".forward"));
 
-  slurrr_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
-  R_PreserveObject(slurrr_shared_empty_lgl);
-  MARK_NOT_MUTABLE(slurrr_shared_empty_lgl);
+  slide_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
+  R_PreserveObject(slide_shared_empty_lgl);
+  MARK_NOT_MUTABLE(slide_shared_empty_lgl);
 
-  slurrr_shared_empty_int = Rf_allocVector(INTSXP, 0);
-  R_PreserveObject(slurrr_shared_empty_int);
-  MARK_NOT_MUTABLE(slurrr_shared_empty_int);
+  slide_shared_empty_int = Rf_allocVector(INTSXP, 0);
+  R_PreserveObject(slide_shared_empty_int);
+  MARK_NOT_MUTABLE(slide_shared_empty_int);
 }

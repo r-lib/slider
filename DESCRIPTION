@@ -1,4 +1,4 @@
-Package: slurrr
+Package: slide
 Title: Sliding Window Functions
 Version: 0.0.0.9000
 Authors@R: 
@@ -20,8 +20,8 @@ LinkingTo:
     vctrs
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/DavisVaughan/slurrr
-BugReports: https://github.com/DavisVaughan/slurrr/issues
+URL: https://github.com/DavisVaughan/slide
+BugReports: https://github.com/DavisVaughan/slide/issues
 Suggests: 
     testthat (>= 2.1.0),
     covr,
@@ -39,9 +39,9 @@ Collate:
     'slide-index.R'
     'slide-index2.R'
     'slide-new.R'
+    'slide-package.R'
     'slide.R'
     'slide2-impl.R'
-    'slurrr-package.R'
     'stretch.R'
     'tile.R'
     'unbounded.R'

@@ -1,11 +1,11 @@
 #include <vctrs.c>
-#include "slurrr-vctrs.h"
+#include "slide-vctrs.h"
 
 SEXP (*vctrs_cast)(SEXP, SEXP, SEXP, SEXP) = NULL;
 SEXP (*compact_seq)(R_len_t, R_len_t, bool) = NULL;
 SEXP (*init_compact_seq)(int*, R_len_t, R_len_t, bool) = NULL;
 
-void slurrr_init_vctrs() {
+void slide_init_vctrs() {
   vctrs_init_api();
 
   // Initialize the experimental exported but non-exposed vctrs API
