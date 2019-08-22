@@ -17,6 +17,7 @@ slide_index_core <- function(x,
   }
 
   check_index_size(size, i)
+  check_index_ascending(i)
 
   before <- check_before(before)
   after <- check_after(after)
@@ -172,6 +173,21 @@ check_index_size <- function(n, i) {
   }
 
   invisible()
+}
+
+check_index_ascending <- function(x) {
+  order <- vec_order(x, "asc")
+
+  if (is.unsorted(order)) {
+    at <- which(diff(order) < 0L)
+    at <- collapse_and_trim(at)
+    glubort(
+      "The `.i`ndex must be in ascending order. ",
+      "At the following locations, it is not: {at}."
+    )
+  }
+
+  invisible(x)
 }
 
 check_index_not_na <- function(i) {
