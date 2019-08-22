@@ -6,6 +6,8 @@
 #' is approximately but not equivalent to, 3 * 30 days. `slide_index()` allows
 #' for these irregular window sizes.
 #'
+#' @section `.i` Details:
+#'
 #' There are 3 restrictions on `.i`:
 #'
 #' - The size of `.i` must match the size of `.x`, `.i` will not be recycled.
@@ -19,15 +21,14 @@
 #' before / after function to `.i` have the same restrictions as the three
 #' mentioned above.
 #'
-#' @export
-#'
 #' @inheritParams slide
 #'
 #' @param .i `[vector]`
 #'
-#'   The vector to iterate over `.x` with. The lower bound of the window range
-#'   will be computed as `.i - .before`, and the upper bound will be `.i +
-#'   .after`. It is often useful to supply a date vector as the index.
+#'   The index vector that determines the window sizes. The lower bound
+#'   of the window range will be computed as `.i - .before`, and the upper
+#'   bound will be `.i + .after`. It is faily common to supply a date vector
+#'   as the index, but not required.
 #'
 #' @param .before `[vector(1) / function / formula]`
 #'
@@ -38,7 +39,7 @@
 #'
 #'   For `slide_index()`, this can be any object that can be subtracted from
 #'   `.i` with `-`. One common use case is to set this to a lubridate period,
-#'   such as [lubridate::weeks(1)].
+#'   such as [lubridate::weeks()].
 #'
 #'   Additionally, `.before` is allowed to be a function or lambda function
 #'   with 1 argument, the entire `.i` vector.
@@ -54,7 +55,7 @@
 #'
 #'   For `slide_index()`, this can be any object that can be added to
 #'   `.i` with `+`. One common use case is to set this to a lubridate period,
-#'   such as [lubridate::weeks(1)].
+#'   such as [lubridate::weeks()].
 #'
 #'   Additionally, `.after` is allowed to be a function or lambda function
 #'   with 1 argument, the entire `.i` vector.
@@ -124,6 +125,8 @@
 #' i[16] - 19 >= i[1] # FALSE
 #' i[17] - 19 >= i[1] # TRUE
 #'
+#' @seealso [slide()], [slide_index2()]
+#' @export
 slide_index <- function(.x,
                         .i,
                         .f,

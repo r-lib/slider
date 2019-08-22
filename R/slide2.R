@@ -7,12 +7,16 @@
 #'
 #' @inheritParams slide
 #'
-#' @param .x,.y `[vector]` Vectors to iterate over. Vectors of size 1 will
-#'   be recycled.
+#' @param .x,.y `[vector]`
 #'
-#' @param .l `[list]` A list of vectors. The length of `.l` determines the
+#'   Vectors to iterate over. Vectors of size 1 will be recycled.
+#'
+#' @param .l `[list]`
+#'
+#'   A list of vectors. The length of `.l` determines the
 #'   number of arguments that `.f` will be called with. If `.l` has names,
-#'   they will be used as named arguments to `.f`.
+#'   they will be used as named arguments to `.f`. Elements of `.l` with size
+#'   1 will be recycled.
 #'
 #' @examples
 #' # Slide along two inputs at once
@@ -36,6 +40,7 @@
 #'
 #' slide2(x, y, row_return, .before = 1, .after = 2)
 #'
+#' @seealso [slide()], [slide_index2()]
 #' @export
 slide2 <- function(.x,
                    .y,

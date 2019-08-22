@@ -203,3 +203,6 @@ slide(1:5, ~.x, .before = -1, .after = 2)
 slide(1:5, ~.x, .before = 2, .after = -1)
 
 }
+\seealso{
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}
+}

@@ -27,17 +27,17 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     lubridate,
-    nanotime
+    RcppQuantuccia
 Remotes:
     DavisVaughan/vctrs@c-exports
 Collate: 
+    'slide-index2.R'
     'pslide-index.R'
     'slide2.R'
     'pslide.R'
     'slide-core.R'
     'slide-index-core.R'
     'slide-index.R'
-    'slide-index2.R'
     'slide-package.R'
     'slide.R'
     'unbounded.R'

@@ -135,6 +135,7 @@
 #' # `.after` can be negative as well to "look backwards"
 #' slide(1:5, ~.x, .before = 2, .after = -1)
 #'
+#' @seealso [slide2()], [slide_index()]
 #' @export
 slide <- function(.x,
                   .f,

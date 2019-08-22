@@ -80,8 +80,9 @@ pslide_dfc(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   "universal", "check_unique", "minimal"))
 }
 \arguments{
-\item{.x, .y}{\code{[vector]} Vectors to iterate over. Vectors of size 1 will
-be recycled.}
+\item{.x, .y}{\code{[vector]}
+
+Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 \item{.f}{\code{[function / formula]}
 
@@ -147,9 +148,12 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 
-\item{.l}{\code{[list]} A list of vectors. The length of \code{.l} determines the
+\item{.l}{\code{[list]}
+
+A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
-they will be used as named arguments to \code{.f}.}
+they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
+1 will be recycled.}
 }
 \description{
 These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in
@@ -179,4 +183,7 @@ row_return <- function(x_rows, y_rows) {
 
 slide2(x, y, row_return, .before = 1, .after = 2)
 
+}
+\seealso{
+\code{\link[=slide]{slide()}}, \code{\link[=slide_index2]{slide_index2()}}
 }
