@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-void check_stops_not_past_stops(SEXP starts, SEXP stops);
+void check_starts_not_past_stops(SEXP starts, SEXP stops);
 
 SEXP compute_window_sizes(SEXP x, int n);
 SEXP compute_window_starts(SEXP x, int n);
@@ -41,7 +41,7 @@ SEXP slide_index_core_impl(SEXP x,
   int size_i = vec_size(i);
 
   if (!before_unbounded && !after_unbounded) {
-    check_stops_not_past_stops(starts, stops);
+    check_starts_not_past_stops(starts, stops);
   }
 
   int iteration_min = 1;
@@ -234,7 +234,7 @@ int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_posi
 // -----------------------------------------------------------------------------
 
 // TODO - better error message
-void check_stops_not_past_stops(SEXP starts, SEXP stops) {
+void check_starts_not_past_stops(SEXP starts, SEXP stops) {
   bool any_gt = vec_any_gt(starts, stops);
 
   if (any_gt) {
