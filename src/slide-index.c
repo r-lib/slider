@@ -16,8 +16,8 @@ static SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n);
 static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
 static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size);
 
-static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val);
-static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val);
+static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position);
+static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position);
 
 // -----------------------------------------------------------------------------
 
@@ -83,10 +83,8 @@ SEXP slide_index_core_impl(SEXP x,
   int window_start_index;
   int window_stop_index;
 
-  SEXP previous_start_index = PROTECT(Rf_ScalarInteger(1));
-  SEXP previous_stop_index = PROTECT(Rf_ScalarInteger(1));
-  int* p_previous_start_index_val = INTEGER(previous_start_index);
-  int* p_previous_stop_index_val = INTEGER(previous_stop_index);
+  SEXP last_start_position = PROTECT(Rf_ScalarInteger(1));
+  SEXP last_stop_position = PROTECT(Rf_ScalarInteger(1));
 
   SEXP iteration = PROTECT(Rf_ScalarInteger(iteration_min));
   int* p_iteration_val = INTEGER(iteration);
@@ -118,7 +116,7 @@ SEXP slide_index_core_impl(SEXP x,
       start = vec_slice_impl(starts, iteration);
       REPROTECT(start, start_prot_idx);
 
-      window_start_index = locate_window_start_index(i, start, size_i, &previous_start_index, p_previous_start_index_val);
+      window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
       window_start = p_window_starts_val[window_start_index - 1];
     }
 
@@ -126,7 +124,7 @@ SEXP slide_index_core_impl(SEXP x,
       stop = vec_slice_impl(stops, iteration);
       REPROTECT(stop, stop_prox_idx);
 
-      window_stop_index = locate_window_stop_index(i, stop, size_i, &previous_stop_index, p_previous_stop_index_val);
+      window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
       window_stop = p_window_stops_val[window_stop_index - 1];
     }
 
@@ -184,8 +182,9 @@ SEXP slide_index_core_impl(SEXP x,
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val) {
+static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position) {
   SEXP last_start_position = *p_last_start_position;
+  int* p_last_start_position_val = INTEGER(last_start_position);
 
   PROTECT_INDEX i_position_prot_idx;
   SEXP i_position = vec_slice_impl(i, last_start_position);
@@ -207,8 +206,9 @@ static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_
   return *p_last_start_position_val;
 }
 
-static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val) {
+static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position) {
   SEXP last_stop_position = *p_last_stop_position;
+  int* p_last_stop_position_val = INTEGER(last_stop_position);
 
   PROTECT_INDEX i_position_prot_idx;
   SEXP i_position = vec_slice_impl(i, last_stop_position);
