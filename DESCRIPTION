@@ -40,8 +40,6 @@ Collate:
     'slide-index2.R'
     'slide-package.R'
     'slide.R'
-    'stretch.R'
-    'tile.R'
     'unbounded.R'
     'utils.R'
     'zzz.R'
