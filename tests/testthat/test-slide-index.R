@@ -24,6 +24,10 @@ test_that(".x must be the same size as .i", {
   expect_error(slide_index(1, 1:2, identity), "must be the same")
 })
 
+test_that(".i must be ascending", {
+  expect_error(slide_index(1:2, 2:1, identity), "`.i`ndex must be in ascending order")
+})
+
 # ------------------------------------------------------------------------------
 # .before - integer
 
@@ -1291,6 +1295,94 @@ test_that("names are retained on inner sliced object", {
   i <- vec_seq_along(x)
   exp <- set_names(as.list(names), names)
   expect_equal(slide_index(x, i, ~rownames(.x)), exp)
+})
+
+# ------------------------------------------------------------------------------
+# .i types
+
+test_that("can technically use a logical index", {
+  expect_equal(
+    slide_index(1:3, c(FALSE, FALSE, TRUE), ~.x, .before = ~.x, .after = ~.x),
+    list(
+      1:2,
+      1:2,
+      3L
+    )
+  )
+
+  expect_equal(
+    slide_index(1:3, c(FALSE, FALSE, TRUE), ~.x, .before = 1L),
+    list(
+      1:2,
+      1:2,
+      1:3
+    )
+  )
+})
+
+test_that("can technically use a character index", {
+  expect_equal(
+    slide_index(1:3, c("a", "b", "b"), ~.x, .before = ~.x, .after = ~.x),
+    list(
+      1L,
+      2:3,
+      2:3
+    )
+  )
+})
+
+test_that("can use a data frame index", {
+  expect_equal(
+    slide_index(1:5, data.frame(x = c(1, 1, 2, 3, 4)), ~.x),
+    list(
+      1:2,
+      1:2,
+      3L,
+      4L,
+      5L
+    )
+  )
+})
+
+test_that("can order by two vectors using a data frame and lambda", {
+  i <- data.frame(
+    date1 = new_date(c(0, 3, 4, 5)),
+    date2 = new_date(c(0, 1, 2, 4))
+  )
+
+  before <- data.frame(date1 = 2, date2 = 1)
+
+  # NOTE - This is a bit tricky. It always tries to determine the comparison
+  # order using the first column that it comes across. If the values are equal,
+  # only then will it look to the second column
+
+  expect_equal(
+    slide_index(i, i, ~.x, .before = ~.x - vec_recycle(before, vec_size(.x)), .after = ~.x),
+    list(
+      # At row 1, subtracting makes no difference
+      # Return row 1
+      vec_slice(i, 1L),
+
+      # "1970-01-04" - 2 days = "1970-01-02"
+      # "1970-01-02" > "1970-01-01". Done.
+      # Return row 2
+      vec_slice(i, 2L),
+
+      # "1970-01-05" - 2 days = "1970-01-03"
+      # "1970-01-03" < "1970-01-04" so use row 2
+      # "1970-01-03" > "1970-01-01" so don't use row 1
+      # Return row 2 and 3
+      vec_slice(i, 2:3),
+
+      # "1970-01-06" - 2 days = "1970-01-04"
+      # "1970-01-04" < "1970-01-05" so use row 3
+      # "1970-01-04" = "1970-01-04" so look to column 2
+      # "1970-01-05" - 1 day = "1970-01-04" (col 2)
+      # "1970-01-04" > "1970-01-02" so don't use row 2
+      # Return row 3 and 4
+      vec_slice(i, 3:4)
+    )
+  )
 })
 
 # ------------------------------------------------------------------------------
