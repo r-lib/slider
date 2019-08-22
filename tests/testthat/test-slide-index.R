@@ -28,6 +28,11 @@ test_that(".i must be ascending", {
   expect_error(slide_index(1:2, 2:1, identity), "`.i`ndex must be in ascending order")
 })
 
+test_that("empty input returns a list, but after the index size check", {
+  expect_equal(slide_index(integer(), integer(), ~.x), list())
+  expect_error(slide_index(integer(), 1, ~.x), "must be the same")
+})
+
 # ------------------------------------------------------------------------------
 # .before - integer
 
