@@ -7,17 +7,17 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-void check_starts_not_past_stops(SEXP starts, SEXP stops);
+static void check_starts_not_past_stops(SEXP starts, SEXP stops);
 
-SEXP compute_window_sizes(SEXP x, int n);
-SEXP compute_window_starts(SEXP x, int n);
-SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n);
+static SEXP compute_window_sizes(SEXP x, int n);
+static SEXP compute_window_starts(SEXP x, int n);
+static SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n);
 
-int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
-int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size);
+static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
+static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size);
 
-int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val);
-int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val);
+static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val);
+static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val);
 
 // -----------------------------------------------------------------------------
 
@@ -184,7 +184,7 @@ SEXP slide_index_core_impl(SEXP x,
 
 // -----------------------------------------------------------------------------
 
-int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val) {
+static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val) {
   SEXP last_start_position = *p_last_start_position;
 
   PROTECT_INDEX i_position_prot_idx;
@@ -207,7 +207,7 @@ int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_p
   return *p_last_start_position_val;
 }
 
-int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val) {
+static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val) {
   SEXP last_stop_position = *p_last_stop_position;
 
   PROTECT_INDEX i_position_prot_idx;
@@ -233,7 +233,7 @@ int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_posi
 
 // -----------------------------------------------------------------------------
 
-void stop_range_start_past_stop(SEXP starts, SEXP stops) {
+static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
   SEXP call = PROTECT(
     Rf_lang3(
       Rf_install("stop_range_start_past_stop"),
@@ -246,7 +246,7 @@ void stop_range_start_past_stop(SEXP starts, SEXP stops) {
   Rf_error("Internal error: `stop_range_start_past_stop()` should have jumped earlier");
 }
 
-void check_starts_not_past_stops(SEXP starts, SEXP stops) {
+static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
   bool any_gt = vec_any_gt(starts, stops);
 
   if (any_gt) {
@@ -257,7 +257,7 @@ void check_starts_not_past_stops(SEXP starts, SEXP stops) {
 // -----------------------------------------------------------------------------
 
 // map_int(x, vec_size)
-SEXP compute_window_sizes(SEXP x, int n) {
+static SEXP compute_window_sizes(SEXP x, int n) {
   SEXP out = PROTECT(Rf_allocVector(INTSXP, n));
   int* p_out = INTEGER(out);
 
@@ -269,7 +269,7 @@ SEXP compute_window_sizes(SEXP x, int n) {
   return out;
 }
 
-SEXP compute_window_starts(SEXP window_sizes, int n) {
+static SEXP compute_window_starts(SEXP window_sizes, int n) {
   int* p_sizes = INTEGER(window_sizes);
 
   SEXP out = PROTECT(Rf_allocVector(INTSXP, n));
@@ -290,7 +290,7 @@ SEXP compute_window_starts(SEXP window_sizes, int n) {
   return out;
 }
 
-SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n) {
+static SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n) {
   int* p_sizes = INTEGER(window_sizes);
   int* p_starts = INTEGER(window_starts);
 
@@ -307,7 +307,7 @@ SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n) {
 
 // -----------------------------------------------------------------------------
 
-int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size) {
+static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size) {
   SEXP first = PROTECT(Rf_ScalarInteger(1));
   SEXP i_first = PROTECT(vec_slice_impl(i, first));
   SEXP range_first = PROTECT(vec_slice_impl(range, first));
@@ -328,7 +328,7 @@ int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size) {
   return iteration_min;
 }
 
-int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size) {
+static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size) {
   SEXP last = PROTECT(Rf_ScalarInteger(size));
   SEXP i_last = PROTECT(vec_slice_impl(i, last));
   SEXP range_last = PROTECT(vec_slice_impl(range, last));
