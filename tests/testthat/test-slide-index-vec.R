@@ -61,6 +61,74 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
 })
 
 # ------------------------------------------------------------------------------
+# suffix tests
+
+test_that("slide_index_int() works", {
+  expect_equal(slide_index_int(1L, 1L, ~.x), 1L)
+})
+
+test_that("slide_index_int() can coerce", {
+  expect_equal(slide_index_int(1, 1, ~.x), 1L)
+})
+
+test_that("slide_index_dbl() works", {
+  expect_equal(slide_index_dbl(1, 1, ~.x), 1)
+})
+
+test_that("slide_index_dbl() can coerce", {
+  expect_equal(slide_index_dbl(1L, 1, ~.x), 1)
+})
+
+test_that("slide_index_chr() works", {
+  expect_equal(slide_index_chr("x", 1, ~.x), "x")
+})
+
+test_that("slide_index_chr() can coerce", {
+  expect_equal(slide_index_chr(1, 1, ~.x), "1")
+})
+
+test_that("slide_index_lgl() works", {
+  expect_equal(slide_index_lgl(TRUE, 1, ~.x), TRUE)
+})
+
+test_that("slide_index_lgl() can coerce", {
+  expect_equal(slide_index_lgl(1, 1, ~.x), TRUE)
+})
+
+test_that("slide_index_raw() works", {
+  expect_equal(slide_index_raw(raw(1), 1, ~.x), raw(1))
+})
+
+# ------------------------------------------------------------------------------
+# data frame suffix tests
+
+test_that("slide_index_dfr() works", {
+  expect_equal(
+    slide_index_dfr(1:2, 1:2, ~.x, .before = 1),
+    slide_dfr(1:2, ~.x, .before = 1)
+  )
+
+  x <- 1:2
+  expect_equal(
+    slide_index_dfr(x, x, ~data.frame(x = .x), .before = 1),
+    slide_dfr(x, ~data.frame(x = .x), .before = 1)
+  )
+})
+
+test_that("slide_index_dfc() works", {
+  expect_equal(
+    slide_index_dfc(1:2, 1:2, ~.x, .before = 1),
+    slide_dfc(1:2, ~.x, .before = 1)
+  )
+
+  x <- 1:2
+  expect_equal(
+    slide_index_dfc(x, x, ~data.frame(x = .x), .before = 1),
+    slide_dfc(x, ~data.frame(x = .x), .before = 1)
+  )
+})
+
+# ------------------------------------------------------------------------------
 # failing tests
 
 # TODO - failing test for OBJECT() that doesn't implement a proxy?
