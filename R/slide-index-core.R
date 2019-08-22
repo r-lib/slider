@@ -48,7 +48,18 @@ slide_index_core <- function(x,
     size
   )
 
-  .Call(slide_index_core_impl, x, i, starts, stops, out_indices, f_call, ptype, env, params)
+  .Call(
+    slide_index_core_impl,
+    x,
+    i,
+    starts,
+    stops,
+    out_indices,
+    f_call,
+    ptype,
+    env,
+    params
+  )
 }
 
 # ------------------------------------------------------------------------------
