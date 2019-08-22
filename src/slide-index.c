@@ -118,7 +118,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(start, start_prot_idx);
 
       window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
-      window_start = window_starts[window_start_index - 1];
+      window_start = window_starts[window_start_index];
     }
 
     if (!after_unbounded) {
@@ -126,7 +126,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(stop, stop_prox_idx);
 
       window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
-      window_stop = window_stops[window_stop_index - 1];
+      window_stop = window_stops[window_stop_index];
     }
 
     // This can happen with an irregular index, and is a sign of the full window
@@ -194,7 +194,7 @@ static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_
   while(compare_lt(i_position, 0, start, 0)) {
     if (*p_last_start_position_val == size) {
       UNPROTECT(1);
-      return(size);
+      return(size - 1);
     }
 
     (*p_last_start_position_val)++;
@@ -204,7 +204,7 @@ static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_
   }
 
   UNPROTECT(1);
-  return *p_last_start_position_val;
+  return *p_last_start_position_val - 1;
 }
 
 static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position) {
@@ -218,7 +218,7 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
   while(compare_lte(i_position, 0, stop, 0)) {
     if (*p_last_stop_position_val == size) {
       UNPROTECT(1);
-      return(size);
+      return(size - 1);
     }
 
     (*p_last_stop_position_val)++;
@@ -228,7 +228,8 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
   }
 
   UNPROTECT(1);
-  return *p_last_stop_position_val - 1;
+  // - 1 - 1 (convert to C index + it always goes 1 too far)
+  return *p_last_stop_position_val - 2;
 }
 
 // -----------------------------------------------------------------------------
