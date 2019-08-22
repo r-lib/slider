@@ -41,8 +41,7 @@ and
 
 ## Installation
 
-You can NOT install the released version of slide from
-[CRAN](https://CRAN.R-project.org) yet.
+slide is NOT yet on [CRAN](https://CRAN.R-project.org).
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -50,6 +49,9 @@ You can install the development version from
 ``` r
 remotes::install_github("DavisVaughan/slide")
 ```
+
+(Just a warning that this uses a custom version of vctrs, which will
+soon become its development version).
 
 ## Examples
 
