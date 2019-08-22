@@ -5,10 +5,7 @@
   requireNamespace("vctrs", quietly = TRUE)
 
   # Initialize slide C globals
-  .Call(slide_init)
+  .Call(slide_init, ns_env("slide"))
 }
-
-# Used when building the slide_index() expression
-utils::globalVariables(c("window"))
 
 # nocov end

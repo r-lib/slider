@@ -7,12 +7,16 @@
 #'
 #' @inheritParams slide
 #'
-#' @param .x,.y `[vector]` Vectors to iterate over. Vectors of size 1 will
-#'   be recycled.
+#' @param .x,.y `[vector]`
 #'
-#' @param .l `[list]` A list of vectors. The length of `.l` determines the
+#'   Vectors to iterate over. Vectors of size 1 will be recycled.
+#'
+#' @param .l `[list]`
+#'
+#'   A list of vectors. The length of `.l` determines the
 #'   number of arguments that `.f` will be called with. If `.l` has names,
-#'   they will be used as named arguments to `.f`.
+#'   they will be used as named arguments to `.f`. Elements of `.l` with size
+#'   1 will be recycled.
 #'
 #' @examples
 #' # Slide along two inputs at once
@@ -36,6 +40,7 @@
 #'
 #' slide2(x, y, row_return, .before = 1, .after = 2)
 #'
+#' @seealso [slide()], [slide_index2()]
 #' @export
 slide2 <- function(.x,
                    .y,
@@ -44,9 +49,7 @@ slide2 <- function(.x,
                    .before = 0L,
                    .after = 0L,
                    .step = 1L,
-                   .offset = NULL,
-                   .complete = FALSE,
-                   .forward = TRUE) {
+                   .complete = FALSE) {
   slide2_impl(
     .x,
     .y,
@@ -55,9 +58,7 @@ slide2 <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -72,9 +73,7 @@ slide2_vec <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -86,9 +85,7 @@ slide2_vec <- function(.x,
       .before = .before,
       .after = .after,
       .step = .step,
-      .offset = .offset,
-      .complete = .complete,
-      .forward = .forward
+      .complete = .complete
     )
 
     return(out)
@@ -102,9 +99,7 @@ slide2_vec <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = .ptype,
     .constrain = TRUE
   )
@@ -117,9 +112,7 @@ slide2_vec_simplify <- function(.x,
                                 .before,
                                 .after,
                                 .step,
-                                .offset,
-                                .complete,
-                                .forward) {
+                                .complete) {
   out <- slide2(
     .x,
     .y,
@@ -128,14 +121,10 @@ slide2_vec_simplify <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
-  if (vec_size_common(!!!out) != 1L) {
-    abort("The size of all results from `.f` must be 1.")
-  }
+  check_all_size_one(out)
 
   vec_c(!!!out)
 }
@@ -149,9 +138,7 @@ slide2_dbl <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -160,9 +147,7 @@ slide2_dbl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = double()
   )
 }
@@ -176,9 +161,7 @@ slide2_int <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -187,9 +170,7 @@ slide2_int <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = integer()
   )
 }
@@ -203,9 +184,7 @@ slide2_lgl <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -214,9 +193,7 @@ slide2_lgl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = logical()
   )
 }
@@ -230,9 +207,7 @@ slide2_chr <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -241,9 +216,7 @@ slide2_chr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = character()
   )
 }
@@ -257,9 +230,7 @@ slide2_raw <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -268,9 +239,7 @@ slide2_raw <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = raw()
   )
 }
@@ -285,9 +254,7 @@ slide2_dfr <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .names_to = NULL,
                        .name_repair = c("unique", "universal", "check_unique")) {
   out <- slide2(
@@ -298,9 +265,7 @@ slide2_dfr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
@@ -316,9 +281,7 @@ slide2_dfc <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .size = NULL,
                        .name_repair = c("unique", "universal", "check_unique", "minimal")) {
   out <- slide2(
@@ -329,10 +292,54 @@ slide2_dfc <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
+}
+
+# ------------------------------------------------------------------------------
+
+slide2_impl <- function(.x,
+                        .y,
+                        .f,
+                        ...,
+                        .before,
+                        .after,
+                        .step,
+                        .complete,
+                        .ptype,
+                        .constrain) {
+  vec_assert(.x)
+  vec_assert(.y)
+
+  # TODO - Do more efficiently internally by reusing rather than recycling
+  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
+  # But use `vec_size_common()` to check sizes and get `.size`
+  args <- vec_recycle_common(.x, .y)
+
+  .f <- as_function(.f)
+
+  f_call <- expr(.f(.x, .y, ...))
+
+  type <- -2L
+
+  params <- list(
+    type,
+    .constrain,
+    .before,
+    .after,
+    .step,
+    .complete
+  )
+
+  out <- slide_core(
+    x = args,
+    f_call = f_call,
+    ptype = .ptype,
+    env = environment(),
+    params = params
+  )
+
+  out
 }

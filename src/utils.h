@@ -1,3 +1,6 @@
+#ifndef SLIDE_UTILS_H
+#define SLIDE_UTILS_H
+
 #include "slide.h"
 
 #define r_int Rf_ScalarInteger
@@ -30,14 +33,24 @@ SEXP strings_empty;
 SEXP strings_dot_before;
 SEXP strings_dot_after;
 SEXP strings_dot_step;
-SEXP strings_dot_offset;
 SEXP strings_dot_complete;
-SEXP strings_dot_forward;
 
 SEXP syms_dot_x;
 SEXP syms_dot_y;
 SEXP syms_dot_l;
-SEXP syms_index;
 
 extern SEXP slide_shared_empty_lgl;
 extern SEXP slide_shared_empty_int;
+
+extern SEXP slide_ns_env;
+
+void stop_not_all_size_one(int iteration, int size);
+
+int compute_size(SEXP x, int type);
+
+SEXP copy_names(SEXP out, SEXP x, int type);
+
+SEXP make_slice_container(int type);
+void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP container);
+
+#endif

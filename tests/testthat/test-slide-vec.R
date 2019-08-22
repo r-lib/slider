@@ -4,7 +4,7 @@
 test_that("size of each `.f` result must be 1", {
   expect_error(
     slide_vec(1:2, ~c(.x, 1)),
-    "Incompatible lengths"
+    "In iteration 1, the result of `.f` had size 2, not 1"
   )
 })
 
@@ -49,7 +49,7 @@ test_that("`.ptype = NULL` fails if no common type is found", {
 test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_error(
     slide_vec(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "Incompatible lengths"
+    "In iteration 1, the result of `.f` had size 2, not 1."
   )
 })
 
@@ -98,6 +98,74 @@ test_that("names can be placed correctly on proxied objects", {
   datetime_lt <- as.POSIXlt(new_datetime(0))
   out <- slide_vec(x, ~datetime_lt, .ptype = datetime_lt)
   expect_equal(names(out), names)
+})
+
+# ------------------------------------------------------------------------------
+# suffix tests
+
+test_that("slide_int() works", {
+  expect_equal(slide_int(1L, ~.x), 1L)
+})
+
+test_that("slide_int() can coerce", {
+  expect_equal(slide_int(1, ~.x), 1L)
+})
+
+test_that("slide_dbl() works", {
+  expect_equal(slide_dbl(1, ~.x), 1)
+})
+
+test_that("slide_dbl() can coerce", {
+  expect_equal(slide_dbl(1L, ~.x), 1)
+})
+
+test_that("slide_chr() works", {
+  expect_equal(slide_chr("x", ~.x), "x")
+})
+
+test_that("slide_chr() can coerce", {
+  expect_equal(slide_chr(1, ~.x), "1")
+})
+
+test_that("slide_lgl() works", {
+  expect_equal(slide_lgl(TRUE, ~.x), TRUE)
+})
+
+test_that("slide_lgl() can coerce", {
+  expect_equal(slide_lgl(1, ~.x), TRUE)
+})
+
+test_that("slide_raw() works", {
+  expect_equal(slide_raw(raw(1), ~.x), raw(1))
+})
+
+# ------------------------------------------------------------------------------
+# data frame suffix tests
+
+test_that("slide_dfr() works", {
+  expect_equal(
+    slide_dfr(1:2, ~.x, .before = 1),
+    data.frame(...1 = c(1, 1), ...2 = c(NA, 2))
+  )
+
+  x <- 1:2
+  expect_equal(
+    slide_dfr(x, ~data.frame(x = .x), .before = 1),
+    data.frame(x = c(1, 1, 2))
+  )
+})
+
+test_that("slide_dfc() works", {
+  expect_equal(
+    slide_dfc(1:2, ~.x, .before = 1),
+    data.frame(...1 = c(1, 1), ...2 = c(1, 2))
+  )
+
+  x <- 1:2
+  expect_equal(
+    slide_dfc(x, ~data.frame(x = .x), .before = 1),
+    data.frame(x...1 = c(1, 1), x...2 = c(1, 2))
+  )
 })
 
 # ------------------------------------------------------------------------------

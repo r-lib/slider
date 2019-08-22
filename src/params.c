@@ -1,0 +1,168 @@
+#include "slide.h"
+#include "slide-vctrs.h"
+#include "utils.h"
+#include <vctrs.h>
+#include "params.h"
+
+// -----------------------------------------------------------------------------
+// Checking for scalar ptypes
+
+static bool is_scalar(SEXP x) {
+  return vec_size(x) == 1;
+}
+
+static void stop_scalar(const char * arg, int size) {
+  Rf_errorcall(R_NilValue, "`%s` must have size 1, not %i.", arg, size);
+}
+
+static void check_scalar(SEXP x, SEXP arg) {
+  if (is_scalar(x)) {
+    return;
+  }
+
+  stop_scalar(r_scalar_chr_get(arg), vec_size(x));
+}
+
+static SEXP check_scalar_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
+  x = PROTECT(vctrs_cast(x, ptype, x_arg, strings_empty));
+  check_scalar(x, x_arg);
+  UNPROTECT(1);
+  return x;
+}
+
+static SEXP check_scalar_int(SEXP x, SEXP x_arg) {
+  return check_scalar_ptype(x, slide_shared_empty_int, x_arg);
+}
+
+static SEXP check_scalar_lgl(SEXP x, SEXP x_arg) {
+  return check_scalar_ptype(x, slide_shared_empty_lgl, x_arg);
+}
+
+// -----------------------------------------------------------------------------
+
+static bool is_unbounded(SEXP x) {
+  return OBJECT(x) && Rf_inherits(x, "slide_box_unbounded");
+}
+
+// -----------------------------------------------------------------------------
+
+// [[ include("params.h") ]]
+int pull_type(SEXP params) {
+  return r_scalar_int_get(r_lst_get(params, 0));
+}
+
+// [[ include("params.h") ]]
+bool pull_constrain(SEXP params) {
+  return r_scalar_lgl_get(r_lst_get(params, 1));
+}
+
+// [[ include("params.h") ]]
+int pull_before(SEXP params, bool* before_unbounded) {
+  SEXP before = r_lst_get(params, 2);
+
+  if (is_unbounded(before)) {
+    *before_unbounded = true;
+    return 0;
+  }
+
+  before = PROTECT(check_scalar_int(before, strings_dot_before));
+  UNPROTECT(1);
+  return r_scalar_int_get(before);
+}
+
+// [[ include("params.h") ]]
+int pull_after(SEXP params, bool* after_unbounded) {
+  SEXP after = r_lst_get(params, 3);
+
+  if (is_unbounded(after)) {
+    *after_unbounded = true;
+    return 0;
+  }
+
+  after = PROTECT(check_scalar_int(after, strings_dot_after));
+  UNPROTECT(1);
+  return r_scalar_int_get(after);
+}
+
+// [[ include("params.h") ]]
+int pull_step(SEXP params) {
+  SEXP step_ = r_lst_get(params, 4);
+  step_ = PROTECT(check_scalar_int(step_, strings_dot_step));
+
+  int step = r_scalar_int_get(step_);
+
+  if (step < 1) {
+    Rf_errorcall(R_NilValue, "`.step` must be at least 1, not %i.", step);
+  }
+
+  UNPROTECT(1);
+  return step;
+}
+
+// [[ include("params.h") ]]
+int pull_complete(SEXP params) {
+  SEXP complete = r_lst_get(params, 5);
+  complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
+  UNPROTECT(1);
+  return r_scalar_lgl_get(complete);
+}
+
+// -----------------------------------------------------------------------------
+
+// [[ include("params.h") ]]
+void check_double_negativeness(int before, int after, bool before_positive, bool after_positive) {
+  if (!before_positive && !after_positive) {
+    Rf_errorcall(
+      R_NilValue,
+      "`.before` (%i) and `.after` (%i) cannot both be negative.",
+      before,
+      after
+    );
+  }
+}
+
+// [[ include("params.h") ]]
+void check_after_negativeness(int after, int before, bool after_positive, bool before_unbounded) {
+  if (after_positive) {
+    return;
+  }
+
+  if (before_unbounded) {
+    return;
+  }
+
+  int abs_after = abs(after);
+
+  if (abs_after > before) {
+    Rf_errorcall(
+      R_NilValue,
+      "When `.after` (%i) is negative, it's absolute value (%i) cannot be greater than `.before` (%i).",
+      after,
+      abs_after,
+      before
+    );
+  }
+}
+
+// [[ include("params.h") ]]
+void check_before_negativeness(int before, int after, bool before_positive, bool after_unbounded) {
+  if (before_positive) {
+    return;
+  }
+
+  if (after_unbounded) {
+    return;
+  }
+
+  int abs_before = abs(before);
+
+  if (abs_before > after) {
+    Rf_errorcall(
+      R_NilValue,
+      "When `.before` (%i) is negative, it's absolute value (%i) cannot be greater than `.after` (%i).",
+      before,
+      abs_before,
+      after
+    );
+  }
+}

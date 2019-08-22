@@ -22,70 +22,67 @@
 \title{Slide over multiple inputs simultaneously}
 \usage{
 slide2(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_vec(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .ptype = list())
+  .complete = FALSE, .ptype = list())
 
 slide2_dbl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_int(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_lgl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_chr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_raw(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide2_dfr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .names_to = NULL, .name_repair = c("unique", "universal",
-  "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 slide2_dfc(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 
 pslide(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_vec(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .ptype = list())
+  .complete = FALSE, .ptype = list())
 
 pslide_dbl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_int(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_lgl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_chr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_raw(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 pslide_dfr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .names_to = NULL, .name_repair = c("unique", "universal",
-  "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 pslide_dfc(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 }
 \arguments{
-\item{.x, .y}{\code{[vector]} Vectors to iterate over. Vectors of size 1 will
-be recycled.}
+\item{.x, .y}{\code{[vector]}
+
+Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 \item{.f}{\code{[function / formula]}
 
@@ -98,33 +95,35 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[integer]} The number of values \emph{before} the
-current element to include in the sliding window. Set to \code{unbounded()}
-to select all elements before the current position. A negative value
-is allowed, and allows you to "look forward" as well.}
+\item{.before}{\code{[integer(1)]}
 
-\item{.after}{\code{[integer]} The number of values \emph{after} the
-current element to include in the sliding window. Set to \code{unbounded()}
-to select all elements after the current position. A negative value
-is allowed, and allows you to "look backward" as well.}
+The number of values \emph{before} the current element to include in the sliding
+window. Set to \code{unbounded()} to select all elements before the current
+position, constructing a cumulative window. A negative value is allowed,
+and allows you to "look forward" as well.}
 
-\item{.step}{\code{[positive integer]} The number of elements to shift the
-window forward (or backward, depending on \code{.forward}) between
-function calls.}
+\item{.after}{\code{[integer(1)]}
 
-\item{.offset}{\code{[NULL / positive integer]} An offset from the beginning
-(or end, depending on \code{.forward}) of \code{.x} to place the first element in
-the output vector. If \code{NULL}, this is computed automatically as the first
-location where a complete sliding window can be generated.}
+The number of values \emph{after} the current element to include in the
+sliding window. Set to \code{unbounded()} to select all elements after the
+current position, constructing the reverse of a cumulative window, where
+you start with as many elements as possible and decrease the amount as
+you move through \code{.x}. A negative value is allowed, and allows you to
+"look backward" as well.}
 
-\item{.complete}{\code{[logical]} Should the sliding be restricted to complete
-windows only? If \code{FALSE}, the default, then partial computations will be
-allowed.}
+\item{.step}{\code{[positive integer(1)]}
 
-\item{.forward}{\code{[logical]} The direction to slide.}
+The number of elements to shift the window forward between function calls.}
 
-\item{.ptype}{\code{[vector]} The prototype corresponding to the type of the
-output. Defaults to a \code{list()}.}
+\item{.complete}{\code{[logical(1)]}
+
+Should the sliding be restricted to complete windows only? If \code{FALSE},
+the default, then partial computations will be allowed.}
+
+\item{.ptype}{\code{[vector]}
+
+The prototype corresponding to the type of the output. Defaults to
+a \code{list()}.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify
@@ -149,9 +148,12 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 
-\item{.l}{\code{[list]} A list of vectors. The length of \code{.l} determines the
+\item{.l}{\code{[list]}
+
+A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
-they will be used as named arguments to \code{.f}.}
+they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
+1 will be recycled.}
 }
 \description{
 These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in
@@ -181,4 +183,7 @@ row_return <- function(x_rows, y_rows) {
 
 slide2(x, y, row_return, .before = 1, .after = 2)
 
+}
+\seealso{
+\code{\link[=slide]{slide()}}, \code{\link[=slide_index2]{slide_index2()}}
 }
