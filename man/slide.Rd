@@ -42,7 +42,9 @@ slide_dfc(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
   "universal", "check_unique", "minimal"))
 }
 \arguments{
-\item{.x}{\code{[vector]} The vector to iterate over.}
+\item{.x}{\code{[vector]}
+
+The vector to iterate over and apply \code{.f} to.}
 
 \item{.f}{\code{[function / formula]}
 
@@ -55,25 +57,35 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[integer]} The number of values \emph{before} the
-current element to include in the sliding window. Set to \code{unbounded()}
-to select all elements before the current position. A negative value
-is allowed, and allows you to "look forward" as well.}
+\item{.before}{\code{[integer(1)]}
 
-\item{.after}{\code{[integer]} The number of values \emph{after} the
-current element to include in the sliding window. Set to \code{unbounded()}
-to select all elements after the current position. A negative value
-is allowed, and allows you to "look backward" as well.}
+The number of values \emph{before} the current element to include in the sliding
+window. Set to \code{unbounded()} to select all elements before the current
+position, constructing a cumulative window. A negative value is allowed,
+and allows you to "look forward" as well.}
 
-\item{.step}{\code{[positive integer]} The number of elements to shift the
-window forward between function calls.}
+\item{.after}{\code{[integer(1)]}
 
-\item{.complete}{\code{[logical]} Should the sliding be restricted to complete
-windows only? If \code{FALSE}, the default, then partial computations will be
-allowed.}
+The number of values \emph{after} the current element to include in the
+sliding window. Set to \code{unbounded()} to select all elements after the
+current position, constructing the reverse of a cumulative window, where
+you start with as many elements as possible and decrease the amount as
+you move through \code{.x}. A negative value is allowed, and allows you to
+"look backward" as well.}
 
-\item{.ptype}{\code{[vector]} The prototype corresponding to the type of the
-output. Defaults to a \code{list()}.}
+\item{.step}{\code{[positive integer(1)]}
+
+The number of elements to shift the window forward between function calls.}
+
+\item{.complete}{\code{[logical(1)]}
+
+Should the sliding be restricted to complete windows only? If \code{FALSE},
+the default, then partial computations will be allowed.}
+
+\item{.ptype}{\code{[vector]}
+
+The prototype corresponding to the type of the output. Defaults to
+a \code{list()}.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify

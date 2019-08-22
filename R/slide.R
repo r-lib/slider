@@ -3,7 +3,9 @@
 #' `slide()` iterates through `.x` using a sliding window, applying `.f` to each
 #' sub-window of `.x`.
 #'
-#' @param .x `[vector]` The vector to iterate over.
+#' @param .x `[vector]`
+#'
+#'   The vector to iterate over and apply `.f` to.
 #'
 #' @param .f `[function / formula]`
 #'
@@ -16,25 +18,35 @@
 #'
 #' @param ... Additional arguments passed on to the mapped function.
 #'
-#' @param .before `[integer]` The number of values _before_ the
-#'   current element to include in the sliding window. Set to `unbounded()`
-#'   to select all elements before the current position. A negative value
-#'   is allowed, and allows you to "look forward" as well.
+#' @param .before `[integer(1)]`
 #'
-#' @param .after `[integer]` The number of values _after_ the
-#'   current element to include in the sliding window. Set to `unbounded()`
-#'   to select all elements after the current position. A negative value
-#'   is allowed, and allows you to "look backward" as well.
+#'   The number of values _before_ the current element to include in the sliding
+#'   window. Set to `unbounded()` to select all elements before the current
+#'   position, constructing a cumulative window. A negative value is allowed,
+#'   and allows you to "look forward" as well.
 #'
-#' @param .step `[positive integer]` The number of elements to shift the
-#'   window forward between function calls.
+#' @param .after `[integer(1)]`
 #'
-#' @param .complete `[logical]` Should the sliding be restricted to complete
-#'   windows only? If `FALSE`, the default, then partial computations will be
-#'   allowed.
+#'   The number of values _after_ the current element to include in the
+#'   sliding window. Set to `unbounded()` to select all elements after the
+#'   current position, constructing the reverse of a cumulative window, where
+#'   you start with as many elements as possible and decrease the amount as
+#'   you move through `.x`. A negative value is allowed, and allows you to
+#'   "look backward" as well.
 #'
-#' @param .ptype `[vector]` The prototype corresponding to the type of the
-#'   output. Defaults to a `list()`.
+#' @param .step `[positive integer(1)]`
+#'
+#'   The number of elements to shift the window forward between function calls.
+#'
+#' @param .complete `[logical(1)]`
+#'
+#'   Should the sliding be restricted to complete windows only? If `FALSE`,
+#'   the default, then partial computations will be allowed.
+#'
+#' @param .ptype `[vector]`
+#'
+#'   The prototype corresponding to the type of the output. Defaults to
+#'   a `list()`.
 #'
 #' @details
 #'
