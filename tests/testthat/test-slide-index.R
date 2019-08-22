@@ -1226,6 +1226,74 @@ test_that("can use unbounded .before with lubridate .after", {
 })
 
 # ------------------------------------------------------------------------------
+# type / size relaxed-ness
+
+test_that("slide_index() doesn't require `size = 1`", {
+  expect_equal(
+    slide_index(1:2, 1:2, ~c(.x, 1)),
+    list(
+      c(1L, 1L),
+      c(2L, 1L)
+    )
+  )
+})
+
+test_that("`slide_index()` doesn't require a common inner type", {
+  expect_equal(
+    slide_index(1:2, 1:2, ~if (.x == 1L) {1} else {"hi"}),
+    list(1, "hi")
+  )
+})
+
+# ------------------------------------------------------------------------------
+# input names
+
+test_that("input names are retained with atomics", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  i <- vec_seq_along(x)
+  expect_equal(names(slide_index(x, i, ~.x)), names)
+})
+
+test_that("input names are retained from proxied objects", {
+  names <- letters[1:5]
+  x <- as.POSIXlt(new_datetime(0:4 + 0))
+  x <- set_names(x, names)
+  i <- vec_seq_along(x)
+  expect_equal(names(slide_index(x, i, ~.x)), names)
+})
+
+test_that("row names are not extracted from data frames", {
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  i <- vec_seq_along(x)
+  expect_equal(names(slide_index(x, i, ~.x)), NULL)
+})
+
+test_that("row names are extracted from arrays", {
+  x <- array(1:4, c(2, 2), dimnames = list(c("r1", "r2"), c("c1", "c2")))
+  i <- vec_seq_along(x)
+  expect_equal(names(slide_index(x, i, ~.x)), c("r1", "r2"))
+})
+
+test_that("names are retained on inner sliced object", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  i <- vec_seq_along(x)
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide_index(x, i, ~names(.x)), exp)
+
+  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  i <- vec_seq_along(x)
+  expect_equal(slide_index(x, i, ~rownames(.x)), as.list(rownames(x)))
+
+  names <- c("r1", "r2")
+  x <- array(1:4, c(2, 2), dimnames = list(names, c("c1", "c2")))
+  i <- vec_seq_along(x)
+  exp <- set_names(as.list(names), names)
+  expect_equal(slide_index(x, i, ~rownames(.x)), exp)
+})
+
+# ------------------------------------------------------------------------------
 
 test_that("repeated index values are grouped with the same values", {
   i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)
