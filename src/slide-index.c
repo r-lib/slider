@@ -9,9 +9,9 @@
 
 static void check_starts_not_past_stops(SEXP starts, SEXP stops);
 
-static SEXP compute_window_sizes(SEXP x, int n);
-static SEXP compute_window_starts(SEXP x, int n);
-static SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n);
+static void compute_window_sizes(int* window_sizes, SEXP x, int n);
+static void compute_window_starts(int* window_starts, int* window_sizes, int n);
+static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int n);
 
 static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
 static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size);
@@ -70,12 +70,13 @@ SEXP slide_index_core_impl(SEXP x,
   out = vec_proxy(out);
   REPROTECT(out, out_prot_idx);
 
-  SEXP window_sizes = PROTECT(compute_window_sizes(out_indices, size_i));
-  SEXP window_starts = PROTECT(compute_window_starts(window_sizes, size_i));
-  SEXP window_stops = PROTECT(compute_window_stops(window_sizes, window_starts, size_i));
+  int window_sizes[size_i];
+  int window_starts[size_i];
+  int window_stops[size_i];
 
-  int* p_window_starts_val = INTEGER(window_starts);
-  int* p_window_stops_val = INTEGER(window_stops);
+  compute_window_sizes(window_sizes, out_indices, size_i);
+  compute_window_starts(window_starts, window_sizes, size_i);
+  compute_window_stops(window_stops, window_sizes, window_starts, size_i);
 
   int window_start = 0;
   int window_stop = size - 1;
@@ -117,7 +118,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(start, start_prot_idx);
 
       window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
-      window_start = p_window_starts_val[window_start_index - 1];
+      window_start = window_starts[window_start_index - 1];
     }
 
     if (!after_unbounded) {
@@ -125,7 +126,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(stop, stop_prox_idx);
 
       window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
-      window_stop = p_window_stops_val[window_stop_index - 1];
+      window_stop = window_stops[window_stop_index - 1];
     }
 
     // This can happen with an irregular index, and is a sign of the full window
@@ -176,7 +177,7 @@ SEXP slide_index_core_impl(SEXP x,
   out = copy_names(out, x, type);
   REPROTECT(out, out_prot_idx);
 
-  UNPROTECT(12);
+  UNPROTECT(9);
   return out;
 }
 
@@ -193,10 +194,10 @@ static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_
   while(compare_lt(i_position, 0, start, 0)) {
     if (*p_last_start_position_val == size) {
       UNPROTECT(1);
-      return(*p_last_start_position_val);
+      return(size);
     }
 
-    *p_last_start_position_val += 1;
+    (*p_last_start_position_val)++;
 
     i_position = vec_slice_impl(i, last_start_position);
     REPROTECT(i_position, i_position_prot_idx);
@@ -217,10 +218,10 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
   while(compare_lte(i_position, 0, stop, 0)) {
     if (*p_last_stop_position_val == size) {
       UNPROTECT(1);
-      return(*p_last_stop_position_val);
+      return(size);
     }
 
-    *p_last_stop_position_val += 1;
+    (*p_last_stop_position_val)++;
 
     i_position = vec_slice_impl(i, last_stop_position);
     REPROTECT(i_position, i_position_prot_idx);
@@ -229,7 +230,6 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
   UNPROTECT(1);
   return *p_last_stop_position_val - 1;
 }
-
 
 // -----------------------------------------------------------------------------
 
@@ -257,52 +257,29 @@ static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
 // -----------------------------------------------------------------------------
 
 // map_int(x, vec_size)
-static SEXP compute_window_sizes(SEXP x, int n) {
-  SEXP out = PROTECT(Rf_allocVector(INTSXP, n));
-  int* p_out = INTEGER(out);
-
+static void compute_window_sizes(int* window_sizes, SEXP x, int n) {
   for (int i = 0; i < n; ++i) {
-    p_out[i] = vec_size(VECTOR_ELT(x, i));
+    window_sizes[i] = vec_size(VECTOR_ELT(x, i));
   }
-
-  UNPROTECT(1);
-  return out;
 }
 
-static SEXP compute_window_starts(SEXP window_sizes, int n) {
-  int* p_sizes = INTEGER(window_sizes);
-
-  SEXP out = PROTECT(Rf_allocVector(INTSXP, n));
-  int* p_out = INTEGER(out);
-
+static void compute_window_starts(int* window_starts, int* window_sizes, int n) {
   // First start is always 0
-  p_out[0] = 0;
+  window_starts[0] = 0;
 
   int sum = 0;
 
   // Then we do a cumsum() to get the rest of the starts
   for (int i = 1; i < n; ++i) {
-    sum += p_sizes[i - 1];
-    p_out[i] = sum;
+    sum += window_sizes[i - 1];
+    window_starts[i] = sum;
   }
-
-  UNPROTECT(1);
-  return out;
 }
 
-static SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n) {
-  int* p_sizes = INTEGER(window_sizes);
-  int* p_starts = INTEGER(window_starts);
-
-  SEXP out = PROTECT(Rf_allocVector(INTSXP, n));
-  int* p_out = INTEGER(out);
-
+static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int n) {
   for (int i = 0; i < n; ++i) {
-    p_out[i] = p_starts[i] + p_sizes[i] - 1;
+    window_stops[i] = window_starts[i] + window_sizes[i] - 1;
   }
-
-  UNPROTECT(1);
-  return out;
 }
 
 // -----------------------------------------------------------------------------
