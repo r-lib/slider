@@ -13,6 +13,7 @@ slide_index_core <- function(x,
   size <- compute_size(x, type)
 
   check_index_size(size, i)
+  check_index_not_na(i)
   check_index_ascending(i)
 
   # Early exit if empty input
@@ -29,8 +30,6 @@ slide_index_core <- function(x,
 
   i <- split$key
   out_indices <- split$id
-
-  check_index_not_na(i)
 
   before_unbounded <- is_unbounded(before)
   after_unbounded <- is_unbounded(after)

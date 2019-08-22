@@ -33,6 +33,11 @@ test_that("empty input returns a list, but after the index size check", {
   expect_error(slide_index(integer(), 1, ~.x), "must be the same")
 })
 
+test_that(".i must not contain NA values", {
+  expect_error(slide_index(1:2, c(1, NA), identity), "found at location[(]s[)]: 2")
+  expect_error(slide_index(1:2, c(NA, 1), identity), "found at location[(]s[)]: 1")
+})
+
 # ------------------------------------------------------------------------------
 # .before - integer
 
