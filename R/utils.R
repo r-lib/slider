@@ -37,3 +37,16 @@ stop_range_start_past_stop <- function(starts, stops) {
 
   glubort(msg)
 }
+
+compute_size <- function(x, type) {
+  SLIDE <- -1L
+  PSLIDE_EMPTY <- 0L
+
+  if (type == SLIDE) {
+    vec_size(x)
+  } else if (type == PSLIDE_EMPTY) {
+    0L
+  } else {
+    vec_size(x[[1L]])
+  }
+}

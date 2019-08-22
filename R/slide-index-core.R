@@ -10,14 +10,16 @@ slide_index_core <- function(x,
                              type) {
   vec_assert(i)
 
-  if (type == -1L) {
-    size <- vec_size(x)
-  } else {
-    size <- vec_size(x[[1L]])
-  }
+  size <- compute_size(x, type)
 
   check_index_size(size, i)
   check_index_ascending(i)
+
+  # Early exit if empty input
+  # (but after the index size check)
+  if (size == 0L) {
+    return(vec_init(ptype, 0L))
+  }
 
   before <- check_before(before)
   after <- check_after(after)

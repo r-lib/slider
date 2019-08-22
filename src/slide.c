@@ -14,12 +14,7 @@ SEXP slide_core_impl(SEXP x,
 
   int type = pull_type(params);
 
-  int size;
-  if (type == SLIDE) {
-    size = vec_size(x);
-  } else {
-    size = vec_size(r_lst_get(x, 0));
-  }
+  int size = compute_size(x, type);
 
   // Bail early if inputs are size 0
   if (size == 0) {

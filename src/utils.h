@@ -46,6 +46,8 @@ extern SEXP slide_ns_env;
 
 void stop_not_all_size_one(int iteration, int size);
 
+int compute_size(SEXP x, int type);
+
 SEXP copy_names(SEXP out, SEXP x, int type);
 
 SEXP make_slice_container(int type);

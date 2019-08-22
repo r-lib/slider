@@ -1,4 +1,5 @@
 #include "slide.h"
+#include "utils.h"
 #include <vctrs.h>
 
 SEXP strings_empty = NULL;
@@ -29,6 +30,18 @@ void stop_not_all_size_one(int iteration, int size) {
 
   Rf_eval(call, slide_ns_env);
   Rf_error("Internal error: `stop_not_all_size_one()` should have jumped earlier");
+}
+
+// -----------------------------------------------------------------------------
+
+int compute_size(SEXP x, int type) {
+  if (type == SLIDE) {
+    return vec_size(x);
+  } else if (type == PSLIDE_EMPTY) {
+    return 0;
+  } else {
+    return vec_size(r_lst_get(x, 0));
+  }
 }
 
 // -----------------------------------------------------------------------------
