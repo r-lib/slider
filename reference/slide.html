@@ -113,42 +113,41 @@ sub-window of <code>.x</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>slide</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_vec</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())
 
 <span class='fu'>slide_dbl</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_int</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_lgl</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_chr</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_raw</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_dfr</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>,
-  <span class='st'>"check_unique"</span>))
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>,
+  <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>))
 
 <span class='fu'>slide_dfc</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>))</pre>
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>,
+  <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>.x</th>
-      <td><p><code>[vector]</code> The vector to iterate over.</p></td>
+      <td><p><code>[vector]</code></p>
+<p>The vector to iterate over and apply <code>.f</code> to.</p></td>
     </tr>
     <tr>
       <th>.f</th>
@@ -165,45 +164,38 @@ create very compact anonymous functions with up to two inputs.</p></td>
     </tr>
     <tr>
       <th>.before</th>
-      <td><p><code>[integer]</code> The number of values <em>before</em> the
-current element to include in the sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code>
-to select all elements before the current position. A negative value
-is allowed, and allows you to "look forward" as well.</p></td>
+      <td><p><code>[integer(1)]</code></p>
+<p>The number of values <em>before</em> the current element to include in the sliding
+window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements before the current
+position, constructing a cumulative window. A negative value is allowed,
+and allows you to "look forward" as well.</p></td>
     </tr>
     <tr>
       <th>.after</th>
-      <td><p><code>[integer]</code> The number of values <em>after</em> the
-current element to include in the sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code>
-to select all elements after the current position. A negative value
-is allowed, and allows you to "look backward" as well.</p></td>
+      <td><p><code>[integer(1)]</code></p>
+<p>The number of values <em>after</em> the current element to include in the
+sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements after the
+current position, constructing the reverse of a cumulative window, where
+you start with as many elements as possible and decrease the amount as
+you move through <code>.x</code>. A negative value is allowed, and allows you to
+"look backward" as well.</p></td>
     </tr>
     <tr>
       <th>.step</th>
-      <td><p><code>[positive integer]</code> The number of elements to shift the
-window forward (or backward, depending on <code>.forward</code>) between
-function calls.</p></td>
-    </tr>
-    <tr>
-      <th>.offset</th>
-      <td><p><code>[NULL / positive integer]</code> An offset from the beginning
-(or end, depending on <code>.forward</code>) of <code>.x</code> to place the first element in
-the output vector. If <code>NULL</code>, this is computed automatically as the first
-location where a complete sliding window can be generated.</p></td>
+      <td><p><code>[positive integer(1)]</code></p>
+<p>The number of elements to shift the window forward between function calls.</p></td>
     </tr>
     <tr>
       <th>.complete</th>
-      <td><p><code>[logical]</code> Should the sliding be restricted to complete
-windows only? If <code>FALSE</code>, the default, then partial computations will be
-allowed.</p></td>
-    </tr>
-    <tr>
-      <th>.forward</th>
-      <td><p><code>[logical]</code> The direction to slide.</p></td>
+      <td><p><code>[logical(1)]</code></p>
+<p>Should the sliding be restricted to complete windows only? If <code>FALSE</code>,
+the default, then partial computations will be allowed.</p></td>
     </tr>
     <tr>
       <th>.ptype</th>
-      <td><p><code>[vector]</code> The prototype corresponding to the type of the
-output. Defaults to a <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list()</a></code>.</p></td>
+      <td><p><code>[vector]</code></p>
+<p>The prototype corresponding to the type of the output. Defaults to
+a <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list()</a></code>.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
@@ -236,7 +228,7 @@ of length 1 will be recycled appropriately.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Unlike <code><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply()</a></code> / <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls
+    <p>Unlike <code><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls
 like <code>.f(.x[[i]], ...)</code>, the equivalent with <code>slide()</code>
 looks like <code>.f(vec_slice(.x, i), ...)</code> which is approximately
 <code>.f(.x[i], ...)</code> except in the case of data frames or arrays,
@@ -252,6 +244,10 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 <li><p><code>vec_size(.x) == vec_size(slide(.x, .f))</code></p></li>
 <li><p><code>vec_size(slide_vec(.x, .f)[[i]]) == 1L</code></p></li>
 </ul>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='slide2.html'>slide2()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -447,39 +443,6 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [[10]]
 #&gt; [1]  8  9 10
 #&gt; </div><div class='input'>
-<span class='co'># The `.offset` let's you shift the initial placement of results</span>
-<span class='co'># in the output. In this example, the offset is set to place the first</span>
-<span class='co'># element at position 3, even though results could have been computed and</span>
-<span class='co'># placed at locations 1 and 2.</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.offset</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; NULL
-#&gt; 
-#&gt; [[2]]
-#&gt; NULL
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] 2 3
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] 3 4
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] 4 5
-#&gt; </div><div class='input'><span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] 1
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] 1 2
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] 2 3
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] 3 4
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] 4 5
-#&gt; </div><div class='input'>
 <span class='co'># `.complete` controls whether or not partial results are computed.</span>
 <span class='co'># By default, they are, but setting `.complete = TRUE` restricts</span>
 <span class='co'># `slide()` to only evaluate the function where a complete window exists.</span>
@@ -511,38 +474,6 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; 
 #&gt; [[5]]
 #&gt; NULL
-#&gt; </div><div class='input'>
-<span class='co'># `.forward` controls the actual direction of sliding, and controls the</span>
-<span class='co'># order in which the sub-window of `.x` is actually sliced out (notice</span>
-<span class='co'># the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] 1
-#&gt; 
-#&gt; [[2]]
-#&gt; NULL
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] 2 3
-#&gt; 
-#&gt; [[4]]
-#&gt; NULL
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] 4 5
-#&gt; </div><div class='input'><span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.forward</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] 1
-#&gt; 
-#&gt; [[2]]
-#&gt; NULL
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] 3 2
-#&gt; 
-#&gt; [[4]]
-#&gt; NULL
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] 5 4
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Data frames</span>
@@ -958,6 +889,8 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
       <li><a href="#details">Details</a></li>
 
       <li><a href="#invariants">Invariants</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
