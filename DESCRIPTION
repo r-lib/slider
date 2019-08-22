@@ -32,6 +32,7 @@ Remotes:
     DavisVaughan/vctrs@c-exports
 Collate: 
     'pslide-impl.R'
+    'pslide-index.R'
     'slide2.R'
     'pslide.R'
     'slide-core.R'
@@ -39,7 +40,6 @@ Collate:
     'slide-index-core.R'
     'slide-index.R'
     'slide-index2.R'
-    'slide-new.R'
     'slide-package.R'
     'slide.R'
     'slide2-impl.R'

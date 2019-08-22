@@ -4,36 +4,31 @@ slide_impl <- function(.x,
                        .before,
                        .after,
                        .step,
-                       .offset,
                        .complete,
-                       .forward,
-                       .ptype,
-                       .constrain) {
+                       .constrain,
+                       .ptype) {
   vec_assert(.x)
+
   .f <- as_function(.f)
 
   f_call <- expr(.f(.x, ...))
 
   type <- -1L
 
-  param_list <- list(
-    type,
-    .constrain,
-    .before,
-    .after,
-    .step,
-    .complete,
-    .forward,
-    .offset
+  params <- list(
+    type = type,
+    constrain = .constrain,
+    before = .before,
+    after = .after,
+    step = .step,
+    complete = .complete
   )
 
-  out <- slide_core(
+  slide_core(
     x = .x,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
-    param_list = param_list
+    params = params
   )
-
-  out
 }

@@ -5,30 +5,30 @@
 #include "vctrs.h"
 #include <strings.h>
 
-void stop_not_comparable(SEXP x, SEXP y, const char* message) {
+static void stop_not_comparable(SEXP x, SEXP y, const char* message) {
   Rf_errorcall(R_NilValue, "`x` and `y` are not comparable: %s", message);
 }
 
-bool is_data_frame(SEXP x) {
+static bool is_data_frame(SEXP x) {
   return Rf_inherits(x, "data.frame");
 }
 
 // https://stackoverflow.com/questions/10996418
-int icmp(int x, int y) {
+static int icmp(int x, int y) {
   return (x > y) - (x < y);
 }
-int dcmp(double x, double y) {
+static int dcmp(double x, double y) {
   return (x > y) - (x < y);
 }
 
-int scmp(SEXP x, SEXP y) {
+static int scmp(SEXP x, SEXP y) {
   if (x == y)
     return 0;
   int cmp = strcmp(CHAR(x), CHAR(y));
   return cmp / abs(cmp);
 }
 
-int compare_scalar(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+static int compare_scalar(SEXP x, R_len_t i, SEXP y, R_len_t j) {
   if (TYPEOF(x) != TYPEOF(y))
     stop_not_comparable(x, y, "different types");
 

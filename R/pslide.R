@@ -7,9 +7,7 @@ pslide <- function(.l,
                    .before = 0L,
                    .after = 0L,
                    .step = 1L,
-                   .offset = NULL,
-                   .complete = FALSE,
-                   .forward = TRUE) {
+                   .complete = FALSE) {
   pslide_impl(
     .l,
     .f,
@@ -17,9 +15,7 @@ pslide <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -33,9 +29,7 @@ pslide_vec <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -46,9 +40,7 @@ pslide_vec <- function(.l,
       .before = .before,
       .after = .after,
       .step = .step,
-      .offset = .offset,
-      .complete = .complete,
-      .forward = .forward
+      .complete = .complete
     )
 
     return(out)
@@ -61,9 +53,7 @@ pslide_vec <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = .ptype
   )
 }
@@ -74,9 +64,7 @@ pslide_vec_simplify <- function(.l,
                                 .before,
                                 .after,
                                 .step,
-                                .offset,
-                                .complete,
-                                .forward) {
+                                .complete) {
   out <- pslide(
     .l,
     .f,
@@ -84,9 +72,7 @@ pslide_vec_simplify <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   if (vec_size_common(!!!out) != 1L) {
@@ -104,9 +90,7 @@ pslide_dbl <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   pslide_vec(
     .l,
     .f,
@@ -114,9 +98,7 @@ pslide_dbl <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = double()
   )
 }
@@ -129,9 +111,7 @@ pslide_int <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   pslide_vec(
     .l,
     .f,
@@ -139,9 +119,7 @@ pslide_int <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = integer()
   )
 }
@@ -154,9 +132,7 @@ pslide_lgl <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   pslide_vec(
     .l,
     .f,
@@ -164,9 +140,7 @@ pslide_lgl <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = logical()
   )
 }
@@ -179,9 +153,7 @@ pslide_chr <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   pslide_vec(
     .l,
     .f,
@@ -189,9 +161,7 @@ pslide_chr <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = character()
   )
 }
@@ -204,9 +174,7 @@ pslide_raw <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   pslide_vec(
     .l,
     .f,
@@ -214,9 +182,7 @@ pslide_raw <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = raw()
   )
 }
@@ -230,9 +196,7 @@ pslide_dfr <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .names_to = NULL,
                        .name_repair = c("unique", "universal", "check_unique")) {
   out <- pslide(
@@ -242,9 +206,7 @@ pslide_dfr <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
@@ -259,9 +221,7 @@ pslide_dfc <- function(.l,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .size = NULL,
                        .name_repair = c("unique", "universal", "check_unique", "minimal")) {
   out <- pslide(
@@ -271,9 +231,7 @@ pslide_dfc <- function(.l,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)

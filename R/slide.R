@@ -27,26 +27,18 @@
 #'   is allowed, and allows you to "look backward" as well.
 #'
 #' @param .step `[positive integer]` The number of elements to shift the
-#'   window forward (or backward, depending on `.forward`) between
-#'   function calls.
-#'
-#' @param .offset `[NULL / positive integer]` An offset from the beginning
-#'   (or end, depending on `.forward`) of `.x` to place the first element in
-#'   the output vector. If `NULL`, this is computed automatically as the first
-#'   location where a complete sliding window can be generated.
+#'   window forward between function calls.
 #'
 #' @param .complete `[logical]` Should the sliding be restricted to complete
 #'   windows only? If `FALSE`, the default, then partial computations will be
 #'   allowed.
-#'
-#' @param .forward `[logical]` The direction to slide.
 #'
 #' @param .ptype `[vector]` The prototype corresponding to the type of the
 #'   output. Defaults to a `list()`.
 #'
 #' @details
 #'
-#' Unlike `lapply()` / `purrr::map()`, which construct calls
+#' Unlike `lapply()` or `purrr::map()`, which construct calls
 #' like `.f(.x[[i]], ...)`, the equivalent with `slide()`
 #' looks like `.f(vec_slice(.x, i), ...)` which is approximately
 #' `.f(.x[i], ...)` except in the case of data frames or arrays,
@@ -88,24 +80,11 @@
 #' # allowing you to "skip" iterations if you only need a less granular result
 #' slide(1:10, ~.x, .before = 2, .step = 3)
 #'
-#' # The `.offset` let's you shift the initial placement of results
-#' # in the output. In this example, the offset is set to place the first
-#' # element at position 3, even though results could have been computed and
-#' # placed at locations 1 and 2.
-#' slide(1:5, ~.x, .before = 1, .offset = 2)
-#' slide(1:5, ~.x, .before = 1)
-#'
 #' # `.complete` controls whether or not partial results are computed.
 #' # By default, they are, but setting `.complete = TRUE` restricts
 #' # `slide()` to only evaluate the function where a complete window exists.
 #' slide(1:5, ~.x, .before = 2, .after = 1)
 #' slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
-#'
-#' # `.forward` controls the actual direction of sliding, and controls the
-#' # order in which the sub-window of `.x` is actually sliced out (notice
-#' # the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
-#' slide(1:5, ~.x, .before = 1, .step = 2)
-#' slide(1:5, ~.x, .before = 1, .step = 2, .forward = FALSE)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Data frames
@@ -151,9 +130,7 @@ slide <- function(.x,
                   .before = 0L,
                   .after = 0L,
                   .step = 1L,
-                  .offset = NULL,
-                  .complete = FALSE,
-                  .forward = TRUE) {
+                  .complete = FALSE) {
   slide_impl(
     .x,
     .f,
@@ -161,9 +138,7 @@ slide <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -177,9 +152,7 @@ slide_vec <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
                       .complete = FALSE,
-                      .forward = TRUE,
                       .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -190,9 +163,7 @@ slide_vec <- function(.x,
       .before = .before,
       .after = .after,
       .step = .step,
-      .offset = .offset,
-      .complete = .complete,
-      .forward = .forward
+      .complete = .complete
     )
 
     return(out)
@@ -205,9 +176,7 @@ slide_vec <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = .ptype,
     .constrain = TRUE
   )
@@ -219,9 +188,7 @@ slide_vec_simplify <- function(.x,
                                .before,
                                .after,
                                .step,
-                               .offset,
-                               .complete,
-                               .forward) {
+                               .complete) {
   out <- slide(
     .x,
     .f,
@@ -229,9 +196,7 @@ slide_vec_simplify <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   size <- vec_size_common(!!!out)
@@ -250,9 +215,7 @@ slide_dbl <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
-                      .complete = FALSE,
-                      .forward = TRUE) {
+                      .complete = FALSE) {
   slide_vec(
     .x,
     .f,
@@ -260,9 +223,7 @@ slide_dbl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = double()
   )
 }
@@ -275,9 +236,7 @@ slide_int <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
-                      .complete = FALSE,
-                      .forward = TRUE) {
+                      .complete = FALSE) {
   slide_vec(
     .x,
     .f,
@@ -285,9 +244,7 @@ slide_int <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = integer()
   )
 }
@@ -300,9 +257,7 @@ slide_lgl <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
-                      .complete = FALSE,
-                      .forward = TRUE) {
+                      .complete = FALSE) {
   slide_vec(
     .x,
     .f,
@@ -310,9 +265,7 @@ slide_lgl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = logical()
   )
 }
@@ -325,9 +278,7 @@ slide_chr <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
-                      .complete = FALSE,
-                      .forward = TRUE) {
+                      .complete = FALSE) {
   slide_vec(
     .x,
     .f,
@@ -335,9 +286,7 @@ slide_chr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = character()
   )
 }
@@ -350,9 +299,7 @@ slide_raw <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
-                      .complete = FALSE,
-                      .forward = TRUE) {
+                      .complete = FALSE) {
   slide_vec(
     .x,
     .f,
@@ -360,9 +307,7 @@ slide_raw <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = raw()
   )
 }
@@ -376,9 +321,7 @@ slide_dfr <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
                       .complete = FALSE,
-                      .forward = TRUE,
                       .names_to = NULL,
                       .name_repair = c("unique", "universal", "check_unique")) {
   out <- slide(
@@ -388,9 +331,7 @@ slide_dfr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
@@ -405,9 +346,7 @@ slide_dfc <- function(.x,
                       .before = 0L,
                       .after = 0L,
                       .step = 1L,
-                      .offset = NULL,
                       .complete = FALSE,
-                      .forward = TRUE,
                       .size = NULL,
                       .name_repair = c("unique", "universal", "check_unique", "minimal")) {
   out <- slide(
@@ -417,9 +356,7 @@ slide_dfc <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)

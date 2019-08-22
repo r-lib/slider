@@ -146,19 +146,6 @@ test_that("can use a negative before to 'look forward'", {
   )
 })
 
-test_that("can use negative before with offset", {
-  expect_equal(
-    slide(1:5, identity, .before = -1, .after = 1, .offset = 1),
-    list(
-      NULL,
-      3L,
-      4L,
-      5L,
-      NULL
-    )
-  )
-})
-
 test_that("error if negative .before's abs() is > .after", {
   expect_error(slide(1:5, identity, .before = -1), "cannot be greater than `.after`.")
 })
@@ -284,229 +271,13 @@ test_that(".complete works when doing center alignment", {
   )
 })
 
-# TODO - fix failing test
 test_that(".complete works with negative .before", {
-  expect_error(
-    slide(1:5, ~.x, .before = -1, .after = 2, .complete = TRUE)
-  )
-
-  # expect_equal(
-  #   slide(1:5, ~.x, .before = -1, .after = 2, .complete = TRUE),
-  #   list(
-  #     2L,
-  #     3L,
-  #     4L,
-  #     5L,
-  #     NULL
-  #   )
-  # )
-})
-
-# ------------------------------------------------------------------------------
-# .forward
-
-test_that("`.forward == FALSE` is equivalent to `.forward == TRUE` if `.size == 1`", {
   expect_equal(
-    slide(1:5, identity, .forward = FALSE),
-    slide(1:5, identity)
-  )
-
-  expect_equal(
-    slide(1:5, identity, .forward = FALSE, .step = 2),
-    slide(1:5, identity, .step = 2)
-  )
-})
-
-test_that("`.forward == FALSE` with only altered size is equivalent to reversed `.forward == TRUE`", {
-  expect_equal(
-    slide(1:5, identity, .forward = FALSE, .before = 1),
-    lapply(slide(1:5, identity, .before = 1), rev)
-  )
-
-  expect_equal(
-    slide(1:5, identity, .forward = FALSE, .before = 1, .after = 2),
-    lapply(slide(1:5, identity, .before = 1, .after = 2), rev)
-  )
-})
-
-test_that("backwards sliding keeps intuitive alignment with .before / .after", {
-  expect_equal(
-    slide(1:5, identity, .before = 1, .step = 2, .forward = FALSE),
+    slide(1:5, ~.x, .before = -1, .after = 2, .complete = TRUE),
     list(
-      1L,
-      NULL,
-      3:2,
-      NULL,
-      5:4
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .after = 1, .step = 2, .forward = FALSE),
-    list(
-      2:1,
-      NULL,
-      4:3,
-      NULL,
-      5L
-    )
-  )
-})
-
-test_that("backwards + .complete is meaningful with `.before > 0`", {
-  expect_equal(
-    slide(1:5, identity, .complete = TRUE, .before = 2L, .forward = FALSE),
-    list(
-      NULL,
-      NULL,
-      3:1,
-      4:2,
-      5:3
-    )
-  )
-})
-
-# ------------------------------------------------------------------------------
-# .offset
-
-test_that(".offset shifts starting point", {
-  expect_equal(
-    slide(1:5, identity, .offset = 1),
-    list(
-      NULL,
-      2,
-      3,
-      4,
-      5
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 4),
-    list(
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      5
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 1, .forward = FALSE),
-    list(
-      1,
-      2,
-      3,
-      4,
-      NULL
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 4, .forward = FALSE),
-    list(
-      1,
-      NULL,
-      NULL,
-      NULL,
-      NULL
-    )
-  )
-})
-
-test_that(".offset can be smaller than .before/.after", {
-  expect_equal(
-    slide(1:5, identity, .offset = 3, .before = 4),
-    list(
-      NULL,
-      NULL,
-      NULL,
-      1:4,
-      1:5
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 3, .after = 4, .forward = FALSE),
-    list(
-      5:1,
-      5:2,
-      NULL,
-      NULL,
-      NULL
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 1, .before = 3, .after = 3),
-    list(
-      NULL,
-      1:5,
-      1:5,
-      1:5,
-      2:5
-    )
-  )
-})
-
-test_that(".offset can be smaller in magnitude than .after and is adjusted automatically", {
-  expect_equal(
-    slide(1:5, ~.x, .before = 3, .after = -2, .offset = 1),
-    list(
-      NULL,
-      NULL,
-      1L,
-      1:2,
-      2:3
-    )
-  )
-})
-
-test_that(".offset can be smaller in magnitude than .before and is adjusted automatically", {
-  expect_equal(
-    slide(1:5, ~.x, .after = 3, .before = -2, .offset = 1, .forward = FALSE),
-    list(
-      4:3,
-      5:4,
-      5L,
-      NULL,
-      NULL
-    )
-  )
-})
-
-test_that(".offset is allowed to be completely outside of .x", {
-  expect_equal(
-    slide(1:5, ~.x, .offset = 5),
-    list(
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .offset = 5, .forward = FALSE),
-    list(
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL
-    )
-  )
-})
-
-test_that(".offset + .before + .complete can result in all NULLs", {
-  expect_equal(
-    slide(1:5, ~.x, .before = 5, .offset = 3, .complete = TRUE),
-    list(
-      NULL,
-      NULL,
-      NULL,
+      2:3,
+      3:4,
+      4:5,
       NULL,
       NULL
     )
@@ -601,147 +372,11 @@ test_that("can use unbounded() in .after + set .before", {
   )
 })
 
-test_that("can use unbounded() when going backwards", {
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .forward = FALSE),
-    list(
-      1L,
-      2:1,
-      3:1,
-      4:1,
-      5:1
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .after = unbounded(), .forward = FALSE),
-    list(
-      5:1,
-      5:2,
-      5:3,
-      5:4,
-      5L
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = 1L, .forward = FALSE),
-    list(
-      2:1,
-      3:1,
-      4:1,
-      5:1,
-      5:1
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = 1L, .forward = FALSE, .complete = TRUE),
-    list(
-      2:1,
-      3:1,
-      4:1,
-      5:1,
-      NULL
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L, .forward = FALSE),
-    list(
-      5:1,
-      5:1,
-      5:2,
-      5:3,
-      5:4
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L, .forward = FALSE, .complete = TRUE),
-    list(
-      NULL,
-      5:1,
-      5:2,
-      5:3,
-      5:4
-    )
-  )
-})
-
-test_that("can use unbounded() with .offset", {
-  expect_equal(
-    slide(1:5, identity, .after = unbounded(), .offset = 1L),
-    list(
-      NULL,
-      2:5,
-      3:5,
-      4:5,
-      5L
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .offset = 1L),
-    list(
-      NULL,
-      1:2,
-      1:3,
-      1:4,
-      1:5
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .forward = FALSE, .offset = 1L),
-    list(
-      1L,
-      2:1,
-      3:1,
-      4:1,
-      NULL
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .after = unbounded(), .forward = FALSE, .offset = 1L),
-    list(
-      5:1,
-      5:2,
-      5:3,
-      5:4,
-      NULL
-    )
-  )
-})
-
 test_that("can be doubly unbounded()", {
   expect_equal(
     slide(1:5, identity, .before = unbounded(), .after = unbounded()),
     list(
       1:5,
-      1:5,
-      1:5,
-      1:5,
-      1:5
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .forward = FALSE),
-    list(
-      5:1,
-      5:1,
-      5:1,
-      5:1,
-      5:1
-    )
-  )
-
-  expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .offset = 1L),
-    list(
-      NULL,
       1:5,
       1:5,
       1:5,
@@ -869,22 +504,12 @@ test_that("cannot use invalid .after", {
   expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_cast_lossy")
 })
 
-test_that("cannot use invalid .offset", {
-  expect_error(slide(1, identity, .offset = c(1, 2)), regexp = "1, not 2")
-  expect_error(slide(1, identity, .offset = "x"), class = "vctrs_error_cast_lossy")
-})
-
 test_that("cannot use invalid .step", {
   expect_error(slide(1, identity, .step = -1), "at least 1, not -1")
   expect_error(slide(1, identity, .step = 0), "at least 1, not 0")
 
   expect_error(slide(1, identity, .step = c(1, 2)), regexp = "1, not 2")
   expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_cast_lossy")
-})
-
-test_that("cannot use invalid .forward", {
-  expect_error(slide(1, identity, .forward = c(TRUE, TRUE)), regexp = "1, not 2")
-  expect_error(slide(1, identity, .forward = "hi"), class = "vctrs_error_cast_lossy")
 })
 
 test_that("cannot use invalid .complete", {

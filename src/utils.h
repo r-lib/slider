@@ -42,6 +42,11 @@ SEXP syms_dot_y;
 SEXP syms_dot_l;
 SEXP syms_index;
 
+SEXP copy_names(SEXP out, SEXP x, int type);
+
+SEXP make_slice_container(int type);
+void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP container);
+
 extern SEXP slide_shared_empty_lgl;
 extern SEXP slide_shared_empty_int;
 

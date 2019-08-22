@@ -4,9 +4,7 @@ pslide_impl <- function(.l,
                         .before,
                         .after,
                         .step,
-                        .offset,
                         .complete,
-                        .forward,
                         .ptype,
                         .constrain = TRUE) {
   if (!is.list(.l)) {
@@ -37,15 +35,13 @@ pslide_impl <- function(.l,
 
   f_call <- expr(.f(!!! slicers, ...))
 
-  param_list <- list(
+  params <- list(
     type,
     .constrain,
     .before,
     .after,
     .step,
-    .complete,
-    .forward,
-    .offset
+    .complete
   )
 
   out <- slide_core(
@@ -53,7 +49,7 @@ pslide_impl <- function(.l,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
-    param_list = param_list
+    params = params
   )
 
   out

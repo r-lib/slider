@@ -1,4 +1,5 @@
 #include "slide.h"
+#include <vctrs.h>
 
 SEXP strings_empty = NULL;
 SEXP strings_dot_before = NULL;
@@ -15,6 +16,65 @@ SEXP syms_index = NULL;
 
 SEXP slide_shared_empty_lgl = NULL;
 SEXP slide_shared_empty_int = NULL;
+
+// -----------------------------------------------------------------------------
+
+SEXP copy_names(SEXP out, SEXP x, int type) {
+  SEXP names;
+  if (type == SLIDE) {
+    names = PROTECT(vec_names(x));
+  } else {
+    names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
+  }
+
+  UNPROTECT(1);
+  return vec_set_names(out, names);
+}
+
+// -----------------------------------------------------------------------------
+
+// update_slices() works by repeatedly overwriting the `slices` SEXP with the
+// slices from `x`. If we are calling slide() or slide2(), it just overwrites
+// `slices` directly and immediately assigns the result into an environment.
+// If we are calling pslide(), then `slices` is a list and each element of the
+// list is overwritten with the current slice of the i-th pslide element.
+// Then that entire list is defined in the environment.
+
+SEXP make_slice_container(int type) {
+  if (type == SLIDE || type == SLIDE2) {
+    return R_NilValue;
+  }
+
+  return Rf_allocVector(VECSXP, type);
+}
+
+void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP container) {
+  // slide()
+  if (type == SLIDE) {
+    container = vec_slice_impl(x, window);
+    Rf_defineVar(syms_dot_x, container, env);
+    return;
+  }
+
+  // slide2()
+  if (type == SLIDE2) {
+    container = vec_slice_impl(VECTOR_ELT(x, 0), window);
+    Rf_defineVar(syms_dot_x, container, env);
+    container = vec_slice_impl(VECTOR_ELT(x, 1), window);
+    Rf_defineVar(syms_dot_y, container, env);
+    return;
+  }
+
+  SEXP slice;
+
+  // pslide()
+  for (int i = 0; i < type; ++i) {
+    slice = vec_slice_impl(VECTOR_ELT(x, i), window);
+    SET_VECTOR_ELT(container, i, slice);
+  }
+
+  Rf_defineVar(syms_dot_l, container, env);
+}
 
 // -----------------------------------------------------------------------------
 

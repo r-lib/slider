@@ -44,9 +44,7 @@ slide2 <- function(.x,
                    .before = 0L,
                    .after = 0L,
                    .step = 1L,
-                   .offset = NULL,
-                   .complete = FALSE,
-                   .forward = TRUE) {
+                   .complete = FALSE) {
   slide2_impl(
     .x,
     .y,
@@ -55,9 +53,7 @@ slide2 <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = list(),
     .constrain = FALSE
   )
@@ -72,9 +68,7 @@ slide2_vec <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .ptype = list()) {
 
   if (is.null(.ptype)) {
@@ -86,9 +80,7 @@ slide2_vec <- function(.x,
       .before = .before,
       .after = .after,
       .step = .step,
-      .offset = .offset,
-      .complete = .complete,
-      .forward = .forward
+      .complete = .complete
     )
 
     return(out)
@@ -102,9 +94,7 @@ slide2_vec <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = .ptype,
     .constrain = TRUE
   )
@@ -117,9 +107,7 @@ slide2_vec_simplify <- function(.x,
                                 .before,
                                 .after,
                                 .step,
-                                .offset,
-                                .complete,
-                                .forward) {
+                                .complete) {
   out <- slide2(
     .x,
     .y,
@@ -128,9 +116,7 @@ slide2_vec_simplify <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   if (vec_size_common(!!!out) != 1L) {
@@ -149,9 +135,7 @@ slide2_dbl <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -160,9 +144,7 @@ slide2_dbl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = double()
   )
 }
@@ -176,9 +158,7 @@ slide2_int <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -187,9 +167,7 @@ slide2_int <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = integer()
   )
 }
@@ -203,9 +181,7 @@ slide2_lgl <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -214,9 +190,7 @@ slide2_lgl <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = logical()
   )
 }
@@ -230,9 +204,7 @@ slide2_chr <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -241,9 +213,7 @@ slide2_chr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = character()
   )
 }
@@ -257,9 +227,7 @@ slide2_raw <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
-                       .complete = FALSE,
-                       .forward = TRUE) {
+                       .complete = FALSE) {
   slide2_vec(
     .x,
     .y,
@@ -268,9 +236,7 @@ slide2_raw <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
     .complete = .complete,
-    .forward = .forward,
     .ptype = raw()
   )
 }
@@ -285,9 +251,7 @@ slide2_dfr <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .names_to = NULL,
                        .name_repair = c("unique", "universal", "check_unique")) {
   out <- slide2(
@@ -298,9 +262,7 @@ slide2_dfr <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
@@ -316,9 +278,7 @@ slide2_dfc <- function(.x,
                        .before = 0L,
                        .after = 0L,
                        .step = 1L,
-                       .offset = NULL,
                        .complete = FALSE,
-                       .forward = TRUE,
                        .size = NULL,
                        .name_repair = c("unique", "universal", "check_unique", "minimal")) {
   out <- slide2(
@@ -329,9 +289,7 @@ slide2_dfc <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .offset = .offset,
-    .complete = .complete,
-    .forward = .forward
+    .complete = .complete
   )
 
   vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)

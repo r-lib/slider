@@ -5,9 +5,7 @@ slide2_impl <- function(.x,
                         .before,
                         .after,
                         .step,
-                        .offset,
                         .complete,
-                        .forward,
                         .ptype,
                         .constrain) {
   vec_assert(.x)
@@ -24,15 +22,13 @@ slide2_impl <- function(.x,
 
   type <- -2L
 
-  param_list <- list(
+  params <- list(
     type,
     .constrain,
     .before,
     .after,
     .step,
-    .complete,
-    .forward,
-    .offset
+    .complete
   )
 
   out <- slide_core(
@@ -40,7 +36,7 @@ slide2_impl <- function(.x,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
-    param_list = param_list
+    params = params
   )
 
   out

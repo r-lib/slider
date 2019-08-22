@@ -16,9 +16,6 @@ SEXP compute_window_stops(SEXP window_sizes, SEXP window_starts, int n);
 int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
 int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size);
 
-static SEXP slice_container(int type);
-static void update_slices(SEXP slices, SEXP x, SEXP window, SEXP env, int type);
-
 int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position, int* p_last_start_position_val);
 int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position, int* p_last_stop_position_val);
 
@@ -106,7 +103,7 @@ SEXP slide_index_core_impl(SEXP x,
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
 
-  SEXP slices = PROTECT(slice_container(type));
+  SEXP container = PROTECT(make_slice_container(type));
 
   for (; *p_iteration <= iteration_max; ++(*p_iteration)) {
     if (*p_iteration % 1024 == 0) {
@@ -139,7 +136,7 @@ SEXP slide_index_core_impl(SEXP x,
     int window_size = window_stop - window_start + 1;
     init_compact_seq(p_window, window_start, window_size, true);
 
-    update_slices(slices, x, window, env, type);
+    slice_and_update_env(x, window, env, type, container);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
@@ -332,42 +329,3 @@ int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size) {
   UNPROTECT(3);
   return iteration_max;
 }
-
-// -----------------------------------------------------------------------------
-
-static SEXP slice_container(int type) {
-  if (type == SLIDE || type == SLIDE2) {
-    return R_NilValue;
-  }
-
-  return Rf_allocVector(VECSXP, type);
-}
-
-static void update_slices(SEXP slices, SEXP x, SEXP window, SEXP env, int type) {
-  // slide()
-  if (type == SLIDE) {
-    slices = vec_slice_impl(x, window);
-    Rf_defineVar(syms_dot_x, slices, env);
-    return;
-  }
-
-  // slide2()
-  if (type == SLIDE2) {
-    slices = vec_slice_impl(VECTOR_ELT(x, 0), window);
-    Rf_defineVar(syms_dot_x, slices, env);
-    slices = vec_slice_impl(VECTOR_ELT(x, 1), window);
-    Rf_defineVar(syms_dot_y, slices, env);
-    return;
-  }
-
-  SEXP slice;
-
-  // pslide()
-  for (int i = 0; i < type; ++i) {
-    slice = vec_slice_impl(VECTOR_ELT(x, i), window);
-    SET_VECTOR_ELT(slices, i, slice);
-  }
-
-  Rf_defineVar(syms_dot_l, slices, env);
-}
-

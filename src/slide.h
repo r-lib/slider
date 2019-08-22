@@ -11,24 +11,4 @@
 #define SLIDE -1
 #define SLIDE2 -2
 
-// -----------------------------------------------------------------------------
-// Parameters
-
-struct slide_params {
-  int type;
-  bool constrain;
-  int before;
-  int after;
-  int step;
-  int offset;
-  bool complete;
-  bool forward;
-  bool before_unbounded;
-  bool after_unbounded;
-  int size;
-};
-
-// Defined in param.c
-struct slide_params init_params(SEXP x, SEXP param_list);
-
 #endif

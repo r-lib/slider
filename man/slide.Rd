@@ -13,35 +13,33 @@
 \title{Slide}
 \usage{
 slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_vec(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .ptype = list())
+  .complete = FALSE, .ptype = list())
 
 slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_int(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_lgl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_chr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_raw(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE)
+  .complete = FALSE)
 
 slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE,
-  .names_to = NULL, .name_repair = c("unique", "universal",
-  "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 slide_dfc(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .offset = NULL, .complete = FALSE, .forward = TRUE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.x}{\code{[vector]} The vector to iterate over.}
@@ -68,19 +66,11 @@ to select all elements after the current position. A negative value
 is allowed, and allows you to "look backward" as well.}
 
 \item{.step}{\code{[positive integer]} The number of elements to shift the
-window forward (or backward, depending on \code{.forward}) between
-function calls.}
-
-\item{.offset}{\code{[NULL / positive integer]} An offset from the beginning
-(or end, depending on \code{.forward}) of \code{.x} to place the first element in
-the output vector. If \code{NULL}, this is computed automatically as the first
-location where a complete sliding window can be generated.}
+window forward between function calls.}
 
 \item{.complete}{\code{[logical]} Should the sliding be restricted to complete
 windows only? If \code{FALSE}, the default, then partial computations will be
 allowed.}
-
-\item{.forward}{\code{[logical]} The direction to slide.}
 
 \item{.ptype}{\code{[vector]} The prototype corresponding to the type of the
 output. Defaults to a \code{list()}.}
@@ -113,7 +103,7 @@ of length 1 will be recycled appropriately.}
 sub-window of \code{.x}.
 }
 \details{
-Unlike \code{lapply()} / \code{purrr::map()}, which construct calls
+Unlike \code{lapply()} or \code{purrr::map()}, which construct calls
 like \code{.f(.x[[i]], ...)}, the equivalent with \code{slide()}
 looks like \code{.f(vec_slice(.x, i), ...)} which is approximately
 \code{.f(.x[i], ...)} except in the case of data frames or arrays,
@@ -157,24 +147,11 @@ slide(1:10, ~.x, .before = 1, .after = 1)
 # allowing you to "skip" iterations if you only need a less granular result
 slide(1:10, ~.x, .before = 2, .step = 3)
 
-# The `.offset` let's you shift the initial placement of results
-# in the output. In this example, the offset is set to place the first
-# element at position 3, even though results could have been computed and
-# placed at locations 1 and 2.
-slide(1:5, ~.x, .before = 1, .offset = 2)
-slide(1:5, ~.x, .before = 1)
-
 # `.complete` controls whether or not partial results are computed.
 # By default, they are, but setting `.complete = TRUE` restricts
 # `slide()` to only evaluate the function where a complete window exists.
 slide(1:5, ~.x, .before = 2, .after = 1)
 slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
-
-# `.forward` controls the actual direction of sliding, and controls the
-# order in which the sub-window of `.x` is actually sliced out (notice
-# the elements in the backwards example are `c(5, 4)` not `c(4, 5)`).
-slide(1:5, ~.x, .before = 1, .step = 2)
-slide(1:5, ~.x, .before = 1, .step = 2, .forward = FALSE)
 
 # ---------------------------------------------------------------------------
 # Data frames
