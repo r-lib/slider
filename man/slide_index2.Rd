@@ -25,30 +25,30 @@ slide_index2(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
   .complete = FALSE)
 
 slide_index2_vec(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .ptype = list())
+  .complete = FALSE, .ptype = list())
 
 slide_index2_dbl(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index2_int(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index2_lgl(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index2_chr(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index2_raw(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index2_dfr(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 slide_index2_dfc(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 
 pslide_index(.l, .i, .f, ..., .before = 0L, .after = 0L,
   .complete = FALSE)
@@ -137,10 +137,6 @@ with 1 argument, the entire \code{.i} vector.}
 Should the sliding be restricted to complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.step}{\code{[positive integer(1)]}
-
-The number of elements to shift the window forward between function calls.}
-
 \item{.ptype}{\code{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
@@ -175,6 +171,10 @@ A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
+
+\item{.step}{\code{[positive integer(1)]}
+
+The number of elements to shift the window forward between function calls.}
 }
 \description{
 \code{slide_index2()} and \code{pslide_index()} represent the combination
