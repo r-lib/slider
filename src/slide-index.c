@@ -64,7 +64,11 @@ SEXP slide_index_core_impl(SEXP x,
     }
   }
 
-  SEXP out = PROTECT(vec_init(ptype, size));
+  PROTECT_INDEX out_prot_idx;
+  SEXP out = vec_init(ptype, size);
+  PROTECT_WITH_INDEX(out, &out_prot_idx);
+  out = vec_proxy(out);
+  REPROTECT(out, out_prot_idx);
 
   SEXP window_sizes = PROTECT(compute_window_sizes(out_indices, size_i));
   SEXP window_starts = PROTECT(compute_window_starts(window_sizes, size_i));
@@ -167,6 +171,12 @@ SEXP slide_index_core_impl(SEXP x,
     }
 
   }
+
+  out = vec_restore(out, ptype, r_int(size));
+  REPROTECT(out, out_prot_idx);
+
+  out = copy_names(out, x, type);
+  REPROTECT(out, out_prot_idx);
 
   UNPROTECT(12);
   return out;
