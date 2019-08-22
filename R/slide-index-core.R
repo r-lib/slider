@@ -9,6 +9,8 @@ slide_index_core <- function(x,
                              env,
                              type) {
 
+  vec_assert(i)
+
   if (type == -1L) {
     size <- vec_size(x)
   } else {

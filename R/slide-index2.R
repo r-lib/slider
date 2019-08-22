@@ -34,13 +34,13 @@ slide_index_impl2 <- function(.x,
                               .ptype) {
   vec_assert(.x)
   vec_assert(.y)
-  vec_assert(.i)
+
   .f <- as_function(.f)
 
   # TODO - more efficiently? reuse .x/.y rather than recycle
   args <- vec_recycle_common(.x, .y)
 
-  f_call <- expr(.f(vec_slice(.x, window), vec_slice(.y, window), ...))
+  f_call <- expr(.f(.x, .y, ...))
 
   type <- -2L
 

@@ -93,7 +93,7 @@ slide_index_impl <- function(.x,
                              .constrain,
                              .ptype) {
   vec_assert(.x)
-  vec_assert(.i)
+
   .f <- as_function(.f)
 
   f_call <- expr(.f(.x, ...))
