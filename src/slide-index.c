@@ -74,8 +74,8 @@ SEXP slide_index_core_impl(SEXP x,
   SEXP window_starts = PROTECT(compute_window_starts(window_sizes, size_i));
   SEXP window_stops = PROTECT(compute_window_stops(window_sizes, window_starts, size_i));
 
-  int* p_window_starts = INTEGER(window_starts);
-  int* p_window_stops = INTEGER(window_stops);
+  int* p_window_starts_val = INTEGER(window_starts);
+  int* p_window_stops_val = INTEGER(window_stops);
 
   int window_start = 0;
   int window_stop = size - 1;
@@ -89,7 +89,7 @@ SEXP slide_index_core_impl(SEXP x,
   int* p_previous_stop_index_val = INTEGER(previous_stop_index);
 
   SEXP iteration = PROTECT(Rf_ScalarInteger(iteration_min));
-  int* p_iteration = INTEGER(iteration);
+  int* p_iteration_val = INTEGER(iteration);
 
   PROTECT_INDEX start_prot_idx;
   SEXP start = R_NilValue;
@@ -100,7 +100,7 @@ SEXP slide_index_core_impl(SEXP x,
   PROTECT_WITH_INDEX(stop, &stop_prox_idx);
 
   SEXP window = PROTECT(compact_seq(0, 0, true));
-  int* p_window = INTEGER(window);
+  int* p_window_val = INTEGER(window);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
@@ -109,8 +109,8 @@ SEXP slide_index_core_impl(SEXP x,
 
   SEXP container = PROTECT(make_slice_container(type));
 
-  for (; *p_iteration <= iteration_max; ++(*p_iteration)) {
-    if (*p_iteration % 1024 == 0) {
+  for (; *p_iteration_val <= iteration_max; ++(*p_iteration_val)) {
+    if (*p_iteration_val % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
@@ -119,7 +119,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(start, start_prot_idx);
 
       window_start_index = locate_window_start_index(i, start, size_i, &previous_start_index, p_previous_start_index_val);
-      window_start = p_window_starts[window_start_index - 1];
+      window_start = p_window_starts_val[window_start_index - 1];
     }
 
     if (!after_unbounded) {
@@ -127,7 +127,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(stop, stop_prox_idx);
 
       window_stop_index = locate_window_stop_index(i, stop, size_i, &previous_stop_index, p_previous_stop_index_val);
-      window_stop = p_window_stops[window_stop_index - 1];
+      window_stop = p_window_stops_val[window_stop_index - 1];
     }
 
     // This can happen with an irregular index, and is a sign of the full window
@@ -138,14 +138,14 @@ SEXP slide_index_core_impl(SEXP x,
     }
 
     int window_size = window_stop - window_start + 1;
-    init_compact_seq(p_window, window_start, window_size, true);
+    init_compact_seq(p_window_val, window_start, window_size, true);
 
     slice_and_update_env(x, window, env, type, container);
 
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    SEXP out_index = VECTOR_ELT(out_indices, *p_iteration - 1);
+    SEXP out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
 
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
@@ -157,7 +157,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(elt, elt_prot_idx);
 
       if (vec_size(elt) != 1) {
-        stop_not_all_size_one(*p_iteration, vec_size(elt));
+        stop_not_all_size_one(*p_iteration_val, vec_size(elt));
       }
 
       vec_assign_impl(out, out_index, elt, false);
