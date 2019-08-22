@@ -160,7 +160,7 @@ test_that("negative .before errors if its absolute value is past .after", {
 
   expect_error(
     slide_index(x, i, identity, .before = -1, .after = 0),
-    "the start of the range is after the end of the range"
+    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
   )
 })
 
@@ -300,7 +300,7 @@ test_that("errors if negative .before Duration is further than .after", {
 
   expect_error(
     slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = 0),
-    "the start of the range is after the end of the range"
+    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
   )
 })
 
@@ -574,7 +574,7 @@ test_that("errors if look forward function looks past .after value", {
 
   expect_error(
     slide_index(x, i, identity, .before = fn, .after = 1L),
-    "the start of the range is after the end of the range"
+    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4, 5"
   )
 })
 
@@ -817,7 +817,7 @@ test_that("negative .after errors if its absolute value is past .before", {
 
   expect_error(
     slide_index(x, i, identity, .after = -1, .before = 0),
-    "the start of the range is after the end of the range"
+    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
   )
 })
 
@@ -1049,7 +1049,7 @@ test_that("errors if look forward function looks past .after value", {
 
   expect_error(
     slide_index(x, i, identity, .after = fn, .before = 1L),
-    "the start of the range is after the end of the range"
+    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4, 5"
   )
 })
 
