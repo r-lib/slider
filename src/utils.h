@@ -33,14 +33,11 @@ SEXP strings_empty;
 SEXP strings_dot_before;
 SEXP strings_dot_after;
 SEXP strings_dot_step;
-SEXP strings_dot_offset;
 SEXP strings_dot_complete;
-SEXP strings_dot_forward;
 
 SEXP syms_dot_x;
 SEXP syms_dot_y;
 SEXP syms_dot_l;
-SEXP syms_index;
 
 SEXP copy_names(SEXP out, SEXP x, int type);
 
