@@ -21,6 +21,11 @@ test_that("pslide_index_vec() errors if it can't simplify", {
   )
 })
 
+test_that("completely empty input returns ptype", {
+  expect_equal(pslide_index_vec(list(), integer(), ~.x), list())
+  expect_equal(pslide_index_vec(list(), integer(), ~.x, .ptype = int()), int())
+})
+
 # ------------------------------------------------------------------------------
 # suffix tests
 
