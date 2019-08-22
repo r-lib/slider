@@ -16,6 +16,12 @@ SEXP slide_shared_empty_int = NULL;
 
 // -----------------------------------------------------------------------------
 
+void stop_incompatible_lengths(int x_size, int y_size) {
+  Rf_errorcall(R_NilValue, "Incompatible lengths: %i, %i", x_size, y_size);
+}
+
+// -----------------------------------------------------------------------------
+
 SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
   if (type == SLIDE) {

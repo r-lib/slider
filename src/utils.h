@@ -39,6 +39,8 @@ SEXP syms_dot_x;
 SEXP syms_dot_y;
 SEXP syms_dot_l;
 
+void stop_incompatible_lengths(int x_size, int y_size);
+
 SEXP copy_names(SEXP out, SEXP x, int type);
 
 SEXP make_slice_container(int type);

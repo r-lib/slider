@@ -157,7 +157,7 @@ SEXP slide_index_core_impl(SEXP x,
       REPROTECT(elt, elt_prot_idx);
 
       if (vec_size(elt) != 1) {
-        Rf_errorcall(R_NilValue, "Incompatible lengths: %i, %i", vec_size(elt), 1);
+        stop_incompatible_lengths(vec_size(elt), 1);
       }
 
       vec_assign_impl(out, out_index, elt, false);
