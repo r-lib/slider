@@ -73,10 +73,7 @@ slide_index_simplify <- function(.x,
     .complete = .complete
   )
 
-  size <- vec_size_common(!!!out)
-  if (size != 1L) {
-    abort(paste0("Incompatible lengths: ", size, ", 1."))
-  }
+  check_all_size_one(out)
 
   vec_c(!!!out)
 }

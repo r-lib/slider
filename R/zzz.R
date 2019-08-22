@@ -5,7 +5,7 @@
   requireNamespace("vctrs", quietly = TRUE)
 
   # Initialize slide C globals
-  .Call(slide_init)
+  .Call(slide_init, ns_env("slide"))
 }
 
 # nocov end

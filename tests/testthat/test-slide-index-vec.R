@@ -4,7 +4,7 @@
 test_that("size of each `.f` result must be 1", {
   expect_error(
     slide_index_vec(1:2, 1:2, ~c(.x, 1)),
-    "Incompatible lengths"
+    "In iteration 1, the result of `.f` had size 2, not 1"
   )
 })
 
@@ -49,7 +49,7 @@ test_that("`.ptype = NULL` fails if no common type is found", {
 test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_error(
     slide_index_vec(1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "Incompatible lengths"
+    "In iteration 1, the result of `.f` had size 2, not 1."
   )
 })
 

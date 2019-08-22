@@ -14,10 +14,21 @@ SEXP syms_dot_l = NULL;
 SEXP slide_shared_empty_lgl = NULL;
 SEXP slide_shared_empty_int = NULL;
 
+SEXP slide_ns_env = NULL;
+
 // -----------------------------------------------------------------------------
 
-void stop_incompatible_lengths(int x_size, int y_size) {
-  Rf_errorcall(R_NilValue, "Incompatible lengths: %i, %i", x_size, y_size);
+void stop_not_all_size_one(int iteration, int size) {
+  SEXP call = PROTECT(
+    Rf_lang3(
+      Rf_install("stop_not_all_size_one"),
+      PROTECT(Rf_ScalarInteger(iteration)),
+      PROTECT(Rf_ScalarInteger(size))
+    )
+  );
+
+  Rf_eval(call, slide_ns_env);
+  Rf_error("Internal error: `stop_not_all_size_one()` should have jumped earlier");
 }
 
 // -----------------------------------------------------------------------------
@@ -82,7 +93,9 @@ void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP containe
 // -----------------------------------------------------------------------------
 
 // [[register()]]
-void slide_init_utils() {
+void slide_init_utils(SEXP ns) {
+  slide_ns_env = ns;
+
   syms_dot_x = Rf_install(".x");
   syms_dot_y = Rf_install(".y");
   syms_dot_l = Rf_install(".l");

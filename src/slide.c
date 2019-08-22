@@ -148,7 +148,7 @@ SEXP slide_core_impl(SEXP x,
       REPROTECT(elt, elt_prot_idx);
 
       if (vec_size(elt) != 1) {
-        stop_incompatible_lengths(vec_size(elt), 1);
+        stop_not_all_size_one(*p_iteration_val, vec_size(elt));
       }
 
       vec_assign_impl(out, iteration, elt, false);

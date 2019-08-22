@@ -76,9 +76,7 @@ pslide_vec_simplify <- function(.l,
     .complete = .complete
   )
 
-  if (vec_size_common(!!!out) != 1L) {
-    abort("The size of all results from `.f` must be 1.")
-  }
+  check_all_size_one(out)
 
   vec_c(!!!out)
 }

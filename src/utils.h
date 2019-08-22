@@ -39,14 +39,16 @@ SEXP syms_dot_x;
 SEXP syms_dot_y;
 SEXP syms_dot_l;
 
-void stop_incompatible_lengths(int x_size, int y_size);
+extern SEXP slide_shared_empty_lgl;
+extern SEXP slide_shared_empty_int;
+
+extern SEXP slide_ns_env;
+
+void stop_not_all_size_one(int iteration, int size);
 
 SEXP copy_names(SEXP out, SEXP x, int type);
 
 SEXP make_slice_container(int type);
 void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP container);
-
-extern SEXP slide_shared_empty_lgl;
-extern SEXP slide_shared_empty_int;
 
 #endif
