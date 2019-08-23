@@ -19,27 +19,27 @@ slide_index_vec(.x, .i, .f, ..., .before = 0L, .after = 0L,
   .complete = FALSE, .ptype = list())
 
 slide_index_dbl(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index_int(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index_lgl(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index_chr(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index_raw(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 slide_index_dfr(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 slide_index_dfc(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.x}{\code{[vector]}
@@ -103,10 +103,6 @@ the default, then partial computations will be allowed.}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
-
-\item{.step}{\code{[positive integer(1)]}
-
-The number of elements to shift the window forward between function calls.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify
