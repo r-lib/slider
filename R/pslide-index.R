@@ -89,7 +89,6 @@ pslide_index_dbl <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE) {
   pslide_index_vec(
     .l,
@@ -98,7 +97,6 @@ pslide_index_dbl <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = double()
   )
@@ -112,7 +110,6 @@ pslide_index_int <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE) {
   pslide_index_vec(
     .l,
@@ -121,7 +118,6 @@ pslide_index_int <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = integer()
   )
@@ -135,7 +131,6 @@ pslide_index_lgl <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE) {
   pslide_index_vec(
     .l,
@@ -144,7 +139,6 @@ pslide_index_lgl <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = logical()
   )
@@ -158,7 +152,6 @@ pslide_index_chr <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE) {
   pslide_index_vec(
     .l,
@@ -167,7 +160,6 @@ pslide_index_chr <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = character()
   )
@@ -181,7 +173,6 @@ pslide_index_raw <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE) {
   pslide_index_vec(
     .l,
@@ -190,7 +181,6 @@ pslide_index_raw <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = raw()
   )
@@ -205,7 +195,6 @@ pslide_index_dfr <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE,
                              .names_to = NULL,
                              .name_repair = c("unique", "universal", "check_unique")) {
@@ -216,7 +205,6 @@ pslide_index_dfr <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete
   )
 
@@ -232,7 +220,6 @@ pslide_index_dfc <- function(.l,
                              ...,
                              .before = 0L,
                              .after = 0L,
-                             .step = 1L,
                              .complete = FALSE,
                              .size = NULL,
                              .name_repair = c("unique", "universal", "check_unique", "minimal")) {
@@ -243,7 +230,6 @@ pslide_index_dfc <- function(.l,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete
   )
 

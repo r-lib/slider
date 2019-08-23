@@ -57,27 +57,27 @@ pslide_index_vec(.l, .i, .f, ..., .before = 0L, .after = 0L,
   .complete = FALSE, .ptype = list())
 
 pslide_index_dbl(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 pslide_index_int(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 pslide_index_lgl(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 pslide_index_chr(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 pslide_index_raw(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE)
+  .complete = FALSE)
 
 pslide_index_dfr(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
+  "universal", "check_unique"))
 
 pslide_index_dfc(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .step = 1L, .complete = FALSE, .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+  .complete = FALSE, .size = NULL, .name_repair = c("unique",
+  "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.x, .y}{\code{[vector]}
@@ -171,10 +171,6 @@ A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
-
-\item{.step}{\code{[positive integer(1)]}
-
-The number of elements to shift the window forward between function calls.}
 }
 \description{
 \code{slide_index2()} and \code{pslide_index()} represent the combination

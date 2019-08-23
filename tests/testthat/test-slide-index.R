@@ -1463,3 +1463,10 @@ test_that("indexing by vec_seq_along(.x) is the same as slide()", {
     slide_index(1:5, 1:5, ~.x, .before = 1)
   )
 })
+
+test_that("lambdas are equivalent to functions (#10)", {
+  expect_equal(
+    slide_index(1:10, 1:10, sum, .before = 3),
+    slide_index(1:10, 1:10, ~sum(.x), .before = 3)
+  )
+})

@@ -215,7 +215,6 @@ slide_index_dbl <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE) {
   slide_index_vec(
     .x,
@@ -224,7 +223,6 @@ slide_index_dbl <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = double()
   )
@@ -238,7 +236,6 @@ slide_index_int <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE) {
   slide_index_vec(
     .x,
@@ -247,7 +244,6 @@ slide_index_int <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = integer()
   )
@@ -261,7 +257,6 @@ slide_index_lgl <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE) {
   slide_index_vec(
     .x,
@@ -270,7 +265,6 @@ slide_index_lgl <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = logical()
   )
@@ -284,7 +278,6 @@ slide_index_chr <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE) {
   slide_index_vec(
     .x,
@@ -293,7 +286,6 @@ slide_index_chr <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = character()
   )
@@ -307,7 +299,6 @@ slide_index_raw <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE) {
   slide_index_vec(
     .x,
@@ -316,7 +307,6 @@ slide_index_raw <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete,
     .ptype = raw()
   )
@@ -331,7 +321,6 @@ slide_index_dfr <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE,
                             .names_to = NULL,
                             .name_repair = c("unique", "universal", "check_unique")) {
@@ -342,7 +331,6 @@ slide_index_dfr <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete
   )
 
@@ -358,7 +346,6 @@ slide_index_dfc <- function(.x,
                             ...,
                             .before = 0L,
                             .after = 0L,
-                            .step = 1L,
                             .complete = FALSE,
                             .size = NULL,
                             .name_repair = c("unique", "universal", "check_unique", "minimal")) {
@@ -369,7 +356,6 @@ slide_index_dfc <- function(.x,
     ...,
     .before = .before,
     .after = .after,
-    .step = .step,
     .complete = .complete
   )
 
