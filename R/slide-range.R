@@ -75,22 +75,44 @@ slide_range_core <- function(x, i, starts, stops, f_call, constrain, ptype, env,
   starts <- ranges$starts
   stops <- ranges$stops
 
+  # Can be different from `out_size` because this is computed
+  # after using `vec_split_id()`
+  size_starts <- vec_size(starts)
+
   out_indices <- split$id
+
+  # All false for slide_range()
+  complete <- FALSE
+  before_unbounded <- FALSE
+  after_unbounded <- FALSE
 
   params <- list(
     type,
     constrain,
-    out_size
+    out_size,
+    complete,
+    before_unbounded,
+    after_unbounded,
+    size_starts
   )
 
-  slide_range_bare(
-    x, i, starts, stops, f_call, ptype, env, out_indices, window_indices, params
+  slide_base(
+    x = x,
+    i = i,
+    starts = starts,
+    stops = stops,
+    f_call = f_call,
+    ptype = ptype,
+    env = env,
+    out_indices = out_indices,
+    window_indices = window_indices,
+    params = params
   )
 }
 
-slide_range_bare <- function(x, i, starts, stops, f_call, ptype, env, out_indices, window_indices, params) {
+slide_base <- function(x, i, starts, stops, f_call, ptype, env, out_indices, window_indices, params) {
   .Call(
-    slide_range_bare_impl,
+    slide_base_impl,
     x,
     i,
     starts,

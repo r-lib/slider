@@ -21,49 +21,52 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
 
 // -----------------------------------------------------------------------------
 
-SEXP slide_range_bare_impl(SEXP x,
-                           SEXP i,
-                           SEXP starts,
-                           SEXP stops,
-                           SEXP f_call,
-                           SEXP ptype,
-                           SEXP env,
-                           SEXP out_indices,
-                           SEXP window_indices,
-                           SEXP params) {
+SEXP slide_base_impl(SEXP x,
+                     SEXP i,
+                     SEXP starts,
+                     SEXP stops,
+                     SEXP f_call,
+                     SEXP ptype,
+                     SEXP env,
+                     SEXP out_indices,
+                     SEXP window_indices,
+                     SEXP params) {
 
   int type = r_scalar_int_get(r_lst_get(params, 0));
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
   int out_size = r_scalar_int_get(r_lst_get(params, 2));
-
-  // TODO - put in `params`
-  bool complete = false;
+  bool complete = r_scalar_lgl_get(r_lst_get(params, 3));
+  bool before_unbounded = r_scalar_lgl_get(r_lst_get(params, 4));
+  bool after_unbounded = r_scalar_lgl_get(r_lst_get(params, 5));
 
   // Different than `out_size`, which was computed before vec_split_id
-  int size = vec_size(starts);
+  int size_starts = r_scalar_int_get(r_lst_get(params, 6));
+
   int size_i = vec_size(i);
   int size_x = compute_size(x, type);
 
-  check_starts_not_past_stops(starts, stops);
+  if (!before_unbounded && !after_unbounded) {
+    check_starts_not_past_stops(starts, stops);
+  }
 
   int iteration_min = 1;
-  int iteration_max = size;
+  int iteration_max = size_starts;
 
   // Iteration adjustment
   if (complete) {
-    //if (!before_unbounded) {
-      iteration_min = adjust_iteration_min(iteration_min, starts, i, size);
-    //}
-    //if (!after_unbounded) {
-      iteration_max = adjust_iteration_max(iteration_max, stops, i, size, size_i);
-    //}
+    if (!before_unbounded) {
+      iteration_min = adjust_iteration_min(iteration_min, starts, i, size_starts);
+    }
+    if (!after_unbounded) {
+      iteration_max = adjust_iteration_max(iteration_max, stops, i, size_starts, size_i);
+    }
   } else {
-    //if (!before_unbounded) {
-      iteration_max = adjust_iteration_max(iteration_max, starts, i, size, size_i);
-    //}
-    //if (!after_unbounded) {
-      iteration_min = adjust_iteration_min(iteration_min, stops, i, size);
-    //}
+    if (!before_unbounded) {
+      iteration_max = adjust_iteration_max(iteration_max, starts, i, size_starts, size_i);
+    }
+    if (!after_unbounded) {
+      iteration_min = adjust_iteration_min(iteration_min, stops, i, size_starts);
+    }
   }
 
   PROTECT_INDEX out_prot_idx;
@@ -114,17 +117,22 @@ SEXP slide_range_bare_impl(SEXP x,
     if (*p_iteration_val % 1024 == 0) {
       R_CheckUserInterrupt();
     }
-    start = vec_slice_impl(starts, iteration);
-    REPROTECT(start, start_prot_idx);
 
-    window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
-    window_start = window_starts[window_start_index];
+    if (!before_unbounded) {
+      start = vec_slice_impl(starts, iteration);
+      REPROTECT(start, start_prot_idx);
 
-    stop = vec_slice_impl(stops, iteration);
-    REPROTECT(stop, stop_prox_idx);
+      window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
+      window_start = window_starts[window_start_index];
+    }
 
-    window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
-    window_stop = window_stops[window_stop_index];
+    if (!after_unbounded) {
+      stop = vec_slice_impl(stops, iteration);
+      REPROTECT(stop, stop_prox_idx);
+
+      window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
+      window_stop = window_stops[window_stop_index];
+    }
 
     // This can happen with an irregular index, and is a sign of the full window
     // being between two index points and means we select nothing
@@ -168,7 +176,7 @@ SEXP slide_range_bare_impl(SEXP x,
 
   }
 
-  out = vec_restore(out, ptype, r_int(size));
+  out = vec_restore(out, ptype, r_int(out_size));
   REPROTECT(out, out_prot_idx);
 
   out = copy_names(out, x, type);
@@ -305,7 +313,7 @@ static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size)
 
 static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size, int size_i) {
   SEXP last = PROTECT(Rf_ScalarInteger(size));
-  SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i)));
+  SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i))); // TODO - too complicated, pull out
   SEXP range_last = PROTECT(vec_slice_impl(range, last));
 
   if (compare_lt(i_last, 0, range_last, 0)) {

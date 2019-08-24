@@ -41,26 +41,52 @@ slide_index_core <- function(x,
   i <- vec_cast(i, range$ptype)
   i <- vec_proxy_compare(i)
 
+  # Computed on `i` because `starts` could be NULL if unbounded() is set
+  size_starts <- vec_size(i)
+
+  # params <- list(
+  #   type,
+  #   complete,
+  #   before_unbounded,
+  #   after_unbounded,
+  #   constrain,
+  #   size
+  # )
+  #
+  # .Call(
+  #   slide_index_core_impl,
+  #   x,
+  #   i,
+  #   starts,
+  #   stops,
+  #   out_indices,
+  #   f_call,
+  #   ptype,
+  #   env,
+  #   params
+  # )
+
   params <- list(
     type,
+    constrain,
+    size, # out_size
     complete,
     before_unbounded,
     after_unbounded,
-    constrain,
-    size
+    size_starts
   )
 
-  .Call(
-    slide_index_core_impl,
-    x,
-    i,
-    starts,
-    stops,
-    out_indices,
-    f_call,
-    ptype,
-    env,
-    params
+  slide_base(
+    x = x,
+    i = i,
+    starts = starts,
+    stops = stops,
+    f_call = f_call,
+    ptype = ptype,
+    env = env,
+    out_indices = out_indices,
+    window_indices = out_indices, # same as out_indices for slide_index
+    params = params
   )
 }
 
