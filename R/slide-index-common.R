@@ -40,14 +40,14 @@ slide_index_common <- function(x,
   stops <- range$stops
 
   # Computed on `i` because `starts` could be NULL if unbounded() is set
-  n_ranges <- vec_size(i)
+  range_count <- vec_size(i)
 
   params <- list(
     type,
     constrain,
     size, # out_size
     complete,
-    n_ranges
+    range_count
   )
 
   slide_between_base(

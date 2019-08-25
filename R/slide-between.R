@@ -72,14 +72,14 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
   complete <- FALSE
   out_indices <- NULL
 
-  n_ranges <- out_size
+  range_count <- out_size
 
   params <- list(
     type,
     constrain,
     out_size,
     complete,
-    n_ranges
+    range_count
   )
 
   slide_between_base(
