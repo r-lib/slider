@@ -10,15 +10,15 @@ slide_index_common <- function(x,
                                type) {
   vec_assert(i)
 
-  size <- compute_size(x, type)
+  out_size <- compute_size(x, type)
 
-  check_index_size(size, i)
+  check_index_size(out_size, i)
   check_index_not_na(i)
   check_index_ascending(i)
 
   # Early exit if empty input
   # (but after the index size check)
-  if (size == 0L) {
+  if (out_size == 0L) {
     return(vec_init(ptype, 0L))
   }
 
@@ -26,54 +26,57 @@ slide_index_common <- function(x,
   after <- check_after(after)
   complete <- check_complete(complete)
 
+  # Compute unique values of `i` to avoid repeated evaluations of `.f`
   split <- vec_split_id(i)
-
   i <- split$key
-  out_indices <- split$id
 
-  start_unbounded <- is_unbounded(before)
-  stop_unbounded <- is_unbounded(after)
+  # `indices` helps us map back to `.x`
+  # For `slide_index()` this is both `out_indices` and `window_indices`
+  indices <- split$id
 
-  range <- compute_range_info(i, before, after, start_unbounded, stop_unbounded)
+  range <- compute_ranges(i, before, after)
   i <- range$i
   starts <- range$starts
   stops <- range$stops
 
-  # Computed on `i` because `starts` could be NULL if unbounded() is set
-  range_count <- vec_size(i)
-
   params <- list(
     type,
     constrain,
-    size, # out_size
     complete,
-    range_count
+    out_size
   )
 
-  slide_between_base(
-    x = x,
-    i = i,
-    starts = starts,
-    stops = stops,
-    f_call = f_call,
-    ptype = ptype,
-    env = env,
-    out_indices = out_indices,
-    window_indices = out_indices, # same as out_indices for slide_index
-    params = params
+  .Call(
+    slide_index_common_impl,
+    x,
+    i,
+    starts,
+    stops,
+    f_call,
+    ptype,
+    env,
+    indices,
+    params
   )
 }
 
 # ------------------------------------------------------------------------------
 
-compute_range_info <- function(i, before, after, start_unbounded, stop_unbounded) {
-  starts <- NULL
-  if (!start_unbounded) {
+compute_ranges <- function(i, before, after, start_unbounded, stop_unbounded) {
+  start_unbounded <- is_unbounded(before)
+  stop_unbounded <- is_unbounded(after)
+
+  # Setting to `NULL`, as that is what the C level new_range_info() expects
+  # for unbounded start / stop ranges
+  if (start_unbounded) {
+    starts <- NULL
+  } else {
     starts <- compute_range_starts(i, before)
   }
 
-  stops <- NULL
-  if (!stop_unbounded) {
+  if (stop_unbounded) {
+    stops <- NULL
+  } else {
     stops <- compute_range_stops(i, after)
   }
 
@@ -205,6 +208,8 @@ check_index_not_na <- function(i) {
 
   invisible(i)
 }
+
+# ------------------------------------------------------------------------------
 
 check_before <- function(before) {
   if (is_unbounded(before)) {

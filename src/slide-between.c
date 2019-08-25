@@ -24,34 +24,89 @@ static void eval_loop(SEXP,
                       SEXP,
                       struct out_info,
                       struct index_info,
-                      struct iteration_info,
                       struct window_info,
                       struct range_info,
-                      struct last_info,
                       int,
+                      bool,
                       bool);
 
 // -----------------------------------------------------------------------------
 
-SEXP slide_between_base_impl(SEXP x,
+// [[ register() ]]
+SEXP slide_index_common_impl(SEXP x,
                              SEXP i,
                              SEXP starts,
                              SEXP stops,
                              SEXP f_call,
                              SEXP ptype,
                              SEXP env,
-                             SEXP out_indices,
-                             SEXP window_indices,
+                             SEXP indices,
                              SEXP params) {
   int n_prot = 0;
 
   int type = r_scalar_int_get(r_lst_get(params, 0));
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
-  int out_size = r_scalar_int_get(r_lst_get(params, 2));
-  bool complete = r_scalar_lgl_get(r_lst_get(params, 3));
-  int count = r_scalar_int_get(r_lst_get(params, 4));
+  bool complete = r_scalar_lgl_get(r_lst_get(params, 2));
+  int out_size = r_scalar_int_get(r_lst_get(params, 3));
 
-  int x_size = compute_size(x, type);
+  struct index_info index = new_index_info(i);
+  PROTECT_INDEX_INFO(&index, &n_prot);
+
+  // Keep in local memory, don't construct inside `new_window_info()`,
+  // otherwise we'd have to manually free()
+  int window_sizes[index.size];
+  int window_starts[index.size];
+  int window_stops[index.size];
+
+  compute_window_sizes(window_sizes, indices, index.size);
+  compute_window_starts(window_starts, window_sizes, index.size);
+  compute_window_stops(window_stops, window_sizes, window_starts, index.size);
+
+  struct window_info window = new_window_info(window_starts, window_stops, index.size);
+  PROTECT_WINDOW_INFO(&window, &n_prot);
+
+  struct range_info range = new_range_info(starts, stops, index.size);
+  PROTECT_RANGE_INFO(&range, &n_prot);
+
+  struct out_info out = new_out_info(ptype, indices, out_size);
+  PROTECT_OUT_INFO(&out, &n_prot);
+
+  eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
+
+  out.data = vec_restore(out.data, out.ptype, r_int(out.size));
+  REPROTECT(out.data, out.data_pidx);
+
+  out.data = copy_names(out.data, x, type);
+  REPROTECT(out.data, out.data_pidx);
+
+  UNPROTECT(n_prot);
+  return out.data;
+}
+
+// [[ register() ]]
+SEXP slide_between_common_impl(SEXP x,
+                               SEXP i,
+                               SEXP starts,
+                               SEXP stops,
+                               SEXP f_call,
+                               SEXP ptype,
+                               SEXP env,
+                               SEXP window_indices,
+                               SEXP params) {
+  int n_prot = 0;
+
+  int type = r_scalar_int_get(r_lst_get(params, 0));
+  bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
+  int out_size = r_scalar_int_get(r_lst_get(params, 2));
+
+  // `complete` is always FALSE for `slide_between()`
+  bool complete = false;
+
+  // `out_indices` are not required for `slide_between()` because the
+  // starts/stops that a user provides are considered to be unique.
+  // We special case this with NULL, which optimizes further calculations in
+  // the `eval_loop()`
+  SEXP out_indices = R_NilValue;
 
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
@@ -66,22 +121,16 @@ SEXP slide_between_base_impl(SEXP x,
   compute_window_starts(window_starts, window_sizes, index.size);
   compute_window_stops(window_stops, window_sizes, window_starts, index.size);
 
-  struct window_info window = new_window_info(window_starts, window_stops, x_size);
+  struct window_info window = new_window_info(window_starts, window_stops, index.size);
   PROTECT_WINDOW_INFO(&window, &n_prot);
 
-  struct range_info range = new_range_info(starts, stops, count);
+  struct range_info range = new_range_info(starts, stops, out_size);
   PROTECT_RANGE_INFO(&range, &n_prot);
-
-  struct last_info last = new_last_info(index);
-  PROTECT_LAST_INFO(&last, &n_prot);
 
   struct out_info out = new_out_info(ptype, out_indices, out_size);
   PROTECT_OUT_INFO(&out, &n_prot);
 
-  struct iteration_info iteration = new_iteration_info(index, range, complete);
-  PROTECT_ITERATION_INFO(&iteration, &n_prot);
-
-  eval_loop(x, env, f_call, out, index, iteration, window, range, last, type, constrain);
+  eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
 
   out.data = vec_restore(out.data, out.ptype, r_int(out.size));
   REPROTECT(out.data, out.data_pidx);
@@ -118,14 +167,14 @@ static struct out_info new_out_info(SEXP ptype, SEXP indices, int size) {
 
 // -----------------------------------------------------------------------------
 
-static struct window_info new_window_info(int* window_starts, int* window_stops, int x_size) {
+static struct window_info new_window_info(int* window_starts, int* window_stops, int size) {
   struct window_info window;
 
   window.starts = window_starts;
   window.stops = window_stops;
 
   window.start = 0;
-  window.stop = x_size - 1;
+  window.stop = window_stops[size];
 
   window.seq = PROTECT(compact_seq(0, 0, true));
   window.p_seq_val = INTEGER(window.seq);
@@ -381,19 +430,27 @@ static void eval_loop(SEXP x,
                       SEXP f_call,
                       struct out_info out,
                       struct index_info index,
-                      struct iteration_info iteration,
                       struct window_info window,
                       struct range_info range,
-                      struct last_info last,
                       int type,
-                      bool constrain) {
+                      bool constrain,
+                      bool complete) {
+  int n_prot = 0;
+
+  struct last_info last = new_last_info(index);
+  PROTECT_LAST_INFO(&last, &n_prot);
+
+  struct iteration_info iteration = new_iteration_info(index, range, complete);
+  PROTECT_ITERATION_INFO(&iteration, &n_prot);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
   SEXP elt = R_NilValue;
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
+  ++n_prot;
 
   SEXP container = PROTECT(make_slice_container(type));
+  ++n_prot;
 
   for (; *iteration.p_data_val <= iteration.max; ++(*iteration.p_data_val)) {
     if (*iteration.p_data_val % 1024 == 0) {
@@ -445,5 +502,5 @@ static void eval_loop(SEXP x,
     }
   }
 
-  UNPROTECT(2);
+  UNPROTECT(n_prot);
 }

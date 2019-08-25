@@ -6,6 +6,7 @@
 
 // -----------------------------------------------------------------------------
 
+// [[ register() ]]
 SEXP slide_common_impl(SEXP x,
                        SEXP f_call,
                        SEXP ptype,
