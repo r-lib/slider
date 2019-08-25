@@ -44,28 +44,6 @@ slide_index_core <- function(x,
   # Computed on `i` because `starts` could be NULL if unbounded() is set
   size_starts <- vec_size(i)
 
-  # params <- list(
-  #   type,
-  #   complete,
-  #   before_unbounded,
-  #   after_unbounded,
-  #   constrain,
-  #   size
-  # )
-  #
-  # .Call(
-  #   slide_index_core_impl,
-  #   x,
-  #   i,
-  #   starts,
-  #   stops,
-  #   out_indices,
-  #   f_call,
-  #   ptype,
-  #   env,
-  #   params
-  # )
-
   params <- list(
     type,
     constrain,
