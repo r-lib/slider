@@ -333,13 +333,17 @@ static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
 // -----------------------------------------------------------------------------
 
 // map_int(x, vec_size)
-static void compute_window_sizes(int* window_sizes, SEXP window_indices, int size) {
+static void compute_window_sizes(int* window_sizes,
+                                 SEXP window_indices,
+                                 int size) {
   for (int i = 0; i < size; ++i) {
     window_sizes[i] = vec_size(VECTOR_ELT(window_indices, i));
   }
 }
 
-static void compute_window_starts(int* window_starts, int* window_sizes, int size) {
+static void compute_window_starts(int* window_starts,
+                                  int* window_sizes,
+                                  int size) {
   // First start is always 0
   window_starts[0] = 0;
 
@@ -352,7 +356,10 @@ static void compute_window_starts(int* window_starts, int* window_sizes, int siz
   }
 }
 
-static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int size) {
+static void compute_window_stops(int* window_stops,
+                                 int* window_sizes,
+                                 int* window_starts,
+                                 int size) {
   for (int i = 0; i < size; ++i) {
     window_stops[i] = window_starts[i] + window_sizes[i] - 1;
   }
@@ -360,7 +367,10 @@ static void compute_window_stops(int* window_stops, int* window_sizes, int* wind
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(struct index_info index, struct range_info range, struct last_info last) {
+static int locate_window_start_index(struct index_info index,
+                                     struct range_info range,
+                                     struct last_info last) {
+
   while(compare_lt(*last.p_start_index, 0, range.start, 0)) {
     if (*last.p_start_loc_val == index.size) {
       return(index.size - 1);
@@ -373,7 +383,10 @@ static int locate_window_start_index(struct index_info index, struct range_info 
   return *last.p_start_loc_val - 1;
 }
 
-static int locate_window_stop_index(struct index_info index, struct range_info range, struct last_info last) {
+static int locate_window_stop_index(struct index_info index,
+                                    struct range_info range,
+                                    struct last_info last) {
+
   while(compare_lte(*last.p_stop_index, 0, range.stop, 0)) {
     if (*last.p_stop_loc_val == index.size) {
       return(index.size - 1);
