@@ -333,13 +333,11 @@ slide2_impl <- function(.x,
     .complete
   )
 
-  out <- slide_core(
+  slide_common(
     x = args,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
     params = params
   )
-
-  out
 }

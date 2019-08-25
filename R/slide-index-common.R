@@ -1,13 +1,13 @@
-slide_index_core <- function(x,
-                             i,
-                             f_call,
-                             before,
-                             after,
-                             complete,
-                             constrain,
-                             ptype,
-                             env,
-                             type) {
+slide_index_common <- function(x,
+                               i,
+                               f_call,
+                               before,
+                               after,
+                               complete,
+                               constrain,
+                               ptype,
+                               env,
+                               type) {
   vec_assert(i)
 
   size <- compute_size(x, type)
@@ -54,7 +54,7 @@ slide_index_core <- function(x,
     size_starts
   )
 
-  slide_base(
+  slide_between_base(
     x = x,
     i = i,
     starts = starts,

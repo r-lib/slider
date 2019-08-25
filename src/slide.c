@@ -6,11 +6,11 @@
 
 // -----------------------------------------------------------------------------
 
-SEXP slide_core_impl(SEXP x,
-                     SEXP f_call,
-                     SEXP ptype,
-                     SEXP env,
-                     SEXP params) {
+SEXP slide_common_impl(SEXP x,
+                       SEXP f_call,
+                       SEXP ptype,
+                       SEXP env,
+                       SEXP params) {
 
   int type = pull_type(params);
 

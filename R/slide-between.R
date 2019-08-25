@@ -1,5 +1,5 @@
-slide_range <- function(.x, .i, .starts, .stops, .f, ...) {
-  slide_range_impl(
+slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
+  slide_between_impl(
     .x,
     .i,
     .starts,
@@ -11,7 +11,7 @@ slide_range <- function(.x, .i, .starts, .stops, .f, ...) {
   )
 }
 
-slide_range_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
+slide_between_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
   vec_assert(.x)
 
   .f <- as_function(.f)
@@ -20,7 +20,7 @@ slide_range_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptyp
 
   type <- -1L
 
-  slide_range_core(
+  slide_between_common(
     x = .x,
     i = .i,
     starts = .starts,
@@ -33,7 +33,7 @@ slide_range_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptyp
   )
 }
 
-slide_range_core <- function(x, i, starts, stops, f_call, constrain, ptype, env, type) {
+slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, env, type) {
 
   x_size <- compute_size(x, type)
 
@@ -81,7 +81,7 @@ slide_range_core <- function(x, i, starts, stops, f_call, constrain, ptype, env,
 
   out_indices <- split$id
 
-  # All false for slide_range()
+  # All false for slide_between()
   complete <- FALSE
   before_unbounded <- FALSE
   after_unbounded <- FALSE
@@ -96,7 +96,7 @@ slide_range_core <- function(x, i, starts, stops, f_call, constrain, ptype, env,
     size_starts
   )
 
-  slide_base(
+  slide_between_base(
     x = x,
     i = i,
     starts = starts,
@@ -110,9 +110,9 @@ slide_range_core <- function(x, i, starts, stops, f_call, constrain, ptype, env,
   )
 }
 
-slide_base <- function(x, i, starts, stops, f_call, ptype, env, out_indices, window_indices, params) {
+slide_between_base <- function(x, i, starts, stops, f_call, ptype, env, out_indices, window_indices, params) {
   .Call(
-    slide_base_impl,
+    slide_between_base_impl,
     x,
     i,
     starts,

@@ -381,7 +381,7 @@ slide_index_impl <- function(.x,
 
   type <- -1L
 
-  slide_index_core(
+  slide_index_common(
     x = .x,
     i = .i,
     f_call = f_call,

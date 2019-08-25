@@ -21,16 +21,16 @@ static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_st
 
 // -----------------------------------------------------------------------------
 
-SEXP slide_base_impl(SEXP x,
-                     SEXP i,
-                     SEXP starts,
-                     SEXP stops,
-                     SEXP f_call,
-                     SEXP ptype,
-                     SEXP env,
-                     SEXP out_indices,
-                     SEXP window_indices,
-                     SEXP params) {
+SEXP slide_between_base_impl(SEXP x,
+                             SEXP i,
+                             SEXP starts,
+                             SEXP stops,
+                             SEXP f_call,
+                             SEXP ptype,
+                             SEXP env,
+                             SEXP out_indices,
+                             SEXP window_indices,
+                             SEXP params) {
 
   int type = r_scalar_int_get(r_lst_get(params, 0));
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));

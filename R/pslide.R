@@ -284,13 +284,11 @@ pslide_impl <- function(.l,
     .complete
   )
 
-  out <- slide_core(
+  slide_common(
     x = .l,
     f_call = f_call,
     ptype = .ptype,
     env = environment(),
     params = params
   )
-
-  out
 }

@@ -400,7 +400,7 @@ slide_impl <- function(.x,
     complete = .complete
   )
 
-  slide_core(
+  slide_common(
     x = .x,
     f_call = f_call,
     ptype = .ptype,
