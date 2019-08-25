@@ -70,8 +70,6 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
   window_indices <- split$id
 
   complete <- FALSE
-  start_unbounded <- FALSE
-  stop_unbounded <- FALSE
   out_indices <- NULL
 
   n_ranges <- out_size
@@ -81,8 +79,6 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
     constrain,
     out_size,
     complete,
-    start_unbounded,
-    stop_unbounded,
     n_ranges
   )
 

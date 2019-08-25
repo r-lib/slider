@@ -35,11 +35,9 @@ slide_index_common <- function(x,
   stop_unbounded <- is_unbounded(after)
 
   range <- compute_range_info(i, before, after, start_unbounded, stop_unbounded)
+  i <- range$i
   starts <- range$starts
   stops <- range$stops
-
-  i <- vec_cast(i, range$ptype)
-  i <- vec_proxy_compare(i)
 
   # Computed on `i` because `starts` could be NULL if unbounded() is set
   n_ranges <- vec_size(i)
@@ -49,8 +47,6 @@ slide_index_common <- function(x,
     constrain,
     size, # out_size
     complete,
-    start_unbounded,
-    stop_unbounded,
     n_ranges
   )
 
@@ -93,7 +89,10 @@ compute_range_info <- function(i, before, after, start_unbounded, stop_unbounded
     stops <- vec_proxy_compare(stops)
   }
 
-  list(starts = starts, stops = stops, ptype = ptype)
+  i <- vec_cast(i, ptype)
+  i <- vec_proxy_compare(i)
+
+  list(i = i, starts = starts, stops = stops)
 }
 
 compute_range_starts <- function(i, before) {

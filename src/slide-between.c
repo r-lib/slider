@@ -1,4 +1,5 @@
 #include "slide.h"
+#include "slide-between.h"
 #include "slide-vctrs.h"
 #include "utils.h"
 #include "compare.h"
@@ -7,17 +8,28 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-static void check_starts_not_past_stops(SEXP starts, SEXP stops);
+static void compute_window_sizes(int*, SEXP, int);
+static void compute_window_starts(int*, int*, int);
+static void compute_window_stops(int*, int*, int*, int);
 
-static void compute_window_sizes(int* window_sizes, SEXP window_indices, int n);
-static void compute_window_starts(int* window_starts, int* window_sizes, int n);
-static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int n);
+static struct out_info new_out_info(SEXP, SEXP, int);
+static struct window_info new_window_info(int*, int*, int);
+static struct index_info new_index_info(SEXP);
+static struct last_info new_last_info(struct index_info);
+static struct range_info new_range_info(SEXP, SEXP, int);
+static struct iteration_info new_iteration_info(struct index_info, struct range_info, bool);
 
-static int iteration_min_adjustment(SEXP i_first, SEXP range, int size);
-static int iteration_max_adjustment(SEXP i_last, SEXP range, int size);
-
-static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position);
-static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position);
+static void eval_loop(SEXP,
+                      SEXP,
+                      SEXP,
+                      struct out_info,
+                      struct index_info,
+                      struct iteration_info,
+                      struct window_info,
+                      struct range_info,
+                      struct last_info,
+                      int,
+                      bool);
 
 // -----------------------------------------------------------------------------
 
@@ -31,232 +43,160 @@ SEXP slide_between_base_impl(SEXP x,
                              SEXP out_indices,
                              SEXP window_indices,
                              SEXP params) {
+  int n_prot = 0;
 
   int type = r_scalar_int_get(r_lst_get(params, 0));
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
   int out_size = r_scalar_int_get(r_lst_get(params, 2));
   bool complete = r_scalar_lgl_get(r_lst_get(params, 3));
-  bool start_unbounded = r_scalar_lgl_get(r_lst_get(params, 4));
-  bool stop_unbounded = r_scalar_lgl_get(r_lst_get(params, 5));
+  int count = r_scalar_int_get(r_lst_get(params, 4));
 
-  // Different than `out_size`, which was computed before vec_split_id
-  int n_ranges = r_scalar_int_get(r_lst_get(params, 6));
+  int x_size = compute_size(x, type);
 
-  int size_i = vec_size(i);
-  int size_x = compute_size(x, type);
+  struct index_info index = new_index_info(i);
+  PROTECT_INDEX_INFO(&index, &n_prot);
 
-  if (!start_unbounded && !stop_unbounded) {
-    check_starts_not_past_stops(starts, stops);
-  }
+  // Keep in local memory, don't construct inside `new_window_info()`,
+  // otherwise we'd have to manually free()
+  int window_sizes[index.size];
+  int window_starts[index.size];
+  int window_stops[index.size];
 
-  int iteration_min = 1;
-  int iteration_max = n_ranges;
+  compute_window_sizes(window_sizes, window_indices, index.size);
+  compute_window_starts(window_starts, window_sizes, index.size);
+  compute_window_stops(window_stops, window_sizes, window_starts, index.size);
 
-  SEXP i_first = PROTECT(vec_slice_impl(i, r_int(1)));
-  SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i)));
+  struct window_info window = new_window_info(window_starts, window_stops, x_size);
+  PROTECT_WINDOW_INFO(&window, &n_prot);
 
-  // Iteration adjustment
-  if (complete) {
-    if (!start_unbounded) {
-      iteration_min += iteration_min_adjustment(i_first, starts, n_ranges);
-    }
-    if (!stop_unbounded) {
-      iteration_max -= iteration_max_adjustment(i_last, stops, n_ranges);
-    }
-  } else {
-    if (!start_unbounded) {
-      iteration_max -= iteration_max_adjustment(i_last, starts, n_ranges);
-    }
-    if (!stop_unbounded) {
-      iteration_min += iteration_min_adjustment(i_first, stops, n_ranges);
-    }
-  }
+  struct range_info range = new_range_info(starts, stops, count);
+  PROTECT_RANGE_INFO(&range, &n_prot);
 
-  PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, out_size);
-  PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_proxy(out);
-  REPROTECT(out, out_prot_idx);
+  struct last_info last = new_last_info(index);
+  PROTECT_LAST_INFO(&last, &n_prot);
 
-  int window_sizes[size_i];
-  int window_starts[size_i];
-  int window_stops[size_i];
+  struct out_info out = new_out_info(ptype, out_indices, out_size);
+  PROTECT_OUT_INFO(&out, &n_prot);
 
-  compute_window_sizes(window_sizes, window_indices, size_i);
-  compute_window_starts(window_starts, window_sizes, size_i);
-  compute_window_stops(window_stops, window_sizes, window_starts, size_i);
+  struct iteration_info iteration = new_iteration_info(index, range, complete);
+  PROTECT_ITERATION_INFO(&iteration, &n_prot);
 
-  int window_start = 0;
-  int window_stop = size_x - 1;
+  eval_loop(x, env, f_call, out, index, iteration, window, range, last, type, constrain);
 
-  int window_start_index;
-  int window_stop_index;
+  out.data = vec_restore(out.data, out.ptype, r_int(out.size));
+  REPROTECT(out.data, out.data_pidx);
 
-  SEXP last_start_position = PROTECT(Rf_ScalarInteger(1));
-  SEXP last_stop_position = PROTECT(Rf_ScalarInteger(1));
+  out.data = copy_names(out.data, x, type);
+  REPROTECT(out.data, out.data_pidx);
 
-  SEXP iteration = PROTECT(Rf_ScalarInteger(iteration_min));
-  int* p_iteration_val = INTEGER(iteration);
+  UNPROTECT(n_prot);
+  return out.data;
+}
 
-  PROTECT_INDEX start_prot_idx;
-  SEXP start = R_NilValue;
-  PROTECT_WITH_INDEX(start, &start_prot_idx);
+// -----------------------------------------------------------------------------
 
-  PROTECT_INDEX stop_prox_idx;
-  SEXP stop = R_NilValue;
-  PROTECT_WITH_INDEX(stop, &stop_prox_idx);
+static struct out_info new_out_info(SEXP ptype, SEXP indices, int size) {
+  struct out_info out;
 
-  SEXP window = PROTECT(compact_seq(0, 0, true));
-  int* p_window_val = INTEGER(window);
+  out.data = PROTECT(vec_init(ptype, size));
+  out.data = PROTECT(vec_proxy(out.data));
 
-  // The result of each function call
-  PROTECT_INDEX elt_prot_idx;
-  SEXP elt = R_NilValue;
-  PROTECT_WITH_INDEX(elt, &elt_prot_idx);
+  out.ptype = ptype;
+  out.size = size;
 
-  SEXP container = PROTECT(make_slice_container(type));
+  out.indices = indices;
+  out.has_indices = (indices != R_NilValue);
 
-  SEXP out_index = PROTECT(Rf_ScalarInteger(0));
-  int* p_out_index_val = INTEGER(out_index);
-  int out_index_size = 1;
-  bool null_out_indices = (out_indices == R_NilValue);
+  out.index = PROTECT(r_int(0));
+  out.p_index_val = INTEGER(out.index);
 
-  for (; *p_iteration_val <= iteration_max; ++(*p_iteration_val)) {
-    if (*p_iteration_val % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
+  out.index_size = 1;
 
-    if (!start_unbounded) {
-      start = vec_slice_impl(starts, iteration);
-      REPROTECT(start, start_prot_idx);
-
-      window_start_index = locate_window_start_index(i, start, size_i, &last_start_position);
-      window_start = window_starts[window_start_index];
-    }
-
-    if (!stop_unbounded) {
-      stop = vec_slice_impl(stops, iteration);
-      REPROTECT(stop, stop_prox_idx);
-
-      window_stop_index = locate_window_stop_index(i, stop, size_i, &last_stop_position);
-      window_stop = window_stops[window_stop_index];
-    }
-
-    // This can happen with an irregular index, and is a sign of the full window
-    // being between two index points and means we select nothing
-    if (window_stop < window_start) {
-      window_start = 0;
-      window_stop = -1;
-    }
-
-    int window_size = window_stop - window_start + 1;
-    init_compact_seq(p_window_val, window_start, window_size, true);
-
-    slice_and_update_env(x, window, env, type, container);
-
-    elt = Rf_eval(f_call, env);
-    REPROTECT(elt, elt_prot_idx);
-
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
-    if (constrain) {
-      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
-      REPROTECT(elt, elt_prot_idx);
-      elt = vec_proxy(elt);
-      REPROTECT(elt, elt_prot_idx);
-
-      if (vec_size(elt) != 1) {
-        stop_not_all_size_one(*p_iteration_val, vec_size(elt));
-      }
-
-      if (null_out_indices) {
-        (*p_out_index_val)++;
-      } else {
-        out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
-      }
-
-      vec_assign_impl(out, out_index, elt, false);
-      continue;
-    }
-
-    if (null_out_indices) {
-      (*p_out_index_val)++;
-      SET_VECTOR_ELT(out, *p_out_index_val - 1, elt);
-      continue;
-    }
-
-    out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
-    p_out_index_val = INTEGER(out_index);
-    out_index_size = vec_size(out_index);
-
-    for (int j = 0; j < out_index_size; ++j) {
-      SET_VECTOR_ELT(out, p_out_index_val[j] - 1, elt);
-    }
-  }
-
-  out = vec_restore(out, ptype, r_int(out_size));
-  REPROTECT(out, out_prot_idx);
-
-  out = copy_names(out, x, type);
-  REPROTECT(out, out_prot_idx);
-
-  UNPROTECT(12);
+  UNPROTECT(3);
   return out;
 }
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position) {
-  SEXP last_start_position = *p_last_start_position;
-  int* p_last_start_position_val = INTEGER(last_start_position);
+static struct window_info new_window_info(int* window_starts, int* window_stops, int x_size) {
+  struct window_info window;
 
-  PROTECT_INDEX i_position_prot_idx;
-  SEXP i_position = vec_slice_impl(i, last_start_position);
-  PROTECT_WITH_INDEX(i_position, &i_position_prot_idx);
+  window.starts = window_starts;
+  window.stops = window_stops;
 
-  while(compare_lt(i_position, 0, start, 0)) {
-    if (*p_last_start_position_val == size) {
-      UNPROTECT(1);
-      return(size - 1);
-    }
+  window.start = 0;
+  window.stop = x_size - 1;
 
-    (*p_last_start_position_val)++;
-
-    i_position = vec_slice_impl(i, last_start_position);
-    REPROTECT(i_position, i_position_prot_idx);
-  }
+  window.seq = PROTECT(compact_seq(0, 0, true));
+  window.p_seq_val = INTEGER(window.seq);
 
   UNPROTECT(1);
-  return *p_last_start_position_val - 1;
+  return window;
 }
 
-static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position) {
-  SEXP last_stop_position = *p_last_stop_position;
-  int* p_last_stop_position_val = INTEGER(last_stop_position);
-
-  PROTECT_INDEX i_position_prot_idx;
-  SEXP i_position = vec_slice_impl(i, last_stop_position);
-  PROTECT_WITH_INDEX(i_position, &i_position_prot_idx);
-
-  while(compare_lte(i_position, 0, stop, 0)) {
-    if (*p_last_stop_position_val == size) {
-      UNPROTECT(1);
-      return(size - 1);
-    }
-
-    (*p_last_stop_position_val)++;
-
-    i_position = vec_slice_impl(i, last_stop_position);
-    REPROTECT(i_position, i_position_prot_idx);
-  }
-
-  UNPROTECT(1);
-  // - 1 - 1 (convert to C index + it always goes 1 too far)
-  return *p_last_stop_position_val - 2;
+static void init_window_seq(struct window_info window) {
+  window.size = window.stop - window.start + 1;
+  init_compact_seq(window.p_seq_val, window.start, window.size, true);
 }
 
 // -----------------------------------------------------------------------------
+
+static struct index_info new_index_info(SEXP i) {
+  struct index_info index;
+
+  index.data = i;
+  index.size = vec_size(i);
+
+  index.first = PROTECT(vec_slice_impl(i, r_int(1)));
+  index.last = PROTECT(vec_slice_impl(i, r_int(index.size)));
+
+  UNPROTECT(2);
+  return index;
+}
+
+// -----------------------------------------------------------------------------
+
+static struct last_info new_last_info(struct index_info index) {
+  struct last_info last;
+
+  last.start_loc = PROTECT(r_int(1));
+  last.stop_loc = PROTECT(r_int(1));
+
+  last.p_start_loc_val = INTEGER(last.start_loc);
+  last.p_stop_loc_val = INTEGER(last.stop_loc);
+
+  last.start_index = index.first;
+  last.stop_index = index.first;
+
+  last.p_start_index = &last.start_index;
+  last.p_stop_index = &last.stop_index;
+
+  UNPROTECT(2);
+  return last;
+}
+
+// -----------------------------------------------------------------------------
+
+static void check_starts_not_past_stops(SEXP starts, SEXP stops);
+
+
+static struct range_info new_range_info(SEXP starts, SEXP stops, int count) {
+  struct range_info range;
+
+  range.starts = starts;
+  range.stops = stops;
+
+  range.start_unbounded = (starts == R_NilValue);
+  range.stop_unbounded = (stops == R_NilValue);
+
+  if (!range.start_unbounded && !range.stop_unbounded) {
+    check_starts_not_past_stops(starts, stops);
+  }
+
+  range.count = count;
+
+  return range;
+}
 
 static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
   SEXP call = PROTECT(
@@ -281,33 +221,41 @@ static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
 
 // -----------------------------------------------------------------------------
 
-// map_int(x, vec_size)
-static void compute_window_sizes(int* window_sizes, SEXP window_indices, int n) {
-  for (int i = 0; i < n; ++i) {
-    window_sizes[i] = vec_size(VECTOR_ELT(window_indices, i));
+static int iteration_min_adjustment(SEXP i_first, SEXP range, int size);
+static int iteration_max_adjustment(SEXP i_last, SEXP range, int size);
+
+
+static struct iteration_info new_iteration_info(struct index_info index, struct range_info range, bool complete) {
+  struct iteration_info iteration;
+
+  int iteration_min = 1;
+  int iteration_max = range.count;
+
+  // TODO - rewrite these helpers to use index/range
+  if (complete) {
+    if (!range.start_unbounded) {
+      iteration_min += iteration_min_adjustment(index.first, range.starts, range.count);
+    }
+    if (!range.stop_unbounded) {
+      iteration_max -= iteration_max_adjustment(index.last, range.stops, range.count);
+    }
+  } else {
+    if (!range.start_unbounded) {
+      iteration_max -= iteration_max_adjustment(index.last, range.starts, range.count);
+    }
+    if (!range.stop_unbounded) {
+      iteration_min += iteration_min_adjustment(index.first, range.stops, range.count);
+    }
   }
+
+  iteration.data = PROTECT(r_int(iteration_min));
+  iteration.p_data_val = INTEGER(iteration.data);
+
+  iteration.max = iteration_max;
+
+  UNPROTECT(1);
+  return iteration;
 }
-
-static void compute_window_starts(int* window_starts, int* window_sizes, int n) {
-  // First start is always 0
-  window_starts[0] = 0;
-
-  int sum = 0;
-
-  // Then we do a cumsum() to get the rest of the starts
-  for (int i = 1; i < n; ++i) {
-    sum += window_sizes[i - 1];
-    window_starts[i] = sum;
-  }
-}
-
-static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int n) {
-  for (int i = 0; i < n; ++i) {
-    window_stops[i] = window_starts[i] + window_sizes[i] - 1;
-  }
-}
-
-// -----------------------------------------------------------------------------
 
 static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
   int forward_adjustment = 0;
@@ -323,8 +271,6 @@ static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
   return forward_adjustment;
 }
 
-
-
 static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
   int backward_adjustment = 0;
 
@@ -337,4 +283,167 @@ static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
   }
 
   return backward_adjustment;
+}
+
+// -----------------------------------------------------------------------------
+
+// map_int(x, vec_size)
+static void compute_window_sizes(int* window_sizes, SEXP window_indices, int size) {
+  for (int i = 0; i < size; ++i) {
+    window_sizes[i] = vec_size(VECTOR_ELT(window_indices, i));
+  }
+}
+
+static void compute_window_starts(int* window_starts, int* window_sizes, int size) {
+  // First start is always 0
+  window_starts[0] = 0;
+
+  int sum = 0;
+
+  // Then we do a cumsum() to get the rest of the starts
+  for (int i = 1; i < size; ++i) {
+    sum += window_sizes[i - 1];
+    window_starts[i] = sum;
+  }
+}
+
+static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int size) {
+  for (int i = 0; i < size; ++i) {
+    window_stops[i] = window_starts[i] + window_sizes[i] - 1;
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+static int locate_window_start_index(struct index_info index, struct range_info range, struct last_info last) {
+  while(compare_lt(*last.p_start_index, 0, range.start, 0)) {
+    if (*last.p_start_loc_val == index.size) {
+      return(index.size - 1);
+    }
+
+    (*last.p_start_loc_val)++;
+    *last.p_start_index = vec_slice_impl(index.data, last.start_loc);
+  }
+
+  return *last.p_start_loc_val - 1;
+}
+
+static int locate_window_stop_index(struct index_info index, struct range_info range, struct last_info last) {
+  while(compare_lte(*last.p_stop_index, 0, range.stop, 0)) {
+    if (*last.p_stop_loc_val == index.size) {
+      return(index.size - 1);
+    }
+
+    (*last.p_stop_loc_val)++;
+    *last.p_stop_index = vec_slice_impl(index.data, last.stop_loc);
+  }
+
+  return *last.p_stop_loc_val - 2;
+}
+
+// -----------------------------------------------------------------------------
+
+static void increment_window(struct window_info window,
+                             struct index_info index,
+                             struct iteration_info iteration,
+                             struct range_info range,
+                             struct last_info last) {
+  if (!range.start_unbounded) {
+    range.start = vec_slice_impl(range.starts, iteration.data);
+    REPROTECT(range.start, range.start_pidx);
+
+    window.start_idx = locate_window_start_index(index, range, last);
+    window.start = window.starts[window.start_idx];
+  }
+
+  if (!range.stop_unbounded) {
+    range.stop = vec_slice_impl(range.stops, iteration.data);
+    REPROTECT(range.stop, range.stop_pidx);
+
+    window.stop_idx = locate_window_stop_index(index, range, last);
+    window.stop = window.stops[window.stop_idx];
+  }
+
+  // This can happen with an irregular index, and is a sign of the full window
+  // being between two index points and means we select nothing
+  if (window.stop < window.start) {
+    window.start = 0;
+    window.stop = -1;
+  }
+
+  init_window_seq(window);
+}
+
+// -----------------------------------------------------------------------------
+
+static void eval_loop(SEXP x,
+                      SEXP env,
+                      SEXP f_call,
+                      struct out_info out,
+                      struct index_info index,
+                      struct iteration_info iteration,
+                      struct window_info window,
+                      struct range_info range,
+                      struct last_info last,
+                      int type,
+                      bool constrain) {
+
+  // The result of each function call
+  PROTECT_INDEX elt_prot_idx;
+  SEXP elt = R_NilValue;
+  PROTECT_WITH_INDEX(elt, &elt_prot_idx);
+
+  SEXP container = PROTECT(make_slice_container(type));
+
+  for (; *iteration.p_data_val <= iteration.max; ++(*iteration.p_data_val)) {
+    if (*iteration.p_data_val % 1024 == 0) {
+      R_CheckUserInterrupt();
+    }
+
+    increment_window(window, index, iteration, range, last);
+
+    slice_and_update_env(x, window.seq, env, type, container);
+
+    elt = Rf_eval(f_call, env);
+    REPROTECT(elt, elt_prot_idx);
+
+    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
+    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
+
+    if (constrain) {
+      elt = vctrs_cast(elt, out.ptype, strings_empty, strings_empty);
+      REPROTECT(elt, elt_prot_idx);
+      elt = vec_proxy(elt);
+      REPROTECT(elt, elt_prot_idx);
+
+      if (vec_size(elt) != 1) {
+        stop_not_all_size_one(*iteration.p_data_val, vec_size(elt));
+      }
+
+      if (out.has_indices) {
+        out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
+      } else {
+        (*out.p_index_val)++;
+      }
+
+      vec_assign_impl(out.data, out.index, elt, false);
+      continue;
+    }
+
+    if (!out.has_indices) {
+      (*out.p_index_val)++;
+      SET_VECTOR_ELT(out.data, *out.p_index_val - 1, elt);
+      continue;
+    }
+
+    out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
+    out.p_index_val = INTEGER(out.index);
+    out.index_size = vec_size(out.index);
+
+    for (int i = 0; i < out.index_size; ++i) {
+      SET_VECTOR_ELT(out.data, out.p_index_val[i] - 1, elt);
+    }
+  }
+
+  UNPROTECT(2);
 }
