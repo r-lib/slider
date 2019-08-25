@@ -36,8 +36,8 @@ SEXP slide_between_base_impl(SEXP x,
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
   int out_size = r_scalar_int_get(r_lst_get(params, 2));
   bool complete = r_scalar_lgl_get(r_lst_get(params, 3));
-  bool before_unbounded = r_scalar_lgl_get(r_lst_get(params, 4));
-  bool after_unbounded = r_scalar_lgl_get(r_lst_get(params, 5));
+  bool start_unbounded = r_scalar_lgl_get(r_lst_get(params, 4));
+  bool stop_unbounded = r_scalar_lgl_get(r_lst_get(params, 5));
 
   // Different than `out_size`, which was computed before vec_split_id
   int size_starts = r_scalar_int_get(r_lst_get(params, 6));
@@ -45,7 +45,7 @@ SEXP slide_between_base_impl(SEXP x,
   int size_i = vec_size(i);
   int size_x = compute_size(x, type);
 
-  if (!before_unbounded && !after_unbounded) {
+  if (!start_unbounded && !stop_unbounded) {
     check_starts_not_past_stops(starts, stops);
   }
 
@@ -57,17 +57,17 @@ SEXP slide_between_base_impl(SEXP x,
 
   // Iteration adjustment
   if (complete) {
-    if (!before_unbounded) {
+    if (!start_unbounded) {
       iteration_min += iteration_min_adjustment(i_first, starts, size_starts);
     }
-    if (!after_unbounded) {
+    if (!stop_unbounded) {
       iteration_max -= iteration_max_adjustment(i_last, stops, size_starts);
     }
   } else {
-    if (!before_unbounded) {
+    if (!start_unbounded) {
       iteration_max -= iteration_max_adjustment(i_last, starts, size_starts);
     }
-    if (!after_unbounded) {
+    if (!stop_unbounded) {
       iteration_min += iteration_min_adjustment(i_first, stops, size_starts);
     }
   }
@@ -116,12 +116,17 @@ SEXP slide_between_base_impl(SEXP x,
 
   SEXP container = PROTECT(make_slice_container(type));
 
+  SEXP out_index = PROTECT(Rf_ScalarInteger(0));
+  int* p_out_index_val = INTEGER(out_index);
+  int out_index_size = 1;
+  bool null_out_indices = (out_indices == R_NilValue);
+
   for (; *p_iteration_val <= iteration_max; ++(*p_iteration_val)) {
     if (*p_iteration_val % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    if (!before_unbounded) {
+    if (!start_unbounded) {
       start = vec_slice_impl(starts, iteration);
       REPROTECT(start, start_prot_idx);
 
@@ -129,7 +134,7 @@ SEXP slide_between_base_impl(SEXP x,
       window_start = window_starts[window_start_index];
     }
 
-    if (!after_unbounded) {
+    if (!stop_unbounded) {
       stop = vec_slice_impl(stops, iteration);
       REPROTECT(stop, stop_prox_idx);
 
@@ -152,8 +157,6 @@ SEXP slide_between_base_impl(SEXP x,
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
-    SEXP out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
-
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
@@ -167,16 +170,29 @@ SEXP slide_between_base_impl(SEXP x,
         stop_not_all_size_one(*p_iteration_val, vec_size(elt));
       }
 
-      vec_assign_impl(out, out_index, elt, false);
-    } else {
-      int* p_out_index = INTEGER(out_index);
-      int out_index_size = vec_size(out_index);
-
-      for (int j = 0; j < out_index_size; ++j) {
-        SET_VECTOR_ELT(out, p_out_index[j] - 1, elt);
+      if (null_out_indices) {
+        (*p_out_index_val)++;
+      } else {
+        out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
       }
+
+      vec_assign_impl(out, out_index, elt, false);
+      continue;
     }
 
+    if (null_out_indices) {
+      (*p_out_index_val)++;
+      SET_VECTOR_ELT(out, *p_out_index_val - 1, elt);
+      continue;
+    }
+
+    out_index = VECTOR_ELT(out_indices, *p_iteration_val - 1);
+    p_out_index_val = INTEGER(out_index);
+    out_index_size = vec_size(out_index);
+
+    for (int j = 0; j < out_index_size; ++j) {
+      SET_VECTOR_ELT(out, p_out_index_val[j] - 1, elt);
+    }
   }
 
   out = vec_restore(out, ptype, r_int(out_size));
@@ -185,7 +201,7 @@ SEXP slide_between_base_impl(SEXP x,
   out = copy_names(out, x, type);
   REPROTECT(out, out_prot_idx);
 
-  UNPROTECT(11);
+  UNPROTECT(12);
   return out;
 }
 

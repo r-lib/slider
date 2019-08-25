@@ -33,6 +33,8 @@ slide_between_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .pt
   )
 }
 
+# ------------------------------------------------------------------------------
+
 slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, env, type) {
 
   x_size <- compute_size(x, type)
@@ -67,32 +69,20 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
   i <- split$key
   window_indices <- split$id
 
-  # Get unique values based on the `starts` and `stops`, not the `i`
-  ranges <- data.frame(starts = starts, stops = stops)
-  split <- vec_split_id(ranges)
-
-  ranges <- split$key
-  starts <- ranges$starts
-  stops <- ranges$stops
-
-  # Can be different from `out_size` because this is computed
-  # after using `vec_split_id()`
-  size_starts <- vec_size(starts)
-
-  out_indices <- split$id
-
-  # All false for slide_between()
   complete <- FALSE
-  before_unbounded <- FALSE
-  after_unbounded <- FALSE
+  start_unbounded <- FALSE
+  stop_unbounded <- FALSE
+  out_indices <- NULL
+
+  size_starts <- out_size
 
   params <- list(
     type,
     constrain,
     out_size,
     complete,
-    before_unbounded,
-    after_unbounded,
+    start_unbounded,
+    stop_unbounded,
     size_starts
   )
 

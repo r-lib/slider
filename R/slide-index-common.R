@@ -31,10 +31,10 @@ slide_index_common <- function(x,
   i <- split$key
   out_indices <- split$id
 
-  before_unbounded <- is_unbounded(before)
-  after_unbounded <- is_unbounded(after)
+  start_unbounded <- is_unbounded(before)
+  stop_unbounded <- is_unbounded(after)
 
-  range <- compute_range_info(i, before, after, before_unbounded, after_unbounded)
+  range <- compute_range_info(i, before, after, start_unbounded, stop_unbounded)
   starts <- range$starts
   stops <- range$stops
 
@@ -49,8 +49,8 @@ slide_index_common <- function(x,
     constrain,
     size, # out_size
     complete,
-    before_unbounded,
-    after_unbounded,
+    start_unbounded,
+    stop_unbounded,
     size_starts
   )
 
@@ -70,25 +70,25 @@ slide_index_common <- function(x,
 
 # ------------------------------------------------------------------------------
 
-compute_range_info <- function(i, before, after, before_unbounded, after_unbounded) {
+compute_range_info <- function(i, before, after, start_unbounded, stop_unbounded) {
   starts <- NULL
-  if (!before_unbounded) {
+  if (!start_unbounded) {
     starts <- compute_range_starts(i, before)
   }
 
   stops <- NULL
-  if (!after_unbounded) {
+  if (!stop_unbounded) {
     stops <- compute_range_stops(i, after)
   }
 
   ptype <- vec_ptype_common(i, starts, stops)
 
-  if (!before_unbounded) {
+  if (!start_unbounded) {
     starts <- vec_cast(starts, ptype)
     starts <- vec_proxy_compare(starts)
   }
 
-  if (!after_unbounded) {
+  if (!stop_unbounded) {
     stops <- vec_cast(stops, ptype)
     stops <- vec_proxy_compare(stops)
   }
