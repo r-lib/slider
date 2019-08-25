@@ -52,8 +52,6 @@ SEXP slide_index_common_impl(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  // Keep in local memory, don't construct inside `new_window_info()`,
-  // otherwise we'd have to manually free()
   int window_sizes[index.size];
   int window_starts[index.size];
   int window_stops[index.size];
@@ -111,8 +109,6 @@ SEXP slide_between_common_impl(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  // Keep in local memory, don't construct inside `new_window_info()`,
-  // otherwise we'd have to manually free()
   int window_sizes[index.size];
   int window_starts[index.size];
   int window_stops[index.size];
