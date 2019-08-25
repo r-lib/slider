@@ -74,7 +74,7 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
   stop_unbounded <- FALSE
   out_indices <- NULL
 
-  size_starts <- out_size
+  n_ranges <- out_size
 
   params <- list(
     type,
@@ -83,7 +83,7 @@ slide_between_common <- function(x, i, starts, stops, f_call, constrain, ptype, 
     complete,
     start_unbounded,
     stop_unbounded,
-    size_starts
+    n_ranges
   )
 
   slide_between_base(

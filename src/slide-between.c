@@ -40,7 +40,7 @@ SEXP slide_between_base_impl(SEXP x,
   bool stop_unbounded = r_scalar_lgl_get(r_lst_get(params, 5));
 
   // Different than `out_size`, which was computed before vec_split_id
-  int size_starts = r_scalar_int_get(r_lst_get(params, 6));
+  int n_ranges = r_scalar_int_get(r_lst_get(params, 6));
 
   int size_i = vec_size(i);
   int size_x = compute_size(x, type);
@@ -50,7 +50,7 @@ SEXP slide_between_base_impl(SEXP x,
   }
 
   int iteration_min = 1;
-  int iteration_max = size_starts;
+  int iteration_max = n_ranges;
 
   SEXP i_first = PROTECT(vec_slice_impl(i, r_int(1)));
   SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i)));
@@ -58,17 +58,17 @@ SEXP slide_between_base_impl(SEXP x,
   // Iteration adjustment
   if (complete) {
     if (!start_unbounded) {
-      iteration_min += iteration_min_adjustment(i_first, starts, size_starts);
+      iteration_min += iteration_min_adjustment(i_first, starts, n_ranges);
     }
     if (!stop_unbounded) {
-      iteration_max -= iteration_max_adjustment(i_last, stops, size_starts);
+      iteration_max -= iteration_max_adjustment(i_last, stops, n_ranges);
     }
   } else {
     if (!start_unbounded) {
-      iteration_max -= iteration_max_adjustment(i_last, starts, size_starts);
+      iteration_max -= iteration_max_adjustment(i_last, starts, n_ranges);
     }
     if (!stop_unbounded) {
-      iteration_min += iteration_min_adjustment(i_first, stops, size_starts);
+      iteration_min += iteration_min_adjustment(i_first, stops, n_ranges);
     }
   }
 

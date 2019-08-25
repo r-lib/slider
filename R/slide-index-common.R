@@ -42,7 +42,7 @@ slide_index_common <- function(x,
   i <- vec_proxy_compare(i)
 
   # Computed on `i` because `starts` could be NULL if unbounded() is set
-  size_starts <- vec_size(i)
+  n_ranges <- vec_size(i)
 
   params <- list(
     type,
@@ -51,7 +51,7 @@ slide_index_common <- function(x,
     complete,
     start_unbounded,
     stop_unbounded,
-    size_starts
+    n_ranges
   )
 
   slide_between_base(
