@@ -13,8 +13,8 @@ static void compute_window_sizes(int* window_sizes, SEXP window_indices, int n);
 static void compute_window_starts(int* window_starts, int* window_sizes, int n);
 static void compute_window_stops(int* window_stops, int* window_sizes, int* window_starts, int n);
 
-static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size);
-static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size, int size_i);
+static int iteration_min_adjustment(SEXP i_first, SEXP range, int size);
+static int iteration_max_adjustment(SEXP i_last, SEXP range, int size);
 
 static int locate_window_start_index(SEXP i, SEXP start, int size, SEXP* p_last_start_position);
 static int locate_window_stop_index(SEXP i, SEXP stop, int size, SEXP* p_last_stop_position);
@@ -52,20 +52,23 @@ SEXP slide_base_impl(SEXP x,
   int iteration_min = 1;
   int iteration_max = size_starts;
 
+  SEXP i_first = PROTECT(vec_slice_impl(i, r_int(1)));
+  SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i)));
+
   // Iteration adjustment
   if (complete) {
     if (!before_unbounded) {
-      iteration_min = adjust_iteration_min(iteration_min, starts, i, size_starts);
+      iteration_min += iteration_min_adjustment(i_first, starts, size_starts);
     }
     if (!after_unbounded) {
-      iteration_max = adjust_iteration_max(iteration_max, stops, i, size_starts, size_i);
+      iteration_max -= iteration_max_adjustment(i_last, stops, size_starts);
     }
   } else {
     if (!before_unbounded) {
-      iteration_max = adjust_iteration_max(iteration_max, starts, i, size_starts, size_i);
+      iteration_max -= iteration_max_adjustment(i_last, starts, size_starts);
     }
     if (!after_unbounded) {
-      iteration_min = adjust_iteration_min(iteration_min, stops, i, size_starts);
+      iteration_min += iteration_min_adjustment(i_first, stops, size_starts);
     }
   }
 
@@ -182,7 +185,7 @@ SEXP slide_base_impl(SEXP x,
   out = copy_names(out, x, type);
   REPROTECT(out, out_prot_idx);
 
-  UNPROTECT(9);
+  UNPROTECT(11);
   return out;
 }
 
@@ -290,44 +293,32 @@ static void compute_window_stops(int* window_stops, int* window_sizes, int* wind
 
 // -----------------------------------------------------------------------------
 
-static int adjust_iteration_min(int iteration_min, SEXP range, SEXP i, int size) {
-  SEXP first = PROTECT(Rf_ScalarInteger(1));
-  SEXP i_first = PROTECT(vec_slice_impl(i, first));
-  SEXP range_first = PROTECT(vec_slice_impl(range, first));
+static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
+  int forward_adjustment = 0;
 
-  if (compare_gt(i_first, 0, range_first, 0)) {
-    int forward_adjustment = 0;
-
-    for (int i = 0; i < size; ++i) {
-      if (compare_gt(i_first, 0, range, i)) {
-        forward_adjustment++;
-      } // TODO else break;? then you don't need the original check?
+  for (int j = 0; j < size; ++j) {
+    if (compare_gt(i_first, 0, range, j)) {
+      forward_adjustment++;
+    } else {
+      break;
     }
-
-    iteration_min = iteration_min + forward_adjustment;
   }
 
-  UNPROTECT(3);
-  return iteration_min;
+  return forward_adjustment;
 }
 
-static int adjust_iteration_max(int iteration_max, SEXP range, SEXP i, int size, int size_i) {
-  SEXP last = PROTECT(Rf_ScalarInteger(size));
-  SEXP i_last = PROTECT(vec_slice_impl(i, r_int(size_i))); // TODO - too complicated, pull out
-  SEXP range_last = PROTECT(vec_slice_impl(range, last));
 
-  if (compare_lt(i_last, 0, range_last, 0)) {
-    int backward_adjustment = 0;
 
-    for (int i = 0; i < size; ++i) {
-      if (compare_lt(i_last, 0, range, i)) {
-        backward_adjustment++;
-      }
+static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
+  int backward_adjustment = 0;
+
+  for (int j = size - 1; j > 0; --j) {
+    if (compare_lt(i_last, 0, range, j)) {
+      backward_adjustment++;
+    } else {
+      break;
     }
-
-    iteration_max = iteration_max - backward_adjustment;
   }
 
-  UNPROTECT(3);
-  return iteration_max;
+  return backward_adjustment;
 }
