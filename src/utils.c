@@ -1,5 +1,6 @@
 #include "slide.h"
 #include "utils.h"
+#include "slide-vctrs.h"
 #include <vctrs.h>
 
 SEXP strings_empty = NULL;

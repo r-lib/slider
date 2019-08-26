@@ -2,7 +2,8 @@
 // https://github.com/r-lib/vctrs/blob/527e350ae74f245a464f9b35111e560acadc8515/src/compare.c
 
 #include "compare.h"
-#include "vctrs.h"
+#include "slide-vctrs.h"
+#include <vctrs.h>
 #include <strings.h>
 
 static void stop_not_comparable(SEXP x, SEXP y, const char* message) {
