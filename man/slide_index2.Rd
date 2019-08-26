@@ -102,7 +102,7 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[vector(1) / function / formula]}
+\item{.before}{\code{[vector(1)]}
 
 The number of values \emph{before} the current element of \code{.i} to include in the
 sliding window. Set to \code{unbounded()} to select all elements before the
@@ -111,12 +111,9 @@ allowed, and allows you to "look forward" as well.
 
 For \code{slide_index()}, this can be any object that can be subtracted from
 \code{.i} with \code{-}. One common use case is to set this to a lubridate period,
-such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.
+such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-Additionally, \code{.before} is allowed to be a function or lambda function
-with 1 argument, the entire \code{.i} vector.}
-
-\item{.after}{\code{[vector(1) / function / formula]}
+\item{.after}{\code{[vector(1)]}
 
 The number of values \emph{after} the current element of \code{.i} to include in the
 sliding window. Set to \code{unbounded()} to select all elements after the
@@ -127,10 +124,7 @@ backward" as well.
 
 For \code{slide_index()}, this can be any object that can be added to
 \code{.i} with \code{+}. One common use case is to set this to a lubridate period,
-such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.
-
-Additionally, \code{.after} is allowed to be a function or lambda function
-with 1 argument, the entire \code{.i} vector.}
+such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
 \item{.complete}{\code{[logical(1)]}
 
@@ -188,9 +182,8 @@ are allowed.
 \item \code{.i} is not allowed to have missing values.
 }
 
-The ranges computed from \code{.i - .before}, \code{.i + .after}, or by applying a
-before / after function to \code{.i} have the same restrictions as the three
-mentioned above.
+The ranges computed from \code{.i - .before} and \code{.i + .after} have the same
+restrictions as the three mentioned above.
 }
 
 \examples{

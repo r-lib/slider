@@ -17,9 +17,8 @@
 #'
 #' - `.i` is not allowed to have missing values.
 #'
-#' The ranges computed from `.i - .before`, `.i + .after`, or by applying a
-#' before / after function to `.i` have the same restrictions as the three
-#' mentioned above.
+#' The ranges computed from `.i - .before` and `.i + .after` have the same
+#' restrictions as the three mentioned above.
 #'
 #' @inheritParams slide
 #'
@@ -30,7 +29,7 @@
 #'   bound will be `.i + .after`. It is faily common to supply a date vector
 #'   as the index, but not required.
 #'
-#' @param .before `[vector(1) / function / formula]`
+#' @param .before `[vector(1)]`
 #'
 #'   The number of values _before_ the current element of `.i` to include in the
 #'   sliding window. Set to `unbounded()` to select all elements before the
@@ -41,10 +40,7 @@
 #'   `.i` with `-`. One common use case is to set this to a lubridate period,
 #'   such as [lubridate::weeks()].
 #'
-#'   Additionally, `.before` is allowed to be a function or lambda function
-#'   with 1 argument, the entire `.i` vector.
-#'
-#' @param .after `[vector(1) / function / formula]`
+#' @param .after `[vector(1)]`
 #'
 #'   The number of values _after_ the current element of `.i` to include in the
 #'   sliding window. Set to `unbounded()` to select all elements after the
@@ -56,9 +52,6 @@
 #'   For `slide_index()`, this can be any object that can be added to
 #'   `.i` with `+`. One common use case is to set this to a lubridate period,
 #'   such as [lubridate::weeks()].
-#'
-#'   Additionally, `.after` is allowed to be a function or lambda function
-#'   with 1 argument, the entire `.i` vector.
 #'
 #' @examples
 #' x <- 1:5

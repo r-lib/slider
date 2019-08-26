@@ -149,3 +149,111 @@ test_that("duplicated .starts/.stops pairs are allowed", {
     )
   )
 })
+
+# ------------------------------------------------------------------------------
+# nonexistant dates with lubridate::months()
+
+test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issues", {
+  requireNamespace("lubridate", quietly = TRUE)
+  `%m-%` <- lubridate::`%m-%`
+
+  i <- vec_c(as.Date("2019-02-27") + 0:3, as.Date("2019-03-27") + 0:5)
+  x <- seq_along(i)
+
+  starts <- i %m-% months(1)
+  stops <- i
+
+  # 3/27 rollback to 2/27
+  # 3/28 rollback to 2/28
+  # 3/29 rollback to 2/28
+  # 3/30 rollback to 2/28
+  # 3/31 rollback to 2/28
+  # 4/01 rollback to 3/01
+  expect_equal(
+    slide_between(x, i, starts, stops, identity),
+    list(
+      1L,
+      1:2,
+      1:3,
+      1:4,
+      1:5,
+      2:6,
+      2:7,
+      2:8,
+      2:9,
+      3:10
+    )
+  )
+
+  starts <- lubridate::add_with_rollback(i, -months(1), roll_to_first = TRUE)
+  stops <- i
+
+  # 3/27 rollback to 2/27
+  # 3/28 rollback to 2/28
+  # 3/29 rollback to 2/28 then forward to 3/01
+  # 3/30 rollback to 2/28 then forward to 3/01
+  # 3/31 rollback to 2/28 then forward to 3/01
+  # 4/01 rollback to 3/01
+  expect_equal(
+    slide_between(x, i, starts, stops, identity),
+    list(
+      1L,
+      1:2,
+      1:3,
+      1:4,
+      1:5,
+      2:6,
+      3:7,
+      3:8,
+      3:9,
+      3:10
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
+# ordering by two vectors
+
+test_that("can order by two vectors using a data frame", {
+  i <- data.frame(
+    date1 = new_date(c(0, 3, 4, 5)),
+    date2 = new_date(c(0, 1, 2, 4))
+  )
+
+  before <- data.frame(date1 = 2, date2 = 1)
+  starts <- i - vec_recycle(before, vec_size(i))
+
+  stops <- i
+
+  # NOTE - This is a bit tricky. It always tries to determine the comparison
+  # order using the first column that it comes across. If the values are equal,
+  # only then will it look to the second column
+
+  expect_equal(
+    slide_between(i, i, starts, stops, ~.x),
+    list(
+      # At row 1, subtracting makes no difference
+      # Return row 1
+      vec_slice(i, 1L),
+
+      # "1970-01-04" - 2 days = "1970-01-02"
+      # "1970-01-02" > "1970-01-01". Done.
+      # Return row 2
+      vec_slice(i, 2L),
+
+      # "1970-01-05" - 2 days = "1970-01-03"
+      # "1970-01-03" < "1970-01-04" so use row 2
+      # "1970-01-03" > "1970-01-01" so don't use row 1
+      # Return row 2 and 3
+      vec_slice(i, 2:3),
+
+      # "1970-01-06" - 2 days = "1970-01-04"
+      # "1970-01-04" < "1970-01-05" so use row 3
+      # "1970-01-04" = "1970-01-04" so look to column 2
+      # "1970-01-05" - 1 day = "1970-01-04" (col 2)
+      # "1970-01-04" > "1970-01-02" so don't use row 2
+      # Return row 3 and 4
+      vec_slice(i, 3:4)
+    )
+  )
+})
