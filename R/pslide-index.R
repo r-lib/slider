@@ -273,7 +273,7 @@ pslide_index_impl <- function(.l,
 
   f_call <- expr(.f(!!! slicers, ...))
 
-  slide_index_core(
+  slide_index_common(
     x = .l,
     i = .i,
     f_call = f_call,
