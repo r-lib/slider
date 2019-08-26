@@ -163,15 +163,16 @@ functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 }
 \examples{
 # Slide along two inputs at once
-slide2(1:5, 6:10, ~list(.x, .y), .before = 2)
+slide2(1:4, 5:8, ~list(.x, .y), .before = 2)
 
 # Or, for more than two, use `pslide()`
-pslide(list(1:5, 6:10, 11:15), ~list(.x, .y, ..3), .before = 2)
+pslide(list(1:4, 5:8, 9:12), ~list(.x, .y, ..3), .before = 2)
 
 # You can even slide along the rows of multiple data frames of
 # equal size at once
-x <- data.frame(a = rnorm(10), b = rnorm(10))
-y <- data.frame(c = letters[1:10], d = letters[11:20])
+set.seed(16)
+x <- data.frame(a = rnorm(5), b = rnorm(5))
+y <- data.frame(c = letters[1:5], d = letters[6:10])
 
 row_return <- function(x_rows, y_rows) {
   if (sum(x_rows$a) < 0) {

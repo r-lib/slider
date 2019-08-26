@@ -99,7 +99,9 @@
 #'
 #' # 20 day rolling regression. Current day + 19 days back.
 #' # Additionally, set `.complete = TRUE` to not compute partial results.
-#' slide_index(df, df$i, ~lm(y ~ x, .x), .before = 19, .complete = TRUE)
+#' regr <- slide_index(df, df$i, ~lm(y ~ x, .x), .before = 19, .complete = TRUE)
+#'
+#' regr[16:18]
 #'
 #' # The first 16 slots are NULL because there is no possible way to
 #' # look back 19 days from the 16th index position and construct a full

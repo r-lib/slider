@@ -136,24 +136,24 @@ to the type required by the version of \code{slide_*()} being used.
 
 \examples{
 # The defaults work similarly to `map()`
-slide(1:10, ~.x)
+slide(1:5, ~.x)
 
 # Use `.before`, `.after`, and `.step` to control the window
-slide(1:10, ~.x, .before = 1)
+slide(1:5, ~.x, .before = 1)
 
 # This can be used for rolling means
-slide_dbl(rnorm(10), mean, .before = 2)
+slide_dbl(rnorm(5), mean, .before = 2)
 
 # Or more flexible rolling operations
-slide(rnorm(10), ~ .x - mean(.x), .before = 2)
+slide(rnorm(5), ~ .x - mean(.x), .before = 2)
 
 # `.after` allows you to "align to the left" rather than the right
-slide(1:10, ~.x, .after = 2)
+slide(1:5, ~.x, .after = 2)
 
 # And a mixture of `.before` and `.after`
 # allows you complete control over the exact alignment.
 # Below, "center alignment" is used.
-slide(1:10, ~.x, .before = 1, .after = 1)
+slide(1:5, ~.x, .before = 1, .after = 1)
 
 # The `.step` controls how the window is shifted along `.x`,
 # allowing you to "skip" iterations if you only need a less granular result
@@ -169,14 +169,16 @@ slide(1:5, ~.x, .before = 2, .after = 1, .complete = TRUE)
 # Data frames
 
 # Data frames are iterated over rowwise
-slide(mtcars, ~.x)
+mtcars_rowwise <- slide(mtcars, ~.x)
+mtcars_rowwise[1:3]
 
 # This means that any column name is easily accessible
 slide_dbl(mtcars, ~.x$mpg + .x$cyl)
 
 # More advanced rowwise iteration is available as well by using the
 # other arguments
-slide(mtcars, ~.x, .before = 1, .after = 1)
+mtcars_rowwise_window <- slide(mtcars, ~.x, .before = 1, .after = 1)
+mtcars_rowwise_window[1:3]
 
 # ---------------------------------------------------------------------------
 # Cumulative sliding
