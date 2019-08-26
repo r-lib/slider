@@ -12,7 +12,7 @@ slide_between_common <- function(x,
 
   check_index_size(x_size, i)
   check_not_na(i, "`.i`")
-  check_index_ascending(i)
+  check_ascending(i, "The `.i`ndex")
 
   check_not_na(starts, "`.starts`")
   check_ascending(starts, "`.starts`")

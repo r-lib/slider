@@ -14,7 +14,7 @@ slide_index_common <- function(x,
 
   check_index_size(out_size, i)
   check_not_na(i, "`.i`")
-  check_index_ascending(i)
+  check_ascending(i, "The `.i`ndex")
 
   # Early exit if empty input
   # (but after the index size check)
@@ -150,21 +150,6 @@ check_index_size <- function(n, i) {
   }
 
   invisible()
-}
-
-check_index_ascending <- function(x) {
-  order <- vec_order(x, "asc")
-
-  if (is.unsorted(order)) {
-    at <- which(diff(order) < 0L)
-    at <- collapse_and_trim(at)
-    glubort(
-      "The `.i`ndex must be in ascending order. ",
-      "At the following locations, it is not: {at}."
-    )
-  }
-
-  invisible(x)
 }
 
 # ------------------------------------------------------------------------------
