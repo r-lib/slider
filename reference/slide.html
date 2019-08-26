@@ -252,7 +252,7 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># The defaults work similarly to `map()`</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -266,24 +266,9 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; 
 #&gt; [[5]]
 #&gt; [1] 5
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] 6
-#&gt; 
-#&gt; [[7]]
-#&gt; [1] 7
-#&gt; 
-#&gt; [[8]]
-#&gt; [1] 8
-#&gt; 
-#&gt; [[9]]
-#&gt; [1] 9
-#&gt; 
-#&gt; [[10]]
-#&gt; [1] 10
 #&gt; </div><div class='input'>
 <span class='co'># Use `.before`, `.after`, and `.step` to control the window</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -297,58 +282,27 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; 
 #&gt; [[5]]
 #&gt; [1] 4 5
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] 5 6
-#&gt; 
-#&gt; [[7]]
-#&gt; [1] 6 7
-#&gt; 
-#&gt; [[8]]
-#&gt; [1] 7 8
-#&gt; 
-#&gt; [[9]]
-#&gt; [1] 8 9
-#&gt; 
-#&gt; [[10]]
-#&gt; [1]  9 10
 #&gt; </div><div class='input'>
 <span class='co'># This can be used for rolling means</span>
-<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>10</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;  [1] -1.40004352 -0.57236323 -1.19399669 -0.72917261 -0.60709406  0.58813101
-#&gt;  [7] -0.01728444 -0.30691045 -0.77111419 -0.25807679</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>5</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -1.4000435 -0.5723632 -1.1939967 -0.7291726 -0.6070941</div><div class='input'>
 <span class='co'># Or more flexible rolling operations</span>
-<span class='fu'>slide</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>10</span>), ~ <span class='no'>.x</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>5</span>), ~ <span class='no'>.x</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 0
 #&gt; 
 #&gt; [[2]]
-#&gt; [1] -0.5913407  0.5913407
+#&gt; [1]  1.485115 -1.485115
 #&gt; 
 #&gt; [[3]]
-#&gt; [1] -1.26713523 -0.08445381  1.35158904
+#&gt; [1]  1.45532206 -1.51490721  0.05958515
 #&gt; 
 #&gt; [[4]]
-#&gt; [1]  0.2746429  1.7106857 -1.9853286
+#&gt; [1] -1.0507035  0.5237889  0.5269146
 #&gt; 
 #&gt; [[5]]
-#&gt; [1]  1.7495374 -1.9464769  0.1969395
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] -0.6371314  1.5062849 -0.8691535
-#&gt; 
-#&gt; [[7]]
-#&gt; [1]  1.1366260 -1.2388125  0.1021865
-#&gt; 
-#&gt; [[8]]
-#&gt; [1] -1.0504695  0.2905295  0.7599401
-#&gt; 
-#&gt; [[9]]
-#&gt; [1] -0.51147315 -0.04206255  0.55353570
-#&gt; 
-#&gt; [[10]]
-#&gt; [1]  0.08862489  0.68422314 -0.77284803
+#&gt; [1]  0.01075148  0.01387718 -0.02462866
 #&gt; </div><div class='input'>
 <span class='co'># `.after` allows you to "align to the left" rather than the right</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1 2 3
 #&gt; 
 #&gt; [[2]]
@@ -358,30 +312,15 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [1] 3 4 5
 #&gt; 
 #&gt; [[4]]
-#&gt; [1] 4 5 6
+#&gt; [1] 4 5
 #&gt; 
 #&gt; [[5]]
-#&gt; [1] 5 6 7
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] 6 7 8
-#&gt; 
-#&gt; [[7]]
-#&gt; [1] 7 8 9
-#&gt; 
-#&gt; [[8]]
-#&gt; [1]  8  9 10
-#&gt; 
-#&gt; [[9]]
-#&gt; [1]  9 10
-#&gt; 
-#&gt; [[10]]
-#&gt; [1] 10
+#&gt; [1] 5
 #&gt; </div><div class='input'>
 <span class='co'># And a mixture of `.before` and `.after`</span>
 <span class='co'># allows you complete control over the exact alignment.</span>
 <span class='co'># Below, "center alignment" is used.</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>10</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1 2
 #&gt; 
 #&gt; [[2]]
@@ -394,22 +333,7 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [1] 3 4 5
 #&gt; 
 #&gt; [[5]]
-#&gt; [1] 4 5 6
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] 5 6 7
-#&gt; 
-#&gt; [[7]]
-#&gt; [1] 6 7 8
-#&gt; 
-#&gt; [[8]]
-#&gt; [1] 7 8 9
-#&gt; 
-#&gt; [[9]]
-#&gt; [1]  8  9 10
-#&gt; 
-#&gt; [[10]]
-#&gt; [1]  9 10
+#&gt; [1] 4 5
 #&gt; </div><div class='input'>
 <span class='co'># The `.step` controls how the window is shifted along `.x`,</span>
 <span class='co'># allowing you to "skip" iterations if you only need a less granular result</span>
@@ -479,7 +403,8 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 <span class='co'># Data frames</span>
 
 <span class='co'># Data frames are iterated over rowwise</span>
-<span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='no'>mtcars_rowwise</span> <span class='kw'>&lt;-</span> <span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>)
+<span class='no'>mtcars_rowwise</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; [[1]]
 #&gt;           mpg cyl disp  hp drat   wt  qsec vs am gear carb
 #&gt; Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4
 #&gt; 
@@ -490,122 +415,6 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [[3]]
 #&gt;             mpg cyl disp hp drat   wt  qsec vs am gear carb
 #&gt; Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1
-#&gt; 
-#&gt; [[4]]
-#&gt;                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-#&gt; 
-#&gt; [[5]]
-#&gt;                    mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.44 17.02  0  0    3    2
-#&gt; 
-#&gt; [[6]]
-#&gt;          mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Valiant 18.1   6  225 105 2.76 3.46 20.22  1  0    3    1
-#&gt; 
-#&gt; [[7]]
-#&gt;             mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Duster 360 14.3   8  360 245 3.21 3.57 15.84  0  0    3    4
-#&gt; 
-#&gt; [[8]]
-#&gt;            mpg cyl  disp hp drat   wt qsec vs am gear carb
-#&gt; Merc 240D 24.4   4 146.7 62 3.69 3.19   20  1  0    4    2
-#&gt; 
-#&gt; [[9]]
-#&gt;           mpg cyl  disp hp drat   wt qsec vs am gear carb
-#&gt; Merc 230 22.8   4 140.8 95 3.92 3.15 22.9  1  0    4    2
-#&gt; 
-#&gt; [[10]]
-#&gt;           mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 280 19.2   6 167.6 123 3.92 3.44 18.3  1  0    4    4
-#&gt; 
-#&gt; [[11]]
-#&gt;            mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 280C 17.8   6 167.6 123 3.92 3.44 18.9  1  0    4    4
-#&gt; 
-#&gt; [[12]]
-#&gt;             mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 450SE 16.4   8 275.8 180 3.07 4.07 17.4  0  0    3    3
-#&gt; 
-#&gt; [[13]]
-#&gt;             mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 450SL 17.3   8 275.8 180 3.07 3.73 17.6  0  0    3    3
-#&gt; 
-#&gt; [[14]]
-#&gt;              mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 450SLC 15.2   8 275.8 180 3.07 3.78   18  0  0    3    3
-#&gt; 
-#&gt; [[15]]
-#&gt;                     mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Cadillac Fleetwood 10.4   8  472 205 2.93 5.25 17.98  0  0    3    4
-#&gt; 
-#&gt; [[16]]
-#&gt;                      mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Lincoln Continental 10.4   8  460 215    3 5.424 17.82  0  0    3    4
-#&gt; 
-#&gt; [[17]]
-#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Chrysler Imperial 14.7   8  440 230 3.23 5.345 17.42  0  0    3    4
-#&gt; 
-#&gt; [[18]]
-#&gt;           mpg cyl disp hp drat  wt  qsec vs am gear carb
-#&gt; Fiat 128 32.4   4 78.7 66 4.08 2.2 19.47  1  1    4    1
-#&gt; 
-#&gt; [[19]]
-#&gt;              mpg cyl disp hp drat    wt  qsec vs am gear carb
-#&gt; Honda Civic 30.4   4 75.7 52 4.93 1.615 18.52  1  1    4    2
-#&gt; 
-#&gt; [[20]]
-#&gt;                 mpg cyl disp hp drat    wt qsec vs am gear carb
-#&gt; Toyota Corolla 33.9   4 71.1 65 4.22 1.835 19.9  1  1    4    1
-#&gt; 
-#&gt; [[21]]
-#&gt;                mpg cyl  disp hp drat    wt  qsec vs am gear carb
-#&gt; Toyota Corona 21.5   4 120.1 97  3.7 2.465 20.01  1  0    3    1
-#&gt; 
-#&gt; [[22]]
-#&gt;                   mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Dodge Challenger 15.5   8  318 150 2.76 3.52 16.87  0  0    3    2
-#&gt; 
-#&gt; [[23]]
-#&gt;              mpg cyl disp  hp drat    wt qsec vs am gear carb
-#&gt; AMC Javelin 15.2   8  304 150 3.15 3.435 17.3  0  0    3    2
-#&gt; 
-#&gt; [[24]]
-#&gt;             mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Camaro Z28 13.3   8  350 245 3.73 3.84 15.41  0  0    3    4
-#&gt; 
-#&gt; [[25]]
-#&gt;                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Pontiac Firebird 19.2   8  400 175 3.08 3.845 17.05  0  0    3    2
-#&gt; 
-#&gt; [[26]]
-#&gt;            mpg cyl disp hp drat    wt qsec vs am gear carb
-#&gt; Fiat X1-9 27.3   4   79 66 4.08 1.935 18.9  1  1    4    1
-#&gt; 
-#&gt; [[27]]
-#&gt;               mpg cyl  disp hp drat   wt qsec vs am gear carb
-#&gt; Porsche 914-2  26   4 120.3 91 4.43 2.14 16.7  0  1    5    2
-#&gt; 
-#&gt; [[28]]
-#&gt;               mpg cyl disp  hp drat    wt qsec vs am gear carb
-#&gt; Lotus Europa 30.4   4 95.1 113 3.77 1.513 16.9  1  1    5    2
-#&gt; 
-#&gt; [[29]]
-#&gt;                 mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Ford Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4
-#&gt; 
-#&gt; [[30]]
-#&gt;               mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Ferrari Dino 19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
-#&gt; 
-#&gt; [[31]]
-#&gt;               mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8
-#&gt; 
-#&gt; [[32]]
-#&gt;             mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Volvo 142E 21.4   4  121 109 4.11 2.78 18.6  1  1    4    2
 #&gt; </div><div class='input'>
 <span class='co'># This means that any column name is easily accessible</span>
 <span class='fu'>slide_dbl</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>$<span class='no'>mpg</span> + <span class='no'>.x</span>$<span class='no'>cyl</span>)</div><div class='output co'>#&gt;  [1] 27.0 27.0 26.8 27.4 26.7 24.1 22.3 28.4 26.8 25.2 23.8 24.4 25.3 23.2 18.4
@@ -613,7 +422,8 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [31] 23.0 25.4</div><div class='input'>
 <span class='co'># More advanced rowwise iteration is available as well by using the</span>
 <span class='co'># other arguments</span>
-<span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='no'>mtcars_rowwise_window</span> <span class='kw'>&lt;-</span> <span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>mtcars_rowwise_window</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; [[1]]
 #&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4      21   6  160 110  3.9 2.620 16.46  0  1    4    4
 #&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
@@ -629,179 +439,6 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; Mazda RX4 Wag  21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
 #&gt; Datsun 710     22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
 #&gt; Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-#&gt; 
-#&gt; [[4]]
-#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
-#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
-#&gt; 
-#&gt; [[5]]
-#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
-#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-#&gt; 
-#&gt; [[6]]
-#&gt;                    mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.44 17.02  0  0    3    2
-#&gt; Valiant           18.1   6  225 105 2.76 3.46 20.22  1  0    3    1
-#&gt; Duster 360        14.3   8  360 245 3.21 3.57 15.84  0  0    3    4
-#&gt; 
-#&gt; [[7]]
-#&gt;             mpg cyl  disp  hp drat   wt  qsec vs am gear carb
-#&gt; Valiant    18.1   6 225.0 105 2.76 3.46 20.22  1  0    3    1
-#&gt; Duster 360 14.3   8 360.0 245 3.21 3.57 15.84  0  0    3    4
-#&gt; Merc 240D  24.4   4 146.7  62 3.69 3.19 20.00  1  0    4    2
-#&gt; 
-#&gt; [[8]]
-#&gt;             mpg cyl  disp  hp drat   wt  qsec vs am gear carb
-#&gt; Duster 360 14.3   8 360.0 245 3.21 3.57 15.84  0  0    3    4
-#&gt; Merc 240D  24.4   4 146.7  62 3.69 3.19 20.00  1  0    4    2
-#&gt; Merc 230   22.8   4 140.8  95 3.92 3.15 22.90  1  0    4    2
-#&gt; 
-#&gt; [[9]]
-#&gt;            mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 240D 24.4   4 146.7  62 3.69 3.19 20.0  1  0    4    2
-#&gt; Merc 230  22.8   4 140.8  95 3.92 3.15 22.9  1  0    4    2
-#&gt; Merc 280  19.2   6 167.6 123 3.92 3.44 18.3  1  0    4    4
-#&gt; 
-#&gt; [[10]]
-#&gt;            mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 230  22.8   4 140.8  95 3.92 3.15 22.9  1  0    4    2
-#&gt; Merc 280  19.2   6 167.6 123 3.92 3.44 18.3  1  0    4    4
-#&gt; Merc 280C 17.8   6 167.6 123 3.92 3.44 18.9  1  0    4    4
-#&gt; 
-#&gt; [[11]]
-#&gt;             mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 280   19.2   6 167.6 123 3.92 3.44 18.3  1  0    4    4
-#&gt; Merc 280C  17.8   6 167.6 123 3.92 3.44 18.9  1  0    4    4
-#&gt; Merc 450SE 16.4   8 275.8 180 3.07 4.07 17.4  0  0    3    3
-#&gt; 
-#&gt; [[12]]
-#&gt;             mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 280C  17.8   6 167.6 123 3.92 3.44 18.9  1  0    4    4
-#&gt; Merc 450SE 16.4   8 275.8 180 3.07 4.07 17.4  0  0    3    3
-#&gt; Merc 450SL 17.3   8 275.8 180 3.07 3.73 17.6  0  0    3    3
-#&gt; 
-#&gt; [[13]]
-#&gt;              mpg cyl  disp  hp drat   wt qsec vs am gear carb
-#&gt; Merc 450SE  16.4   8 275.8 180 3.07 4.07 17.4  0  0    3    3
-#&gt; Merc 450SL  17.3   8 275.8 180 3.07 3.73 17.6  0  0    3    3
-#&gt; Merc 450SLC 15.2   8 275.8 180 3.07 3.78 18.0  0  0    3    3
-#&gt; 
-#&gt; [[14]]
-#&gt;                     mpg cyl  disp  hp drat   wt  qsec vs am gear carb
-#&gt; Merc 450SL         17.3   8 275.8 180 3.07 3.73 17.60  0  0    3    3
-#&gt; Merc 450SLC        15.2   8 275.8 180 3.07 3.78 18.00  0  0    3    3
-#&gt; Cadillac Fleetwood 10.4   8 472.0 205 2.93 5.25 17.98  0  0    3    4
-#&gt; 
-#&gt; [[15]]
-#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-#&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-#&gt; 
-#&gt; [[16]]
-#&gt;                      mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Cadillac Fleetwood  10.4   8  472 205 2.93 5.250 17.98  0  0    3    4
-#&gt; Lincoln Continental 10.4   8  460 215 3.00 5.424 17.82  0  0    3    4
-#&gt; Chrysler Imperial   14.7   8  440 230 3.23 5.345 17.42  0  0    3    4
-#&gt; 
-#&gt; [[17]]
-#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-#&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-#&gt; Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
-#&gt; 
-#&gt; [[18]]
-#&gt;                    mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Chrysler Imperial 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-#&gt; Fiat 128          32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
-#&gt; Honda Civic       30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
-#&gt; 
-#&gt; [[19]]
-#&gt;                 mpg cyl disp hp drat    wt  qsec vs am gear carb
-#&gt; Fiat 128       32.4   4 78.7 66 4.08 2.200 19.47  1  1    4    1
-#&gt; Honda Civic    30.4   4 75.7 52 4.93 1.615 18.52  1  1    4    2
-#&gt; Toyota Corolla 33.9   4 71.1 65 4.22 1.835 19.90  1  1    4    1
-#&gt; 
-#&gt; [[20]]
-#&gt;                 mpg cyl  disp hp drat    wt  qsec vs am gear carb
-#&gt; Honda Civic    30.4   4  75.7 52 4.93 1.615 18.52  1  1    4    2
-#&gt; Toyota Corolla 33.9   4  71.1 65 4.22 1.835 19.90  1  1    4    1
-#&gt; Toyota Corona  21.5   4 120.1 97 3.70 2.465 20.01  1  0    3    1
-#&gt; 
-#&gt; [[21]]
-#&gt;                   mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Toyota Corolla   33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
-#&gt; Toyota Corona    21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
-#&gt; Dodge Challenger 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-#&gt; 
-#&gt; [[22]]
-#&gt;                   mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Toyota Corona    21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
-#&gt; Dodge Challenger 15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-#&gt; AMC Javelin      15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
-#&gt; 
-#&gt; [[23]]
-#&gt;                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Dodge Challenger 15.5   8  318 150 2.76 3.520 16.87  0  0    3    2
-#&gt; AMC Javelin      15.2   8  304 150 3.15 3.435 17.30  0  0    3    2
-#&gt; Camaro Z28       13.3   8  350 245 3.73 3.840 15.41  0  0    3    4
-#&gt; 
-#&gt; [[24]]
-#&gt;                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; AMC Javelin      15.2   8  304 150 3.15 3.435 17.30  0  0    3    2
-#&gt; Camaro Z28       13.3   8  350 245 3.73 3.840 15.41  0  0    3    4
-#&gt; Pontiac Firebird 19.2   8  400 175 3.08 3.845 17.05  0  0    3    2
-#&gt; 
-#&gt; [[25]]
-#&gt;                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#&gt; Camaro Z28       13.3   8  350 245 3.73 3.840 15.41  0  0    3    4
-#&gt; Pontiac Firebird 19.2   8  400 175 3.08 3.845 17.05  0  0    3    2
-#&gt; Fiat X1-9        27.3   4   79  66 4.08 1.935 18.90  1  1    4    1
-#&gt; 
-#&gt; [[26]]
-#&gt;                   mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Pontiac Firebird 19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
-#&gt; Fiat X1-9        27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
-#&gt; Porsche 914-2    26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
-#&gt; 
-#&gt; [[27]]
-#&gt;                mpg cyl  disp  hp drat    wt qsec vs am gear carb
-#&gt; Fiat X1-9     27.3   4  79.0  66 4.08 1.935 18.9  1  1    4    1
-#&gt; Porsche 914-2 26.0   4 120.3  91 4.43 2.140 16.7  0  1    5    2
-#&gt; Lotus Europa  30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
-#&gt; 
-#&gt; [[28]]
-#&gt;                 mpg cyl  disp  hp drat    wt qsec vs am gear carb
-#&gt; Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.7  0  1    5    2
-#&gt; Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
-#&gt; Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4
-#&gt; 
-#&gt; [[29]]
-#&gt;                 mpg cyl  disp  hp drat    wt qsec vs am gear carb
-#&gt; Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
-#&gt; Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4
-#&gt; Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6
-#&gt; 
-#&gt; [[30]]
-#&gt;                 mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Ford Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4
-#&gt; Ferrari Dino   19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
-#&gt; Maserati Bora  15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
-#&gt; 
-#&gt; [[31]]
-#&gt;                mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Ferrari Dino  19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
-#&gt; Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
-#&gt; Volvo 142E    21.4   4  121 109 4.11 2.78 18.6  1  1    4    2
-#&gt; 
-#&gt; [[32]]
-#&gt;                mpg cyl disp  hp drat   wt qsec vs am gear carb
-#&gt; Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
-#&gt; Volvo 142E    21.4   4  121 109 4.11 2.78 18.6  1  1    4    2
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Cumulative sliding</span>
