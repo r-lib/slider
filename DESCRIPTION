@@ -29,7 +29,7 @@ Suggests:
     lubridate,
     RcppQuantuccia
 Remotes:
-    DavisVaughan/vctrs@c-exports-more
+    DavisVaughan/vctrs@c-exports
 Collate: 
     'slide-index2.R'
     'pslide-index.R'
