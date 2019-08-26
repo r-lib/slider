@@ -203,20 +203,18 @@ create very compact anonymous functions with up to two inputs.</p></td>
     </tr>
     <tr>
       <th>.before</th>
-      <td><p><code>[vector(1) / function / formula]</code></p>
+      <td><p><code>[vector(1)]</code></p>
 <p>The number of values <em>before</em> the current element of <code>.i</code> to include in the
 sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements before the
 current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.</p>
 <p>For <code><a href='slide_index.html'>slide_index()</a></code>, this can be any object that can be subtracted from
 <code>.i</code> with <code>-</code>. One common use case is to set this to a lubridate period,
-such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
-<p>Additionally, <code>.before</code> is allowed to be a function or lambda function
-with 1 argument, the entire <code>.i</code> vector.</p></td>
+such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></td>
     </tr>
     <tr>
       <th>.after</th>
-      <td><p><code>[vector(1) / function / formula]</code></p>
+      <td><p><code>[vector(1)]</code></p>
 <p>The number of values <em>after</em> the current element of <code>.i</code> to include in the
 sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements after the
 current position, constructing the reverse of a cumulative window, where
@@ -225,9 +223,7 @@ move through <code>.x</code>. A negative value is allowed, and allows you to "lo
 backward" as well.</p>
 <p>For <code><a href='slide_index.html'>slide_index()</a></code>, this can be any object that can be added to
 <code>.i</code> with <code>+</code>. One common use case is to set this to a lubridate period,
-such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
-<p>Additionally, <code>.after</code> is allowed to be a function or lambda function
-with 1 argument, the entire <code>.i</code> vector.</p></td>
+such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></td>
     </tr>
     <tr>
       <th>.complete</th>
@@ -287,9 +283,8 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 are allowed.</p></li>
 <li><p><code>.i</code> is not allowed to have missing values.</p></li>
 </ul>
-    <p>The ranges computed from <code>.i - .before</code>, <code>.i + .after</code>, or by applying a
-before / after function to <code>.i</code> have the same restrictions as the three
-mentioned above.</p>
+    <p>The ranges computed from <code>.i - .before</code> and <code>.i + .after</code> have the same
+restrictions as the three mentioned above.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
