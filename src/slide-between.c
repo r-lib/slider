@@ -473,6 +473,12 @@ static void eval_loop(SEXP x,
     elt = Rf_eval(f_call, env);
     REPROTECT(elt, elt_prot_idx);
 
+    if (out.has_indices) {
+      out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
+    } else {
+      *out.p_index_val = *iteration.p_data_val - 1;
+    }
+
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
@@ -486,23 +492,15 @@ static void eval_loop(SEXP x,
         stop_not_all_size_one(*iteration.p_data_val, vec_size(elt));
       }
 
-      if (out.has_indices) {
-        out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
-      } else {
-        (*out.p_index_val)++;
-      }
-
       vec_assign_impl(out.data, out.index, elt, false);
       continue;
     }
 
     if (!out.has_indices) {
-      (*out.p_index_val)++;
-      SET_VECTOR_ELT(out.data, *out.p_index_val - 1, elt);
+      SET_VECTOR_ELT(out.data, *out.p_index_val, elt);
       continue;
     }
 
-    out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
     out.p_index_val = INTEGER(out.index);
     out.index_size = vec_size(out.index);
 
