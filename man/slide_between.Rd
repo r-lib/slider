@@ -52,8 +52,8 @@ with a size that is different from \code{.x}.
 }
 
 \examples{
-library(lubridate)
 library(vctrs)
+library(lubridate, warn.conflicts = FALSE)
 
 # ---------------------------------------------------------------------------
 # Returning a size smaller than `.x`
@@ -92,7 +92,8 @@ i <- vec_c(as.Date("2019-02-27") + 0:3, as.Date("2019-03-27") + 0:5)
 x <- rnorm(vec_seq_along(i))
 
 # You might try `slide_index()` like this, but you'd run into this error
-try(slide_index(x, i, mean, .before = months(1)))
+cnd <- try(slide_index(x, i, mean, .before = months(1)), silent = TRUE)
+attr(cnd, "condition")[["message"]]
 
 # This is because when you actually compute the `.i - .before` sequence,
 # you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.
