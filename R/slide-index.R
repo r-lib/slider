@@ -83,15 +83,6 @@
 #' # since `i - lubridate::days(1)` is allowed
 #' slide_index(i, i, ~.x, .before = lubridate::days(1))
 #'
-#' # If you are following a "business calendar", you might want `"2019-08-19"`
-#' # (a Monday) to be paired with `"2019-08-16"` (a Friday) because they are
-#' # adjacent in the business week. Using the RcppQuantuccia package, we
-#' # can use `advanceUnits()` to compute the correct business day boundaries
-#' # for use in `slide_index()`. This requires `.before` to be a function, where
-#' # `.x` will be replaced with the index vector, `i`.
-#' library(RcppQuantuccia)
-#' slide_index(i, i, ~.x, .before = ~advanceUnits(.x, -1, "Days"))
-#'
 #' # ---------------------------------------------------------------------------
 #'
 #' # When `.i` has repeated values, they are always grouped together.
