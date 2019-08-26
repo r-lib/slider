@@ -73,12 +73,15 @@ struct last_info {
   SEXP* p_stop_index;
 };
 
-#define PROTECT_LAST_INFO(last, n) do {   \
-  PROTECT((last)->start_loc);             \
-  PROTECT((last)->stop_loc);              \
-  PROTECT((last)->start_index);           \
-  PROTECT((last)->stop_index);            \
-  *n += 4;                                \
+#define PROTECT_LAST_INFO(last, n) do {                \
+  PROTECT((last)->start_loc);                          \
+  PROTECT((last)->stop_loc);                           \
+  PROTECT((last)->start_index);                        \
+  PROTECT((last)->stop_index);                         \
+  /* SEXP* assignment must be done after protection */ \
+  (last)->p_start_index = &(last)->start_index;        \
+  (last)->p_stop_index = &(last)->stop_index;          \
+  *n += 4;                                             \
 } while (0)
 
 // -----------------------------------------------------------------------------
