@@ -319,7 +319,7 @@ static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
 static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
   int backward_adjustment = 0;
 
-  for (int j = size - 1; j > 0; --j) {
+  for (int j = size - 1; j >= 0; --j) {
     if (compare_lt(i_last, 0, range, j)) {
       backward_adjustment++;
     } else {
