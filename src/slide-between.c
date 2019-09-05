@@ -170,7 +170,7 @@ static struct window_info new_window_info(int* window_starts, int* window_stops,
   window.stops = window_stops;
 
   window.start = 0;
-  window.stop = window_stops[size];
+  window.stop = window_stops[size - 1];
 
   window.seq = PROTECT(compact_seq(0, 0, true));
   window.p_seq_val = INTEGER(window.seq);
