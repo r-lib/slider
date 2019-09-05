@@ -135,7 +135,7 @@ test_that("can use a negative before to 'look forward'", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = -1, .after = unbounded()),
+    slide(1:5, identity, .before = -1, .after = Inf),
     list(
       2:5,
       3:5,
@@ -170,7 +170,7 @@ test_that("can use a negative .after to 'look backward'", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = -1),
+    slide(1:5, identity, .before = Inf, .after = -1),
     list(
       NULL,
       1L,
@@ -285,11 +285,11 @@ test_that(".complete works with negative .before", {
 })
 
 # ------------------------------------------------------------------------------
-# unbounded()
+# unbounded
 
-test_that("can use unbounded() in .before for cumulative sliding", {
+test_that("can use Inf in .before for cumulative sliding", {
   expect_equal(
-    slide(1:5, identity, .before = unbounded()),
+    slide(1:5, identity, .before = Inf),
     list(
       1L,
       1:2,
@@ -300,9 +300,9 @@ test_that("can use unbounded() in .before for cumulative sliding", {
   )
 })
 
-test_that("can use unbounded() in .before + set .after", {
+test_that("can use Inf in .before + set .after", {
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = 1L),
+    slide(1:5, identity, .before = Inf, .after = 1L),
     list(
       1:2,
       1:3,
@@ -313,7 +313,7 @@ test_that("can use unbounded() in .before + set .after", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = -1L),
+    slide(1:5, identity, .before = Inf, .after = -1L),
     list(
       NULL,
       1L,
@@ -324,9 +324,9 @@ test_that("can use unbounded() in .before + set .after", {
   )
 })
 
-test_that("can use unbounded() in .after for cumulative sliding", {
+test_that("can use Inf in .after for cumulative sliding", {
   expect_equal(
-    slide(1:5, identity, .after = unbounded()),
+    slide(1:5, identity, .after = Inf),
     list(
       1:5,
       2:5,
@@ -337,9 +337,9 @@ test_that("can use unbounded() in .after for cumulative sliding", {
   )
 })
 
-test_that("can use unbounded() in .after + set .before", {
+test_that("can use Inf in .after + set .before", {
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L),
+    slide(1:5, identity, .after = Inf, .before = 1L),
     list(
       1:5,
       1:5,
@@ -350,7 +350,7 @@ test_that("can use unbounded() in .after + set .before", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = 1L, .complete = TRUE),
+    slide(1:5, identity, .after = Inf, .before = 1L, .complete = TRUE),
     list(
       NULL,
       1:5,
@@ -361,7 +361,7 @@ test_that("can use unbounded() in .after + set .before", {
   )
 
   expect_equal(
-    slide(1:5, identity, .after = unbounded(), .before = -1L),
+    slide(1:5, identity, .after = Inf, .before = -1L),
     list(
       2:5,
       3:5,
@@ -372,9 +372,9 @@ test_that("can use unbounded() in .after + set .before", {
   )
 })
 
-test_that("can be doubly unbounded()", {
+test_that("can be doubly unbounded", {
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = unbounded()),
+    slide(1:5, identity, .before = Inf, .after = Inf),
     list(
       1:5,
       1:5,
@@ -385,7 +385,7 @@ test_that("can be doubly unbounded()", {
   )
 
   expect_equal(
-    slide(1:5, identity, .before = unbounded(), .after = unbounded(), .complete = TRUE),
+    slide(1:5, identity, .before = Inf, .after = Inf, .complete = TRUE),
     list(
       1:5,
       1:5,
