@@ -472,7 +472,7 @@ static void eval_loop(SEXP x,
     if (out.has_indices) {
       out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
     } else {
-      *out.p_index_val = *iteration.p_data_val - 1;
+      *out.p_index_val = *iteration.p_data_val;
     }
 
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
@@ -493,7 +493,7 @@ static void eval_loop(SEXP x,
     }
 
     if (!out.has_indices) {
-      SET_VECTOR_ELT(out.data, *out.p_index_val, elt);
+      SET_VECTOR_ELT(out.data, *out.p_index_val - 1, elt);
       continue;
     }
 
