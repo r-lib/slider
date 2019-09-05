@@ -273,7 +273,6 @@ static struct iteration_info new_iteration_info(struct index_info index, struct 
   int iteration_min = 1;
   int iteration_max = range.count;
 
-  // TODO - rewrite these helpers to use index/range
   if (complete) {
     if (!range.start_unbounded) {
       iteration_min += iteration_min_adjustment(index.first, range.starts, range.count);
