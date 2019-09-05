@@ -2,9 +2,35 @@
 % Please edit documentation in R/slide-between.R
 \name{slide_between}
 \alias{slide_between}
+\alias{slide_between_vec}
+\alias{slide_between_dbl}
+\alias{slide_between_int}
+\alias{slide_between_lgl}
+\alias{slide_between_chr}
+\alias{slide_between_raw}
+\alias{slide_between_dfr}
+\alias{slide_between_dfc}
 \title{Slide between boundaries}
 \usage{
 slide_between(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_vec(.x, .i, .starts, .stops, .f, ..., .ptype = list())
+
+slide_between_dbl(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_int(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_lgl(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_chr(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_raw(.x, .i, .starts, .stops, .f, ...)
+
+slide_between_dfr(.x, .i, .starts, .stops, .f, ..., .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique"))
+
+slide_between_dfc(.x, .i, .starts, .stops, .f, ..., .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal"))
 }
 \arguments{
 \item{.x}{\code{[vector]}
@@ -37,6 +63,34 @@ The \code{.} placeholder can be used instead of \code{.x}. This allows you to
 create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
+
+\item{.ptype}{\code{[vector]}
+
+The prototype corresponding to the type of the output. Defaults to
+a \code{list()}.}
+
+\item{.names_to}{Optionally, the name of a column where the names
+of \code{...} arguments are copied. These names are useful to identify
+which row comes from which input. If supplied and \code{...} is not named,
+an integer column is used to identify the rows.}
+
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
+\code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
+options.
+
+With \code{vec_rbind()}, the repair function is applied to all inputs
+separately. This is because \code{vec_rbind()} needs to align their
+columns before binding the rows, and thus needs all inputs to
+have unique names. On the other hand, \code{vec_cbind()} applies the
+repair function after all inputs have been concatenated together
+in a final data frame. Hence \code{vec_cbind()} allows the more
+permissive minimal names repair.}
+
+\item{.size}{If, \code{NULL}, the default, will determine the number of
+rows in \code{vec_cbind()} output by using the standard recycling rules.
+
+Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.}
 }
 \description{
 \code{slide_between()} is the lower level engine that powers \code{\link[=slide_index]{slide_index()}}. It

@@ -114,6 +114,202 @@ slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
   )
 }
 
+#' @rdname slide_between
+#' @export
+slide_between_vec <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...,
+                              .ptype = list()) {
+
+  if (is.null(.ptype)) {
+    out <- slide_between_vec_simplify(
+      .x,
+      .i,
+      .starts,
+      .stops,
+      .f,
+      ...
+    )
+
+    return(out)
+  }
+
+  slide_between_impl(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .constrain = TRUE,
+    .ptype = .ptype
+  )
+}
+
+slide_between_vec_simplify <- function(.x,
+                                       .i,
+                                       .starts,
+                                       .stops,
+                                       .f,
+                                       ...) {
+  out <- slide_between(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...
+  )
+
+  check_all_size_one(out)
+
+  vec_c(!!!out)
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_dbl <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...) {
+  slide_between_vec(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = double()
+  )
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_int <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...) {
+  slide_between_vec(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = integer()
+  )
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_lgl <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...) {
+  slide_between_vec(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = logical()
+  )
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_chr <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...) {
+  slide_between_vec(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = character()
+  )
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_raw <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...) {
+  slide_between_vec(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = raw()
+  )
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_dfr <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...,
+                              .names_to = NULL,
+                              .name_repair = c("unique", "universal", "check_unique")) {
+  out <- slide_between(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...
+  )
+
+  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
+}
+
+#' @rdname slide_between
+#' @export
+slide_between_dfc <- function(.x,
+                              .i,
+                              .starts,
+                              .stops,
+                              .f,
+                              ...,
+                              .size = NULL,
+                              .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+  out <- slide_between(
+    .x,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...
+  )
+
+  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
+}
+
+# ------------------------------------------------------------------------------
+
 slide_between_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
   vec_assert(.x)
 
