@@ -120,7 +120,25 @@ with a size that is different from <code>.x</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>slide_between</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>slide_between</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_vec</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+
+<span class='fu'>slide_between_dbl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_int</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_lgl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_chr</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_raw</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+
+<span class='fu'>slide_between_dfr</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>))
+
+<span class='fu'>slide_between_dfc</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +178,39 @@ create very compact anonymous functions with up to two inputs.</p></td>
     <tr>
       <th>...</th>
       <td><p>Additional arguments passed on to the mapped function.</p></td>
+    </tr>
+    <tr>
+      <th>.ptype</th>
+      <td><p><code>[vector]</code></p>
+<p>The prototype corresponding to the type of the output. Defaults to
+a <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>.names_to</th>
+      <td><p>Optionally, the name of a column where the names
+of <code>...</code> arguments are copied. These names are useful to identify
+which row comes from which input. If supplied and <code>...</code> is not named,
+an integer column is used to identify the rows.</p></td>
+    </tr>
+    <tr>
+      <th>.name_repair</th>
+      <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
+<code>"check_unique"</code>. See <code>vec_as_names()</code> for the meaning of these
+options.</p>
+<p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
+separately. This is because <code>vec_rbind()</code> needs to align their
+columns before binding the rows, and thus needs all inputs to
+have unique names. On the other hand, <code>vec_cbind()</code> applies the
+repair function after all inputs have been concatenated together
+in a final data frame. Hence <code>vec_cbind()</code> allows the more
+permissive minimal names repair.</p></td>
+    </tr>
+    <tr>
+      <th>.size</th>
+      <td><p>If, <code>NULL</code>, the default, will determine the number of
+rows in <code>vec_cbind()</code> output by using the standard recycling rules.</p>
+<p>Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.</p></td>
     </tr>
     </table>
     
