@@ -69,10 +69,10 @@ slide_dbl(1:5, ~mean(.x), .after = 2)
 slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
 ```
 
-With `unbounded()`, you can do a "cumulative slide" to compute cumulative expressions. I think of this as saying "give me everything before the current element."
+With `Inf`, you can do a "cumulative slide" to compute cumulative expressions. I think of this as saying "give me everything before the current element."
 
 ```{r}
-slide(1:4, ~.x, .before = unbounded())
+slide(1:4, ~.x, .before = Inf)
 ```
 
 With `.complete`, you can decide whether or not `.f` should be evaluated on incomplete windows. In the following example, the requested window size is 3, but the first two results are computed on windows of size 1 and 2 because partial results are allowed by default. When `.complete` is set to `TRUE`, the first two results are not computed.
