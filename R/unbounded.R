@@ -22,7 +22,3 @@ print.slide_box_unbounded <- function(x, ...) {
   cat("<unbounded>")
   print(unbox(x))
 }
-
-is_unbounded <- function(x) {
-  inherits(x, "slide_box_unbounded")
-}
