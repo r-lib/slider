@@ -13,5 +13,5 @@ void slide_init_vctrs() {
   vctrs_cast = (SEXP (*)(SEXP, SEXP, SEXP, SEXP)) R_GetCCallable("vctrs", "vctrs_cast");
   compact_seq = (SEXP (*)(R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "compact_seq");
   init_compact_seq = (SEXP (*)(int*, R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "init_compact_seq");
-  vec_size = (R_len_t (*)(SEXP)) R_GetCCallable("vctrs", "vec_size");
+  vec_size = (R_len_t (*)(SEXP)) R_GetCCallable("vctrs", "vec_short_size");
 }
