@@ -182,9 +182,9 @@ create very compact anonymous functions with up to two inputs.</p></td>
     </tr>
     <tr>
       <th>.before</th>
-      <td><p><code>[vector(1)]</code></p>
+      <td><p><code>[vector(1) / Inf]</code></p>
 <p>The number of values <em>before</em> the current element of <code>.i</code> to include in the
-sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements before the
+sliding window. Set to <code>Inf</code> to select all elements before the
 current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.</p>
 <p>For <code>slide_index()</code>, this can be any object that can be subtracted from
@@ -193,9 +193,9 @@ such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lub
     </tr>
     <tr>
       <th>.after</th>
-      <td><p><code>[vector(1)]</code></p>
+      <td><p><code>[vector(1) / Inf]</code></p>
 <p>The number of values <em>after</em> the current element of <code>.i</code> to include in the
-sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements after the
+sliding window. Set to <code>Inf</code> to select all elements after the
 current position, constructing the reverse of a cumulative window, where
 you start with as many elements as possible and decrease the amount as you
 move through <code>.x</code>. A negative value is allowed, and allows you to "look

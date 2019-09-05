@@ -168,17 +168,17 @@ create very compact anonymous functions with up to two inputs.</p></td>
     </tr>
     <tr>
       <th>.before</th>
-      <td><p><code>[integer(1)]</code></p>
+      <td><p><code>[integer(1) / Inf]</code></p>
 <p>The number of values <em>before</em> the current element to include in the sliding
-window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements before the current
+window. Set to <code>Inf</code> to select all elements before the current
 position, constructing a cumulative window. A negative value is allowed,
 and allows you to "look forward" as well.</p></td>
     </tr>
     <tr>
       <th>.after</th>
-      <td><p><code>[integer(1)]</code></p>
+      <td><p><code>[integer(1) / Inf]</code></p>
 <p>The number of values <em>after</em> the current element to include in the
-sliding window. Set to <code><a href='unbounded.html'>unbounded()</a></code> to select all elements after the
+sliding window. Set to <code>Inf</code> to select all elements after the
 current position, constructing the reverse of a cumulative window, where
 you start with as many elements as possible and decrease the amount as
 you move through <code>.x</code>. A negative value is allowed, and allows you to
@@ -449,10 +449,10 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Cumulative sliding</span>
 
-<span class='co'># Using the sentinel value, `unbounded()`, you can ask `slide()` to pin the</span>
+<span class='co'># Using the special cased value, `Inf`, you can ask `slide()` to pin the</span>
 <span class='co'># start of the sliding window to the first element, effectively creating</span>
 <span class='co'># a cumulative window</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='unbounded.html'>unbounded</a></span>())</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -469,7 +469,7 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; </div><div class='input'>
 <span class='co'># Same with `.after`, this creates a window where you start with all of the</span>
 <span class='co'># elements, but decrease the total number over each iteration</span>
-<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fu'><a href='unbounded.html'>unbounded</a></span>())</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1 2 3 4 5
 #&gt; 
 #&gt; [[2]]
