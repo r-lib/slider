@@ -9,6 +9,8 @@
 status](https://travis-ci.org/DavisVaughan/slide.svg?branch=master)](https://travis-ci.org/DavisVaughan/slide)
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/slide/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slide?branch=master)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 slide provides a family of general purpose “sliding window” functions.
