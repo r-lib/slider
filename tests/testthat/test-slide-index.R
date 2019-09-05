@@ -945,6 +945,22 @@ test_that("can use unbounded .before", {
   )
 })
 
+test_that("can use unbounded .after", {
+  i <- new_date(c(0, 1, 2, 3, 4))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .after = Inf),
+    list(
+      1:5,
+      2:5,
+      3:5,
+      4:5,
+      5L
+    )
+  )
+})
+
 test_that("can use unbounded .before with positive .after", {
   i <- new_date(c(0, 1, 2, 3, 4))
   x <- seq_along(i)
@@ -986,6 +1002,22 @@ test_that("can use unbounded .before with lubridate .after", {
     list(
       1:3,
       1:4,
+      1:5,
+      1:5,
+      1:5
+    )
+  )
+})
+
+test_that("can be doubly unbounded", {
+  i <- new_date(c(0, 1, 2, 3, 4))
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index(x, i, identity, .before = Inf, .after = Inf),
+    list(
+      1:5,
+      1:5,
       1:5,
       1:5,
       1:5
