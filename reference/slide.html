@@ -522,6 +522,32 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [[5]]
 #&gt; [1] 3 4
 #&gt; </div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Removing padding</span>
+
+<span class='co'># If you are looking for a way to remove the `NA` values from something like</span>
+<span class='co'># this, then it doesn't exist as a built in option.</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>)
+<span class='fu'>slide_dbl</span>(<span class='no'>x</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1]         NA         NA         NA  0.1273295         NA -0.2291373
+#&gt;  [7]         NA -0.4812997         NA -0.2364232</div><div class='input'>
+<span class='co'># Adding an option to `slide_dbl()` to remove the `NA` values would destroy</span>
+<span class='co'># its size stability. Instead, you can use a combination of `slide_dfr()`</span>
+<span class='co'># to get the start/stop indices with `slide_between_dbl()`.</span>
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='no'>x</span>)
+<span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_dfr</span>(
+  <span class='no'>i</span>,
+  ~<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='no'>.x</span>[<span class='fl'>1</span>], <span class='kw'>stop</span> <span class='kw'>=</span> <span class='no'>.x</span>[<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>.x</span>)]),
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
+
+<span class='no'>idx</span></div><div class='output co'>#&gt;   start stop
+#&gt; 1     1    4
+#&gt; 2     3    6
+#&gt; 3     5    8
+#&gt; 4     7   10</div><div class='input'>
+<span class='fu'><a href='slide_between.html'>slide_between_dbl</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>idx</span>$<span class='no'>start</span>, <span class='no'>idx</span>$<span class='no'>stop</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [1]  0.1273295 -0.2291373 -0.4812997 -0.2364232</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
