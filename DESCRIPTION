@@ -42,6 +42,5 @@ Collate:
     'slide-index.R'
     'slide-package.R'
     'slide.R'
-    'unbounded.R'
     'utils.R'
     'zzz.R'

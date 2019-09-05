@@ -18,17 +18,17 @@
 #'
 #' @param ... Additional arguments passed on to the mapped function.
 #'
-#' @param .before `[integer(1)]`
+#' @param .before `[integer(1) / Inf]`
 #'
 #'   The number of values _before_ the current element to include in the sliding
-#'   window. Set to `unbounded()` to select all elements before the current
+#'   window. Set to `Inf` to select all elements before the current
 #'   position, constructing a cumulative window. A negative value is allowed,
 #'   and allows you to "look forward" as well.
 #'
-#' @param .after `[integer(1)]`
+#' @param .after `[integer(1) / Inf]`
 #'
 #'   The number of values _after_ the current element to include in the
-#'   sliding window. Set to `unbounded()` to select all elements after the
+#'   sliding window. Set to `Inf` to select all elements after the
 #'   current position, constructing the reverse of a cumulative window, where
 #'   you start with as many elements as possible and decrease the amount as
 #'   you move through `.x`. A negative value is allowed, and allows you to
@@ -116,14 +116,14 @@
 #' # ---------------------------------------------------------------------------
 #' # Cumulative sliding
 #'
-#' # Using the sentinel value, `unbounded()`, you can ask `slide()` to pin the
+#' # Using the special cased value, `Inf`, you can ask `slide()` to pin the
 #' # start of the sliding window to the first element, effectively creating
 #' # a cumulative window
-#' slide(1:5, ~.x, .before = unbounded())
+#' slide(1:5, ~.x, .before = Inf)
 #'
 #' # Same with `.after`, this creates a window where you start with all of the
 #' # elements, but decrease the total number over each iteration
-#' slide(1:5, ~.x, .after = unbounded())
+#' slide(1:5, ~.x, .after = Inf)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Negative `.before` / `.after`

@@ -129,22 +129,12 @@ check_index_size <- function(n, i) {
 # ------------------------------------------------------------------------------
 
 check_before <- function(before) {
-  if (is_unbounded(before)) {
-    return(invisible(before))
-  }
-
   vec_assert(before, size = 1L, arg = ".before")
-
   invisible(before)
 }
 
 check_after <- function(after) {
-  if (is_unbounded(after)) {
-    return(invisible(after))
-  }
-
   vec_assert(after, size = 1L, arg = ".after")
-
   invisible(after)
 }
 

@@ -6,6 +6,10 @@ collapse_and_trim <- function(x) {
   glue::glue_collapse(x, sep = ", ", width = 30L)
 }
 
+is_unbounded <- function(x) {
+  is.infinite(x) && x == Inf
+}
+
 check_all_size_one <- function(out) {
   size <- vec_size_common(!!!out)
 

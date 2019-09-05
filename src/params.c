@@ -23,25 +23,32 @@ static void check_scalar(SEXP x, SEXP arg) {
   stop_scalar(r_scalar_chr_get(arg), vec_size(x));
 }
 
-static SEXP check_scalar_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
-  x = PROTECT(vctrs_cast(x, ptype, x_arg, strings_empty));
-  check_scalar(x, x_arg);
-  UNPROTECT(1);
-  return x;
+static SEXP check_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
+  return vctrs_cast(x, ptype, x_arg, strings_empty);
+}
+
+static SEXP check_int(SEXP x, SEXP x_arg) {
+  return check_ptype(x, slide_shared_empty_int, x_arg);
+}
+
+static SEXP check_lgl(SEXP x, SEXP x_arg) {
+  return check_ptype(x, slide_shared_empty_lgl, x_arg);
 }
 
 static SEXP check_scalar_int(SEXP x, SEXP x_arg) {
-  return check_scalar_ptype(x, slide_shared_empty_int, x_arg);
+  check_scalar(x, x_arg);
+  return check_int(x, x_arg);
 }
 
 static SEXP check_scalar_lgl(SEXP x, SEXP x_arg) {
-  return check_scalar_ptype(x, slide_shared_empty_lgl, x_arg);
+  check_scalar(x, x_arg);
+  return check_lgl(x, x_arg);
 }
 
 // -----------------------------------------------------------------------------
 
 static bool is_unbounded(SEXP x) {
-  return OBJECT(x) && Rf_inherits(x, "slide_box_unbounded");
+  return TYPEOF(x) == REALSXP && REAL(x)[0] == R_PosInf;
 }
 
 // -----------------------------------------------------------------------------
@@ -60,12 +67,14 @@ bool pull_constrain(SEXP params) {
 int pull_before(SEXP params, bool* before_unbounded) {
   SEXP before = r_lst_get(params, 2);
 
+  check_scalar(before, strings_dot_before);
+
   if (is_unbounded(before)) {
     *before_unbounded = true;
     return 0;
   }
 
-  before = PROTECT(check_scalar_int(before, strings_dot_before));
+  before = PROTECT(check_int(before, strings_dot_before));
   UNPROTECT(1);
   return r_scalar_int_get(before);
 }
@@ -74,12 +83,14 @@ int pull_before(SEXP params, bool* before_unbounded) {
 int pull_after(SEXP params, bool* after_unbounded) {
   SEXP after = r_lst_get(params, 3);
 
+  check_scalar(after, strings_dot_after);
+
   if (is_unbounded(after)) {
     *after_unbounded = true;
     return 0;
   }
 
-  after = PROTECT(check_scalar_int(after, strings_dot_after));
+  after = PROTECT(check_int(after, strings_dot_after));
   UNPROTECT(1);
   return r_scalar_int_get(after);
 }

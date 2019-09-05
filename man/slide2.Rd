@@ -95,17 +95,17 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[integer(1)]}
+\item{.before}{\code{[integer(1) / Inf]}
 
 The number of values \emph{before} the current element to include in the sliding
-window. Set to \code{unbounded()} to select all elements before the current
+window. Set to \code{Inf} to select all elements before the current
 position, constructing a cumulative window. A negative value is allowed,
 and allows you to "look forward" as well.}
 
-\item{.after}{\code{[integer(1)]}
+\item{.after}{\code{[integer(1) / Inf]}
 
 The number of values \emph{after} the current element to include in the
-sliding window. Set to \code{unbounded()} to select all elements after the
+sliding window. Set to \code{Inf} to select all elements after the
 current position, constructing the reverse of a cumulative window, where
 you start with as many elements as possible and decrease the amount as
 you move through \code{.x}. A negative value is allowed, and allows you to

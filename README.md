@@ -84,12 +84,12 @@ slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
 #> [1] 1.5 2.0 3.0 4.0 4.5
 ```
 
-With `unbounded()`, you can do a “cumulative slide” to compute
-cumulative expressions. I think of this as saying “give me everything
-before the current element.”
+With `Inf`, you can do a “cumulative slide” to compute cumulative
+expressions. I think of this as saying “give me everything before the
+current element.”
 
 ``` r
-slide(1:4, ~.x, .before = unbounded())
+slide(1:4, ~.x, .before = Inf)
 #> [[1]]
 #> [1] 1
 #> 

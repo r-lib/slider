@@ -102,10 +102,10 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[vector(1)]}
+\item{.before}{\code{[vector(1) / Inf]}
 
 The number of values \emph{before} the current element of \code{.i} to include in the
-sliding window. Set to \code{unbounded()} to select all elements before the
+sliding window. Set to \code{Inf} to select all elements before the
 current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.
 
@@ -113,10 +113,10 @@ For \code{slide_index()}, this can be any object that can be subtracted from
 \code{.i} with \code{-}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-\item{.after}{\code{[vector(1)]}
+\item{.after}{\code{[vector(1) / Inf]}
 
 The number of values \emph{after} the current element of \code{.i} to include in the
-sliding window. Set to \code{unbounded()} to select all elements after the
+sliding window. Set to \code{Inf} to select all elements after the
 current position, constructing the reverse of a cumulative window, where
 you start with as many elements as possible and decrease the amount as you
 move through \code{.x}. A negative value is allowed, and allows you to "look
