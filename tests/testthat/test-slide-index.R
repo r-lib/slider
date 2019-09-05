@@ -927,14 +927,14 @@ test_that("cannot use an invalid .complete value", {
 })
 
 # ------------------------------------------------------------------------------
-# unbounded()
+# unbounded
 
 test_that("can use unbounded .before", {
   i <- new_date(c(0, 1, 2, 3, 4))
   x <- seq_along(i)
 
   expect_equal(
-    slide_index(x, i, identity, .before = unbounded()),
+    slide_index(x, i, identity, .before = Inf),
     list(
       1L,
       1:2,
@@ -950,7 +950,7 @@ test_that("can use unbounded .before with positive .after", {
   x <- seq_along(i)
 
   expect_equal(
-    slide_index(x, i, identity, .before = unbounded(), .after = 1),
+    slide_index(x, i, identity, .before = Inf, .after = 1),
     list(
       1:2,
       1:3,
@@ -966,7 +966,7 @@ test_that("can use unbounded .before with negative .after", {
   x <- seq_along(i)
 
   expect_equal(
-    slide_index(x, i, identity, .before = unbounded(), .after = -1),
+    slide_index(x, i, identity, .before = Inf, .after = -1),
     list(
       NULL,
       1L,
@@ -982,7 +982,7 @@ test_that("can use unbounded .before with lubridate .after", {
   x <- seq_along(i)
 
   expect_equal(
-    slide_index(x, i, identity, .before = unbounded(), .after = lubridate::days(2)),
+    slide_index(x, i, identity, .before = Inf, .after = lubridate::days(2)),
     list(
       1:3,
       1:4,

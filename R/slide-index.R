@@ -29,10 +29,10 @@
 #'   bound will be `.i + .after`. It is faily common to supply a date vector
 #'   as the index, but not required.
 #'
-#' @param .before `[vector(1)]`
+#' @param .before `[vector(1) / Inf]`
 #'
 #'   The number of values _before_ the current element of `.i` to include in the
-#'   sliding window. Set to `unbounded()` to select all elements before the
+#'   sliding window. Set to `Inf` to select all elements before the
 #'   current element, constructing a cumulative window. A negative value is
 #'   allowed, and allows you to "look forward" as well.
 #'
@@ -40,10 +40,10 @@
 #'   `.i` with `-`. One common use case is to set this to a lubridate period,
 #'   such as [lubridate::weeks()].
 #'
-#' @param .after `[vector(1)]`
+#' @param .after `[vector(1) / Inf]`
 #'
 #'   The number of values _after_ the current element of `.i` to include in the
-#'   sliding window. Set to `unbounded()` to select all elements after the
+#'   sliding window. Set to `Inf` to select all elements after the
 #'   current position, constructing the reverse of a cumulative window, where
 #'   you start with as many elements as possible and decrease the amount as you
 #'   move through `.x`. A negative value is allowed, and allows you to "look
