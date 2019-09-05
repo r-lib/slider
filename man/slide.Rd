@@ -204,6 +204,30 @@ slide(1:5, ~.x, .before = -1, .after = 2)
 # `.after` can be negative as well to "look backwards"
 slide(1:5, ~.x, .before = 2, .after = -1)
 
+# ---------------------------------------------------------------------------
+# Removing padding
+
+# If you are looking for a way to remove the `NA` values from something like
+# this, then it doesn't exist as a built in option.
+x <- rnorm(10)
+slide_dbl(x, mean, .before = 3, .step = 2, .complete = TRUE)
+
+# Adding an option to `slide_dbl()` to remove the `NA` values would destroy
+# its size stability. Instead, you can use a combination of `slide_dfr()`
+# to get the start/stop indices with `slide_between_dbl()`.
+i <- seq_along(x)
+idx <- slide_dfr(
+  i,
+  ~data.frame(start = .x[1], stop = .x[length(.x)]),
+  .before = 3,
+  .step = 2,
+  .complete = TRUE
+)
+
+idx
+
+slide_between_dbl(x, i, idx$start, idx$stop, mean)
+
 }
 \seealso{
 \code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}
