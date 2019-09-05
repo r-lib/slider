@@ -16,13 +16,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -50,6 +52,7 @@ with a size that is different from .x." />
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -74,7 +77,7 @@ with a size that is different from .x." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -86,7 +89,7 @@ with a size that is different from .x." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slide">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,6 +100,7 @@ with a size that is different from .x." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -162,19 +166,21 @@ create very compact anonymous functions with up to two inputs.</p></td>
     <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
 
     
-    <ul>
+
+<ul>
 <li><p><code>vec_size_common(.starts, .stops) == vec_size(slide_between(.x, ...))</code></p></li>
 </ul>
+
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>vctrs</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>vctrs</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lubridate</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Returning a size smaller than `.x`</span>
 
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2019-01-25"</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>35</span>, <span class='fl'>42</span>, <span class='fl'>45</span>)
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-25"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>35</span>, <span class='fl'>42</span>, <span class='fl'>45</span>)
 
 <span class='co'># slide_index() allows you to slide relative to `i`</span>
 <span class='fu'><a href='slide_index.html'>slide_index</a></span>(<span class='no'>i</span>, <span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/period.html'>weeks</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [[1]]
@@ -246,11 +252,11 @@ create very compact anonymous functions with up to two inputs.</p></td>
 <span class='co'># hand craft the boundaries, but this is a general strategy</span>
 <span class='co'># I've found useful:</span>
 <span class='no'>first_start</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>floor_date</a></span>(<span class='no'>i</span>[<span class='fl'>1</span>], <span class='st'>"months"</span>)
-<span class='no'>last_stop</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span>(<span class='no'>i</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>i</span>)], <span class='st'>"months"</span>)
-<span class='no'>dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='no'>first_start</span>, <span class='no'>last_stop</span>, <span class='st'>"1 month"</span>)
-<span class='no'>inner</span> <span class='kw'>&lt;-</span> <span class='no'>dates</span>[<span class='fl'>2</span>:(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>dates</span>) - <span class='fl'>1L</span>)]
-<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/vctrs/topics/vec_c'>vec_c</a></span>(<span class='no'>first_start</span>, <span class='no'>inner</span>)
-<span class='no'>stops</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/vctrs/topics/vec_c'>vec_c</a></span>(<span class='no'>inner</span> - <span class='fl'>1</span>, <span class='no'>last_stop</span>)
+<span class='no'>last_stop</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span>(<span class='no'>i</span>[<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>i</span>)], <span class='st'>"months"</span>)
+<span class='no'>dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='no'>first_start</span>, <span class='no'>last_stop</span>, <span class='st'>"1 month"</span>)
+<span class='no'>inner</span> <span class='kw'>&lt;-</span> <span class='no'>dates</span>[<span class='fl'>2</span>:(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>dates</span>) - <span class='fl'>1L</span>)]
+<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_c.html'>vec_c</a></span>(<span class='no'>first_start</span>, <span class='no'>inner</span>)
+<span class='no'>stops</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_c.html'>vec_c</a></span>(<span class='no'>inner</span> - <span class='fl'>1</span>, <span class='no'>last_stop</span>)
 
 <span class='fu'>slide_between</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='no'>starts</span>, <span class='no'>stops</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2019-01-25" "2019-01-26" "2019-01-27" "2019-01-28"
@@ -266,21 +272,21 @@ create very compact anonymous functions with up to two inputs.</p></td>
 
 <span class='co'># Imagine you want to compute a 1 month rolling average on this</span>
 <span class='co'># irregular daily data.</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/vctrs/topics/vec_c'>vec_c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2019-02-27"</span>) + <span class='fl'>0</span>:<span class='fl'>3</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2019-03-27"</span>) + <span class='fl'>0</span>:<span class='fl'>5</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/vctrs/topics/vec_seq_along'>vec_seq_along</a></span>(<span class='no'>i</span>))
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_c.html'>vec_c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-02-27"</span>) + <span class='fl'>0</span>:<span class='fl'>3</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-03-27"</span>) + <span class='fl'>0</span>:<span class='fl'>5</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_seq_along.html'>vec_seq_along</a></span>(<span class='no'>i</span>))
 
 <span class='co'># You might try `slide_index()` like this, but you'd run into this error</span>
-<span class='no'>cnd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'><a href='slide_index.html'>slide_index</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/weekday.POSIXt'>months</a></span>(<span class='fl'>1</span>)), <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>cnd</span>, <span class='st'>"condition"</span>)<span class='kw'>[[</span><span class='st'>"message"</span>]]</div><div class='output co'>#&gt; The range generated by `.before` cannot have `NA` values, which were found at location(s): 7, 8, 9.</div><div class='input'>
+<span class='no'>cnd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='slide_index.html'>slide_index</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>)), <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>cnd</span>, <span class='st'>"condition"</span>)<span class='kw'>[[</span><span class='st'>"message"</span>]]</div><div class='output co'>#&gt; The range generated by `.before` cannot have `NA` values, which were found at location(s): 7, 8, 9.</div><div class='input'>
 <span class='co'># This is because when you actually compute the `.i - .before` sequence,</span>
 <span class='co'># you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.</span>
-<span class='no'>i</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/weekday.POSIXt'>months</a></span>(<span class='fl'>1</span>)</div><div class='output co'>#&gt;  [1] "2019-01-27" "2019-01-28" "2019-02-01" "2019-02-02" "2019-02-27"
+<span class='no'>i</span> - <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>)</div><div class='output co'>#&gt;  [1] "2019-01-27" "2019-01-28" "2019-02-01" "2019-02-02" "2019-02-27"
 #&gt;  [6] "2019-02-28" NA           NA           NA           "2019-03-01"</div><div class='input'>
 <span class='co'># To get around this, lubridate provides `add_with_rollback()`,</span>
 <span class='co'># and the shortcut operation `%m-%`, which subtracts the month, then rolls</span>
 <span class='co'># forward/backward if it hits an `NA`. You can manually generate boundaries,</span>
 <span class='co'># then provide them to `slide_between()`.</span>
-<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='no'>i</span> <span class='kw'>%m-%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/weekday.POSIXt'>months</a></span>(<span class='fl'>1</span>)
+<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='no'>i</span> <span class='kw'>%m-%</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>)
 <span class='no'>stops</span> <span class='kw'>&lt;-</span> <span class='no'>i</span>
 
 <span class='fu'>slide_between</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>starts</span>, <span class='no'>stops</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [[1]]
@@ -352,7 +358,7 @@ create very compact anonymous functions with up to two inputs.</p></td>
 
 <span class='co'># Imagine you work in a company with daily costs that fall on these dates.</span>
 <span class='co'># Notice that these are strictly weekdays that cross over a weekend.</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='st'>"2019-08-15"</span>) + <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>)
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-08-15"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>)
 <span class='fu'><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></span>(<span class='no'>i</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] Thu Fri Mon Wed Thu
 #&gt; Levels: Sun &lt; Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat</div><div class='input'>
 <span class='co'># If you are following a "business calendar" and want to compute a rolling</span>
@@ -360,8 +366,8 @@ create very compact anonymous functions with up to two inputs.</p></td>
 <span class='co'># with `"2019-08-16"` (a Friday) because they are adjacent in the business</span>
 <span class='co'># week. Using the RcppQuantuccia package, we can use `advanceUnits()` to</span>
 <span class='co'># compute the correct business day boundaries for use in `slide_between()`.</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>RcppQuantuccia</span>)
-<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/RcppQuantuccia/topics/advanceUnits'>advanceUnits</a></span>(<span class='no'>i</span>, -<span class='fl'>1</span>, <span class='st'>"Days"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RcppQuantuccia</span>)
+<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/RcppQuantuccia/man/advanceUnits.html'>advanceUnits</a></span>(<span class='no'>i</span>, -<span class='fl'>1</span>, <span class='st'>"Days"</span>)
 <span class='no'>stops</span> <span class='kw'>&lt;-</span> <span class='no'>i</span>
 
 <span class='co'># "The current day + 1 business day before"</span>
@@ -395,19 +401,23 @@ create very compact anonymous functions with up to two inputs.</p></td>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Davis Vaughan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

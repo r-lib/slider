@@ -16,13 +16,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -46,6 +48,7 @@ sub-window of .x." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -72,7 +75,7 @@ sub-window of .x." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -84,7 +87,7 @@ sub-window of .x." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slide">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,6 +98,7 @@ sub-window of .x." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -116,7 +120,7 @@ sub-window of <code>.x</code>.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_vec</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>())
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
 
 <span class='fu'>slide_dbl</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -134,11 +138,11 @@ sub-window of <code>.x</code>.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>slide_dfr</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>,
   <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>))
 
 <span class='fu'>slide_dfc</span>(<span class='no'>.x</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"unique"</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>,
   <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -195,7 +199,7 @@ the default, then partial computations will be allowed.</p></td>
       <th>.ptype</th>
       <td><p><code>[vector]</code></p>
 <p>The prototype corresponding to the type of the output. Defaults to
-a <code><a href='https://www.rdocumentation.org/packages/base/topics/list'>list()</a></code>.</p></td>
+a <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
@@ -228,22 +232,24 @@ of length 1 will be recycled appropriately.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Unlike <code><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls
+    <p>Unlike <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls
 like <code>.f(.x[[i]], ...)</code>, the equivalent with <code>slide()</code>
 looks like <code>.f(vec_slice(.x, i), ...)</code> which is approximately
 <code>.f(.x[i], ...)</code> except in the case of data frames or arrays,
 which are iterated over row-wise.</p>
 <p>If <code>.x</code> has names, then the output will preserve those names.</p>
-<p>Using <code><a href='https://www.rdocumentation.org/packages/vctrs/topics/vec_cast'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
+<p>Using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
 to the type required by the version of <code>slide_*()</code> being used.</p>
     
     <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
 
     
-    <ul>
+
+<ul>
 <li><p><code>vec_size(.x) == vec_size(slide(.x, .f))</code></p></li>
 <li><p><code>vec_size(slide_vec(.x, .f)[[i]]) == 1L</code></p></li>
 </ul>
+
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -284,9 +290,9 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [1] 4 5
 #&gt; </div><div class='input'>
 <span class='co'># This can be used for rolling means</span>
-<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>5</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -1.4000435 -0.5723632 -1.1939967 -0.7291726 -0.6070941</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -1.4000435 -0.5723632 -1.1939967 -0.7291726 -0.6070941</div><div class='input'>
 <span class='co'># Or more flexible rolling operations</span>
-<span class='fu'>slide</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fl'>5</span>), ~ <span class='no'>.x</span> - <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/mean'>mean</a></span>(<span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide</span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), ~ <span class='no'>.x</span> - <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 0
 #&gt; 
 #&gt; [[2]]
@@ -535,19 +541,23 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Davis Vaughan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
