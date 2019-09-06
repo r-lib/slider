@@ -52,8 +52,8 @@ You can install the development version from
 remotes::install_github("DavisVaughan/slide")
 ```
 
-(Just a warning that this uses a custom version of vctrs, which will
-soon become its development version).
+As a warning, slide uses the development version of vctrs, which will
+automatically be installed for you when you install slide from GitHub.
 
 ## Examples
 

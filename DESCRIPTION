@@ -1,6 +1,6 @@
 Package: slide
 Title: Sliding Window Functions
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     c(person(given = "Davis",
              family = "Vaughan",
@@ -16,7 +16,7 @@ LazyData: true
 Imports: 
     glue,
     rlang,
-    vctrs
+    vctrs (>= 0.2.0.9002)
 LinkingTo:
     vctrs
 RoxygenNote: 6.1.1
@@ -29,7 +29,7 @@ Suggests:
     lubridate,
     RcppQuantuccia
 Remotes:
-    DavisVaughan/vctrs@c-exports
+    r-lib/vctrs
 Collate: 
     'slide-index2.R'
     'pslide-index.R'
