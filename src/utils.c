@@ -63,12 +63,28 @@ SEXP copy_names(SEXP out, SEXP x, int type) {
 
 // -----------------------------------------------------------------------------
 
-// update_slices() works by repeatedly overwriting the `slices` SEXP with the
-// slices from `x`. If we are calling slide() or slide2(), it just overwrites
-// `slices` directly and immediately assigns the result into an environment.
-// If we are calling pslide(), then `slices` is a list and each element of the
-// list is overwritten with the current slice of the i-th pslide element.
-// Then that entire list is defined in the environment.
+// `slice_and_update_env()` works by repeatedly overwriting the
+// `container` with the results of slicing into `x`. This is mainly important
+// for performance with `pslide()`, where `container` is a list the same size
+// as `.l`. By repeatedly overwriting 1 list, we don't have to reallocate one
+// every time we call `slice_and_update_env()`. For `slide()` and `slide2()`,
+// `container` is just `NULL`.
+
+// slide()
+// - Slice `x` directly
+// - Immediately define `container` as `.x` in `env`
+
+// slide2()
+// - Slice `x[[1]]`
+// - Define `container` as `.x` in `env`
+// - Slice `x[[2]]`
+// - Define `container` as `.y` in `env`
+
+// pslide()
+// - For i in 1:length(.l)
+//  - Slice `x[[i]]`
+//  - Set the slice result as `container[[i]]`
+// - Define `container` as `.l` in `env`
 
 SEXP make_slice_container(int type) {
   if (type == SLIDE || type == SLIDE2) {
