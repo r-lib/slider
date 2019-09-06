@@ -51,6 +51,8 @@ SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
   if (type == SLIDE) {
     names = PROTECT(vec_names(x));
+  } else if (type == PSLIDE_EMPTY) {
+    names = PROTECT(R_NilValue);
   } else {
     names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
   }
