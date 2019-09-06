@@ -28,7 +28,7 @@
 #' # `x` and one from `y`), otherwise, 4 values are returned.
 #' slide_index2(x, y, i, ~c(.x, .y), .before = 1)
 #'
-#' @inheritSection slide_index `.i` Details
+#' @inheritSection slide_index The `.i`-ndex
 #' @seealso [slide2()], [slide_index()]
 #' @export
 slide_index2 <- function(.x,

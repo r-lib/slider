@@ -128,7 +128,7 @@ you want to compute a rolling computation looking "3 months back", which
 is approximately but not equivalent to, 3 * 30 days. \code{slide_index()} allows
 for these irregular window sizes.
 }
-\section{\code{.i} Details}{
+\section{The \code{.i}-ndex}{
 
 
 There are 3 restrictions on \code{.i}:
@@ -138,9 +138,13 @@ There are 3 restrictions on \code{.i}:
 are allowed.
 \item \code{.i} is not allowed to have missing values.
 }
+}
+
+\section{\code{.before} and \code{.after}}{
+
 
 The ranges computed from \code{.i - .before} and \code{.i + .after} have the same
-restrictions as the three mentioned above.
+restrictions as the three mentioned above for \code{.i}.
 }
 
 \examples{
