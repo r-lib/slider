@@ -53,6 +53,14 @@ check_ascending <- function(x, what) {
   invisible(x)
 }
 
+check_is_list <- function(.l) {
+  if (!is.list(.l)) {
+    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))
+  }
+
+  invisible(.l)
+}
+
 stop_not_all_size_one <- function(iteration, size) {
   glubort("In iteration {iteration}, the result of `.f` had size {size}, not 1.")
 }

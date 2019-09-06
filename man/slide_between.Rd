@@ -105,6 +105,18 @@ with a size that is different from \code{.x}.
 }
 }
 
+\section{The \code{.i}-ndex}{
+
+
+There are 3 restrictions on \code{.i}:
+\itemize{
+\item The size of \code{.i} must match the size of \code{.x}, \code{.i} will not be recycled.
+\item \code{.i} must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item \code{.i} is not allowed to have missing values.
+}
+}
+
 \examples{
 library(vctrs)
 library(lubridate, warn.conflicts = FALSE)
@@ -184,4 +196,7 @@ stops <- i
 # "The current day + 1 business day before"
 slide_between(i, i, starts, stops, ~.x)
 
+}
+\seealso{
+\code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=slide_between2]{slide_between2()}}
 }

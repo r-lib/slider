@@ -171,7 +171,7 @@ they will be used as named arguments to \code{.f}. Elements of \code{.l} with si
 of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=slide_index]{slide_index()}}, allowing you to iterate
 over multiple vectors at once, while respecting an \code{.i}-ndex.
 }
-\section{\code{.i} Details}{
+\section{The \code{.i}-ndex}{
 
 
 There are 3 restrictions on \code{.i}:
@@ -181,9 +181,6 @@ There are 3 restrictions on \code{.i}:
 are allowed.
 \item \code{.i} is not allowed to have missing values.
 }
-
-The ranges computed from \code{.i - .before} and \code{.i + .after} have the same
-restrictions as the three mentioned above.
 }
 
 \examples{
@@ -199,5 +196,5 @@ slide_index2(x, y, i, ~c(.x, .y), .before = 1)
 
 }
 \seealso{
-\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_between2]{slide_between2()}}, \code{\link[=slide_index]{slide_index()}}
 }

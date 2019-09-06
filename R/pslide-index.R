@@ -247,9 +247,7 @@ pslide_index_impl <- function(.l,
                               .complete,
                               .constrain,
                               .ptype) {
-  if (!is.list(.l)) {
-    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))
-  }
+  check_is_list(.l)
 
   lapply(.l, vec_assert)
 

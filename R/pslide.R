@@ -247,9 +247,7 @@ pslide_impl <- function(.l,
                         .complete,
                         .ptype,
                         .constrain) {
-  if (!is.list(.l)) {
-    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))
-  }
+  check_is_list(.l)
 
   lapply(.l, vec_assert)
 

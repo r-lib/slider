@@ -161,7 +161,7 @@
 #'
 #' slide_between_dbl(x, i, idx$start, idx$stop, mean)
 #'
-#' @seealso [slide2()], [slide_index()]
+#' @seealso [slide2()], [slide_index()], [slide_between()]
 #' @export
 slide <- function(.x,
                   .f,

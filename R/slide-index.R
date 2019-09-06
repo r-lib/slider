@@ -6,7 +6,7 @@
 #' is approximately but not equivalent to, 3 * 30 days. `slide_index()` allows
 #' for these irregular window sizes.
 #'
-#' @section `.i` Details:
+#' @section The `.i`-ndex:
 #'
 #' There are 3 restrictions on `.i`:
 #'
@@ -17,8 +17,10 @@
 #'
 #' - `.i` is not allowed to have missing values.
 #'
+#' @section `.before` and `.after`:
+#'
 #' The ranges computed from `.i - .before` and `.i + .after` have the same
-#' restrictions as the three mentioned above.
+#' restrictions as the three mentioned above for `.i`.
 #'
 #' @inheritParams slide
 #'
@@ -111,7 +113,7 @@
 #' i[16] - 19 >= i[1] # FALSE
 #' i[17] - 19 >= i[1] # TRUE
 #'
-#' @seealso [slide()], [slide_index2()]
+#' @seealso [slide()], [slide_between()], [slide_index2()]
 #' @export
 slide_index <- function(.x,
                         .i,

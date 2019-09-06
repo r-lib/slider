@@ -31,6 +31,8 @@ Suggests:
 Remotes:
     r-lib/vctrs
 Collate: 
+    'slide-between2.R'
+    'pslide-between.R'
     'slide-index2.R'
     'pslide-index.R'
     'slide2.R'
