@@ -223,6 +223,23 @@ of length 1 will be recycled appropriately.</p></td>
 </ul>
 
     
+    <h2 class="hasAnchor" id="the-i-ndex"><a class="anchor" href="#the-i-ndex"></a>The <code>.i</code>-ndex</h2>
+
+    
+
+
+<p>There are 3 restrictions on <code>.i</code>:</p><ul>
+<li><p>The size of <code>.i</code> must match the size of <code>.x</code>, <code>.i</code> will not be recycled.</p></li>
+<li><p><code>.i</code> must be an <em>increasing</em> vector, but duplicate values
+are allowed.</p></li>
+<li><p><code>.i</code> is not allowed to have missing values.</p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='slide.html'>slide()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code>, <code><a href='slide_between2.html'>slide_between2()</a></code></p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>vctrs</span>)
@@ -445,6 +462,10 @@ of length 1 will be recycled appropriately.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#invariants">Invariants</a></li>
+
+      <li><a href="#the-i-ndex">The <code>.i</code>-ndex</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
