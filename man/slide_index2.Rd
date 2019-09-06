@@ -221,6 +221,13 @@ are allowed.
 }
 }
 
+\section{\code{.before} and \code{.after}}{
+
+
+The ranges computed from \code{.i - .before} and \code{.i + .after} have the same
+restrictions as the three mentioned above for \code{.i}.
+}
+
 \examples{
 # Notice that `i` is an irregular index!
 x <- 1:5
