@@ -31,13 +31,14 @@ Suggests:
 Remotes:
     r-lib/vctrs
 Collate: 
+    'slide-between2.R'
+    'pslide-between.R'
     'slide-index2.R'
     'pslide-index.R'
     'slide2.R'
     'pslide.R'
     'slide-between-common.R'
     'slide-between.R'
-    'slide-between2.R'
     'slide-common.R'
     'slide-index-common.R'
     'slide-index.R'
