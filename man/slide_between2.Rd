@@ -141,3 +141,6 @@ stops <- as.Date(c("2019-08-16", "2019-08-23"))
 slide_between2(x, i, i, starts, stops, ~data.frame(x = .x, y = .y))
 
 }
+\seealso{
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index2]{slide_index2()}}, \code{\link[=slide_between]{slide_between()}}
+}

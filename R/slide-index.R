@@ -113,7 +113,7 @@
 #' i[16] - 19 >= i[1] # FALSE
 #' i[17] - 19 >= i[1] # TRUE
 #'
-#' @seealso [slide()], [slide_index2()]
+#' @seealso [slide()], [slide_between()], [slide_index2()]
 #' @export
 slide_index <- function(.x,
                         .i,

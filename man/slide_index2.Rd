@@ -196,5 +196,5 @@ slide_index2(x, y, i, ~c(.x, .y), .before = 1)
 
 }
 \seealso{
-\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_between2]{slide_between2()}}, \code{\link[=slide_index]{slide_index()}}
 }

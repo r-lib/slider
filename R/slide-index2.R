@@ -29,7 +29,7 @@
 #' slide_index2(x, y, i, ~c(.x, .y), .before = 1)
 #'
 #' @inheritSection slide_index The `.i`-ndex
-#' @seealso [slide2()], [slide_index()]
+#' @seealso [slide2()], [slide_between2()], [slide_index()]
 #' @export
 slide_index2 <- function(.x,
                          .y,

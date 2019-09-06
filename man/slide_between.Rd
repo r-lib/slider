@@ -197,3 +197,6 @@ stops <- i
 slide_between(i, i, starts, stops, ~.x)
 
 }
+\seealso{
+\code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=slide_between2]{slide_between2()}}
+}

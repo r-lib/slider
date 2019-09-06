@@ -230,5 +230,5 @@ slide_between_dbl(x, i, idx$start, idx$stop, mean)
 
 }
 \seealso{
-\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=slide_between]{slide_between()}}
 }

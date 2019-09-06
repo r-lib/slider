@@ -100,6 +100,7 @@
 #' slide_between(i, i, starts, stops, ~.x)
 #'
 #' @inheritSection slide_index The `.i`-ndex
+#' @seealso [slide()], [slide_index()], [slide_between2()]
 #' @export
 slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
   slide_between_impl(

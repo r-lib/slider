@@ -32,6 +32,7 @@
 #' slide_between2(x, i, i, starts, stops, ~data.frame(x = .x, y = .y))
 #'
 #' @inheritSection slide_index The `.i`-ndex
+#' @seealso [slide2()], [slide_index2()], [slide_between()]
 #' @export
 slide_between2 <- function(.x, .y, .i, .starts, .stops, .f, ...) {
   slide_between2_impl(
