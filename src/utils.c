@@ -54,7 +54,7 @@ SEXP copy_names(SEXP out, SEXP x, int type) {
   } else if (type == PSLIDE_EMPTY) {
     names = PROTECT(R_NilValue);
   } else {
-    names = PROTECT(vec_names(VECTOR_ELT(x, 0)));
+    names = PROTECT(vec_names(r_lst_get(x, 0)));
   }
 
   UNPROTECT(1);
