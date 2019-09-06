@@ -99,6 +99,7 @@
 #' # "The current day + 1 business day before"
 #' slide_between(i, i, starts, stops, ~.x)
 #'
+#' @inheritSection slide_index The `.i`-ndex
 #' @export
 slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
   slide_between_impl(

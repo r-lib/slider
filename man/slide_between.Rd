@@ -105,6 +105,18 @@ with a size that is different from \code{.x}.
 }
 }
 
+\section{The \code{.i}-ndex}{
+
+
+There are 3 restrictions on \code{.i}:
+\itemize{
+\item The size of \code{.i} must match the size of \code{.x}, \code{.i} will not be recycled.
+\item \code{.i} must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item \code{.i} is not allowed to have missing values.
+}
+}
+
 \examples{
 library(vctrs)
 library(lubridate, warn.conflicts = FALSE)
