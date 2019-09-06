@@ -37,6 +37,7 @@ Collate:
     'pslide.R'
     'slide-between-common.R'
     'slide-between.R'
+    'slide-between2.R'
     'slide-common.R'
     'slide-index-common.R'
     'slide-index.R'
