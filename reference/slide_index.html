@@ -266,6 +266,31 @@ are allowed.</p></li>
 <p>The ranges computed from <code>.i - .before</code> and <code>.i + .after</code> have the same
 restrictions as the three mentioned above for <code>.i</code>.</p>
     
+    <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
+
+    
+
+
+<h3><code>slide_index()</code></h3>
+
+<ul>
+<li><p><code>vec_size(slide_index(.x)) == vec_size(.x)</code></p></li>
+<li><p><code>vec_ptype(slide_index(.x)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>slide_index_vec()</code> and <code>slide_index_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(slide_index_vec(.x)) = vec_size(.x)</code></p></li>
+<li><p><code>vec_size(slide_index_vec(.x)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_index_vec(.x, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='slide.html'>slide()</a></code>, <code><a href='slide_between.html'>slide_between()</a></code>, <code><a href='slide_index2.html'>slide_index2()</a></code></p></div>
@@ -429,6 +454,8 @@ restrictions as the three mentioned above for <code>.i</code>.</p>
       <li><a href="#the-i-ndex">The <code>.i</code>-ndex</a></li>
 
       <li><a href="#-before-and-after"><code>.before</code> and <code>.after</code></a></li>
+
+      <li><a href="#invariants">Invariants</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

@@ -245,10 +245,25 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 
     
 
+
+<h3><code>slide()</code></h3>
+
 <ul>
-<li><p><code>vec_size(.x) == vec_size(slide(.x, .f))</code></p></li>
-<li><p><code>vec_size(slide_vec(.x, .f)[[i]]) == 1L</code></p></li>
+<li><p><code>vec_size(slide(.x)) == vec_size(.x)</code></p></li>
+<li><p><code>vec_ptype(slide(.x)) == list()</code></p></li>
 </ul>
+
+
+
+<h3><code>slide_vec()</code> and <code>slide_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(slide_vec(.x)) = vec_size(.x)</code></p></li>
+<li><p><code>vec_size(slide_vec(.x)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_vec(.x, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
 
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

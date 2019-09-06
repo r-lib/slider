@@ -218,9 +218,25 @@ of length 1 will be recycled appropriately.</p></td>
 
     
 
+
+<h3><code>slide_between()</code></h3>
+
 <ul>
-<li><p><code>vec_size_common(.starts, .stops) == vec_size(slide_between(.x, ...))</code></p></li>
+<li><p><code>vec_size(slide_between(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_ptype(slide_between(.x, .starts, .stops)) == list()</code></p></li>
 </ul>
+
+
+
+<h3><code>slide_between_vec()</code> and <code>slide_between_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(slide_between_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_size(slide_between_vec(.x, .starts, .stops)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_between_vec(.x, .starts, .stops, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
 
     
     <h2 class="hasAnchor" id="the-i-ndex"><a class="anchor" href="#the-i-ndex"></a>The <code>.i</code>-ndex</h2>

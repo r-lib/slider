@@ -278,6 +278,50 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
+
+    
+
+
+<h3><code>slide_index2()</code></h3>
+
+<ul>
+<li><p><code>vec_size(slide_index2(.x, .y)) == vec_size_common(.x, .y)</code></p></li>
+<li><p><code>vec_ptype(slide_index2(.x, .y)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>slide_index2_vec()</code> and <code>slide_index2_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(slide_index2_vec(.x, .y)) == vec_size_common(.x, .y)</code></p></li>
+<li><p><code>vec_size(slide_index2_vec(.x, .y)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_index2_vec(.x, .y, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_index()</code></h3>
+
+<ul>
+<li><p><code>vec_size(pslide_index(.l)) == vec_size_common(!!! .l)</code></p></li>
+<li><p><code>vec_ptype(pslide_index(.l)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_index_vec()</code> and <code>pslide_index_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(pslide_index_vec(.l)) == vec_size_common(!!! .l)</code></p></li>
+<li><p><code>vec_size(pslide_index_vec(.l)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(pslide_index_vec(.l, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+    
     <h2 class="hasAnchor" id="the-i-ndex"><a class="anchor" href="#the-i-ndex"></a>The <code>.i</code>-ndex</h2>
 
     
@@ -327,6 +371,8 @@ are allowed.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#invariants">Invariants</a></li>
+
       <li><a href="#the-i-ndex">The <code>.i</code>-ndex</a></li>
 
       <li><a href="#see-also">See also</a></li>

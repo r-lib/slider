@@ -253,6 +253,50 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
+
+    
+
+
+<h3><code>slide_between2()</code></h3>
+
+<ul>
+<li><p><code>vec_size(slide_between2(.x, .y, .starts, .stops)) == vvec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_ptype(slide_between2(.x, .y, .starts, .stops)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>slide_between2_vec()</code> and <code>slide_between2_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(slide_between2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_size(slide_between2_vec(.x, .y, .starts, .stops)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_between2_vec(.x, .y, .starts, .stops, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_between()</code></h3>
+
+<ul>
+<li><p><code>vec_size(pslide_between(.l, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_ptype(pslide_between(.l, .starts, .stops)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_between_vec()</code> and <code>pslide_between_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(pslide_between_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
+<li><p><code>vec_size(pslide_between_vec(.l, .starts, .stops)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(pslide_between_vec(.l, .starts, .stops, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+    
     <h2 class="hasAnchor" id="the-i-ndex"><a class="anchor" href="#the-i-ndex"></a>The <code>.i</code>-ndex</h2>
 
     
@@ -300,6 +344,8 @@ are allowed.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#invariants">Invariants</a></li>
+
       <li><a href="#the-i-ndex">The <code>.i</code>-ndex</a></li>
 
       <li><a href="#see-also">See also</a></li>
