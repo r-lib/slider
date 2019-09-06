@@ -18,6 +18,44 @@
 #'   they will be used as named arguments to `.f`. Elements of `.l` with size
 #'   1 will be recycled.
 #'
+#' @section Invariants:
+#'
+#' \subsection{`slide2()`}{
+#'
+#'  * `vec_size(slide2(.x, .y)) == vec_size_common(.x, .y)`
+#'
+#'  * `vec_ptype(slide2(.x, .y)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide2_vec()` and `slide2_*()` variants}{
+#'
+#'  * `vec_size(slide2_vec(.x, .y)) == vec_size_common(.x, .y)`
+#'
+#'  * `vec_size(slide2_vec(.x, .y)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide2_vec(.x, .y, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
+#' \subsection{`pslide()`}{
+#'
+#'  * `vec_size(pslide(.l)) == vec_size_common(!!! .l)`
+#'
+#'  * `vec_ptype(pslide(.l)) == list()`
+#'
+#' }
+#'
+#' \subsection{`pslide_vec()` and `pslide_*()` variants}{
+#'
+#'  * `vec_size(pslide_vec(.l)) == vec_size_common(!!! .l)`
+#'
+#'  * `vec_size(pslide_vec(.l)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(pslide_vec(.l, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
 #' @examples
 #' # Slide along two inputs at once
 #' slide2(1:4, 5:8, ~list(.x, .y), .before = 2)

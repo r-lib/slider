@@ -128,9 +128,22 @@ to the type required by the version of \code{slide_*()} being used.
 }
 \section{Invariants}{
 
+
+\subsection{\code{slide()}}{
 \itemize{
-\item \code{vec_size(.x) == vec_size(slide(.x, .f))}
-\item \code{vec_size(slide_vec(.x, .f)[[i]]) == 1L}
+\item \code{vec_size(slide(.x)) == vec_size(.x)}
+\item \code{vec_ptype(slide(.x)) == list()}
+}
+
+}
+
+\subsection{\code{slide_vec()} and \code{slide_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_vec(.x)) = vec_size(.x)}
+\item \code{vec_size(slide_vec(.x)[[1]]) == 1L}
+\item \code{vec_ptype(slide_vec(.x, .ptype = ptype)) == ptype}
+}
+
 }
 }
 

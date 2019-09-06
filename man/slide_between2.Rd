@@ -144,6 +144,44 @@ of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \cod
 over multiple vectors at once, while sliding along an \code{.i}-ndex with
 boundaries defined by \code{.starts} and \code{.stops}.
 }
+\section{Invariants}{
+
+
+\subsection{\code{slide_between2()}}{
+\itemize{
+\item \code{vec_size(slide_between2(.x, .y, .starts, .stops)) == vvec_size_common(.starts, .stops)}
+\item \code{vec_ptype(slide_between2(.x, .y, .starts, .stops)) == list()}
+}
+
+}
+
+\subsection{\code{slide_between2_vec()} and \code{slide_between2_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_between2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)}
+\item \code{vec_size(slide_between2_vec(.x, .y, .starts, .stops)[[1]]) == 1L}
+\item \code{vec_ptype(slide_between2_vec(.x, .y, .starts, .stops, .ptype = ptype)) == ptype}
+}
+
+}
+
+\subsection{\code{pslide_between()}}{
+\itemize{
+\item \code{vec_size(pslide_between(.l, .starts, .stops)) == vec_size_common(.starts, .stops)}
+\item \code{vec_ptype(pslide_between(.l, .starts, .stops)) == list()}
+}
+
+}
+
+\subsection{\code{pslide_between_vec()} and \code{pslide_between_*()} variants}{
+\itemize{
+\item \code{vec_size(pslide_between_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)}
+\item \code{vec_size(pslide_between_vec(.l, .starts, .stops)[[1]]) == 1L}
+\item \code{vec_ptype(pslide_between_vec(.l, .starts, .stops, .ptype = ptype)) == ptype}
+}
+
+}
+}
+
 \section{The \code{.i}-ndex}{
 
 

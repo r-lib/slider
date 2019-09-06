@@ -17,6 +17,44 @@
 #'   they will be used as named arguments to `.f`. Elements of `.l` with size
 #'   1 will be recycled.
 #'
+#' @section Invariants:
+#'
+#' \subsection{`slide_index2()`}{
+#'
+#'  * `vec_size(slide_index2(.x, .y)) == vec_size_common(.x, .y)`
+#'
+#'  * `vec_ptype(slide_index2(.x, .y)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_index2_vec()` and `slide_index2_*()` variants}{
+#'
+#'  * `vec_size(slide_index2_vec(.x, .y)) == vec_size_common(.x, .y)`
+#'
+#'  * `vec_size(slide_index2_vec(.x, .y)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_index2_vec(.x, .y, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
+#' \subsection{`pslide_index()`}{
+#'
+#'  * `vec_size(pslide_index(.l)) == vec_size_common(!!! .l)`
+#'
+#'  * `vec_ptype(pslide_index(.l)) == list()`
+#'
+#' }
+#'
+#' \subsection{`pslide_index_vec()` and `pslide_index_*()` variants}{
+#'
+#'  * `vec_size(pslide_index_vec(.l)) == vec_size_common(!!! .l)`
+#'
+#'  * `vec_size(pslide_index_vec(.l)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(pslide_index_vec(.l, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
 #' @examples
 #' # Notice that `i` is an irregular index!
 #' x <- 1:5

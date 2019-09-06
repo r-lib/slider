@@ -161,6 +161,44 @@ parallel. They are parallel in the sense that each input is processed in
 parallel with the others, not in the sense of multicore computing. These
 functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 }
+\section{Invariants}{
+
+
+\subsection{\code{slide2()}}{
+\itemize{
+\item \code{vec_size(slide2(.x, .y)) == vec_size_common(.x, .y)}
+\item \code{vec_ptype(slide2(.x, .y)) == list()}
+}
+
+}
+
+\subsection{\code{slide2_vec()} and \code{slide2_*()} variants}{
+\itemize{
+\item \code{vec_size(slide2_vec(.x, .y)) == vec_size_common(.x, .y)}
+\item \code{vec_size(slide2_vec(.x, .y)[[1]]) == 1L}
+\item \code{vec_ptype(slide2_vec(.x, .y, .ptype = ptype)) == ptype}
+}
+
+}
+
+\subsection{\code{pslide()}}{
+\itemize{
+\item \code{vec_size(pslide(.l)) == vec_size_common(!!! .l)}
+\item \code{vec_ptype(pslide(.l)) == list()}
+}
+
+}
+
+\subsection{\code{pslide_vec()} and \code{pslide_*()} variants}{
+\itemize{
+\item \code{vec_size(pslide_vec(.l)) == vec_size_common(!!! .l)}
+\item \code{vec_size(pslide_vec(.l)[[1]]) == 1L}
+\item \code{vec_ptype(pslide_vec(.l, .ptype = ptype)) == ptype}
+}
+
+}
+}
+
 \examples{
 # Slide along two inputs at once
 slide2(1:4, 5:8, ~list(.x, .y), .before = 2)

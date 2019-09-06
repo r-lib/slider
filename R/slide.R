@@ -63,9 +63,23 @@
 #'
 #' @section Invariants:
 #'
-#'  * `vec_size(.x) == vec_size(slide(.x, .f))`
+#' \subsection{`slide()`}{
 #'
-#'  * `vec_size(slide_vec(.x, .f)[[i]]) == 1L`
+#'  * `vec_size(slide(.x)) == vec_size(.x)`
+#'
+#'  * `vec_ptype(slide(.x)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_vec()` and `slide_*()` variants}{
+#'
+#'  * `vec_size(slide_vec(.x)) = vec_size(.x)`
+#'
+#'  * `vec_size(slide_vec(.x)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_vec(.x, .ptype = ptype)) == ptype`
+#'
+#' }
 #'
 #' @examples
 #' # The defaults work similarly to `map()`

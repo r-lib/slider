@@ -171,6 +171,44 @@ they will be used as named arguments to \code{.f}. Elements of \code{.l} with si
 of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=slide_index]{slide_index()}}, allowing you to iterate
 over multiple vectors at once, while respecting an \code{.i}-ndex.
 }
+\section{Invariants}{
+
+
+\subsection{\code{slide_index2()}}{
+\itemize{
+\item \code{vec_size(slide_index2(.x, .y)) == vec_size_common(.x, .y)}
+\item \code{vec_ptype(slide_index2(.x, .y)) == list()}
+}
+
+}
+
+\subsection{\code{slide_index2_vec()} and \code{slide_index2_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_index2_vec(.x, .y)) == vec_size_common(.x, .y)}
+\item \code{vec_size(slide_index2_vec(.x, .y)[[1]]) == 1L}
+\item \code{vec_ptype(slide_index2_vec(.x, .y, .ptype = ptype)) == ptype}
+}
+
+}
+
+\subsection{\code{pslide_index()}}{
+\itemize{
+\item \code{vec_size(pslide_index(.l)) == vec_size_common(!!! .l)}
+\item \code{vec_ptype(pslide_index(.l)) == list()}
+}
+
+}
+
+\subsection{\code{pslide_index_vec()} and \code{pslide_index_*()} variants}{
+\itemize{
+\item \code{vec_size(pslide_index_vec(.l)) == vec_size_common(!!! .l)}
+\item \code{vec_size(pslide_index_vec(.l)[[1]]) == 1L}
+\item \code{vec_ptype(pslide_index_vec(.l, .ptype = ptype)) == ptype}
+}
+
+}
+}
+
 \section{The \code{.i}-ndex}{
 
 

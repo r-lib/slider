@@ -147,6 +147,27 @@ The ranges computed from \code{.i - .before} and \code{.i + .after} have the sam
 restrictions as the three mentioned above for \code{.i}.
 }
 
+\section{Invariants}{
+
+
+\subsection{\code{slide_index()}}{
+\itemize{
+\item \code{vec_size(slide_index(.x)) == vec_size(.x)}
+\item \code{vec_ptype(slide_index(.x)) == list()}
+}
+
+}
+
+\subsection{\code{slide_index_vec()} and \code{slide_index_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_index_vec(.x)) = vec_size(.x)}
+\item \code{vec_size(slide_index_vec(.x)[[1]]) == 1L}
+\item \code{vec_ptype(slide_index_vec(.x, .ptype = ptype)) == ptype}
+}
+
+}
+}
+
 \examples{
 x <- 1:5
 

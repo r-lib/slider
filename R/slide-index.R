@@ -55,6 +55,26 @@
 #'   `.i` with `+`. One common use case is to set this to a lubridate period,
 #'   such as [lubridate::weeks()].
 #'
+#' @section Invariants:
+#'
+#' \subsection{`slide_index()`}{
+#'
+#'  * `vec_size(slide_index(.x)) == vec_size(.x)`
+#'
+#'  * `vec_ptype(slide_index(.x)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_index_vec()` and `slide_index_*()` variants}{
+#'
+#'  * `vec_size(slide_index_vec(.x)) = vec_size(.x)`
+#'
+#'  * `vec_size(slide_index_vec(.x)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_index_vec(.x, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
 #' @examples
 #' x <- 1:5
 #'

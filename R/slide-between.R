@@ -18,7 +18,23 @@
 #'
 #' @section Invariants:
 #'
-#' - `vec_size_common(.starts, .stops) == vec_size(slide_between(.x, ...))`
+#' \subsection{`slide_between()`}{
+#'
+#'  * `vec_size(slide_between(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'
+#'  * `vec_ptype(slide_between(.x, .starts, .stops)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_between_vec()` and `slide_between_*()` variants}{
+#'
+#'  * `vec_size(slide_between_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'
+#'  * `vec_size(slide_between_vec(.x, .starts, .stops)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_between_vec(.x, .starts, .stops, .ptype = ptype)) == ptype`
+#'
+#' }
 #'
 #' @examples
 #' library(vctrs)

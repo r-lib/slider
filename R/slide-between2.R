@@ -18,6 +18,44 @@
 #'   they will be used as named arguments to `.f`. Elements of `.l` with size
 #'   1 will be recycled.
 #'
+#' @section Invariants:
+#'
+#' \subsection{`slide_between2()`}{
+#'
+#'  * `vec_size(slide_between2(.x, .y, .starts, .stops)) == vvec_size_common(.starts, .stops)`
+#'
+#'  * `vec_ptype(slide_between2(.x, .y, .starts, .stops)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_between2_vec()` and `slide_between2_*()` variants}{
+#'
+#'  * `vec_size(slide_between2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'
+#'  * `vec_size(slide_between2_vec(.x, .y, .starts, .stops)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_between2_vec(.x, .y, .starts, .stops, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
+#' \subsection{`pslide_between()`}{
+#'
+#'  * `vec_size(pslide_between(.l, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'
+#'  * `vec_ptype(pslide_between(.l, .starts, .stops)) == list()`
+#'
+#' }
+#'
+#' \subsection{`pslide_between_vec()` and `pslide_between_*()` variants}{
+#'
+#'  * `vec_size(pslide_between_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'
+#'  * `vec_size(pslide_between_vec(.l, .starts, .stops)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(pslide_between_vec(.l, .starts, .stops, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
 #' @examples
 #' # Notice that `i` is an irregular index!
 #' x <- 1:5

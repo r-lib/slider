@@ -100,8 +100,22 @@ with a size that is different from \code{.x}.
 }
 \section{Invariants}{
 
+
+\subsection{\code{slide_between()}}{
 \itemize{
-\item \code{vec_size_common(.starts, .stops) == vec_size(slide_between(.x, ...))}
+\item \code{vec_size(slide_between(.x, .starts, .stops)) == vec_size_common(.starts, .stops)}
+\item \code{vec_ptype(slide_between(.x, .starts, .stops)) == list()}
+}
+
+}
+
+\subsection{\code{slide_between_vec()} and \code{slide_between_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_between_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)}
+\item \code{vec_size(slide_between_vec(.x, .starts, .stops)[[1]]) == 1L}
+\item \code{vec_ptype(slide_between_vec(.x, .starts, .stops, .ptype = ptype)) == ptype}
+}
+
 }
 }
 
