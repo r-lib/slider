@@ -3,12 +3,141 @@
 \name{slide_between2}
 \alias{slide_between2}
 \alias{slide_between2_vec}
+\alias{slide_between2_dbl}
+\alias{slide_between2_int}
+\alias{slide_between2_lgl}
+\alias{slide_between2_chr}
+\alias{slide_between2_raw}
+\alias{slide_between2_dfr}
+\alias{slide_between2_dfc}
 \title{Slide over multiple inputs between boundaries}
 \usage{
 slide_between2(.x, .y, .i, .starts, .stops, .f, ...)
 
 slide_between2_vec(.x, .y, .i, .starts, .stops, .f, ..., .ptype = list())
+
+slide_between2_dbl(.x, .y, .i, .starts, .stops, .f, ...)
+
+slide_between2_int(.x, .y, .i, .starts, .stops, .f, ...)
+
+slide_between2_lgl(.x, .y, .i, .starts, .stops, .f, ...)
+
+slide_between2_chr(.x, .y, .i, .starts, .stops, .f, ...)
+
+slide_between2_raw(.x, .y, .i, .starts, .stops, .f, ...)
+
+slide_between2_dfr(.x, .y, .i, .starts, .stops, .f, ...,
+  .names_to = NULL, .name_repair = c("unique", "universal",
+  "check_unique"))
+
+slide_between2_dfc(.x, .y, .i, .starts, .stops, .f, ..., .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+}
+\arguments{
+\item{.x, .y}{\code{[vector]}
+
+Vectors to iterate over. Vectors of size 1 will be recycled.}
+
+\item{.i}{\code{[vector]}
+
+The index vector that determines the window sizes. The lower bound
+of the window range will be computed as \code{.i - .before}, and the upper
+bound will be \code{.i + .after}. It is faily common to supply a date vector
+as the index, but not required.}
+
+\item{.starts}{\code{[vector]}
+
+Vectors of boundary values that make up the windows to bucket \code{.i} with.
+Both \code{.starts} and \code{.stops} will be recycled to their common size, and
+that common size will be the size of the result. Both vectors should be
+the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
+that \code{.i} will be searched for values that fall into the
+range of \code{[start, stop]}.}
+
+\item{.stops}{\code{[vector]}
+
+Vectors of boundary values that make up the windows to bucket \code{.i} with.
+Both \code{.starts} and \code{.stops} will be recycled to their common size, and
+that common size will be the size of the result. Both vectors should be
+the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
+that \code{.i} will be searched for values that fall into the
+range of \code{[start, stop]}.}
+
+\item{.f}{\code{[function / formula]}
+
+If a \strong{function}, it is used as is.
+
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
+to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
+The \code{.} placeholder can be used instead of \code{.x}. This allows you to
+create very compact anonymous functions with up to two inputs.}
+
+\item{...}{Additional arguments passed on to the mapped function.}
+
+\item{.ptype}{\code{[vector]}
+
+The prototype corresponding to the type of the output. Defaults to
+a \code{list()}.}
+
+\item{.names_to}{Optionally, the name of a column where the names
+of \code{...} arguments are copied. These names are useful to identify
+which row comes from which input. If supplied and \code{...} is not named,
+an integer column is used to identify the rows.}
+
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
+\code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
+options.
+
+With \code{vec_rbind()}, the repair function is applied to all inputs
+separately. This is because \code{vec_rbind()} needs to align their
+columns before binding the rows, and thus needs all inputs to
+have unique names. On the other hand, \code{vec_cbind()} applies the
+repair function after all inputs have been concatenated together
+in a final data frame. Hence \code{vec_cbind()} allows the more
+permissive minimal names repair.}
+
+\item{.size}{If, \code{NULL}, the default, will determine the number of
+rows in \code{vec_cbind()} output by using the standard recycling rules.
+
+Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.}
+
+\item{.l}{\code{[list]}
+
+A list of vectors. The length of \code{.l} determines the
+number of arguments that \code{.f} will be called with. If \code{.l} has names,
+they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
+1 will be recycled.}
 }
 \description{
-Slide over multiple inputs between boundaries
+\code{slide_between2()} and \code{pslide_between()} represent the combination
+of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=slide_between]{slide_between()}}, allowing you to iterate
+over multiple vectors at once, while sliding along an \code{.i}-ndex with
+boundaries defined by \code{.starts} and \code{.stops}.
+}
+\section{The \code{.i}-ndex}{
+
+
+There are 3 restrictions on \code{.i}:
+\itemize{
+\item The size of \code{.i} must match the size of \code{.x}, \code{.i} will not be recycled.
+\item \code{.i} must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item \code{.i} is not allowed to have missing values.
+}
+}
+
+\examples{
+# Notice that `i` is an irregular index!
+x <- 1:5
+i <- as.Date("2019-08-15") + c(0:1, 4, 6, 7)
+
+# Manually create starts/stops. They don't have to be equally spaced,
+# and they don't have to be the same size as `.x` or `.i`.
+starts <- as.Date(c("2019-08-15", "2019-08-18"))
+stops <- as.Date(c("2019-08-16", "2019-08-23"))
+
+# The output size is equal to the common size of `.starts` and `.stops`
+slide_between2(x, i, i, starts, stops, ~data.frame(x = .x, y = .y))
+
 }
