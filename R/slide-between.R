@@ -20,7 +20,6 @@
 #'
 #' - `vec_size_common(.starts, .stops) == vec_size(slide_between(.x, ...))`
 #'
-#'
 #' @examples
 #' library(vctrs)
 #' library(lubridate, warn.conflicts = FALSE)
