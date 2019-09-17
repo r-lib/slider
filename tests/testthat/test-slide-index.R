@@ -1155,16 +1155,6 @@ test_that("repeated date index values are grouped with the same values", {
   )
 })
 
-test_that("size 1 results are recycled when there are repeated indices", {
-  i <- c(1, 1, 2, 3, 3)
-  x <- seq_along(i)
-
-  expect_equal(
-    slide_index(x, i, mean),
-    lapply(vec_slice(vec_split(x, i)$val, i), mean)
-  )
-})
-
 test_that("can have an irregular index where the window is completely within two index values", {
   expect_equal(
     slide_index(1:7, c(10, 11, 13, 17, 18, 19, 20), ~.x, .before = 3, .after = -2),

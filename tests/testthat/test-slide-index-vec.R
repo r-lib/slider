@@ -129,6 +129,19 @@ test_that("slide_index_dfc() works", {
 })
 
 # ------------------------------------------------------------------------------
+# recycling
+
+test_that("size 1 results are recycled when there are repeated indices", {
+  i <- c(1, 1, 2, 3, 3)
+  x <- seq_along(i)
+
+  expect_equal(
+    slide_index_dbl(x, i, mean),
+    vapply(vec_slice(vec_split(x, i)$val, i), mean, double(1))
+  )
+})
+
+# ------------------------------------------------------------------------------
 # failing tests
 
 # TODO - failing test for OBJECT() that doesn't implement a proxy?
