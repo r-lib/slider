@@ -31,7 +31,8 @@ Suggests:
     RcppQuantuccia,
     nycflights13,
     knitr,
-    rmarkdown
+    rmarkdown,
+    xml2
 Remotes:
     DavisVaughan/vctrs@export-recycle
 Collate: 
