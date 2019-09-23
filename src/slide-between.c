@@ -454,6 +454,8 @@ static void eval_loop(SEXP x,
   PROTECT_WITH_INDEX(elt, &elt_prot_idx);
   ++n_prot;
 
+  R_len_t elt_size;
+
   SEXP container = PROTECT(make_slice_container(type));
   ++n_prot;
 
@@ -471,6 +473,7 @@ static void eval_loop(SEXP x,
 
     if (out.has_indices) {
       out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
+      out.index_size = vec_size(out.index);
     } else {
       *out.p_index_val = *iteration.p_data_val;
     }
@@ -484,8 +487,15 @@ static void eval_loop(SEXP x,
       elt = vec_proxy(elt);
       REPROTECT(elt, elt_prot_idx);
 
-      if (vec_size(elt) != 1) {
-        stop_not_all_size_one(*iteration.p_data_val, vec_size(elt));
+      elt_size = vec_size(elt);
+
+      if (elt_size != 1) {
+        stop_not_all_size_one(*iteration.p_data_val, elt_size);
+      }
+
+      if (out.index_size != 1) {
+        elt = vec_recycle(elt, out.index_size);
+        REPROTECT(elt, elt_prot_idx);
       }
 
       vec_assign_impl(out.data, out.index, elt, false);
@@ -498,7 +508,6 @@ static void eval_loop(SEXP x,
     }
 
     out.p_index_val = INTEGER(out.index);
-    out.index_size = vec_size(out.index);
 
     for (int i = 0; i < out.index_size; ++i) {
       SET_VECTOR_ELT(out.data, out.p_index_val[i] - 1, elt);
