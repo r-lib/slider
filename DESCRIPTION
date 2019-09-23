@@ -16,7 +16,7 @@ LazyData: true
 Imports: 
     glue,
     rlang,
-    vctrs (>= 0.2.0.9002)
+    vctrs (>= 0.2.0.9003)
 LinkingTo:
     vctrs
 RoxygenNote: 6.1.1
@@ -31,7 +31,7 @@ Suggests:
     knitr,
     rmarkdown
 Remotes:
-    r-lib/vctrs
+    DavisVaughan/vctrs@export-recycle
 Collate: 
     'slide-between2.R'
     'pslide-between.R'
