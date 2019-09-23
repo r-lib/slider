@@ -26,8 +26,10 @@ BugReports: https://github.com/DavisVaughan/slide/issues
 Suggests: 
     testthat (>= 2.1.0),
     covr,
+    dplyr,
     lubridate,
     RcppQuantuccia,
+    nycflights13,
     knitr,
     rmarkdown
 Remotes:

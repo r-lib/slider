@@ -16,195 +16,47 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(slide)
-```
-
 ```{r}
-library(readr)
 library(slide)
 library(dplyr)
+library(nycflights13)
 library(lubridate)
 
-crime_raw <- read_csv("https://query.data.world/s/lpctzoyj27sh3e6uyfoedqfnm3uvel")
-```
+weather_ewr <- weather %>%
+  select(origin, time_hour, temp, dewp, humid, wind_speed) %>%
+  filter(origin == "EWR") %>%
+  mutate(time_hour = force_tz(time_hour, "UTC")) %>%
+  slice(-2, -4, -5)
 
-Do a little cleaning up, use UTC dates to avoid any DST mess.
+weather_gap <- slice(weather_ewr, 1:5)
 
-```{r}
-crime_time <- crime_raw %>%
-  mutate(
-    datetime = as.POSIXct(
-      paste(CrimeDate, CrimeTime), 
-      format = "%m/%d/%Y %H:%M:%S",
-      tz = "UTC"
-    )
-  ) %>%
-  select(datetime) %>%
-  arrange(datetime)
+weather_dups <- slice(weather_ewr, 10:15)
+weather_dups$time_hour[5:6] <- weather_dups$time_hour[3:4]
+weather_dups$time_hour[3:4] <- weather_dups$time_hour[2]
 
-# some times are entered as 1132 rather than 11:32, which end up as NA
-# with as.posixct
-crime_time <- crime_time %>%
-  filter(!is.na(datetime))
+# notice that `weather_gap` is irregular because there are missing data points.
+# otherwise, the index column is still increasing, and in this case there are
+# no duplicates
+weather_gap
 
-# slice() in such a way that we can show interesting results without having
-# to show more than 10 rows each time
-crime_time <- slice(crime_time, c(1, 3, 5, 12, 25:2020))
-```
+# you might watnt to compute the average temperature every 3 hours, using the
+# current hour plus the 2 hours before
 
-A series with times of when a crime occured. Note that it is irregular, and there are duplicate times if more than one crime occured in a single minute.
+# with `slide_dbl()`, when `.before` is specified it looks backwards by the
+# specified number of values. `slide()` and friends are not _index aware_
 
-```{r}
-crime_time
-```
+# mean(39.0)             | Hours: 1
+# mean(39.0, 39.0)       | Hours: 1, 3
+# mean(39.0, 39.0, 37.9) | Hours: 1, 3, 6
+# mean(39.0, 37.9, 39.0) | Hours: 3, 6, 7
+# mean(37.9, 39.0, 39.9) | Hours: 6, 7, 8
+mutate(weather_gap, bad_roll_temp = slide_dbl(temp, mean, .before = 2))
 
-Compute the counts of the number of crimes in any particular minute.
-
-```{r}
-crime_counts <- crime_time %>%
-  group_by(datetime) %>%
-  summarise(count = n()) %>%
-  mutate(cumulative = cumsum(count))
-
-crime_counts
-```
-
-## Hourly slide, with minute data 
-
-Say we want to look back 1 hour from the current time point, and count all of the crimes that happen within that window. Since this is minute data, you might think that you could use `slide_int(.before = 60)`, but this won't work!
-
-```{r}
-crime_counts %>%
-  mutate(
-    wrong_roll = slide_int(count, sum, .before = 60),
-    cumulative = cumsum(count)
-  )
-```
-
-If this had worked correctly, row 5 with a time of `2011-01-01 01:01:00` would have looked back 1 hour to `2011-01-01 00:01:00`, and summed up the number of crimes since then, resulting in `4` crimes. But this didn't happen because `slide_int()` is not _index aware_, and will look back 60 _rows_ before the current row. The only way this would have worked correctly is if `crime_counts` was a "regular" time series, with no gaps and no duplicate rows.
-
-The solution to this is to use `slide_index()`, an alternative sliding function that has an extra argument, `.i`, corresponding to an index to slide relative to. Additionally, we can use more intuitive `.before` objects, such as `hours(1)` from lubridate to describe the operation we are trying to perform.
-
-```{r}
-hourly_slide_with_minute_counts <- crime_counts %>%
-  mutate(
-    rolling_count = slide_index_int(
-      .x = count, 
-      .i = datetime, 
-      .f = sum, 
-      .before = hours(1)
-    )
-  )
-
-hourly_slide_with_minute_counts
-```
-
-## Hourly slide, with hourly data
-
-Rather than sliding at a different period than our data, we might first roll up the counts to hourly periods, then slide along that hourly data.
-
-```{r}
-crime_counts_hourly <- crime_counts %>%
-  mutate(
-    start = floor_date(datetime, "hours"),
-    stop = ceiling_date(datetime + .0001, "hours") - 1
-  ) %>%
-  group_by(start, stop) %>%
-  summarise(count = sum(count)) %>%
-  ungroup()
-
-crime_counts_hourly
-```
-
-Let's compute the rolling sum again, looking back 5 hours from the current start time.
-
-```{r}
-crime_counts_hourly %>%
-  mutate(
-    rolling = slide_index_int(count, start, sum, .before = hours(5))
-  )
-```
-
-If you didn't want the partial results, and only wanted complete 5 hour periods, you can use `.complete` to pad with `NA` values.
-
-```{r}
-crime_counts_hourly %>%
-  mutate(
-    rolling = slide_index_int(
-      count, 
-      start, 
-      sum, 
-      .before = hours(5), 
-      .complete = TRUE
-    )
-  )
-```
-
-## Fixed windows
-
-One thing to be aware of is that `slide()` and `slide_index()` both have the constraint that the output size is the exact same as the input size. This is convenient for use with `mutate()`, but there are some occasions where you might want to return a result with a different size.
-
-Let's go back to our irregular minutely data.
-
-
-
-```{r}
-crime_counts_hourly$start
-```
-
-
-```{r}
-rolling_counts <- slide_between_int(
-  crime_counts,
-  crime_counts$datetime,
-  crime_counts_hourly$start,
-  crime_counts_hourly$stop,
-  sum
-)
-
-mutate(crime_counts_hourly, rolling_manual = rolling_counts)
-```
-
-```{r}
-crime_counts_lm <- crime_counts %>%
-  mutate(y = rnorm(n()))
-
-crime_counts_lm %>%
-  slide_between(
-    crime_counts_lm$datetime, 
-    crime_counts_hourly$start,
-    crime_counts_hourly$stop,
-    ~lm(y ~ count, data = .x)
-  )
-```
-
-Same example as before, but with only the complete windows in the output.
-
-```{r}
-hourly_starts <- crime_counts_hourly$start
-hourly_counts <- crime_counts_hourly$count
-
-indices <- slide_index_dfr(
-  hourly_starts, 
-  hourly_starts, 
-  ~data.frame(start = .x[1], stop = .x[length(.x)]), 
-  .before = hours(5), 
-  .complete = TRUE
-) %>% 
-  as_tibble()
-
-crime_counts_hourly_complete <- indices %>%
-  mutate(
-    rolling = slide_between_int(
-      .x = hourly_counts, 
-      .i = hourly_starts,
-      .starts = start,
-      .stops = stop,
-      sum
-    )
-  )
-
-crime_counts_hourly_complete
+# mean(39.0)             | Hours: 1
+# mean(39.0, 39.0)       | Hours: 1, 3
+# mean(37.9)             | Hours: 6
+# mean(37.9, 39.0)       | Hours: 6, 7
+# mean(37.9, 39.0, 39.9) | Hours: 6, 7, 8
+mutate(weather_gap, roll_temp = slide_index_dbl(temp, time_hour, mean, .before = hours(2)))
 ```
 
