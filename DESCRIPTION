@@ -34,7 +34,7 @@ Suggests:
     rmarkdown,
     xml2
 Remotes:
-    DavisVaughan/vctrs@export-recycle
+    r-lib/vctrs
 Collate: 
     'slide-between2.R'
     'pslide-between.R'
