@@ -36,3 +36,11 @@ test_that("pslide() can iterate over a data frame with a data frame column", {
 test_that("pslide() requires a list-like input", {
   expect_error(pslide(1:5, ~.x), "list, not integer")
 })
+
+test_that("pslide() forces arguments in the same way as base R / pmap()", {
+  f_slide <- pslide(list(1:2, 1:2, 1:2), function(i, j, k) function(x) x + i + j + k)
+  f_base <- mapply(function(i, j, k) function(x) x + i + j + k, 1:2, 1:2, 1:2)
+
+  expect_equal(f_slide[[1]](0), f_base[[1]](0))
+  expect_equal(f_slide[[2]](0), f_base[[2]](0))
+})
