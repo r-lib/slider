@@ -22,6 +22,8 @@ SEXP slide_common_impl(SEXP x,
     return vec_init(ptype, 0);
   }
 
+  int force = compute_force(type);
+
   bool before_unbounded = false;
   bool after_unbounded = false;
 
@@ -131,7 +133,11 @@ SEXP slide_common_impl(SEXP x,
 
     slice_and_update_env(x, window, env, type, container);
 
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
+    elt = R_forceAndCall(f_call, force, env);
+#else
     elt = Rf_eval(f_call, env);
+#endif
     REPROTECT(elt, elt_prot_idx);
 
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
