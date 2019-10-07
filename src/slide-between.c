@@ -213,6 +213,10 @@ static struct last_info new_last_info(struct index_info index) {
   last.start_index = index.first;
   last.stop_index = index.first;
 
+  // last.p_start_index and last.p_stop_index are initialized
+  // after last.start_index and last.stop_index have been protected
+  // inside PROTECT_LAST_INFO
+
   UNPROTECT(2);
   return last;
 }
