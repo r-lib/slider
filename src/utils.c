@@ -47,6 +47,18 @@ int compute_size(SEXP x, int type) {
 
 // -----------------------------------------------------------------------------
 
+int compute_force(int type) {
+  if (type == SLIDE) {
+    return 1;
+  } else if (type == SLIDE2) {
+    return 2;
+  } else {
+    return type;
+  }
+}
+
+// -----------------------------------------------------------------------------
+
 SEXP copy_names(SEXP out, SEXP x, int type) {
   SEXP names;
   if (type == SLIDE) {

@@ -517,3 +517,15 @@ test_that("cannot use invalid .complete", {
   expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_cast_lossy")
 })
 
+# ------------------------------------------------------------------------------
+# misc
+
+test_that("slide() forces arguments in the same way as base R / map()", {
+  f_slide <- slide(1:2, function(i) function(x) x + i)
+  f_base <- lapply(1:2, function(i) function(x) x + i)
+
+  expect_equal(f_slide[[1]](0), f_base[[1]](0))
+  expect_equal(f_slide[[2]](0), f_base[[2]](0))
+})
+
+
