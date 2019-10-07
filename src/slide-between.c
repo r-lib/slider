@@ -228,6 +228,9 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int count) {
   range.starts = starts;
   range.stops = stops;
 
+  range.start = R_NilValue;
+  range.stop = R_NilValue;
+
   range.start_unbounded = (starts == R_NilValue);
   range.stop_unbounded = (stops == R_NilValue);
 
