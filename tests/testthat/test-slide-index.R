@@ -1121,6 +1121,7 @@ test_that("can use a data frame index", {
 })
 
 # ------------------------------------------------------------------------------
+# misc
 
 test_that("repeated index values are grouped with the same values", {
   i <- c(1, 1, 1, 2, 2, 3, 4, 4, 5)
@@ -1195,3 +1196,13 @@ test_that("lambdas are equivalent to functions (#10)", {
     slide_index(1:10, 1:10, ~sum(.x), .before = 3)
   )
 })
+
+test_that("slide_index() forces arguments in the same way as base R / map()", {
+  f_slide <- slide_index(1:2, 1:2, function(i) function(x) x + i)
+  f_base <- lapply(1:2, function(i) function(x) x + i)
+
+  expect_equal(f_slide[[1]](0), f_base[[1]](0))
+  expect_equal(f_slide[[2]](0), f_base[[2]](0))
+})
+
+

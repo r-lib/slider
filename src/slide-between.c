@@ -466,6 +466,8 @@ static void eval_loop(SEXP x,
   SEXP container = PROTECT(make_slice_container(type));
   ++n_prot;
 
+  int force = compute_force(type);
+
   for (; *iteration.p_data_val <= iteration.max; ++(*iteration.p_data_val)) {
     if (*iteration.p_data_val % 1024 == 0) {
       R_CheckUserInterrupt();
@@ -475,7 +477,11 @@ static void eval_loop(SEXP x,
 
     slice_and_update_env(x, window.seq, env, type, container);
 
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
+    elt = R_forceAndCall(f_call, force, env);
+#else
     elt = Rf_eval(f_call, env);
+#endif
     REPROTECT(elt, elt_prot_idx);
 
     if (out.has_indices) {
