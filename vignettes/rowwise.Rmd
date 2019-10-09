@@ -1,0 +1,243 @@
+---
+title: "Row-wise iteration with slide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Row-wise iteration with slide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(slide)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+{slide} is implemented with a new convention that began in {vctrs}, treating a data frame as a vector of rows. This makes `slide()` a _row-wise iterator_ over a data frame, which can be useful in solving some long standing problem points in the tidyverse.
+
+The point of this vignette is to go through a few examples of a row-oriented workflow. The examples are adapted from [Jenny Bryan's talk of row-oriented workflows with purrr](https://github.com/jennybc/row-oriented-workflows), to show how this workflow is improved with `slide()`.
+
+## Row-wise iteration
+
+Let's first explore using `slide()` as a row wise iterator in general. We'll start with this simple data frame.
+
+```{r}
+example <- tibble(
+  x = 1:4,
+  y = letters[1:4]
+)
+
+example
+```
+
+If we were to pass the `x` column to `slide()`, it would iterate over that using the window specified by `.before`, `.after`, and `.complete`. The defaults look to be similar to `purrr::map()`.
+
+```{r}
+slide(example$x, ~.x)
+
+slide(example$x, ~.x, .before = 2)
+```
+
+When applied to the entire `example` data frame, `map()` treats it as a list and iterates over the columns. `slide()`, on the other hand, iterates over rows. This is consistent with the vctrs idea of _size_, which is the length of an atomic vector, but the number of rows of a data frame or matrix. `slide()` always returns an object with the same size as its input. Because the number of rows in `example` is 4, the output size is 4.
+
+```{r}
+slide(example, ~.x)
+```
+
+You can still use the other arguments to `slide()` to control the window size.
+
+```{r}
+# Current row + 2 before
+slide(example, ~.x, .before = 2)
+
+# Center aligned, with no partial results
+slide(example, ~.x, .before = 1, .after = 1, .complete = TRUE)
+```
+
+Often, using `slide()` with its defaults will be enough, as its common to iterate over just one row at a time.
+
+## Calling functions with various parameter combinations
+
+A nice use of a tibble is as a structured way to store parameter combinations. For example, we could store multiple rows of parameter combinations where each row could be supplied to `runif()` to generate different types of uniform random variables. 
+
+```{r}
+parameters <- tibble(
+  n = 1:3,
+  min = c(0, 10, 100),
+  max = c(1, 100, 1000)
+)
+
+parameters
+```
+
+With `slide()` you can pass these parameters on to `runif()` by iterating over `parameters` row-wise, giving you access to `.x` inside of the function, which is a data frame of the current row. Because it is a data frame, you have access to each column by name. Notice how there is no restriction that the columns of the data frame be the same as the argument names of `runif()`.
+
+```{r}
+set.seed(123)
+
+slide(parameters, ~runif(.x$n, .x$min, .x$max))
+```
+
+## Sliding inside a mutate()
+
+For these examples, we will consider a `company` data set containing the `day` a sale was made, the number of calls, `n_calls`, that were placed on that day, and the number of `sales` that resulted from those calls.
+
+```{r}
+company <- tibble(
+  day = rep(c(1, 2), each = 5),
+  sales = sample(100, 10),
+  n_calls = sales + sample(1000, 10)
+)
+
+company
+```
+
+When `slide()`-ing inside of a `mutate()` call, there are a few scenarios that can arise. First, you might want to slide over a single column. This is easy enough in both the ungrouped and grouped case. 
+
+```{r}
+company %>%
+  mutate(sales_roll = slide_dbl(sales, mean, .before = 2, .complete = TRUE))
+
+company %>%
+  group_by(day) %>%
+  mutate(sales_roll = slide_dbl(sales, mean, .before = 2, .complete = TRUE))
+```
+
+If the function you want to apply when sliding takes a data frame as input, things get more complicated. One way to accomplish this is by utilizing the fact that you have access to `.` in the magrittr `%>%`. As an example, imagine you want to perform a rolling regression with `sales` as your outcome and `n_calls` as a predictor.
+
+```{r}
+company %>%
+  mutate(
+    regressions = slide(
+      .x = ., 
+      .f = ~lm(sales ~ n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  )
+```
+
+But here be dragons! The `.` you have access to has two problems.
+
+### No updating as you add new columns.
+
+If you try and add columns in the `mutate()` and expect them to be available to you in `.`, you will be upset. In this case, `lm()` couldn't find `log_n_calls` in the slice of `.` available through `.x`, so it looked in the surrounding environment and found the entire length 10 `log_n_calls` vector that we created and tried to pass that through to the regression.
+
+```{r, error=TRUE}
+company %>%
+  mutate(
+    log_n_calls = log(n_calls),
+    regressions = slide(
+      .x = ., 
+      .f = ~lm(sales ~ log_n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  )
+```
+
+To show this a bit simpler, let's just try and access that `log_n_calls` column inside our slide function. We immediately get a slew of warnings because it doesn't exist.
+
+```{r, error=TRUE}
+company %>%
+  mutate(
+    log_n_calls = log(n_calls),
+    example = slide(., ~.x$log_n_calls)
+  )
+```
+
+### No respect of groups
+
+Even if you don't create new columns in your `mutate()`, there is a high chance that you'll use dplyr for its `group_by()` capability. If you try and use `.` with a grouped data frame, you'll have issues as well because `.` won't correspond to the _current group_, but will instead be the _entire data frame_.
+
+```{r, error=TRUE}
+company %>%
+  group_by(day) %>%
+  mutate(
+    regressions = slide(
+      .x = ., 
+      .f = ~lm(sales ~ n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  )
+```
+
+### Solution (sort of)
+
+The "problem" is that currently dplyr does not give us any way to easily access the current data frame that we are processing. We can access individual columns by name, but the entire data frame object is impossible to get access to. I'm optimistic that this will get easier in the coming months, but in the mean time here are a few solutions that you can use.
+
+Rather than trying to pass the data frame on with `.`, you can construct it on the fly from the individual vectors that you do have access to. This means you would have access to any columns that were created in the same `mutate()` call.
+
+```{r}
+company %>%
+  mutate(
+    log_n_calls = log(n_calls),
+    regressions = slide(
+      .x = tibble(sales = sales, log_n_calls = log_n_calls), 
+      .f = ~lm(sales ~ log_n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  )
+```
+
+This also works for the grouped example.
+
+```{r}
+company %>%
+  group_by(day) %>%
+  mutate(
+    regressions = slide(
+      .x = tibble(sales = sales, n_calls = n_calls), 
+      .f = ~lm(sales ~ n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  )
+```
+
+Depending on your comfort with the new `dplyr::group_modify()` function, it can provide a solution that doesn't require you to explicitly create a tibble of the columns you require. `group_modify()` allows us to apply a function on each group, giving us access to the current data frame as the first argument to the function, and the "key" as the second argument. We don't need to worry about the key for this example, but we need to "swallow" it with `...` in our function.
+
+The way I tackle these problems is to construct a function that works on one data frame group, then apply it to all of them.
+
+```{r}
+single_group_regressions <- function(.data_group, ...) {
+  regressions <- slide(
+      .x = .data_group, 
+      .f = ~lm(sales ~ n_calls, .x), 
+      .before = 2, 
+      .complete = TRUE
+    )
+  
+  mutate(.data_group, regressions = regressions)
+}
+```
+
+Test it on one group.
+
+```{r}
+day_one <- filter(company, day == 1)
+single_group_regressions(day_one)
+```
+
+Now apply it to all groups with `group_modify()`!
+
+```{r}
+company %>%
+  group_by(day) %>%
+  group_modify(single_group_regressions)
+```
+
+
+
+
+

@@ -15,8 +15,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     glue,
-    rlang,
-    vctrs (>= 0.2.0.9003)
+    rlang (>= 0.4.0.9003),
+    vctrs (>= 0.2.0.9005)
 LinkingTo:
     vctrs
 RoxygenNote: 6.1.1
@@ -26,7 +26,7 @@ BugReports: https://github.com/DavisVaughan/slide/issues
 Suggests: 
     testthat (>= 2.1.0),
     covr,
-    dplyr,
+    dplyr (>= 0.8.3),
     lubridate,
     RcppQuantuccia,
     nycflights13,
@@ -34,7 +34,8 @@ Suggests:
     rmarkdown,
     xml2
 Remotes:
-    r-lib/vctrs
+    r-lib/vctrs,
+    r-lib/rlang
 Collate: 
     'slide-between2.R'
     'pslide-between.R'
