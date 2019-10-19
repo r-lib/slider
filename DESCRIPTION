@@ -28,7 +28,6 @@ Suggests:
     covr,
     dplyr (>= 0.8.3),
     lubridate,
-    nycflights13,
     knitr,
     rmarkdown,
     xml2
