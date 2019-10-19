@@ -190,26 +190,6 @@ slide_between(x, i, starts, stops, mean)
 
 slide_between(i, i, starts, stops, ~.x)
 
-# ---------------------------------------------------------------------------
-# Business calendars with RcppQuantuccia
-
-# Imagine you work in a company with daily costs that fall on these dates.
-# Notice that these are strictly weekdays that cross over a weekend.
-i <- as.Date("2019-08-15") + c(0:1, 4, 6, 7)
-wday(i, label = TRUE)
-
-# If you are following a "business calendar" and want to compute a rolling
-# 2 day computation, you might want `"2019-08-19"` (a Monday) to be paired
-# with `"2019-08-16"` (a Friday) because they are adjacent in the business
-# week. Using the RcppQuantuccia package, we can use `advanceUnits()` to
-# compute the correct business day boundaries for use in `slide_between()`.
-library(RcppQuantuccia)
-starts <- advanceUnits(i, -1, "Days")
-stops <- i
-
-# "The current day + 1 business day before"
-slide_between(i, i, starts, stops, ~.x)
-
 }
 \seealso{
 \code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=slide_between2]{slide_between2()}}
