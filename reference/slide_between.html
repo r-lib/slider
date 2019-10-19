@@ -452,39 +452,6 @@ are allowed.</p></li>
 #&gt; [1] "2019-03-01" "2019-03-02" "2019-03-27" "2019-03-28" "2019-03-29"
 #&gt; [6] "2019-03-30" "2019-03-31" "2019-04-01"
 #&gt; </div><div class='input'>
-<span class='co'># ---------------------------------------------------------------------------</span>
-<span class='co'># Business calendars with RcppQuantuccia</span>
-
-<span class='co'># Imagine you work in a company with daily costs that fall on these dates.</span>
-<span class='co'># Notice that these are strictly weekdays that cross over a weekend.</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-08-15"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>)
-<span class='fu'><a href='http://lubridate.tidyverse.org/reference/day.html'>wday</a></span>(<span class='no'>i</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] Thu Fri Mon Wed Thu
-#&gt; Levels: Sun &lt; Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat</div><div class='input'>
-<span class='co'># If you are following a "business calendar" and want to compute a rolling</span>
-<span class='co'># 2 day computation, you might want `"2019-08-19"` (a Monday) to be paired</span>
-<span class='co'># with `"2019-08-16"` (a Friday) because they are adjacent in the business</span>
-<span class='co'># week. Using the RcppQuantuccia package, we can use `advanceUnits()` to</span>
-<span class='co'># compute the correct business day boundaries for use in `slide_between()`.</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>RcppQuantuccia</span>)
-<span class='no'>starts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/RcppQuantuccia/man/advanceUnits.html'>advanceUnits</a></span>(<span class='no'>i</span>, -<span class='fl'>1</span>, <span class='st'>"Days"</span>)
-<span class='no'>stops</span> <span class='kw'>&lt;-</span> <span class='no'>i</span>
-
-<span class='co'># "The current day + 1 business day before"</span>
-<span class='fu'>slide_between</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='no'>starts</span>, <span class='no'>stops</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-08-15"
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] "2019-08-15" "2019-08-16"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "2019-08-16" "2019-08-19"
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] "2019-08-21"
-#&gt; 
-#&gt; [[5]]
-#&gt; [1] "2019-08-21" "2019-08-22"
-#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
