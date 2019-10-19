@@ -1,0 +1,265 @@
+---
+title: "Getting started with slide"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{slide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(slide)
+library(dplyr, warn.conflicts = FALSE)
+library(lubridate, warn.conflicts = FALSE)
+```
+
+This vignette is meant to serve as an introduction to {slide}. In it, you'll learn about the three core functions in the package: `slide()`, `slide_index()`, and `slide_between()`, along with their many variants.
+
+slide is a package for rolling analysis using window functions. "Window functions" is a term that I've borrowed from SQL that means that some function is repeatedly applied to different "windows" of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.
+
+## slide()
+
+To better understand window functions, we'll turn to our first core function, `slide()`. `slide()` is a bit like `purrr::map()`. You supply a vector to slide over, `.x`, and a function to apply to each window, `.f`. With those two things alone, `slide()` is almost identical to `map()`.
+
+```{r}
+slide(1:4, ~.x)
+```
+
+On top of this, you can control the size and placement of the window by using the additional arguments to `slide()`. For example, you can ask for a window of size 3 containing "the current element, as well as the 2 before it" like this:
+
+```{r}
+slide(1:4, ~.x, .before = 2)
+```
+
+You'll notice that the first two elements of the list contain partial or "incomplete" windows. By default, `slide()` assumes that you want to compute on these windows anyways, but if you don't care about them, you can change the `.complete` argument.
+
+```{r}
+slide(1:4, ~.x, .before = 2, .complete = TRUE)
+```
+
+`slide()` is _size stable_, so you always get an output that is the same size as your input. Because of that, the partial results have been replaced by the corresponding missing value. For a list, that is `NULL`.
+
+Sometimes, changing the placement of the window is a critical part of your calculation. For example, you might want a "center alignment" where you have an equal number of values before and after the current element. To accomplish this, you can combine the `.before` argument with `.after` to get a centered window. Here we ask for a window of size 3 containing "the current element, as well as 1 element before and 1 element after". It is "centered" because in position 2 we have a complete window of the current element (2), along with one element before (1) and one after (3).
+
+```{r}
+slide(1:4, ~.x, .before = 1, .after = 1)
+```
+
+`slide()` can also perform _expanding_ windows. These are the type that allow _cumulative_ operations to work. In prose, an expanding window would be "the current element, along with every element before this one". To construct this kind of window, you can set `.before` to `Inf`.
+
+```{r}
+slide(1:4, ~.x, .before = Inf)
+```
+
+`slide()` is _type stable_, meaning that it always returns an object of the same type, and the base form of `slide()` always returns a list. So far, this is all that we have used to illustrate how it works, but practically you are more likely to use one of the suffixed forms like `slide_dbl()` or `slide_int()`. For example, you might have a vector of sales data that you want to compute a 3 value moving average on.
+
+```{r}
+sales_vec <- c(2, 4, 6, 2)
+
+slide_dbl(sales_vec, mean, .before = 2)
+```
+
+## slide_index()
+
+To make things a bit more interesting, let's assume that the sales vector from the example above is also tied to some "index", like a date vector of when the sale actually occurred.
+
+```{r}
+index_vec <- as.Date("2019-08-29") + c(0, 1, 5, 6)
+wday_vec <- as.character(wday(index_vec, label = TRUE))
+
+company <- tibble(
+  sales = sales_vec,
+  index = index_vec,
+  wday = wday_vec
+)
+
+company
+```
+
+This index is increasing but irregular, meaning that we "jumped" from Friday to Tuesday because there were no sales between those dates. For the purpose of this example, let's assume that this is an online company where it is perfectly reasonable that you _could_ have sales on both Saturday and Sunday (If your use case requires that you "skip over" weekends and even holidays, you might like [{almanac}](https://github.com/DavisVaughan/almanac)).
+
+A reasonable business question to ask would be to compute a _3 day_ moving average. Is this different from the 3 value moving average we computed before? Here is the expected result, side by side with the 3 value one computed using `slide_dbl()` from before.
+
+```{r, echo=FALSE}
+mutate(
+  company, 
+  roll_val = slide_dbl(sales, mean, .before = 2),
+  roll_day = slide_index_dbl(sales, index, mean, .before = 2)
+)
+```
+
+The difference shows up in the third row, when computing the 3 day moving average looking back from Tuesday. To understand why they are different, consider what `slide_dbl()` does. It uses the `sales` column and looks at the "current row, along with two rows before it" to compute the result. When you are on row 3, this would select rows 1-3 giving the date range of `[Thu, Tue]`, which isn't 3 days. The correct answer would have been to look back 2 days from Tuesday, not 2 rows from row 3. This would have given us the date window of `[Sun, Tue]`, and only values in that range should be included in the moving average calculation for row 3. The only row in that range is row 3, so we should just be averaging the single value of `6` to get our result.
+
+`slide_dbl()` doesn't give us what we want because it is _unaware of the index column_. It just looks back a set number of values. What we need is a function that "knows" about the `index` and can adjust accordingly. For that, you can use `slide_index(.x, .i, .f, ...)` which has a `.i` argument to pass an index vector through.
+
+To understand how `slide_index()` works, take a look at the following comparison to `slide()`. For illustration, the current window of the weekday vector is printed out. Notice that in position 3, `slide()` gives us the "wrong" result of Thursday, Friday and Tuesday, because it just looks back 2 values.
+
+```{r}
+wday_vec
+
+slide(wday_vec, ~.x, .before = 2)
+```
+
+On the other hand, `slide_index()` can be "aware" of the irregular index vector. By passing it through as `.i`, and by swapping a look back period of 2 for the lubridate object of `days(2)`, the start of the range is computed as `.i - days(2)`, which correctly computes a date window of `[Sun, Tue]` for the third element, so that we only capture Tuesday in the window.
+
+```{r}
+slide_index(wday_vec, index_vec, ~.x, .before = days(2))
+```
+
+Knowing this, we can swap out `slide_dbl()` for `slide_index_dbl()` to see how to correctly compute our 3 day rolling average.
+
+```{r}
+mutate(
+  company, 
+  roll_val = slide_dbl(sales, mean, .before = 2),
+  roll_day = slide_index_dbl(sales, index, mean, .before = days(2))
+)
+```
+
+## slide_between()
+
+`slide_between()` is a lower level function that you can think of as powering `slide_index()`. It has the `.i` argument for the index, but in place of `.before` and `.after` are `.starts` and `.stops`, vectors of the same type as `.i` that allow fine tuned control over the exact windows that are used.
+
+As a first example, let's look at how `slide_between()` can be equivalent to `slide_index()`. Previously we had computed a `roll_day` column:
+
+```{r}
+company %>%
+  mutate(
+    roll_day = slide_index_dbl(sales, index, mean, .before = days(2))
+  )
+```
+
+This would be equivalent to "manually" computing the `.starts` by subtracting 2 days from `index`, and "manually" computing the `.stops`, which is just the `index` itself since we aren't looking forward any amount of time.
+
+```{r}
+company %>%
+  mutate(
+    starts = index - days(2),
+    stops = index,
+    roll_day = slide_between_dbl(sales, index, starts, stops, mean)
+  )
+```
+
+The rules that govern the output of `slide_between()` are slightly different from `slide()` and `slide_index()`. It is still type stable as you'd expect, but the _size_ of the output is different than the other two. Where `slide()` returns an output that is the same size as `.x`, `slide_between()` returns an output that is the same size as `.starts` and `.stops`. This is actually _extremely_ useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.
+
+### Decreasing the size
+
+Imagine you have another set of some irregular daily sales data, spanning 3 months.
+
+```{r}
+daily_sales <- tibble(
+  sales = c(10, 20, 50, 12, 14, 35, 77, 14, 22),
+  index = as.Date("2019-01-25") + c(0, 1, 2, 3, 10, 20, 35, 42, 45)
+)
+
+daily_sales
+```
+
+You are tasked with computing rolling two month total sales numbers. You should end up with two values, one for the range of `[2019-01-01, 2019-02-28]` and one for `[2019-02-01, 2019-03-31]`. Note that this is a bit hard to accomplish using dplyr alone because these ranges overlap, so we can't construct a column to group on and then summarize it. 
+
+Using `slide_between()`, we can manually construct these ranges and pass them as the `.starts` and `.stops`, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I'll generate the ranges programmatically.
+
+```{r}
+jan_first <- floor_date(min(daily_sales$index), "1 month")
+apr_first <- ceiling_date(max(daily_sales$index), "1 month")
+
+dates <- seq(jan_first, apr_first, "1 month")
+
+results <- tibble(
+  starts = dates[1:2],
+  stops = dates[3:4] - 1
+)
+
+results
+```
+
+```{r}
+results %>%
+  mutate(
+    total_sales = slide_between_dbl(
+      .x = daily_sales$sales, 
+      .i = daily_sales$index,
+      .starts = starts,
+      .stops = stops,
+      .f = sum
+    )
+  ) 
+```
+
+### Increasing the size
+
+This last example is inspired by a real internal question an RStudio employee had.
+
+Imagine you have a set of customers, each identifiable by an `id`, and each customer has a contract with you that expires on a particular `date`. The day is currently `2019-09-27`, and your boss gives you the following task:
+
+"For every day from today until our last expiration, I want a count of how many customers are currently active."
+
+```{r}
+today <- as.Date("2019-09-27")
+
+customers <- tibble(
+  id = 1:3,
+  date = as.Date(c("2019-12-23", "2020-01-01", "2021-04-02"))
+)
+
+customers
+```
+
+With the above data set, we'd have results like:
+
+- 3 active on `2019-09-27`
+- 3 active on `2019-09-28`
+- ...
+- 2 active on `2019-12-24` (id 1 expired)
+- ...
+- 1 active on `2021-04-02` (last day)
+
+There are multiple ways to solve this problem, and I felt that `slide_between()` provided a pretty nice solution! The general idea is as follows:
+
+The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our `.starts`, and the `.stops` is always the last expiration date. So we'll construct the date column first, and then pass that on to `slide_between()` to compute our result, counting all of the active customer `id`s on any particular day by just taking the `length()` of the current window.
+
+```{r}
+last_expiration <- max(customers$date)
+
+# We don't need a `.stops` column because it is always 
+# `last_expiration` and `slide_between_int()` will recycle it for us
+result <- tibble(
+  current_date = seq(today, last_expiration, by = 1)
+)
+
+result
+
+result <- result %>%
+  mutate(
+    active = slide_between_int(
+      .x = customers$id, 
+      .i = customers$date,
+      .starts = current_date,
+      .stops = last_expiration,
+      .f = length
+    )
+  )
+
+result
+```
+
+We can filter down to a range of interest to ensure that we computed the correct number of active customers as they expire.
+
+```{r}
+result %>%
+  filter(
+    current_date >= min(customers$date) - 3, 
+    current_date <= min(customers$date) + 3
+  )
+```
+
+
