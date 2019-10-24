@@ -30,9 +30,9 @@ slide_between_common <- function(x,
   starts <- args[[2L]]
   stops <- args[[3L]]
 
-  split <- vec_split_id(i)
+  split <- vec_group_pos(i)
   i <- split$key
-  window_indices <- split$id
+  window_indices <- split$pos
 
   params <- list(
     type,
