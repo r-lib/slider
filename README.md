@@ -20,32 +20,36 @@ status](https://img.shields.io/azure-devops/coverage/DavisVaughan/slide/2)](http
 <!-- badges: end -->
 
 slide provides a family of general purpose “sliding window” functions.
-The API is purposefully *very* similar to purrr, with functions such as
-`slide()`, `slide_dbl()`, `slide2()` and `pslide()`. The goal of these
+The API is purposefully *very* similar to purrr. The goal of these
 functions is usually to compute rolling averages, cumulative sums,
 rolling regressions, or other “window” based computations.
 
-There are 3 reasons to use slide:
+There are 3 core functions in slide:
 
-  - Like `purrr::map()`, `slide()` is type stable, and also always
-    returns a result with the same size as its input.
+  - `slide()` iterates over your data like `purrr::map()`, but uses a
+    sliding window to do so. It is type stable, and always returns a
+    result with the same size as its input.
 
-  - Unlike `map()`, with data frames `slide()` iterates *row wise*. This
-    is consistent with the theory that backs `slide()`, but also makes
-    it a generic row wise data frame iterator that solves a number of
-    problems outside of sliding windows. It just happens to be a neat
-    side effect of this API.
+  - `slide_index()` computes a rolling calculation *relative to an
+    index*. If you have ever wanted to compute something like a “3 month
+    rolling average” where the number of days in each month is
+    irregular, you might like this function.
 
-  - If you have ever needed to compute a rolling calculation *relative
-    to an index*, then you might like `slide_index()`. This solves the
-    problem of computing a “rolling mean over a 3 month window”, where
-    the number of days in each month is irregular.
+  - `slide_between()` is a lower level version of `slide_index()` that
+    allows you to manually specify sliding boundaries using `.starts`
+    and `.stops`. It can be useful if you want to return a result with a
+    different size from the original input, or want to aggregate data to
+    a less granular frequency using a rolling window (like taking daily
+    data, slicing it into monthly blocks, and then creating a rolling
+    window over those monthly blocks).
 
-If you are new to slide, but are familiar with purrr, I would encourage
-you to start with the documentation and examples for
-[`?slide`](https://davisvaughan.github.io/slide/reference/slide.html)
-and
-[`?slide_index`](https://davisvaughan.github.io/slide/reference/slide_index.html).
+Each of these 3 functions has the same variants as `purrr::map()`. For
+example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`, along
+with the other combinations of these variants that you might expect from
+having previously used purrr.
+
+To learn more about these three functions, read the [introduction
+vignette](https://davisvaughan.github.io/slide/articles/slide.html).
 
 ## Installation
 
@@ -57,9 +61,6 @@ You can install the development version from
 ``` r
 remotes::install_github("DavisVaughan/slide")
 ```
-
-As a warning, slide uses the development version of vctrs, which will
-automatically be installed for you when you install slide from GitHub.
 
 ## Examples
 
@@ -151,6 +152,9 @@ Unlike `purrr::map()`, `slide()` iterates over data frames in a row wise
 fashion. Interestingly this means the default of `slide()` becomes a
 generic row wise iterator, with nice syntax for accessing data frame
 columns.
+
+There is a [vignette specifically about
+this](https://davisvaughan.github.io/slide/articles/rowwise.html).
 
 ``` r
 cars <- mtcars[1:4,]
