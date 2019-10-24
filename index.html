@@ -87,21 +87,21 @@
 <a href="#slide" class="anchor"></a>slide</h1></div>
 <!-- badges: start -->
 
-<p>slide provides a family of general purpose “sliding window” functions. The API is purposefully <em>very</em> similar to purrr, with functions such as <code><a href="reference/slide.html">slide()</a></code>, <code><a href="reference/slide.html">slide_dbl()</a></code>, <code><a href="reference/slide2.html">slide2()</a></code> and <code><a href="reference/slide2.html">pslide()</a></code>. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other “window” based computations.</p>
-<p>There are 3 reasons to use slide:</p>
+<p>slide provides a family of general purpose “sliding window” functions. The API is purposefully <em>very</em> similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other “window” based computations.</p>
+<p>There are 3 core functions in slide:</p>
 <ul>
-<li><p>Like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> is type stable, and also always returns a result with the same size as its input.</p></li>
-<li><p>Unlike <code>map()</code>, with data frames <code><a href="reference/slide.html">slide()</a></code> iterates <em>row wise</em>. This is consistent with the theory that backs <code><a href="reference/slide.html">slide()</a></code>, but also makes it a generic row wise data frame iterator that solves a number of problems outside of sliding windows. It just happens to be a neat side effect of this API.</p></li>
-<li><p>If you have ever needed to compute a rolling calculation <em>relative to an index</em>, then you might like <code><a href="reference/slide_index.html">slide_index()</a></code>. This solves the problem of computing a “rolling mean over a 3 month window”, where the number of days in each month is irregular.</p></li>
+<li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, but uses a sliding window to do so. It is type stable, and always returns a result with the same size as its input.</p></li>
+<li><p><code><a href="reference/slide_index.html">slide_index()</a></code> computes a rolling calculation <em>relative to an index</em>. If you have ever wanted to compute something like a “3 month rolling average” where the number of days in each month is irregular, you might like this function.</p></li>
+<li><p><code><a href="reference/slide_between.html">slide_between()</a></code> is a lower level version of <code><a href="reference/slide_index.html">slide_index()</a></code> that allows you to manually specify sliding boundaries using <code>.starts</code> and <code>.stops</code>. It can be useful if you want to return a result with a different size from the original input, or want to aggregate data to a less granular frequency using a rolling window (like taking daily data, slicing it into monthly blocks, and then creating a rolling window over those monthly blocks).</p></li>
 </ul>
-<p>If you are new to slide, but are familiar with purrr, I would encourage you to start with the documentation and examples for <a href="https://davisvaughan.github.io/slide/reference/slide.html"><code><a href="reference/slide.html">?slide</a></code></a> and <a href="https://davisvaughan.github.io/slide/reference/slide_index.html"><code><a href="reference/slide_index.html">?slide_index</a></code></a>.</p>
+<p>Each of these 3 functions has the same variants as <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>. For example, <code><a href="reference/slide.html">slide()</a></code> has <code><a href="reference/slide.html">slide_dbl()</a></code>, <code><a href="reference/slide2.html">slide2()</a></code>, and <code><a href="reference/slide2.html">pslide()</a></code>, along with the other combinations of these variants that you might expect from having previously used purrr.</p>
+<p>To learn more about these three functions, read the <a href="https://davisvaughan.github.io/slide/articles/slide.html">introduction vignette</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>slide is NOT yet on <a href="https://CRAN.R-project.org">CRAN</a>.</p>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"DavisVaughan/slide"</span>)</a></code></pre></div>
-<p>As a warning, slide uses the development version of vctrs, which will automatically be installed for you when you install slide from GitHub.</p>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -167,6 +167,7 @@
 <h2 class="hasAnchor">
 <a href="#data-frames" class="anchor"></a>Data frames</h2>
 <p>Unlike <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> iterates over data frames in a row wise fashion. Interestingly this means the default of <code><a href="reference/slide.html">slide()</a></code> becomes a generic row wise iterator, with nice syntax for accessing data frame columns.</p>
+<p>There is a <a href="https://davisvaughan.github.io/slide/articles/rowwise.html">vignette specifically about this</a>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">cars &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="reference/slide.html">slide</a></span>(cars, <span class="op">~</span>.x)</a>
