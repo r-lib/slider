@@ -15,8 +15,8 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     glue,
-    rlang (>= 0.4.0.9003),
-    vctrs (>= 0.2.0.9005)
+    rlang (>= 0.4.1),
+    vctrs (>= 0.2.0.9007)
 LinkingTo:
     vctrs
 RoxygenNote: 6.1.1
@@ -32,8 +32,7 @@ Suggests:
     rmarkdown,
     xml2
 Remotes:
-    r-lib/vctrs,
-    r-lib/rlang
+    r-lib/vctrs
 Collate: 
     'slide-between2.R'
     'pslide-between.R'
