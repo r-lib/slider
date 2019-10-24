@@ -109,9 +109,9 @@ SEXP slide_between_common_impl(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  int window_sizes[index.size];
-  int window_starts[index.size];
-  int window_stops[index.size];
+  int* window_sizes = (int*) R_alloc(index.size, sizeof(int));
+  int* window_starts = (int*) R_alloc(index.size, sizeof(int));
+  int* window_stops = (int*) R_alloc(index.size, sizeof(int));
 
   compute_window_sizes(window_sizes, window_indices, index.size);
   compute_window_starts(window_starts, window_sizes, index.size);
