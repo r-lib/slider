@@ -53,6 +53,32 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   )
 })
 
+test_that("`.ptype = NULL` returns `NULL` with size 0 `.starts` / `.stops`", {
+  expect_equal(
+    slide_between_vec(integer(), integer(), integer(), integer(), ~.x, .ptype = NULL),
+    NULL
+  )
+})
+
+test_that("`.ptype = NULL` returns `NULL` with one size 0 and one size 1 starts / stops", {
+  expect_equal(
+    slide_between_vec(integer(), integer(), integer(), 1, ~.x, .ptype = NULL),
+    NULL
+  )
+
+  expect_equal(
+    slide_between_vec(integer(), integer(), 1, integer(), ~.x, .ptype = NULL),
+    NULL
+  )
+})
+
+test_that("`.ptype = NULL` errors with non recyclable starts/stops", {
+  expect_error(
+    slide_between_vec(integer(), integer(), integer(), 1:2, ~.x, .ptype = NULL),
+    class = "vctrs_error_incompatible_size"
+  )
+})
+
 test_that(".ptypes with a vec_proxy() are restored to original type", {
   expect_is(
     slide_between_vec(Sys.Date() + 1:5, 1:5, 1:5, 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),

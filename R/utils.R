@@ -11,6 +11,10 @@ is_unbounded <- function(x) {
 }
 
 check_all_size_one <- function(out) {
+  if (vec_size(out) == 0L) {
+    return(invisible(out))
+  }
+
   size <- vec_size_common(!!!out)
 
   if (size != 1L) {
