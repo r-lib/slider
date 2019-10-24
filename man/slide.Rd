@@ -139,7 +139,7 @@ to the type required by the version of \code{slide_*()} being used.
 
 \subsection{\code{slide_vec()} and \code{slide_*()} variants}{
 \itemize{
-\item \code{vec_size(slide_vec(.x)) = vec_size(.x)}
+\item \code{vec_size(slide_vec(.x)) == vec_size(.x)}
 \item \code{vec_size(slide_vec(.x)[[1]]) == 1L}
 \item \code{vec_ptype(slide_vec(.x, .ptype = ptype)) == ptype}
 }

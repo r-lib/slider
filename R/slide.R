@@ -73,7 +73,7 @@
 #'
 #' \subsection{`slide_vec()` and `slide_*()` variants}{
 #'
-#'  * `vec_size(slide_vec(.x)) = vec_size(.x)`
+#'  * `vec_size(slide_vec(.x)) == vec_size(.x)`
 #'
 #'  * `vec_size(slide_vec(.x)[[1]]) == 1L`
 #'
