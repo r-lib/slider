@@ -26,6 +26,12 @@ slide_between_common <- function(x,
   args <- vec_cast_common(i, !!!args)
   args <- lapply(args, vec_proxy_compare)
 
+  # Early exit if empty input
+  # (but after all size checks have been done)
+  if (out_size == 0L) {
+    return(vec_init(ptype, 0L))
+  }
+
   i <- args[[1L]]
   starts <- args[[2L]]
   stops <- args[[3L]]
