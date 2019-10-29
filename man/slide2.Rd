@@ -21,70 +21,203 @@
 \alias{pslide_dfc}
 \title{Slide over multiple inputs simultaneously}
 \usage{
-slide2(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_vec(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .ptype = list())
+slide2_vec(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-slide2_dbl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2_dbl(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_int(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2_int(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_lgl(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2_lgl(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_chr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2_chr(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_raw(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide2_raw(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide2_dfr(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+slide2_dfr(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide2_dfc(.x, .y, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+slide2_dfc(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 
-pslide(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L, .complete = FALSE)
 
-pslide_vec(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .ptype = list())
+pslide_vec(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-pslide_dbl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide_dbl(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-pslide_int(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide_int(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-pslide_lgl(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide_lgl(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-pslide_chr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide_chr(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-pslide_raw(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+pslide_raw(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-pslide_dfr(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+pslide_dfr(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-pslide_dfc(.l, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+pslide_dfc(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x, .y}{\code{[vector]}
+\item{.x, .y}{\verb{[vector]}
 
 Vectors to iterate over. Vectors of size 1 will be recycled.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -95,14 +228,14 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[integer(1) / Inf]}
+\item{.before}{\verb{[integer(1) / Inf]}
 
 The number of values \emph{before} the current element to include in the sliding
 window. Set to \code{Inf} to select all elements before the current
 position, constructing a cumulative window. A negative value is allowed,
 and allows you to "look forward" as well.}
 
-\item{.after}{\code{[integer(1) / Inf]}
+\item{.after}{\verb{[integer(1) / Inf]}
 
 The number of values \emph{after} the current element to include in the
 sliding window. Set to \code{Inf} to select all elements after the
@@ -111,16 +244,16 @@ you start with as many elements as possible and decrease the amount as
 you move through \code{.x}. A negative value is allowed, and allows you to
 "look backward" as well.}
 
-\item{.step}{\code{[positive integer(1)]}
+\item{.step}{\verb{[positive integer(1)]}
 
 The number of elements to shift the window forward between function calls.}
 
-\item{.complete}{\code{[logical(1)]}
+\item{.complete}{\verb{[logical(1)]}
 
 Should the sliding be restricted to complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -148,7 +281,7 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 
-\item{.l}{\code{[list]}
+\item{.l}{\verb{[list]}
 
 A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
@@ -172,7 +305,7 @@ functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 
 }
 
-\subsection{\code{slide2_vec()} and \code{slide2_*()} variants}{
+\subsection{\code{slide2_vec()} and \verb{slide2_*()} variants}{
 \itemize{
 \item \code{vec_size(slide2_vec(.x, .y)) == vec_size_common(.x, .y)}
 \item \code{vec_size(slide2_vec(.x, .y)[[1]]) == 1L}
@@ -189,7 +322,7 @@ functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 
 }
 
-\subsection{\code{pslide_vec()} and \code{pslide_*()} variants}{
+\subsection{\code{pslide_vec()} and \verb{pslide_*()} variants}{
 \itemize{
 \item \code{vec_size(pslide_vec(.l)) == vec_size_common(!!! .l)}
 \item \code{vec_size(pslide_vec(.l)[[1]]) == 1L}

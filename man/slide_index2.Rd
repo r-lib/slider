@@ -21,77 +21,161 @@
 \alias{pslide_index_dfc}
 \title{Slide along multiples inputs simultaneously over an index}
 \usage{
-slide_index2(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2(.x, .y, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index2_vec(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .ptype = list())
+slide_index2_vec(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-slide_index2_dbl(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2_dbl(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+)
 
-slide_index2_int(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2_int(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+)
 
-slide_index2_lgl(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2_lgl(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+)
 
-slide_index2_chr(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2_chr(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+)
 
-slide_index2_raw(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index2_raw(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+)
 
-slide_index2_dfr(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+slide_index2_dfr(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide_index2_dfc(.x, .y, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+slide_index2_dfc(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 
-pslide_index(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_vec(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .ptype = list())
+pslide_index_vec(
+  .l,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-pslide_index_dbl(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index_dbl(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_int(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index_int(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_lgl(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index_lgl(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_chr(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index_chr(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_raw(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+pslide_index_raw(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-pslide_index_dfr(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+pslide_index_dfr(
+  .l,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-pslide_index_dfc(.l, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+pslide_index_dfc(
+  .l,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x, .y}{\code{[vector]}
+\item{.x, .y}{\verb{[vector]}
 
 Vectors to iterate over. Vectors of size 1 will be recycled.}
 
-\item{.i}{\code{[vector]}
+\item{.i}{\verb{[vector]}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
 bound will be \code{.i + .after}. It is faily common to supply a date vector
 as the index, but not required.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -102,7 +186,7 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[vector(1) / Inf]}
+\item{.before}{\verb{[vector(1) / Inf]}
 
 The number of values \emph{before} the current element of \code{.i} to include in the
 sliding window. Set to \code{Inf} to select all elements before the
@@ -110,10 +194,10 @@ current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.
 
 For \code{slide_index()}, this can be any object that can be subtracted from
-\code{.i} with \code{-}. One common use case is to set this to a lubridate period,
+\code{.i} with \verb{-}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-\item{.after}{\code{[vector(1) / Inf]}
+\item{.after}{\verb{[vector(1) / Inf]}
 
 The number of values \emph{after} the current element of \code{.i} to include in the
 sliding window. Set to \code{Inf} to select all elements after the
@@ -123,15 +207,15 @@ move through \code{.x}. A negative value is allowed, and allows you to "look
 backward" as well.
 
 For \code{slide_index()}, this can be any object that can be added to
-\code{.i} with \code{+}. One common use case is to set this to a lubridate period,
+\code{.i} with \verb{+}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-\item{.complete}{\code{[logical(1)]}
+\item{.complete}{\verb{[logical(1)]}
 
 Should the sliding be restricted to complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -159,7 +243,7 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 
-\item{.l}{\code{[list]}
+\item{.l}{\verb{[list]}
 
 A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
@@ -182,7 +266,7 @@ over multiple vectors at once, while respecting an \code{.i}-ndex.
 
 }
 
-\subsection{\code{slide_index2_vec()} and \code{slide_index2_*()} variants}{
+\subsection{\code{slide_index2_vec()} and \verb{slide_index2_*()} variants}{
 \itemize{
 \item \code{vec_size(slide_index2_vec(.x, .y)) == vec_size_common(.x, .y)}
 \item \code{vec_size(slide_index2_vec(.x, .y)[[1]]) == 1L}
@@ -199,7 +283,7 @@ over multiple vectors at once, while respecting an \code{.i}-ndex.
 
 }
 
-\subsection{\code{pslide_index_vec()} and \code{pslide_index_*()} variants}{
+\subsection{\code{pslide_index_vec()} and \verb{pslide_index_*()} variants}{
 \itemize{
 \item \code{vec_size(pslide_index_vec(.l)) == vec_size_common(!!! .l)}
 \item \code{vec_size(pslide_index_vec(.l)[[1]]) == 1L}

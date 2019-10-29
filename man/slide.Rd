@@ -12,41 +12,99 @@
 \alias{slide_dfc}
 \title{Slide}
 \usage{
-slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L, .complete = FALSE)
 
-slide_vec(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .ptype = list())
+slide_vec(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-slide_dbl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide_dbl(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide_int(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide_int(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide_lgl(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide_lgl(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide_chr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide_chr(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide_raw(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE)
+slide_raw(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+)
 
-slide_dfr(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+slide_dfr(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide_dfc(.x, .f, ..., .before = 0L, .after = 0L, .step = 1L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+slide_dfc(
+  .x,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x}{\code{[vector]}
+\item{.x}{\verb{[vector]}
 
 The vector to iterate over and apply \code{.f} to.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -57,14 +115,14 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[integer(1) / Inf]}
+\item{.before}{\verb{[integer(1) / Inf]}
 
 The number of values \emph{before} the current element to include in the sliding
 window. Set to \code{Inf} to select all elements before the current
 position, constructing a cumulative window. A negative value is allowed,
 and allows you to "look forward" as well.}
 
-\item{.after}{\code{[integer(1) / Inf]}
+\item{.after}{\verb{[integer(1) / Inf]}
 
 The number of values \emph{after} the current element to include in the
 sliding window. Set to \code{Inf} to select all elements after the
@@ -73,16 +131,16 @@ you start with as many elements as possible and decrease the amount as
 you move through \code{.x}. A negative value is allowed, and allows you to
 "look backward" as well.}
 
-\item{.step}{\code{[positive integer(1)]}
+\item{.step}{\verb{[positive integer(1)]}
 
 The number of elements to shift the window forward between function calls.}
 
-\item{.complete}{\code{[logical(1)]}
+\item{.complete}{\verb{[logical(1)]}
 
 Should the sliding be restricted to complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -124,7 +182,7 @@ which are iterated over row-wise.
 If \code{.x} has names, then the output will preserve those names.
 
 Using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, the output of \code{.f} will be automatically cast
-to the type required by the version of \code{slide_*()} being used.
+to the type required by the version of \verb{slide_*()} being used.
 }
 \section{Invariants}{
 
@@ -137,7 +195,7 @@ to the type required by the version of \code{slide_*()} being used.
 
 }
 
-\subsection{\code{slide_vec()} and \code{slide_*()} variants}{
+\subsection{\code{slide_vec()} and \verb{slide_*()} variants}{
 \itemize{
 \item \code{vec_size(slide_vec(.x)) == vec_size(.x)}
 \item \code{vec_size(slide_vec(.x)[[1]]) == 1L}

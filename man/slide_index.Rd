@@ -12,48 +12,66 @@
 \alias{slide_index_dfc}
 \title{Slide over an index}
 \usage{
-slide_index(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_vec(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .ptype = list())
+slide_index_vec(
+  .x,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .ptype = list()
+)
 
-slide_index_dbl(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index_dbl(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_int(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index_int(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_lgl(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index_lgl(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_chr(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index_chr(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_raw(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE)
+slide_index_raw(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
-slide_index_dfr(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .names_to = NULL, .name_repair = c("unique",
-  "universal", "check_unique"))
+slide_index_dfr(
+  .x,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide_index_dfc(.x, .i, .f, ..., .before = 0L, .after = 0L,
-  .complete = FALSE, .size = NULL, .name_repair = c("unique",
-  "universal", "check_unique", "minimal"))
+slide_index_dfc(
+  .x,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x}{\code{[vector]}
+\item{.x}{\verb{[vector]}
 
 The vector to iterate over and apply \code{.f} to.}
 
-\item{.i}{\code{[vector]}
+\item{.i}{\verb{[vector]}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
 bound will be \code{.i + .after}. It is faily common to supply a date vector
 as the index, but not required.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -64,7 +82,7 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\code{[vector(1) / Inf]}
+\item{.before}{\verb{[vector(1) / Inf]}
 
 The number of values \emph{before} the current element of \code{.i} to include in the
 sliding window. Set to \code{Inf} to select all elements before the
@@ -72,10 +90,10 @@ current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.
 
 For \code{slide_index()}, this can be any object that can be subtracted from
-\code{.i} with \code{-}. One common use case is to set this to a lubridate period,
+\code{.i} with \verb{-}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-\item{.after}{\code{[vector(1) / Inf]}
+\item{.after}{\verb{[vector(1) / Inf]}
 
 The number of values \emph{after} the current element of \code{.i} to include in the
 sliding window. Set to \code{Inf} to select all elements after the
@@ -85,15 +103,15 @@ move through \code{.x}. A negative value is allowed, and allows you to "look
 backward" as well.
 
 For \code{slide_index()}, this can be any object that can be added to
-\code{.i} with \code{+}. One common use case is to set this to a lubridate period,
+\code{.i} with \verb{+}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
-\item{.complete}{\code{[logical(1)]}
+\item{.complete}{\verb{[logical(1)]}
 
 Should the sliding be restricted to complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -158,7 +176,7 @@ restrictions as the three mentioned above for \code{.i}.
 
 }
 
-\subsection{\code{slide_index_vec()} and \code{slide_index_*()} variants}{
+\subsection{\code{slide_index_vec()} and \verb{slide_index_*()} variants}{
 \itemize{
 \item \code{vec_size(slide_index_vec(.x)) == vec_size(.x)}
 \item \code{vec_size(slide_index_vec(.x)[[1]]) == 1L}

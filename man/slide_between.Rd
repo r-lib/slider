@@ -26,34 +26,50 @@ slide_between_chr(.x, .i, .starts, .stops, .f, ...)
 
 slide_between_raw(.x, .i, .starts, .stops, .f, ...)
 
-slide_between_dfr(.x, .i, .starts, .stops, .f, ..., .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+slide_between_dfr(
+  .x,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide_between_dfc(.x, .i, .starts, .stops, .f, ..., .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+slide_between_dfc(
+  .x,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x}{\code{[vector]}
+\item{.x}{\verb{[vector]}
 
 The vector to iterate over and apply \code{.f} to.}
 
-\item{.i}{\code{[vector]}
+\item{.i}{\verb{[vector]}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
 bound will be \code{.i + .after}. It is faily common to supply a date vector
 as the index, but not required.}
 
-\item{.starts, .stops}{\code{[vector]}
+\item{.starts, .stops}{\verb{[vector]}
 
 Vectors of boundary values that make up the windows to bucket \code{.i} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
 the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
 that \code{.i} will be searched for values that fall into the
-range of \code{[start, stop]}.}
+range of \verb{[start, stop]}.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -64,7 +80,7 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -109,7 +125,7 @@ with a size that is different from \code{.x}.
 
 }
 
-\subsection{\code{slide_between_vec()} and \code{slide_between_*()} variants}{
+\subsection{\code{slide_between_vec()} and \verb{slide_between_*()} variants}{
 \itemize{
 \item \code{vec_size(slide_between_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(slide_between_vec(.x, .starts, .stops)[[1]]) == 1L}

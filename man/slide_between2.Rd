@@ -35,12 +35,29 @@ slide_between2_chr(.x, .y, .i, .starts, .stops, .f, ...)
 
 slide_between2_raw(.x, .y, .i, .starts, .stops, .f, ...)
 
-slide_between2_dfr(.x, .y, .i, .starts, .stops, .f, ...,
-  .names_to = NULL, .name_repair = c("unique", "universal",
-  "check_unique"))
+slide_between2_dfr(
+  .x,
+  .y,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-slide_between2_dfc(.x, .y, .i, .starts, .stops, .f, ..., .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+slide_between2_dfc(
+  .x,
+  .y,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 
 pslide_between(.l, .i, .starts, .stops, .f, ...)
 
@@ -56,43 +73,59 @@ pslide_between_chr(.l, .i, .starts, .stops, .f, ...)
 
 pslide_between_raw(.l, .i, .starts, .stops, .f, ...)
 
-pslide_between_dfr(.l, .i, .starts, .stops, .f, ..., .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique"))
+pslide_between_dfr(
+  .l,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .names_to = NULL,
+  .name_repair = c("unique", "universal", "check_unique")
+)
 
-pslide_between_dfc(.l, .i, .starts, .stops, .f, ..., .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal"))
+pslide_between_dfc(
+  .l,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+)
 }
 \arguments{
-\item{.x, .y}{\code{[vector]}
+\item{.x, .y}{\verb{[vector]}
 
 Vectors to iterate over. Vectors of size 1 will be recycled.}
 
-\item{.i}{\code{[vector]}
+\item{.i}{\verb{[vector]}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
 bound will be \code{.i + .after}. It is faily common to supply a date vector
 as the index, but not required.}
 
-\item{.starts}{\code{[vector]}
+\item{.starts}{\verb{[vector]}
 
 Vectors of boundary values that make up the windows to bucket \code{.i} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
 the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
 that \code{.i} will be searched for values that fall into the
-range of \code{[start, stop]}.}
+range of \verb{[start, stop]}.}
 
-\item{.stops}{\code{[vector]}
+\item{.stops}{\verb{[vector]}
 
 Vectors of boundary values that make up the windows to bucket \code{.i} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
 the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
 that \code{.i} will be searched for values that fall into the
-range of \code{[start, stop]}.}
+range of \verb{[start, stop]}.}
 
-\item{.f}{\code{[function / formula]}
+\item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
@@ -103,7 +136,7 @@ create very compact anonymous functions with up to two inputs.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.ptype}{\code{[vector]}
+\item{.ptype}{\verb{[vector]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -131,7 +164,7 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 
-\item{.l}{\code{[list]}
+\item{.l}{\verb{[list]}
 
 A list of vectors. The length of \code{.l} determines the
 number of arguments that \code{.f} will be called with. If \code{.l} has names,
@@ -155,7 +188,7 @@ boundaries defined by \code{.starts} and \code{.stops}.
 
 }
 
-\subsection{\code{slide_between2_vec()} and \code{slide_between2_*()} variants}{
+\subsection{\code{slide_between2_vec()} and \verb{slide_between2_*()} variants}{
 \itemize{
 \item \code{vec_size(slide_between2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(slide_between2_vec(.x, .y, .starts, .stops)[[1]]) == 1L}
@@ -172,7 +205,7 @@ boundaries defined by \code{.starts} and \code{.stops}.
 
 }
 
-\subsection{\code{pslide_between_vec()} and \code{pslide_between_*()} variants}{
+\subsection{\code{pslide_between_vec()} and \verb{pslide_between_*()} variants}{
 \itemize{
 \item \code{vec_size(pslide_between_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(pslide_between_vec(.l, .starts, .stops)[[1]]) == 1L}
