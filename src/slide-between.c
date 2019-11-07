@@ -340,7 +340,7 @@ static void compute_window_sizes(int* window_sizes,
                                  SEXP window_indices,
                                  int size) {
   for (int i = 0; i < size; ++i) {
-    window_sizes[i] = vec_size(VECTOR_ELT(window_indices, i));
+    window_sizes[i] = Rf_length(VECTOR_ELT(window_indices, i));
   }
 }
 
