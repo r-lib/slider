@@ -205,7 +205,7 @@ static struct index_info new_index_info(SEXP i) {
 
 static void check_starts_not_past_stops(SEXP starts, SEXP stops);
 
-static struct range_info new_range_info(SEXP starts, SEXP stops, int count) {
+static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   struct range_info range;
 
   range.starts = starts;
@@ -221,7 +221,7 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int count) {
     check_starts_not_past_stops(starts, stops);
   }
 
-  range.count = count;
+  range.size = size;
 
   return range;
 }
@@ -256,21 +256,21 @@ static struct iteration_info new_iteration_info(struct index_info index, struct 
   struct iteration_info iteration;
 
   int iteration_min = 1;
-  int iteration_max = range.count;
+  int iteration_max = range.size;
 
   if (complete) {
     if (!range.start_unbounded) {
-      iteration_min += iteration_min_adjustment(index, range.starts, range.count);
+      iteration_min += iteration_min_adjustment(index, range.starts, range.size);
     }
     if (!range.stop_unbounded) {
-      iteration_max -= iteration_max_adjustment(index, range.stops, range.count);
+      iteration_max -= iteration_max_adjustment(index, range.stops, range.size);
     }
   } else {
     if (!range.start_unbounded) {
-      iteration_max -= iteration_max_adjustment(index, range.starts, range.count);
+      iteration_max -= iteration_max_adjustment(index, range.starts, range.size);
     }
     if (!range.stop_unbounded) {
-      iteration_min += iteration_min_adjustment(index, range.stops, range.count);
+      iteration_min += iteration_min_adjustment(index, range.stops, range.size);
     }
   }
 

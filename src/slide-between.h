@@ -71,7 +71,7 @@ struct range_info {
   SEXP stop;
   PROTECT_INDEX start_pidx;
   PROTECT_INDEX stop_pidx;
-  int count;
+  int size;
   bool start_unbounded;
   bool stop_unbounded;
 };
