@@ -211,9 +211,6 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   range.starts = starts;
   range.stops = stops;
 
-  range.start = R_NilValue;
-  range.stop = R_NilValue;
-
   range.start_unbounded = (starts == R_NilValue);
   range.stop_unbounded = (stops == R_NilValue);
 
@@ -222,6 +219,7 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   }
 
   range.size = size;
+  range.pos = 0;
 
   return range;
 }
@@ -351,7 +349,7 @@ static void compute_window_stops(int* window_stops,
 // -----------------------------------------------------------------------------
 
 static int locate_window_start_index(struct index_info* index, struct range_info range) {
-  while(index->compare_lt(index->data, index->current_start_pos, range.start, 0)) {
+  while(index->compare_lt(index->data, index->current_start_pos, range.starts, range.pos)) {
     if (index->current_start_pos == (index->size - 1)) {
       return index->current_start_pos;
     }
@@ -362,7 +360,7 @@ static int locate_window_start_index(struct index_info* index, struct range_info
 }
 
 static int locate_window_stop_index(struct index_info* index, struct range_info range) {
-  while(index->compare_lte(index->data, index->current_stop_pos, range.stop, 0)) {
+  while(index->compare_lte(index->data, index->current_stop_pos, range.stops, range.pos)) {
     if (index->current_stop_pos == (index->size - 1)) {
       return index->current_stop_pos;
     }
@@ -376,20 +374,13 @@ static int locate_window_stop_index(struct index_info* index, struct range_info 
 
 static void increment_window(struct window_info window,
                              struct index_info* index,
-                             struct iteration_info iteration,
                              struct range_info range) {
   if (!range.start_unbounded) {
-    range.start = vec_slice_impl(range.starts, iteration.data);
-    REPROTECT(range.start, range.start_pidx);
-
     window.start_idx = locate_window_start_index(index, range);
     window.start = window.starts[window.start_idx];
   }
 
   if (!range.stop_unbounded) {
-    range.stop = vec_slice_impl(range.stops, iteration.data);
-    REPROTECT(range.stop, range.stop_pidx);
-
     window.stop_idx = locate_window_stop_index(index, range);
     window.stop = window.stops[window.stop_idx];
   }
@@ -439,7 +430,8 @@ static void eval_loop(SEXP x,
       R_CheckUserInterrupt();
     }
 
-    increment_window(window, &index, iteration, range);
+    range.pos = *iteration.p_data_val - 1;
+    increment_window(window, &index, range);
 
     slice_and_update_env(x, window.seq, env, type, container);
 

@@ -67,21 +67,16 @@ struct index_info {
 struct range_info {
   SEXP starts;
   SEXP stops;
-  SEXP start;
-  SEXP stop;
-  PROTECT_INDEX start_pidx;
-  PROTECT_INDEX stop_pidx;
+  int pos;
   int size;
   bool start_unbounded;
   bool stop_unbounded;
 };
 
-#define PROTECT_RANGE_INFO(range, n) do {                     \
-  PROTECT((range)->starts);                                   \
-  PROTECT((range)->stops);                                    \
-  PROTECT_WITH_INDEX((range)->start, &(range)->start_pidx);   \
-  PROTECT_WITH_INDEX((range)->stop, &(range)->stop_pidx);     \
-  *n += 4;                                                    \
+#define PROTECT_RANGE_INFO(range, n) do { \
+  PROTECT((range)->starts);               \
+  PROTECT((range)->stops);                \
+  *n += 2;                                \
 } while (0)
 
 // -----------------------------------------------------------------------------
