@@ -24,12 +24,12 @@ Roxygen: list(markdown = TRUE)
 URL: https://github.com/DavisVaughan/slide
 BugReports: https://github.com/DavisVaughan/slide/issues
 Suggests: 
-    testthat (>= 2.1.0),
     covr,
     dplyr (>= 0.8.3),
-    lubridate,
     knitr,
+    lubridate,
     rmarkdown,
+    testthat (>= 2.1.0),
     xml2
 Remotes:
     r-lib/vctrs
