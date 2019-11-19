@@ -11,12 +11,8 @@ status](https://travis-ci.org/DavisVaughan/slide.svg?branch=master)](https://tra
 coverage](https://codecov.io/gh/DavisVaughan/slide/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slide?branch=master)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Azure pipelines build
-status](https://img.shields.io/azure-devops/build/DavisVaughan/slide/2)](https://dev.azure.com/DavisVaughan/slide/_build/latest?definitionId=1&branchName=master)
-[![Azure pipelines test
-status](https://img.shields.io/azure-devops/tests/DavisVaughan/slide/2?color=brightgreen&compact_message)](https://dev.azure.com/DavisVaughan/slide/_build/latest?definitionId=1&branchName=master)
-[![Azure pipelines coverage
-status](https://img.shields.io/azure-devops/coverage/DavisVaughan/slide/2)](https://dev.azure.com/DavisVaughan/slide/_build/latest?definitionId=1&branchName=master)
+[![R build
+status](https://github.com/DavisVaughan/slide/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slide/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
 slide provides a family of general purpose “sliding window” functions.
