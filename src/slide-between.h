@@ -6,25 +6,6 @@
 
 // -----------------------------------------------------------------------------
 
-struct out_info {
-  SEXP data;
-  int size;
-  SEXP indices;
-  bool has_indices;
-  SEXP index;
-  int* p_index_val;
-  int index_size;
-};
-
-#define PROTECT_OUT_INFO(out, n) do { \
-  PROTECT((out)->data);               \
-  PROTECT((out)->indices);            \
-  PROTECT((out)->index);              \
-  *n += 3;                            \
-} while (0)
-
-// -----------------------------------------------------------------------------
-
 struct window_info {
   int* starts;
   int* stops;

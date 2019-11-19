@@ -12,23 +12,15 @@ static void compute_window_sizes(int*, SEXP, int);
 static void compute_window_starts(int*, int*, int);
 static void compute_window_stops(int*, int*, int*, int);
 
-static struct out_info new_out_info(SEXP, SEXP, int);
 static struct window_info new_window_info(int*, int*, int);
 static struct index_info new_index_info(SEXP);
 static struct range_info new_range_info(SEXP, SEXP, int);
 static struct iteration_info new_iteration_info(struct index_info, struct range_info, bool);
 
-static void eval_loop(SEXP,
-                      SEXP,
-                      SEXP,
-                      SEXP,
-                      struct out_info,
-                      struct index_info,
-                      struct window_info,
-                      struct range_info,
-                      int,
-                      bool,
-                      bool);
+static void increment_window(struct window_info window,
+                             struct index_info* index,
+                             struct range_info range,
+                             int pos);
 
 // -----------------------------------------------------------------------------
 
@@ -49,6 +41,8 @@ SEXP slide_index_common_impl(SEXP x,
   bool complete = r_scalar_lgl_get(r_lst_get(params, 2));
   int out_size = r_scalar_int_get(r_lst_get(params, 3));
 
+  int force = compute_force(type);
+
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
@@ -66,19 +60,67 @@ SEXP slide_index_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, index.size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  struct out_info out = new_out_info(ptype, indices, out_size);
-  PROTECT_OUT_INFO(&out, &n_prot);
+  struct iteration_info iteration = new_iteration_info(index, range, complete);
 
-  eval_loop(x, env, f_call, ptype, out, index, window, range, type, constrain, complete);
+  SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  out.data = vec_restore(out.data, ptype, r_int(out.size));
-  PROTECT_N(out.data, &n_prot);
+  SEXP out = PROTECT_N(vec_init(ptype, out_size), &n_prot);
+  out = PROTECT_N(vec_proxy(out), &n_prot);
 
-  out.data = copy_names(out.data, x, type);
-  PROTECT_N(out.data, &n_prot);
+  for (int i = iteration.min; i < iteration.max; ++i) {
+    if (i % 1024 == 0) {
+      R_CheckUserInterrupt();
+    }
+
+    increment_window(window, &index, range, i);
+    slice_and_update_env(x, window.seq, env, type, container);
+
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
+    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));
+#else
+    SEXP elt = PROTECT(Rf_eval(f_call, env));
+#endif
+
+    SEXP out_index = VECTOR_ELT(indices, i);
+    int out_index_size = vec_size(out_index);
+
+    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
+    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
+
+    if (constrain) {
+      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
+      elt = PROTECT(vec_proxy(elt));
+
+      R_len_t elt_size = vec_size(elt);
+
+      if (elt_size != 1) {
+        stop_not_all_size_one(i + 1, elt_size);
+      }
+
+      int recycled = 0;
+      if (out_index_size != 1) {
+        elt = PROTECT(vec_recycle(elt, out_index_size));
+        recycled = 1;
+      }
+
+      vec_assign_impl(out, out_index, elt, false);
+      UNPROTECT(2 + recycled);
+    } else {
+      int* p_out_index = INTEGER(out_index);
+
+      for (int j = 0; j < out_index_size; ++j) {
+        SET_VECTOR_ELT(out, p_out_index[j] - 1, elt);
+      }
+    }
+
+    UNPROTECT(1);
+  }
+
+  out = PROTECT_N(vec_restore(out, ptype, r_int(out_size)), &n_prot);
+  out = PROTECT_N(copy_names(out, x, type), &n_prot);
 
   UNPROTECT(n_prot);
-  return out.data;
+  return out;
 }
 
 // [[ register() ]]
@@ -97,14 +139,7 @@ SEXP slide_between_common_impl(SEXP x,
   bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
   int out_size = r_scalar_int_get(r_lst_get(params, 2));
 
-  // `complete` is always FALSE for `slide_between()`
-  bool complete = false;
-
-  // `out_indices` are not required for `slide_between()` because the
-  // starts/stops that a user provides are considered to be unique.
-  // We special case this with NULL, which optimizes further calculations in
-  // the `eval_loop()`
-  SEXP out_indices = R_NilValue;
+  int force = compute_force(type);
 
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
@@ -123,40 +158,65 @@ SEXP slide_between_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, out_size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  struct out_info out = new_out_info(ptype, out_indices, out_size);
-  PROTECT_OUT_INFO(&out, &n_prot);
+  // `complete = false` for `slide_between()`
+  struct iteration_info iteration = new_iteration_info(index, range, false);
 
-  eval_loop(x, env, f_call, ptype, out, index, window, range, type, constrain, complete);
+  SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  out.data = vec_restore(out.data, ptype, r_int(out.size));
-  PROTECT_N(out.data, &n_prot);
+  SEXP out = PROTECT_N(vec_init(ptype, out_size), &n_prot);
+  out = PROTECT_N(vec_proxy(out), &n_prot);
 
-  out.data = copy_names(out.data, x, type);
-  PROTECT_N(out.data, &n_prot);
+  // 1 based index for `vec_assign()`
+  SEXP out_index;
+  int* p_out_index;
+
+  if (constrain) {
+    out_index = PROTECT_N(r_int(0), &n_prot);
+    p_out_index = INTEGER(out_index);
+  }
+
+  for (int i = iteration.min; i < iteration.max; ++i) {
+    if (i % 1024 == 0) {
+      R_CheckUserInterrupt();
+    }
+
+    increment_window(window, &index, range, i);
+    slice_and_update_env(x, window.seq, env, type, container);
+
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
+    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));
+#else
+    SEXP elt = PROTECT(Rf_eval(f_call, env));
+#endif
+
+    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
+    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
+
+    if (constrain) {
+      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
+      elt = PROTECT(vec_proxy(elt));
+
+      R_len_t elt_size = vec_size(elt);
+
+      if (elt_size != 1) {
+        stop_not_all_size_one(i + 1, elt_size);
+      }
+
+      *p_out_index = i + 1;
+
+      vec_assign_impl(out, out_index, elt, false);
+      UNPROTECT(2);
+    } else {
+      SET_VECTOR_ELT(out, i, elt);
+    }
+
+    UNPROTECT(1);
+  }
+
+  out = PROTECT_N(vec_restore(out, ptype, r_int(out_size)), &n_prot);
+  out = PROTECT_N(copy_names(out, x, type), &n_prot);
 
   UNPROTECT(n_prot);
-  return out.data;
-}
-
-// -----------------------------------------------------------------------------
-
-static struct out_info new_out_info(SEXP ptype, SEXP indices, int size) {
-  struct out_info out;
-
-  out.data = PROTECT(vec_init(ptype, size));
-  out.data = PROTECT(vec_proxy(out.data));
-
-  out.size = size;
-
-  out.indices = indices;
-  out.has_indices = (indices != R_NilValue);
-
-  out.index = PROTECT(r_int(0));
-  out.p_index_val = INTEGER(out.index);
-
-  out.index_size = 1;
-
-  UNPROTECT(3);
   return out;
 }
 
@@ -349,6 +409,8 @@ static void compute_window_stops(int* window_stops,
 }
 
 // -----------------------------------------------------------------------------
+// `index` is passed by pointer so we can permanently
+// update the current start/stop position
 
 static int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
   while(index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
@@ -387,96 +449,4 @@ static void increment_window(struct window_info window,
   }
 
   init_window_seq(window);
-}
-
-// -----------------------------------------------------------------------------
-
-static void eval_loop(SEXP x,
-                      SEXP env,
-                      SEXP f_call,
-                      SEXP ptype,
-                      struct out_info out,
-                      struct index_info index,
-                      struct window_info window,
-                      struct range_info range,
-                      int type,
-                      bool constrain,
-                      bool complete) {
-  int n_prot = 0;
-
-  struct iteration_info iteration = new_iteration_info(index, range, complete);
-
-  // The result of each function call
-  PROTECT_INDEX elt_prot_idx;
-  SEXP elt = R_NilValue;
-  PROTECT_WITH_INDEX(elt, &elt_prot_idx);
-  ++n_prot;
-
-  R_len_t elt_size;
-
-  SEXP container = PROTECT(make_slice_container(type));
-  ++n_prot;
-
-  int force = compute_force(type);
-
-  for (int i = iteration.min; i < iteration.max; ++i) {
-    if (i % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
-
-    increment_window(window, &index, range, i);
-
-    slice_and_update_env(x, window.seq, env, type, container);
-
-#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
-    elt = R_forceAndCall(f_call, force, env);
-#else
-    elt = Rf_eval(f_call, env);
-#endif
-    REPROTECT(elt, elt_prot_idx);
-
-    if (out.has_indices) {
-      out.index = VECTOR_ELT(out.indices, i);
-      out.index_size = vec_size(out.index);
-    } else {
-      *out.p_index_val = i + 1;
-    }
-
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
-    if (constrain) {
-      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
-      REPROTECT(elt, elt_prot_idx);
-      elt = vec_proxy(elt);
-      REPROTECT(elt, elt_prot_idx);
-
-      elt_size = vec_size(elt);
-
-      if (elt_size != 1) {
-        stop_not_all_size_one(i + 1, elt_size);
-      }
-
-      if (out.index_size != 1) {
-        elt = vec_recycle(elt, out.index_size);
-        REPROTECT(elt, elt_prot_idx);
-      }
-
-      vec_assign_impl(out.data, out.index, elt, false);
-      continue;
-    }
-
-    if (!out.has_indices) {
-      SET_VECTOR_ELT(out.data, *out.p_index_val - 1, elt);
-      continue;
-    }
-
-    out.p_index_val = INTEGER(out.index);
-
-    for (int j = 0; j < out.index_size; ++j) {
-      SET_VECTOR_ELT(out.data, out.p_index_val[j] - 1, elt);
-    }
-  }
-
-  UNPROTECT(n_prot);
 }
