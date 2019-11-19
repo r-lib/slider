@@ -31,7 +31,6 @@ slide_index_common <- function(x,
   i <- split$key
 
   # `indices` helps us map back to `.x`
-  # For `slide_index()` this is both `out_indices` and `window_indices`
   indices <- split$pos
 
   range <- compute_ranges(i, before, after)
