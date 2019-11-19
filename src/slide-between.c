@@ -15,7 +15,6 @@ static void compute_window_stops(int*, int*, int*, int);
 static struct out_info new_out_info(SEXP, SEXP, int);
 static struct window_info new_window_info(int*, int*, int);
 static struct index_info new_index_info(SEXP);
-static struct last_info new_last_info(struct index_info);
 static struct range_info new_range_info(SEXP, SEXP, int);
 static struct iteration_info new_iteration_info(struct index_info, struct range_info, bool);
 
@@ -192,6 +191,9 @@ static struct index_info new_index_info(SEXP i) {
   index.data = i;
   index.size = vec_size(i);
 
+  index.current_start_pos = 0;
+  index.current_stop_pos = 0;
+
   index.compare_lt = get_compare_fn_lt(i);
   index.compare_gt = get_compare_fn_gt(i);
   index.compare_lte = get_compare_fn_lte(i);
@@ -201,30 +203,7 @@ static struct index_info new_index_info(SEXP i) {
 
 // -----------------------------------------------------------------------------
 
-static struct last_info new_last_info(struct index_info index) {
-  struct last_info last;
-
-  last.start_loc = PROTECT(r_int(1));
-  last.stop_loc = PROTECT(r_int(1));
-
-  last.p_start_loc_val = INTEGER(last.start_loc);
-  last.p_stop_loc_val = INTEGER(last.stop_loc);
-
-  last.start_index = PROTECT(vec_slice_impl(index.data, r_int(1)));
-  last.stop_index = PROTECT(vec_slice_impl(index.data, r_int(1)));
-
-  // last.p_start_index and last.p_stop_index are initialized
-  // after last.start_index and last.stop_index have been protected
-  // inside PROTECT_LAST_INFO
-
-  UNPROTECT(4);
-  return last;
-}
-
-// -----------------------------------------------------------------------------
-
 static void check_starts_not_past_stops(SEXP starts, SEXP stops);
-
 
 static struct range_info new_range_info(SEXP starts, SEXP stops, int count) {
   struct range_info range;
@@ -371,50 +350,39 @@ static void compute_window_stops(int* window_stops,
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(struct index_info index,
-                                     struct range_info range,
-                                     struct last_info last) {
-
-  while(index.compare_lt(*last.p_start_index, 0, range.start, 0)) {
-    if (*last.p_start_loc_val == index.size) {
-      return(index.size - 1);
+static int locate_window_start_index(struct index_info* index, struct range_info range) {
+  while(index->compare_lt(index->data, index->current_start_pos, range.start, 0)) {
+    if (index->current_start_pos == (index->size - 1)) {
+      return index->current_start_pos;
     }
-
-    (*last.p_start_loc_val)++;
-    *last.p_start_index = vec_slice_impl(index.data, last.start_loc);
+    index->current_start_pos++;
   }
 
-  return *last.p_start_loc_val - 1;
+  return index->current_start_pos;
 }
 
-static int locate_window_stop_index(struct index_info index,
-                                    struct range_info range,
-                                    struct last_info last) {
-
-  while(index.compare_lte(*last.p_stop_index, 0, range.stop, 0)) {
-    if (*last.p_stop_loc_val == index.size) {
-      return(index.size - 1);
+static int locate_window_stop_index(struct index_info* index, struct range_info range) {
+  while(index->compare_lte(index->data, index->current_stop_pos, range.stop, 0)) {
+    if (index->current_stop_pos == (index->size - 1)) {
+      return index->current_stop_pos;
     }
-
-    (*last.p_stop_loc_val)++;
-    *last.p_stop_index = vec_slice_impl(index.data, last.stop_loc);
+    index->current_stop_pos++;
   }
 
-  return *last.p_stop_loc_val - 2;
+  return index->current_stop_pos - 1;
 }
 
 // -----------------------------------------------------------------------------
 
 static void increment_window(struct window_info window,
-                             struct index_info index,
+                             struct index_info* index,
                              struct iteration_info iteration,
-                             struct range_info range,
-                             struct last_info last) {
+                             struct range_info range) {
   if (!range.start_unbounded) {
     range.start = vec_slice_impl(range.starts, iteration.data);
     REPROTECT(range.start, range.start_pidx);
 
-    window.start_idx = locate_window_start_index(index, range, last);
+    window.start_idx = locate_window_start_index(index, range);
     window.start = window.starts[window.start_idx];
   }
 
@@ -422,7 +390,7 @@ static void increment_window(struct window_info window,
     range.stop = vec_slice_impl(range.stops, iteration.data);
     REPROTECT(range.stop, range.stop_pidx);
 
-    window.stop_idx = locate_window_stop_index(index, range, last);
+    window.stop_idx = locate_window_stop_index(index, range);
     window.stop = window.stops[window.stop_idx];
   }
 
@@ -450,9 +418,6 @@ static void eval_loop(SEXP x,
                       bool complete) {
   int n_prot = 0;
 
-  struct last_info last = new_last_info(index);
-  PROTECT_LAST_INFO(&last, &n_prot);
-
   struct iteration_info iteration = new_iteration_info(index, range, complete);
   PROTECT_ITERATION_INFO(&iteration, &n_prot);
 
@@ -474,7 +439,7 @@ static void eval_loop(SEXP x,
       R_CheckUserInterrupt();
     }
 
-    increment_window(window, index, iteration, range, last);
+    increment_window(window, &index, iteration, range);
 
     slice_and_update_env(x, window.seq, env, type, container);
 

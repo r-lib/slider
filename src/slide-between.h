@@ -50,6 +50,8 @@ struct window_info {
 struct index_info {
   SEXP data;
   int size;
+  int current_start_pos;
+  int current_stop_pos;
   slide_compare_fn_t compare_lt;
   slide_compare_fn_t compare_gt;
   slide_compare_fn_t compare_lte;
@@ -58,30 +60,6 @@ struct index_info {
 #define PROTECT_INDEX_INFO(index, n) do {  \
   PROTECT((index)->data);                  \
   *n += 1;                                 \
-} while (0)
-
-// -----------------------------------------------------------------------------
-
-struct last_info {
-  SEXP start_loc;
-  SEXP stop_loc;
-  int* p_start_loc_val;
-  int* p_stop_loc_val;
-  SEXP start_index;
-  SEXP stop_index;
-  SEXP* p_start_index;
-  SEXP* p_stop_index;
-};
-
-#define PROTECT_LAST_INFO(last, n) do {                \
-  PROTECT((last)->start_loc);                          \
-  PROTECT((last)->stop_loc);                           \
-  PROTECT((last)->start_index);                        \
-  PROTECT((last)->stop_index);                         \
-  /* SEXP* assignment must be done after protection */ \
-  (last)->p_start_index = &(last)->start_index;        \
-  (last)->p_stop_index = &(last)->stop_index;          \
-  *n += 4;                                             \
 } while (0)
 
 // -----------------------------------------------------------------------------
