@@ -10,15 +10,15 @@ slide_index_common <- function(x,
                                type) {
   vec_assert(i)
 
-  out_size <- compute_size(x, type)
+  size <- compute_size(x, type)
 
-  check_index_size(out_size, i)
+  check_index_size(size, i)
   check_not_na(i, "`.i`")
   check_ascending(i, "The `.i`ndex")
 
   # Early exit if empty input
   # (but after the index size check)
-  if (out_size == 0L) {
+  if (size == 0L) {
     return(vec_init(ptype, 0L))
   }
 
@@ -39,13 +39,6 @@ slide_index_common <- function(x,
   starts <- range$starts
   stops <- range$stops
 
-  params <- list(
-    type,
-    constrain,
-    complete,
-    out_size
-  )
-
   .Call(
     slide_index_common_impl,
     x,
@@ -56,7 +49,10 @@ slide_index_common <- function(x,
     ptype,
     env,
     indices,
-    params
+    type,
+    constrain,
+    size,
+    complete
   )
 }
 
