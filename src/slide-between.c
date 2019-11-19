@@ -192,14 +192,10 @@ static struct index_info new_index_info(SEXP i) {
   index.data = i;
   index.size = vec_size(i);
 
-  index.first = PROTECT(vec_slice_impl(i, r_int(1)));
-  index.last = PROTECT(vec_slice_impl(i, r_int(index.size)));
-
   index.compare_lt = get_compare_fn_lt(i);
   index.compare_gt = get_compare_fn_gt(i);
   index.compare_lte = get_compare_fn_lte(i);
 
-  UNPROTECT(2);
   return index;
 }
 
@@ -214,14 +210,14 @@ static struct last_info new_last_info(struct index_info index) {
   last.p_start_loc_val = INTEGER(last.start_loc);
   last.p_stop_loc_val = INTEGER(last.stop_loc);
 
-  last.start_index = index.first;
-  last.stop_index = index.first;
+  last.start_index = PROTECT(vec_slice_impl(index.data, r_int(1)));
+  last.stop_index = PROTECT(vec_slice_impl(index.data, r_int(1)));
 
   // last.p_start_index and last.p_stop_index are initialized
   // after last.start_index and last.stop_index have been protected
   // inside PROTECT_LAST_INFO
 
-  UNPROTECT(2);
+  UNPROTECT(4);
   return last;
 }
 
@@ -312,7 +308,7 @@ static int iteration_min_adjustment(struct index_info index, SEXP range, int siz
   int forward_adjustment = 0;
 
   for (int j = 0; j < size; ++j) {
-    if (index.compare_gt(index.first, 0, range, j)) {
+    if (index.compare_gt(index.data, 0, range, j)) {
       forward_adjustment++;
     } else {
       break;
@@ -326,7 +322,7 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
   int backward_adjustment = 0;
 
   for (int j = size - 1; j >= 0; --j) {
-    if (index.compare_lt(index.last, 0, range, j)) {
+    if (index.compare_lt(index.data, index.size - 1, range, j)) {
       backward_adjustment++;
     } else {
       break;

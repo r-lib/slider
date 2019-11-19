@@ -49,8 +49,6 @@ struct window_info {
 
 struct index_info {
   SEXP data;
-  SEXP first;
-  SEXP last;
   int size;
   slide_compare_fn_t compare_lt;
   slide_compare_fn_t compare_gt;
@@ -59,9 +57,7 @@ struct index_info {
 
 #define PROTECT_INDEX_INFO(index, n) do {  \
   PROTECT((index)->data);                  \
-  PROTECT((index)->first);                 \
-  PROTECT((index)->last);                  \
-  *n += 3;                                 \
+  *n += 1;                                 \
 } while (0)
 
 // -----------------------------------------------------------------------------
