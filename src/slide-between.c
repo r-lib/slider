@@ -132,12 +132,14 @@ SEXP slide_between_common_impl(SEXP x,
                                SEXP ptype,
                                SEXP env,
                                SEXP window_indices,
-                               SEXP params) {
+                               SEXP type_,
+                               SEXP constrain_,
+                               SEXP size_) {
   int n_prot = 0;
 
-  int type = r_scalar_int_get(r_lst_get(params, 0));
-  bool constrain = r_scalar_lgl_get(r_lst_get(params, 1));
-  int out_size = r_scalar_int_get(r_lst_get(params, 2));
+  int type = r_scalar_int_get(type_);
+  bool constrain = r_scalar_lgl_get(constrain_);
+  int size = r_scalar_int_get(size_);
 
   int force = compute_force(type);
 
@@ -155,7 +157,7 @@ SEXP slide_between_common_impl(SEXP x,
   struct window_info window = new_window_info(window_starts, window_stops, index.size);
   PROTECT_WINDOW_INFO(&window, &n_prot);
 
-  struct range_info range = new_range_info(starts, stops, out_size);
+  struct range_info range = new_range_info(starts, stops, size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
   // `complete = false` for `slide_between()`
@@ -163,7 +165,7 @@ SEXP slide_between_common_impl(SEXP x,
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  SEXP out = PROTECT_N(vec_init(ptype, out_size), &n_prot);
+  SEXP out = PROTECT_N(vec_init(ptype, size), &n_prot);
   out = PROTECT_N(vec_proxy(out), &n_prot);
 
   // 1 based index for `vec_assign()`
@@ -213,7 +215,7 @@ SEXP slide_between_common_impl(SEXP x,
     UNPROTECT(1);
   }
 
-  out = PROTECT_N(vec_restore(out, ptype, r_int(out_size)), &n_prot);
+  out = PROTECT_N(vec_restore(out, ptype, size_), &n_prot);
   out = PROTECT_N(copy_names(out, x, type), &n_prot);
 
   UNPROTECT(n_prot);
