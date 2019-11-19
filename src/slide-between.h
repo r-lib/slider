@@ -8,7 +8,6 @@
 
 struct out_info {
   SEXP data;
-  SEXP ptype;
   int size;
   SEXP indices;
   bool has_indices;
@@ -19,10 +18,9 @@ struct out_info {
 
 #define PROTECT_OUT_INFO(out, n) do { \
   PROTECT((out)->data);               \
-  PROTECT((out)->ptype);              \
   PROTECT((out)->indices);            \
   PROTECT((out)->index);              \
-  *n += 4;                            \
+  *n += 3;                            \
 } while (0)
 
 // -----------------------------------------------------------------------------

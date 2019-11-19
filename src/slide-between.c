@@ -21,6 +21,7 @@ static struct iteration_info new_iteration_info(struct index_info, struct range_
 static void eval_loop(SEXP,
                       SEXP,
                       SEXP,
+                      SEXP,
                       struct out_info,
                       struct index_info,
                       struct window_info,
@@ -68,9 +69,9 @@ SEXP slide_index_common_impl(SEXP x,
   struct out_info out = new_out_info(ptype, indices, out_size);
   PROTECT_OUT_INFO(&out, &n_prot);
 
-  eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
+  eval_loop(x, env, f_call, ptype, out, index, window, range, type, constrain, complete);
 
-  out.data = vec_restore(out.data, out.ptype, r_int(out.size));
+  out.data = vec_restore(out.data, ptype, r_int(out.size));
   PROTECT_N(out.data, &n_prot);
 
   out.data = copy_names(out.data, x, type);
@@ -125,9 +126,9 @@ SEXP slide_between_common_impl(SEXP x,
   struct out_info out = new_out_info(ptype, out_indices, out_size);
   PROTECT_OUT_INFO(&out, &n_prot);
 
-  eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
+  eval_loop(x, env, f_call, ptype, out, index, window, range, type, constrain, complete);
 
-  out.data = vec_restore(out.data, out.ptype, r_int(out.size));
+  out.data = vec_restore(out.data, ptype, r_int(out.size));
   PROTECT_N(out.data, &n_prot);
 
   out.data = copy_names(out.data, x, type);
@@ -145,7 +146,6 @@ static struct out_info new_out_info(SEXP ptype, SEXP indices, int size) {
   out.data = PROTECT(vec_init(ptype, size));
   out.data = PROTECT(vec_proxy(out.data));
 
-  out.ptype = ptype;
   out.size = size;
 
   out.indices = indices;
@@ -394,6 +394,7 @@ static void increment_window(struct window_info window,
 static void eval_loop(SEXP x,
                       SEXP env,
                       SEXP f_call,
+                      SEXP ptype,
                       struct out_info out,
                       struct index_info index,
                       struct window_info window,
@@ -445,7 +446,7 @@ static void eval_loop(SEXP x,
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
     if (constrain) {
-      elt = vctrs_cast(elt, out.ptype, strings_empty, strings_empty);
+      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
       REPROTECT(elt, elt_prot_idx);
       elt = vec_proxy(elt);
       REPROTECT(elt, elt_prot_idx);
