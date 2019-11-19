@@ -121,20 +121,145 @@ static int compare_scalar(SEXP x, R_len_t i, SEXP y, R_len_t j) {
 
 // -----------------------------------------------------------------------------
 
-// [[ include("compare.h") ]]
-bool compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
-  return compare_scalar(x, i, y, j) == 1;
+#define SCALAR_COMPARE_DIRECTION(CONST_DEREF, SCALAR_COMPARE, RELATION, TO)  \
+do {                                                                         \
+  return SCALAR_COMPARE(CONST_DEREF(x) + i, CONST_DEREF(y) + j) RELATION TO; \
+}                                                                            \
+while (0)
+
+static bool lgl_compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(LOGICAL_RO, lgl_compare_scalar, ==, -1);
+}
+static bool int_compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(INTEGER_RO, int_compare_scalar, ==, -1);
+}
+static bool dbl_compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(REAL_RO, dbl_compare_scalar, ==, -1);
+}
+static bool chr_compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(STRING_PTR_RO, chr_compare_scalar, ==, -1);
+}
+static bool df_compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  int n_col = Rf_length(x);
+
+  if (n_col != Rf_length(y)) {
+    stop_not_comparable(x, y, "must have the same number of columns");
+  }
+
+  if (n_col == 0) {
+    stop_not_comparable(x, y, "data frame with zero columns");
+  }
+
+  return df_compare_scalar(x, i, y, j, n_col) == -1;
+}
+
+static bool lgl_compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(LOGICAL_RO, lgl_compare_scalar, ==, 1);
+}
+static bool int_compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(INTEGER_RO, int_compare_scalar, ==, 1);
+}
+static bool dbl_compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(REAL_RO, dbl_compare_scalar, ==, 1);
+}
+static bool chr_compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(STRING_PTR_RO, chr_compare_scalar, ==, 1);
+}
+static bool df_compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  int n_col = Rf_length(x);
+
+  if (n_col != Rf_length(y)) {
+    stop_not_comparable(x, y, "must have the same number of columns");
+  }
+
+  if (n_col == 0) {
+    stop_not_comparable(x, y, "data frame with zero columns");
+  }
+
+  return df_compare_scalar(x, i, y, j, n_col) == 1;
+}
+
+static bool lgl_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(LOGICAL_RO, lgl_compare_scalar, <=, 0);
+}
+static bool int_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(INTEGER_RO, int_compare_scalar, <=, 0);
+}
+static bool dbl_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(REAL_RO, dbl_compare_scalar, <=, 0);
+}
+static bool chr_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  SCALAR_COMPARE_DIRECTION(STRING_PTR_RO, chr_compare_scalar, <=, 0);
+}
+static bool df_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
+  int n_col = Rf_length(x);
+
+  if (n_col != Rf_length(y)) {
+    stop_not_comparable(x, y, "must have the same number of columns");
+  }
+
+  if (n_col == 0) {
+    stop_not_comparable(x, y, "data frame with zero columns");
+  }
+
+  return df_compare_scalar(x, i, y, j, n_col) <= 0;
 }
 
 // [[ include("compare.h") ]]
-bool compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j) {
-  return compare_scalar(x, i, y, j) == -1;
+slide_compare_fn_t get_compare_fn_lt(SEXP x) {
+  switch (TYPEOF(x)) {
+  case LGLSXP: return lgl_compare_lt;
+  case INTSXP: return int_compare_lt;
+  case REALSXP: return dbl_compare_lt;
+  case STRSXP: return chr_compare_lt;
+  case VECSXP: {
+    if (!is_data_frame(x)) {
+      Rf_errorcall(R_NilValue, "`x` and `y` are not comparable, lists are not comparable.");
+    }
+    return df_compare_lt;
+  }
+  default:
+    Rf_errorcall(R_NilValue, "Unsupported type %s", Rf_type2char(TYPEOF(x)));
+  }
 }
 
 // [[ include("compare.h") ]]
-bool compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
-  return compare_scalar(x, i, y, j) <= 0;
+slide_compare_fn_t get_compare_fn_gt(SEXP x) {
+  switch (TYPEOF(x)) {
+  case LGLSXP: return lgl_compare_gt;
+  case INTSXP: return int_compare_gt;
+  case REALSXP: return dbl_compare_gt;
+  case STRSXP: return chr_compare_gt;
+  case VECSXP: {
+    if (!is_data_frame(x)) {
+    Rf_errorcall(R_NilValue, "`x` and `y` are not comparable, lists are not comparable.");
+  }
+    return df_compare_gt;
+  }
+  default:
+    Rf_errorcall(R_NilValue, "Unsupported type %s", Rf_type2char(TYPEOF(x)));
+  }
 }
+
+// [[ include("compare.h") ]]
+slide_compare_fn_t get_compare_fn_lte(SEXP x) {
+  switch (TYPEOF(x)) {
+  case LGLSXP: return lgl_compare_lte;
+  case INTSXP: return int_compare_lte;
+  case REALSXP: return dbl_compare_lte;
+  case STRSXP: return chr_compare_lte;
+  case VECSXP: {
+    if (!is_data_frame(x)) {
+    Rf_errorcall(R_NilValue, "`x` and `y` are not comparable, lists are not comparable.");
+  }
+    return df_compare_lte;
+  }
+  default:
+    Rf_errorcall(R_NilValue, "Unsupported type %s", Rf_type2char(TYPEOF(x)));
+  }
+}
+
+#undef SCALAR_COMPARE_DIRECTION
 
 // -----------------------------------------------------------------------------
 

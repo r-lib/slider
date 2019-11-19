@@ -2,6 +2,7 @@
 #define SLIDE_BETWEEN_H
 
 #include "slide.h"
+#include "compare.h"
 
 // -----------------------------------------------------------------------------
 
@@ -51,6 +52,9 @@ struct index_info {
   SEXP first;
   SEXP last;
   int size;
+  slide_compare_fn_t compare_lt;
+  slide_compare_fn_t compare_gt;
+  slide_compare_fn_t compare_lte;
 };
 
 #define PROTECT_INDEX_INFO(index, n) do {  \
