@@ -238,9 +238,7 @@ static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
 }
 
 static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
-  bool any_gt = vec_any_gt(starts, stops);
-
-  if (any_gt) {
+  if (vec_any_gt(starts, stops)) {
     stop_range_start_past_stop(starts, stops);
   }
 }
