@@ -112,7 +112,7 @@ SEXP slide_common_impl(SEXP x,
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
-  int* p_window_val = INTEGER(window);
+  int* p_window = INTEGER(window);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
@@ -135,7 +135,7 @@ SEXP slide_common_impl(SEXP x,
     window_stop = min(stop, size - 1);
     window_size = window_stop - window_start + 1;
 
-    init_compact_seq(p_window_val, window_start, window_size, true);
+    init_compact_seq(p_window, window_start, window_size, true);
 
     slice_and_update_env(x, window, env, type, container);
 
