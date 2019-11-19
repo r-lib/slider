@@ -3,9 +3,11 @@
 
 #include "slide.h"
 
-bool compare_gt(SEXP x, R_len_t i, SEXP y, R_len_t j);
-bool compare_lt(SEXP x, R_len_t i, SEXP y, R_len_t j);
-bool compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j);
+typedef bool (*slide_compare_fn_t)(SEXP, R_len_t, SEXP, R_len_t);
+
+slide_compare_fn_t get_compare_fn_lt(SEXP x);
+slide_compare_fn_t get_compare_fn_gt(SEXP x);
+slide_compare_fn_t get_compare_fn_lte(SEXP x);
 
 bool vec_any_gt(SEXP x, SEXP y);
 

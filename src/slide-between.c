@@ -195,6 +195,10 @@ static struct index_info new_index_info(SEXP i) {
   index.first = PROTECT(vec_slice_impl(i, r_int(1)));
   index.last = PROTECT(vec_slice_impl(i, r_int(index.size)));
 
+  index.compare_lt = get_compare_fn_lt(i);
+  index.compare_gt = get_compare_fn_gt(i);
+  index.compare_lte = get_compare_fn_lte(i);
+
   UNPROTECT(2);
   return index;
 }
@@ -270,9 +274,8 @@ static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
 
 // -----------------------------------------------------------------------------
 
-static int iteration_min_adjustment(SEXP i_first, SEXP range, int size);
-static int iteration_max_adjustment(SEXP i_last, SEXP range, int size);
-
+static int iteration_min_adjustment(struct index_info index, SEXP range, int size);
+static int iteration_max_adjustment(struct index_info index, SEXP range, int size);
 
 static struct iteration_info new_iteration_info(struct index_info index, struct range_info range, bool complete) {
   struct iteration_info iteration;
@@ -282,17 +285,17 @@ static struct iteration_info new_iteration_info(struct index_info index, struct 
 
   if (complete) {
     if (!range.start_unbounded) {
-      iteration_min += iteration_min_adjustment(index.first, range.starts, range.count);
+      iteration_min += iteration_min_adjustment(index, range.starts, range.count);
     }
     if (!range.stop_unbounded) {
-      iteration_max -= iteration_max_adjustment(index.last, range.stops, range.count);
+      iteration_max -= iteration_max_adjustment(index, range.stops, range.count);
     }
   } else {
     if (!range.start_unbounded) {
-      iteration_max -= iteration_max_adjustment(index.last, range.starts, range.count);
+      iteration_max -= iteration_max_adjustment(index, range.starts, range.count);
     }
     if (!range.stop_unbounded) {
-      iteration_min += iteration_min_adjustment(index.first, range.stops, range.count);
+      iteration_min += iteration_min_adjustment(index, range.stops, range.count);
     }
   }
 
@@ -305,11 +308,11 @@ static struct iteration_info new_iteration_info(struct index_info index, struct 
   return iteration;
 }
 
-static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
+static int iteration_min_adjustment(struct index_info index, SEXP range, int size) {
   int forward_adjustment = 0;
 
   for (int j = 0; j < size; ++j) {
-    if (compare_gt(i_first, 0, range, j)) {
+    if (index.compare_gt(index.first, 0, range, j)) {
       forward_adjustment++;
     } else {
       break;
@@ -319,11 +322,11 @@ static int iteration_min_adjustment(SEXP i_first, SEXP range, int size) {
   return forward_adjustment;
 }
 
-static int iteration_max_adjustment(SEXP i_last, SEXP range, int size) {
+static int iteration_max_adjustment(struct index_info index, SEXP range, int size) {
   int backward_adjustment = 0;
 
   for (int j = size - 1; j >= 0; --j) {
-    if (compare_lt(i_last, 0, range, j)) {
+    if (index.compare_lt(index.last, 0, range, j)) {
       backward_adjustment++;
     } else {
       break;
@@ -374,7 +377,7 @@ static int locate_window_start_index(struct index_info index,
                                      struct range_info range,
                                      struct last_info last) {
 
-  while(compare_lt(*last.p_start_index, 0, range.start, 0)) {
+  while(index.compare_lt(*last.p_start_index, 0, range.start, 0)) {
     if (*last.p_start_loc_val == index.size) {
       return(index.size - 1);
     }
@@ -390,7 +393,7 @@ static int locate_window_stop_index(struct index_info index,
                                     struct range_info range,
                                     struct last_info last) {
 
-  while(compare_lte(*last.p_stop_index, 0, range.stop, 0)) {
+  while(index.compare_lte(*last.p_stop_index, 0, range.stop, 0)) {
     if (*last.p_stop_loc_val == index.size) {
       return(index.size - 1);
     }
