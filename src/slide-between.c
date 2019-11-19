@@ -168,8 +168,10 @@ static struct window_info new_window_info(int* window_starts, int* window_stops,
   window.starts = window_starts;
   window.stops = window_stops;
 
-  window.start = 0;
-  window.stop = window_stops[size - 1];
+  // Initialized to values that are correct if
+  // either start or stops is unbounded
+  window.starts_pos = 0;
+  window.stops_pos = size - 1;
 
   window.seq = PROTECT(compact_seq(0, 0, true));
   window.p_seq_val = INTEGER(window.seq);
@@ -179,8 +181,18 @@ static struct window_info new_window_info(int* window_starts, int* window_stops,
 }
 
 static void init_window_seq(struct window_info window) {
-  window.size = window.stop - window.start + 1;
-  init_compact_seq(window.p_seq_val, window.start, window.size, true);
+  int start = window.starts[window.starts_pos];
+  int stop = window.stops[window.stops_pos];
+
+  // This can happen with an irregular index, and is a sign of the full window
+  // being between two index points and means we select nothing
+  if (stop < start) {
+    start = 0;
+    stop = -1;
+  }
+
+  int size = stop - start + 1;
+  init_compact_seq(window.p_seq_val, start, size, true);
 }
 
 // -----------------------------------------------------------------------------
@@ -338,7 +350,7 @@ static void compute_window_stops(int* window_stops,
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(struct index_info* index, struct range_info range, int pos) {
+static int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
   while(index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
     if (index->current_start_pos == index->last_pos) {
       return index->current_start_pos;
@@ -349,7 +361,7 @@ static int locate_window_start_index(struct index_info* index, struct range_info
   return index->current_start_pos;
 }
 
-static int locate_window_stop_index(struct index_info* index, struct range_info range, int pos) {
+static int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
   while(index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
     if (index->current_stop_pos == index->last_pos) {
       return index->current_stop_pos;
@@ -367,20 +379,11 @@ static void increment_window(struct window_info window,
                              struct range_info range,
                              int pos) {
   if (!range.start_unbounded) {
-    window.start_idx = locate_window_start_index(index, range, pos);
-    window.start = window.starts[window.start_idx];
+    window.starts_pos = locate_window_starts_pos(index, range, pos);
   }
 
   if (!range.stop_unbounded) {
-    window.stop_idx = locate_window_stop_index(index, range, pos);
-    window.stop = window.stops[window.stop_idx];
-  }
-
-  // This can happen with an irregular index, and is a sign of the full window
-  // being between two index points and means we select nothing
-  if (window.stop < window.start) {
-    window.start = 0;
-    window.stop = -1;
+    window.stops_pos = locate_window_stops_pos(index, range, pos);
   }
 
   init_window_seq(window);

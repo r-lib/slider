@@ -31,13 +31,10 @@ struct out_info {
 struct window_info {
   int* starts;
   int* stops;
-  int start;
-  int stop;
-  int start_idx;
-  int stop_idx;
+  int starts_pos;
+  int stops_pos;
   SEXP seq;
   int* p_seq_val;
-  int size;
 };
 
 #define PROTECT_WINDOW_INFO(window, n) do {  \
