@@ -50,6 +50,7 @@ struct window_info {
 struct index_info {
   SEXP data;
   int size;
+  int last_pos;
   int current_start_pos;
   int current_stop_pos;
   slide_compare_fn_t compare_lt;
@@ -67,7 +68,6 @@ struct index_info {
 struct range_info {
   SEXP starts;
   SEXP stops;
-  int pos;
   int size;
   bool start_unbounded;
   bool stop_unbounded;
@@ -82,15 +82,9 @@ struct range_info {
 // -----------------------------------------------------------------------------
 
 struct iteration_info {
-  SEXP data;
-  int* p_data_val;
+  int min;
   int max;
 };
-
-#define PROTECT_ITERATION_INFO(iteration, n) do {  \
-  PROTECT((iteration)->data);                      \
-  *n += 1;                                         \
-} while (0)
 
 // -----------------------------------------------------------------------------
 

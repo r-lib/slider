@@ -190,6 +190,7 @@ static struct index_info new_index_info(SEXP i) {
 
   index.data = i;
   index.size = vec_size(i);
+  index.last_pos = index.size - 1;
 
   index.current_start_pos = 0;
   index.current_stop_pos = 0;
@@ -219,7 +220,6 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   }
 
   range.size = size;
-  range.pos = 0;
 
   return range;
 }
@@ -253,40 +253,33 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
 static struct iteration_info new_iteration_info(struct index_info index, struct range_info range, bool complete) {
   struct iteration_info iteration;
 
-  int iteration_min = 1;
-  int iteration_max = range.size;
+  iteration.min = 0;
+  iteration.max = range.size;
 
   if (complete) {
     if (!range.start_unbounded) {
-      iteration_min += iteration_min_adjustment(index, range.starts, range.size);
+      iteration.min += iteration_min_adjustment(index, range.starts, range.size);
     }
     if (!range.stop_unbounded) {
-      iteration_max -= iteration_max_adjustment(index, range.stops, range.size);
+      iteration.max -= iteration_max_adjustment(index, range.stops, range.size);
     }
   } else {
     if (!range.start_unbounded) {
-      iteration_max -= iteration_max_adjustment(index, range.starts, range.size);
+      iteration.max -= iteration_max_adjustment(index, range.starts, range.size);
     }
     if (!range.stop_unbounded) {
-      iteration_min += iteration_min_adjustment(index, range.stops, range.size);
+      iteration.min += iteration_min_adjustment(index, range.stops, range.size);
     }
   }
 
-  iteration.data = PROTECT(r_int(iteration_min));
-  iteration.p_data_val = INTEGER(iteration.data);
-
-  iteration.max = iteration_max;
-
-  UNPROTECT(1);
   return iteration;
 }
 
 static int iteration_min_adjustment(struct index_info index, SEXP range, int size) {
   int forward_adjustment = 0;
-  R_len_t index_first = 0;
 
   for (int j = 0; j < size; ++j) {
-    if (index.compare_gt(index.data, index_first, range, j)) {
+    if (index.compare_gt(index.data, 0, range, j)) {
       forward_adjustment++;
     } else {
       break;
@@ -298,10 +291,9 @@ static int iteration_min_adjustment(struct index_info index, SEXP range, int siz
 
 static int iteration_max_adjustment(struct index_info index, SEXP range, int size) {
   int backward_adjustment = 0;
-  R_len_t index_last = index.size - 1;
 
   for (int j = size - 1; j >= 0; --j) {
-    if (index.compare_lt(index.data, index_last, range, j)) {
+    if (index.compare_lt(index.data, index.last_pos, range, j)) {
       backward_adjustment++;
     } else {
       break;
@@ -348,9 +340,9 @@ static void compute_window_stops(int* window_stops,
 
 // -----------------------------------------------------------------------------
 
-static int locate_window_start_index(struct index_info* index, struct range_info range) {
-  while(index->compare_lt(index->data, index->current_start_pos, range.starts, range.pos)) {
-    if (index->current_start_pos == (index->size - 1)) {
+static int locate_window_start_index(struct index_info* index, struct range_info range, int pos) {
+  while(index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
+    if (index->current_start_pos == index->last_pos) {
       return index->current_start_pos;
     }
     index->current_start_pos++;
@@ -359,9 +351,9 @@ static int locate_window_start_index(struct index_info* index, struct range_info
   return index->current_start_pos;
 }
 
-static int locate_window_stop_index(struct index_info* index, struct range_info range) {
-  while(index->compare_lte(index->data, index->current_stop_pos, range.stops, range.pos)) {
-    if (index->current_stop_pos == (index->size - 1)) {
+static int locate_window_stop_index(struct index_info* index, struct range_info range, int pos) {
+  while(index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
+    if (index->current_stop_pos == index->last_pos) {
       return index->current_stop_pos;
     }
     index->current_stop_pos++;
@@ -374,14 +366,15 @@ static int locate_window_stop_index(struct index_info* index, struct range_info 
 
 static void increment_window(struct window_info window,
                              struct index_info* index,
-                             struct range_info range) {
+                             struct range_info range,
+                             int pos) {
   if (!range.start_unbounded) {
-    window.start_idx = locate_window_start_index(index, range);
+    window.start_idx = locate_window_start_index(index, range, pos);
     window.start = window.starts[window.start_idx];
   }
 
   if (!range.stop_unbounded) {
-    window.stop_idx = locate_window_stop_index(index, range);
+    window.stop_idx = locate_window_stop_index(index, range, pos);
     window.stop = window.stops[window.stop_idx];
   }
 
@@ -410,7 +403,6 @@ static void eval_loop(SEXP x,
   int n_prot = 0;
 
   struct iteration_info iteration = new_iteration_info(index, range, complete);
-  PROTECT_ITERATION_INFO(&iteration, &n_prot);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
@@ -425,13 +417,12 @@ static void eval_loop(SEXP x,
 
   int force = compute_force(type);
 
-  for (; *iteration.p_data_val <= iteration.max; ++(*iteration.p_data_val)) {
-    if (*iteration.p_data_val % 1024 == 0) {
+  for (int i = iteration.min; i < iteration.max; ++i) {
+    if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    range.pos = *iteration.p_data_val - 1;
-    increment_window(window, &index, range);
+    increment_window(window, &index, range, i);
 
     slice_and_update_env(x, window.seq, env, type, container);
 
@@ -443,10 +434,10 @@ static void eval_loop(SEXP x,
     REPROTECT(elt, elt_prot_idx);
 
     if (out.has_indices) {
-      out.index = VECTOR_ELT(out.indices, *iteration.p_data_val - 1);
+      out.index = VECTOR_ELT(out.indices, i);
       out.index_size = vec_size(out.index);
     } else {
-      *out.p_index_val = *iteration.p_data_val;
+      *out.p_index_val = i + 1;
     }
 
     // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
@@ -461,7 +452,7 @@ static void eval_loop(SEXP x,
       elt_size = vec_size(elt);
 
       if (elt_size != 1) {
-        stop_not_all_size_one(*iteration.p_data_val, elt_size);
+        stop_not_all_size_one(i + 1, elt_size);
       }
 
       if (out.index_size != 1) {
@@ -480,8 +471,8 @@ static void eval_loop(SEXP x,
 
     out.p_index_val = INTEGER(out.index);
 
-    for (int i = 0; i < out.index_size; ++i) {
-      SET_VECTOR_ELT(out.data, out.p_index_val[i] - 1, elt);
+    for (int j = 0; j < out.index_size; ++j) {
+      SET_VECTOR_ELT(out.data, out.p_index_val[j] - 1, elt);
     }
   }
 
