@@ -7,4 +7,3 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^azure-pipelines\.yml$
