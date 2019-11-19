@@ -3,6 +3,8 @@
 
 #include "slide.h"
 
+#define PROTECT_N(x, n) (++*n, PROTECT(x))
+
 #define r_int Rf_ScalarInteger
 
 static inline int min(int x, int y) {

@@ -20,15 +20,15 @@ slide_between_common <- function(x,
   check_not_na(stops, "`.stops`")
   check_ascending(stops, "`.stops`")
 
-  out_size <- vec_size_common(starts, stops)
+  size <- vec_size_common(starts, stops)
 
-  args <- vec_recycle_common(starts, stops, .size = out_size)
+  args <- vec_recycle_common(starts, stops, .size = size)
   args <- vec_cast_common(i, !!!args)
   args <- lapply(args, vec_proxy_compare)
 
   # Early exit if empty input
   # (but after all size checks have been done)
-  if (out_size == 0L) {
+  if (size == 0L) {
     return(vec_init(ptype, 0L))
   }
 
@@ -40,12 +40,6 @@ slide_between_common <- function(x,
   i <- split$key
   window_indices <- split$pos
 
-  params <- list(
-    type,
-    constrain,
-    out_size
-  )
-
   .Call(
     slide_between_common_impl,
     x,
@@ -56,6 +50,8 @@ slide_between_common <- function(x,
     ptype,
     env,
     window_indices,
-    params
+    type,
+    constrain,
+    size
   )
 }

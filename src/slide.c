@@ -40,15 +40,24 @@ SEXP slide_common_impl(SEXP x,
   check_before_negativeness(before, after, before_positive, after_unbounded);
   check_after_negativeness(after, before, after_positive, before_unbounded);
 
-  // 1 based for usage as the index in `vec_assign()`
-  SEXP iteration = PROTECT(r_int(1));
-  int* p_iteration_val = INTEGER(iteration);
+  // 1 based index for `vec_assign()`
+  SEXP index;
+  int* p_index;
+
+  if (constrain) {
+    index = PROTECT(r_int(0));
+    p_index = INTEGER(index);
+  } else {
+    index = PROTECT(R_NilValue);
+  }
+
+  int iteration_min = 0;
   int iteration_max = size;
 
   // Iteration adjustment
   if (complete) {
     if (before_positive) {
-      *p_iteration_val += before;
+      iteration_min += before;
     }
     if (after_positive) {
       iteration_max -= after;
@@ -58,7 +67,7 @@ SEXP slide_common_impl(SEXP x,
       iteration_max -= abs(before);
     }
     if (!after_positive) {
-      *p_iteration_val += abs(after);
+      iteration_min += abs(after);
     }
   }
 
@@ -103,7 +112,7 @@ SEXP slide_common_impl(SEXP x,
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
-  int* p_window_val = INTEGER(window);
+  int* p_window = INTEGER(window);
 
   // The result of each function call
   PROTECT_INDEX elt_prot_idx;
@@ -117,11 +126,8 @@ SEXP slide_common_impl(SEXP x,
   int window_stop;
   int window_size;
 
-  for (;
-       *p_iteration_val <= iteration_max;
-       *p_iteration_val += step, start += start_step, stop += stop_step) {
-
-    if (*p_iteration_val % 1024 == 0) {
+  for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
+    if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
@@ -129,7 +135,7 @@ SEXP slide_common_impl(SEXP x,
     window_stop = min(stop, size - 1);
     window_size = window_stop - window_start + 1;
 
-    init_compact_seq(p_window_val, window_start, window_size, true);
+    init_compact_seq(p_window, window_start, window_size, true);
 
     slice_and_update_env(x, window, env, type, container);
 
@@ -150,12 +156,14 @@ SEXP slide_common_impl(SEXP x,
       REPROTECT(elt, elt_prot_idx);
 
       if (vec_size(elt) != 1) {
-        stop_not_all_size_one(*p_iteration_val, vec_size(elt));
+        stop_not_all_size_one(i + 1, vec_size(elt));
       }
 
-      vec_assign_impl(out, iteration, elt, false);
+      *p_index = i + 1;
+
+      vec_assign_impl(out, index, elt, false);
     } else {
-      SET_VECTOR_ELT(out, *p_iteration_val - 1, elt);
+      SET_VECTOR_ELT(out, i, elt);
     }
   }
 
