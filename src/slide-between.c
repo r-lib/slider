@@ -306,9 +306,10 @@ static struct iteration_info new_iteration_info(struct index_info index, struct 
 
 static int iteration_min_adjustment(struct index_info index, SEXP range, int size) {
   int forward_adjustment = 0;
+  R_len_t index_first = 0;
 
   for (int j = 0; j < size; ++j) {
-    if (index.compare_gt(index.data, 0, range, j)) {
+    if (index.compare_gt(index.data, index_first, range, j)) {
       forward_adjustment++;
     } else {
       break;
@@ -320,9 +321,10 @@ static int iteration_min_adjustment(struct index_info index, SEXP range, int siz
 
 static int iteration_max_adjustment(struct index_info index, SEXP range, int size) {
   int backward_adjustment = 0;
+  R_len_t index_last = index.size - 1;
 
   for (int j = size - 1; j >= 0; --j) {
-    if (index.compare_lt(index.data, index.size - 1, range, j)) {
+    if (index.compare_lt(index.data, index_last, range, j)) {
       backward_adjustment++;
     } else {
       break;
