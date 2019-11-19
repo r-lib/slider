@@ -11,6 +11,8 @@ status](https://travis-ci.org/DavisVaughan/slide.svg?branch=master)](https://tra
 coverage](https://codecov.io/gh/DavisVaughan/slide/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slide?branch=master)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R build
+status](https://github.com/DavisVaughan/slide/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slide/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
 slide provides a family of general purpose “sliding window” functions.
