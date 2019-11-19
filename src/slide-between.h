@@ -8,7 +8,6 @@
 
 struct out_info {
   SEXP data;
-  PROTECT_INDEX data_pidx;
   SEXP ptype;
   int size;
   SEXP indices;
@@ -18,12 +17,12 @@ struct out_info {
   int index_size;
 };
 
-#define PROTECT_OUT_INFO(out, n) do {                  \
-  PROTECT_WITH_INDEX((out)->data, &(out)->data_pidx);  \
-  PROTECT((out)->ptype);                               \
-  PROTECT((out)->indices);                             \
-  PROTECT((out)->index);                               \
-  *n += 4;                                             \
+#define PROTECT_OUT_INFO(out, n) do { \
+  PROTECT((out)->data);               \
+  PROTECT((out)->ptype);              \
+  PROTECT((out)->indices);            \
+  PROTECT((out)->index);              \
+  *n += 4;                            \
 } while (0)
 
 // -----------------------------------------------------------------------------

@@ -71,10 +71,10 @@ SEXP slide_index_common_impl(SEXP x,
   eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
 
   out.data = vec_restore(out.data, out.ptype, r_int(out.size));
-  REPROTECT(out.data, out.data_pidx);
+  PROTECT_N(out.data, &n_prot);
 
   out.data = copy_names(out.data, x, type);
-  REPROTECT(out.data, out.data_pidx);
+  PROTECT_N(out.data, &n_prot);
 
   UNPROTECT(n_prot);
   return out.data;
@@ -128,10 +128,10 @@ SEXP slide_between_common_impl(SEXP x,
   eval_loop(x, env, f_call, out, index, window, range, type, constrain, complete);
 
   out.data = vec_restore(out.data, out.ptype, r_int(out.size));
-  REPROTECT(out.data, out.data_pidx);
+  PROTECT_N(out.data, &n_prot);
 
   out.data = copy_names(out.data, x, type);
-  REPROTECT(out.data, out.data_pidx);
+  PROTECT_N(out.data, &n_prot);
 
   UNPROTECT(n_prot);
   return out.data;
