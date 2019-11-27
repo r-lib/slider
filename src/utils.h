@@ -31,15 +31,15 @@ static inline const char* r_scalar_chr_get(SEXP x) {
   return CHAR(STRING_ELT(x, 0));
 }
 
-SEXP strings_empty;
-SEXP strings_dot_before;
-SEXP strings_dot_after;
-SEXP strings_dot_step;
-SEXP strings_dot_complete;
+extern SEXP strings_empty;
+extern SEXP strings_dot_before;
+extern SEXP strings_dot_after;
+extern SEXP strings_dot_step;
+extern SEXP strings_dot_complete;
 
-SEXP syms_dot_x;
-SEXP syms_dot_y;
-SEXP syms_dot_l;
+extern SEXP syms_dot_x;
+extern SEXP syms_dot_y;
+extern SEXP syms_dot_l;
 
 extern SEXP slide_shared_empty_lgl;
 extern SEXP slide_shared_empty_int;
