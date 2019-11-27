@@ -194,7 +194,7 @@ current element, constructing a cumulative window. A negative value is
 allowed, and allows you to "look forward" as well.
 
 For \code{slide_index()}, this can be any object that can be subtracted from
-\code{.i} with \verb{-}. One common use case is to set this to a lubridate period,
+\code{.i} with \code{-}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
 \item{.after}{\verb{[vector(1) / Inf]}
@@ -207,7 +207,7 @@ move through \code{.x}. A negative value is allowed, and allows you to "look
 backward" as well.
 
 For \code{slide_index()}, this can be any object that can be added to
-\code{.i} with \verb{+}. One common use case is to set this to a lubridate period,
+\code{.i} with \code{+}. One common use case is to set this to a lubridate period,
 such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
 
 \item{.complete}{\verb{[logical(1)]}
@@ -226,7 +226,7 @@ which row comes from which input. If supplied and \code{...} is not named,
 an integer column is used to identify the rows.}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
+\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
 options.
 
 With \code{vec_rbind()}, the repair function is applied to all inputs

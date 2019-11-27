@@ -147,7 +147,7 @@ which row comes from which input. If supplied and \code{...} is not named,
 an integer column is used to identify the rows.}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[=vec_as_names]{vec_as_names()}} for the meaning of these
+\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
 options.
 
 With \code{vec_rbind()}, the repair function is applied to all inputs
