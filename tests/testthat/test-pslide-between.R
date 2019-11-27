@@ -13,3 +13,8 @@ test_that("completely empty input returns a list", {
 test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
   expect_equal(pslide_between(list(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
 })
+
+test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
+  expect_error(pslide_between(list(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
+  expect_error(pslide_between(list(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
+})

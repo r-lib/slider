@@ -45,6 +45,11 @@ test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns 
   expect_equal(slide_between(integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
 })
 
+test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
+  expect_error(slide_between(integer(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
+  expect_error(slide_between(integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
+})
+
 test_that(".i must not contain NA values", {
   expect_error(slide_between(1:2, c(1, NA), 1:2, 1:2, identity), "found at location[(]s[)]: 2")
   expect_error(slide_between(1:2, c(NA, 1), 1:2, 1:2, identity), "found at location[(]s[)]: 1")
