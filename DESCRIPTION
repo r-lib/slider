@@ -34,6 +34,8 @@ Suggests:
 Remotes:
     r-lib/vctrs
 Collate: 
+    'hop-common.R'
+    'hop.R'
     'slide-between2.R'
     'pslide-between.R'
     'slide-index2.R'
