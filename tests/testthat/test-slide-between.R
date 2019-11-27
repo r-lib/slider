@@ -41,6 +41,10 @@ test_that("empty input returns a list, but after the index size check", {
   expect_error(slide_between(integer(), 1, integer(), integer(), ~.x), "must be the same")
 })
 
+test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
+  expect_equal(slide_between(integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
+})
+
 test_that(".i must not contain NA values", {
   expect_error(slide_between(1:2, c(1, NA), 1:2, 1:2, identity), "found at location[(]s[)]: 2")
   expect_error(slide_between(1:2, c(NA, 1), 1:2, 1:2, identity), "found at location[(]s[)]: 1")

@@ -32,6 +32,10 @@ slide_between_common <- function(x,
     return(vec_init(ptype, 0L))
   }
 
+  if (x_size == 0L) {
+    return(vec_init(ptype, size))
+  }
+
   i <- args[[1L]]
   starts <- args[[2L]]
   stops <- args[[3L]]

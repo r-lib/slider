@@ -26,6 +26,13 @@ test_that("completely empty input returns ptype", {
   expect_equal(pslide_between_vec(list(), integer(), integer(), integer(), ~.x, .ptype = int()), int())
 })
 
+test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
+  expect_equal(
+    pslide_between_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = int()),
+    c(NA_integer_, NA_integer_)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # suffix tests
 
