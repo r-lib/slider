@@ -48,6 +48,8 @@ extern SEXP slide_ns_env;
 
 void stop_not_all_size_one(int iteration, int size);
 
+void check_starts_not_past_stops(SEXP starts, SEXP stops);
+
 int compute_size(SEXP x, int type);
 int compute_force(int type);
 

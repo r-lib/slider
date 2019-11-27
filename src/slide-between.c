@@ -281,8 +281,6 @@ static struct index_info new_index_info(SEXP i) {
 
 // -----------------------------------------------------------------------------
 
-static void check_starts_not_past_stops(SEXP starts, SEXP stops);
-
 static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   struct range_info range;
 
@@ -299,25 +297,6 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   range.size = size;
 
   return range;
-}
-
-static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
-  SEXP call = PROTECT(
-    Rf_lang3(
-      Rf_install("stop_range_start_past_stop"),
-      starts,
-      stops
-    )
-  );
-
-  Rf_eval(call, slide_ns_env);
-  Rf_error("Internal error: `stop_range_start_past_stop()` should have jumped earlier");
-}
-
-static void check_starts_not_past_stops(SEXP starts, SEXP stops) {
-  if (vec_any_gt(starts, stops)) {
-    stop_range_start_past_stop(starts, stops);
-  }
 }
 
 // -----------------------------------------------------------------------------

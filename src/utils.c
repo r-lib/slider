@@ -1,5 +1,6 @@
 #include "slide.h"
 #include "utils.h"
+#include "compare.h"
 #include "slide-vctrs.h"
 #include <vctrs.h>
 
@@ -31,6 +32,27 @@ void stop_not_all_size_one(int iteration, int size) {
 
   Rf_eval(call, slide_ns_env);
   Rf_error("Internal error: `stop_not_all_size_one()` should have jumped earlier");
+}
+
+// -----------------------------------------------------------------------------
+
+static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
+  SEXP call = PROTECT(
+    Rf_lang3(
+      Rf_install("stop_range_start_past_stop"),
+      starts,
+      stops
+    )
+  );
+
+  Rf_eval(call, slide_ns_env);
+  Rf_error("Internal error: `stop_range_start_past_stop()` should have jumped earlier");
+}
+
+void check_starts_not_past_stops(SEXP starts, SEXP stops) {
+  if (vec_any_gt(starts, stops)) {
+    stop_range_start_past_stop(starts, stops);
+  }
 }
 
 // -----------------------------------------------------------------------------
