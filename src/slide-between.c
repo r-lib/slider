@@ -424,6 +424,9 @@ static void increment_window(struct window_info window,
   int starts_pos = locate_window_starts_pos(index, range, pos);
   int stops_pos = locate_window_stops_pos(index, range, pos);
 
+  // This is our signal that we are outside the range of `i`. For example,
+  // i = 1:2, but we are trying to index [start = 3, stop = 4]. In these cases
+  // there is "no data" in that range, so we pass a size 0 slice of `x` to `f`
   if (starts_pos == -1 || stops_pos == -1) {
     init_compact_seq(window.p_seq_val, 0, 0, true);
     return;
