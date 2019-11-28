@@ -1,3 +1,8 @@
+#' Hop
+#'
+#' `hop()` jumps along `.x` according the the `.starts` and `.stops`, applying
+#' `.f` to each sub-window of `.x`.
+#'
 #' @export
 hop <- function(.x,
                 .starts,

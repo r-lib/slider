@@ -1,6 +1,6 @@
 #' Slide between boundaries
 #'
-#' `slide_between()` is the lower level engine that powers [slide_index()]. It
+#' `hop_index()` is the lower level engine that powers [slide_index()]. It
 #' has slightly different invariants than `slide_index()`, and is useful when
 #' you either need to hand craft boundary values, or want to compute a result
 #' with a size that is different from `.x`.
@@ -18,21 +18,21 @@
 #'
 #' @section Invariants:
 #'
-#' \subsection{`slide_between()`}{
+#' \subsection{`hop_index()`}{
 #'
-#'  * `vec_size(slide_between(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'  * `vec_size(hop_index(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
-#'  * `vec_ptype(slide_between(.x, .starts, .stops)) == list()`
+#'  * `vec_ptype(hop_index(.x, .starts, .stops)) == list()`
 #'
 #' }
 #'
-#' \subsection{`slide_between_vec()` and `slide_between_*()` variants}{
+#' \subsection{`hop_index_vec()` and `hop_index_*()` variants}{
 #'
-#'  * `vec_size(slide_between_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
+#'  * `vec_size(hop_index_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
-#'  * `vec_size(slide_between_vec(.x, .starts, .stops)[[1]]) == 1L`
+#'  * `vec_size(hop_index_vec(.x, .starts, .stops)[[1]]) == 1L`
 #'
-#'  * `vec_ptype(slide_between_vec(.x, .starts, .stops, .ptype = ptype)) == ptype`
+#'  * `vec_ptype(hop_index_vec(.x, .starts, .stops, .ptype = ptype)) == ptype`
 #'
 #' }
 #'
@@ -56,7 +56,7 @@
 #' # ^ This works nicely when working with dplyr if you are trying to create
 #' # a new column in a data frame, but you'll notice that there are really only
 #' # 3 months, so only 3 values are being calculated. If you only want to return
-#' # a vector of those 3 values, you can use `slide_between()`. You'll have to
+#' # a vector of those 3 values, you can use `hop_index()`. You'll have to
 #' # hand craft the boundaries, but this is a general strategy
 #' # I've found useful:
 #' first_start <- floor_date(i[1], "months")
@@ -66,7 +66,7 @@
 #' starts <- vec_c(first_start, inner)
 #' stops <- vec_c(inner - 1, last_stop)
 #'
-#' slide_between(i, i, starts, stops, ~.x)
+#' hop_index(i, i, starts, stops, ~.x)
 #'
 #' # ---------------------------------------------------------------------------
 #' # Non-existant dates with `lubridate::months()`
@@ -87,19 +87,19 @@
 #' # To get around this, lubridate provides `add_with_rollback()`,
 #' # and the shortcut operation `%m-%`, which subtracts the month, then rolls
 #' # forward/backward if it hits an `NA`. You can manually generate boundaries,
-#' # then provide them to `slide_between()`.
+#' # then provide them to `hop_index()`.
 #' starts <- i %m-% months(1)
 #' stops <- i
 #'
-#' slide_between(x, i, starts, stops, mean)
+#' hop_index(x, i, starts, stops, mean)
 #'
-#' slide_between(i, i, starts, stops, ~.x)
+#' hop_index(i, i, starts, stops, ~.x)
 #'
 #' @inheritSection slide_index The `.i`-ndex
-#' @seealso [slide()], [slide_index()], [slide_between2()]
+#' @seealso [slide()], [slide_index()], [hop_index2()]
 #' @export
-slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
-  slide_between_impl(
+hop_index <- function(.x, .i, .starts, .stops, .f, ...) {
+  hop_index_impl(
     .x,
     .i,
     .starts,
@@ -111,18 +111,18 @@ slide_between <- function(.x, .i, .starts, .stops, .f, ...) {
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_vec <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...,
-                              .ptype = list()) {
+hop_index_vec <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...,
+                          .ptype = list()) {
 
   if (is.null(.ptype)) {
-    out <- slide_between_vec_simplify(
+    out <- hop_index_vec_simplify(
       .x,
       .i,
       .starts,
@@ -134,7 +134,7 @@ slide_between_vec <- function(.x,
     return(out)
   }
 
-  slide_between_impl(
+  hop_index_impl(
     .x,
     .i,
     .starts,
@@ -146,13 +146,13 @@ slide_between_vec <- function(.x,
   )
 }
 
-slide_between_vec_simplify <- function(.x,
-                                       .i,
-                                       .starts,
-                                       .stops,
-                                       .f,
-                                       ...) {
-  out <- slide_between(
+hop_index_vec_simplify <- function(.x,
+                                   .i,
+                                   .starts,
+                                   .stops,
+                                   .f,
+                                   ...) {
+  out <- hop_index(
     .x,
     .i,
     .starts,
@@ -166,15 +166,15 @@ slide_between_vec_simplify <- function(.x,
   vec_c(!!!out)
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_dbl <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...) {
-  slide_between_vec(
+hop_index_dbl <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...) {
+  hop_index_vec(
     .x,
     .i,
     .starts,
@@ -185,15 +185,15 @@ slide_between_dbl <- function(.x,
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_int <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...) {
-  slide_between_vec(
+hop_index_int <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...) {
+  hop_index_vec(
     .x,
     .i,
     .starts,
@@ -204,15 +204,15 @@ slide_between_int <- function(.x,
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_lgl <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...) {
-  slide_between_vec(
+hop_index_lgl <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...) {
+  hop_index_vec(
     .x,
     .i,
     .starts,
@@ -223,15 +223,15 @@ slide_between_lgl <- function(.x,
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_chr <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...) {
-  slide_between_vec(
+hop_index_chr <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...) {
+  hop_index_vec(
     .x,
     .i,
     .starts,
@@ -242,15 +242,15 @@ slide_between_chr <- function(.x,
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_raw <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...) {
-  slide_between_vec(
+hop_index_raw <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...) {
+  hop_index_vec(
     .x,
     .i,
     .starts,
@@ -261,17 +261,17 @@ slide_between_raw <- function(.x,
   )
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_dfr <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...,
-                              .names_to = NULL,
-                              .name_repair = c("unique", "universal", "check_unique")) {
-  out <- slide_between(
+hop_index_dfr <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...,
+                          .names_to = NULL,
+                          .name_repair = c("unique", "universal", "check_unique")) {
+  out <- hop_index(
     .x,
     .i,
     .starts,
@@ -283,17 +283,17 @@ slide_between_dfr <- function(.x,
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
 }
 
-#' @rdname slide_between
+#' @rdname hop_index
 #' @export
-slide_between_dfc <- function(.x,
-                              .i,
-                              .starts,
-                              .stops,
-                              .f,
-                              ...,
-                              .size = NULL,
-                              .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- slide_between(
+hop_index_dfc <- function(.x,
+                          .i,
+                          .starts,
+                          .stops,
+                          .f,
+                          ...,
+                          .size = NULL,
+                          .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+  out <- hop_index(
     .x,
     .i,
     .starts,
@@ -307,7 +307,7 @@ slide_between_dfc <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-slide_between_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
+hop_index_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
   vec_assert(.x)
 
   .f <- as_function(.f)
@@ -316,7 +316,7 @@ slide_between_impl <- function(.x, .i, .starts, .stops, .f, ..., .constrain, .pt
 
   type <- -1L
 
-  slide_between_common(
+  hop_index_common(
     x = .x,
     i = .i,
     starts = .starts,

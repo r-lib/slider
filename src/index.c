@@ -1,5 +1,5 @@
 #include "slide.h"
-#include "slide-between.h"
+#include "index.h"
 #include "slide-vctrs.h"
 #include "utils.h"
 #include "compare.h"
@@ -127,17 +127,17 @@ SEXP slide_index_common_impl(SEXP x,
 }
 
 // [[ register() ]]
-SEXP slide_between_common_impl(SEXP x,
-                               SEXP i,
-                               SEXP starts,
-                               SEXP stops,
-                               SEXP f_call,
-                               SEXP ptype,
-                               SEXP env,
-                               SEXP window_indices,
-                               SEXP type_,
-                               SEXP constrain_,
-                               SEXP size_) {
+SEXP hop_index_common_impl(SEXP x,
+                           SEXP i,
+                           SEXP starts,
+                           SEXP stops,
+                           SEXP f_call,
+                           SEXP ptype,
+                           SEXP env,
+                           SEXP window_indices,
+                           SEXP type_,
+                           SEXP constrain_,
+                           SEXP size_) {
   int n_prot = 0;
 
   int type = r_scalar_int_get(type_);
@@ -163,7 +163,7 @@ SEXP slide_between_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  // `complete = false` for `slide_between()`
+  // `complete = false` for `hop_index()`
   struct iteration_info iteration = new_iteration_info(index, range, false);
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);

@@ -1,5 +1,5 @@
-#ifndef SLIDE_BETWEEN_H
-#define SLIDE_BETWEEN_H
+#ifndef SLIDE_INDEX_H
+#define SLIDE_INDEX_H
 
 #include "slide.h"
 #include "compare.h"

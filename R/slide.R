@@ -161,7 +161,7 @@
 #'
 #' # Adding an option to `slide_dbl()` to remove the `NA` values would destroy
 #' # its size stability. Instead, you can use a combination of `slide_dfr()`
-#' # to get the start/stop indices with `slide_between_dbl()`.
+#' # to get the start/stop indices with `hop_index_dbl()`.
 #' i <- seq_along(x)
 #' idx <- slide_dfr(
 #'   i,
@@ -173,9 +173,9 @@
 #'
 #' idx
 #'
-#' slide_between_dbl(x, i, idx$start, idx$stop, mean)
+#' hop_index_dbl(x, i, idx$start, idx$stop, mean)
 #'
-#' @seealso [slide2()], [slide_index()], [slide_between()]
+#' @seealso [slide2()], [slide_index()], [hop_index()]
 #' @export
 slide <- function(.x,
                   .f,

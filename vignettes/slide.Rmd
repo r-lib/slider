@@ -22,7 +22,7 @@ library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 ```
 
-This vignette is meant to serve as an introduction to {slide}. In it, you'll learn about the three core functions in the package: `slide()`, `slide_index()`, and `slide_between()`, along with their many variants.
+This vignette is meant to serve as an introduction to {slide}. In it, you'll learn about the three core functions in the package: `slide()`, `slide_index()`, and `hop_index()`, along with their many variants.
 
 slide is a package for rolling analysis using window functions. "Window functions" is a term that I've borrowed from SQL that means that some function is repeatedly applied to different "windows" of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.
 
@@ -125,11 +125,11 @@ mutate(
 )
 ```
 
-## slide_between()
+## hop_index()
 
-`slide_between()` is a lower level function that you can think of as powering `slide_index()`. It has the `.i` argument for the index, but in place of `.before` and `.after` are `.starts` and `.stops`, vectors of the same type as `.i` that allow fine tuned control over the exact windows that are used.
+`hop_index()` is a lower level function that you can think of as powering `slide_index()`. It has the `.i` argument for the index, but in place of `.before` and `.after` are `.starts` and `.stops`, vectors of the same type as `.i` that allow fine tuned control over the exact windows that are used.
 
-As a first example, let's look at how `slide_between()` can be equivalent to `slide_index()`. Previously we had computed a `roll_day` column:
+As a first example, let's look at how `hop_index()` can be equivalent to `slide_index()`. Previously we had computed a `roll_day` column:
 
 ```{r}
 company %>%
@@ -145,11 +145,11 @@ company %>%
   mutate(
     starts = index - days(2),
     stops = index,
-    roll_day = slide_between_dbl(sales, index, starts, stops, mean)
+    roll_day = hop_index_dbl(sales, index, starts, stops, mean)
   )
 ```
 
-The rules that govern the output of `slide_between()` are slightly different from `slide()` and `slide_index()`. It is still type stable as you'd expect, but the _size_ of the output is different than the other two. Where `slide()` returns an output that is the same size as `.x`, `slide_between()` returns an output that is the same size as `.starts` and `.stops`. This is actually _extremely_ useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.
+The rules that govern the output of `hop_index()` are slightly different from `slide()` and `slide_index()`. It is still type stable as you'd expect, but the _size_ of the output is different than the other two. Where `slide()` returns an output that is the same size as `.x`, `hop_index()` returns an output that is the same size as `.starts` and `.stops`. This is actually _extremely_ useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.
 
 ### Decreasing the size
 
@@ -166,7 +166,7 @@ daily_sales
 
 You are tasked with computing rolling two month total sales numbers. You should end up with two values, one for the range of `[2019-01-01, 2019-02-28]` and one for `[2019-02-01, 2019-03-31]`. Note that this is a bit hard to accomplish using dplyr alone because these ranges overlap, so we can't construct a column to group on and then summarize it. 
 
-Using `slide_between()`, we can manually construct these ranges and pass them as the `.starts` and `.stops`, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I'll generate the ranges programmatically.
+Using `hop_index()`, we can manually construct these ranges and pass them as the `.starts` and `.stops`, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I'll generate the ranges programmatically.
 
 ```{r}
 jan_first <- floor_date(min(daily_sales$index), "1 month")
@@ -185,7 +185,7 @@ results
 ```{r}
 results %>%
   mutate(
-    total_sales = slide_between_dbl(
+    total_sales = hop_index_dbl(
       .x = daily_sales$sales, 
       .i = daily_sales$index,
       .starts = starts,
@@ -223,15 +223,15 @@ With the above data set, we'd have results like:
 - ...
 - 1 active on `2021-04-02` (last day)
 
-There are multiple ways to solve this problem, and I felt that `slide_between()` provided a pretty nice solution! The general idea is as follows:
+There are multiple ways to solve this problem, and I felt that `hop_index()` provided a pretty nice solution! The general idea is as follows:
 
-The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our `.starts`, and the `.stops` is always the last expiration date. So we'll construct the date column first, and then pass that on to `slide_between()` to compute our result, counting all of the active customer `id`s on any particular day by just taking the `length()` of the current window.
+The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our `.starts`, and the `.stops` is always the last expiration date. So we'll construct the date column first, and then pass that on to `hop_index()` to compute our result, counting all of the active customer `id`s on any particular day by just taking the `length()` of the current window.
 
 ```{r}
 last_expiration <- max(customers$date)
 
 # We don't need a `.stops` column because it is always 
-# `last_expiration` and `slide_between_int()` will recycle it for us
+# `last_expiration` and `hop_index_int()` will recycle it for us
 result <- tibble(
   current_date = seq(today, last_expiration, by = 1)
 )
@@ -240,7 +240,7 @@ result
 
 result <- result %>%
   mutate(
-    active = slide_between_int(
+    active = hop_index_int(
       .x = customers$id, 
       .i = customers$date,
       .starts = current_date,

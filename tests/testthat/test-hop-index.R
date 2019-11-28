@@ -1,6 +1,6 @@
 test_that("trivial case works", {
   expect_equal(
-    slide_between(1:2, 1:2, 1:2, 1:2, ~.x),
+    hop_index(1:2, 1:2, 1:2, 1:2, ~.x),
     list(1L, 2L)
   )
 })
@@ -10,7 +10,7 @@ test_that("can work with with Date `.i`", {
   x <- 1:4
 
   expect_equal(
-    slide_between(x, i, i, i, identity),
+    hop_index(x, i, i, i, identity),
     list(
       1L,
       2L,
@@ -21,53 +21,53 @@ test_that("can work with with Date `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_between(1, 1:2, 1, 1, identity), "must be the same")
+  expect_error(hop_index(1, 1:2, 1, 1, identity), "must be the same")
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_between(1:2, 2:1, 1:2, 1:2, identity), "`.i`ndex must be in ascending order")
+  expect_error(hop_index(1:2, 2:1, 1:2, 1:2, identity), "`.i`ndex must be in ascending order")
 })
 
 test_that(".starts must be ascending", {
-  expect_error(slide_between(1:2, 1:2, 2:1, 1:2, identity), "`.starts` must be in ascending order")
+  expect_error(hop_index(1:2, 1:2, 2:1, 1:2, identity), "`.starts` must be in ascending order")
 })
 
 test_that(".stops must be ascending", {
-  expect_error(slide_between(1:2, 1:2, 1:2, 2:1, identity), "`.stops` must be in ascending order")
+  expect_error(hop_index(1:2, 1:2, 1:2, 2:1, identity), "`.stops` must be in ascending order")
 })
 
 test_that("empty input returns a list, but after the index size check", {
-  expect_equal(slide_between(integer(), integer(), integer(), integer(), ~.x), list())
-  expect_error(slide_between(integer(), 1, integer(), integer(), ~.x), "must be the same")
+  expect_equal(hop_index(integer(), integer(), integer(), integer(), ~.x), list())
+  expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), "must be the same")
 })
 
 test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
-  expect_equal(slide_between(integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
+  expect_equal(hop_index(integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
 })
 
 test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
-  expect_error(slide_between(integer(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
-  expect_error(slide_between(integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
+  expect_error(hop_index(integer(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
+  expect_error(hop_index(integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_between(1:2, c(1, NA), 1:2, 1:2, identity), "found at location[(]s[)]: 2")
-  expect_error(slide_between(1:2, c(NA, 1), 1:2, 1:2, identity), "found at location[(]s[)]: 1")
+  expect_error(hop_index(1:2, c(1, NA), 1:2, 1:2, identity), "found at location[(]s[)]: 2")
+  expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), "found at location[(]s[)]: 1")
 })
 
 test_that(".starts must not contain NA values", {
-  expect_error(slide_between(1:2, 1:2, c(1, NA), 1:2, identity), "found at location[(]s[)]: 2")
-  expect_error(slide_between(1:2, 1:2, c(NA, 1), 1:2, identity), "found at location[(]s[)]: 1")
+  expect_error(hop_index(1:2, 1:2, c(1, NA), 1:2, identity), "found at location[(]s[)]: 2")
+  expect_error(hop_index(1:2, 1:2, c(NA, 1), 1:2, identity), "found at location[(]s[)]: 1")
 })
 
 test_that(".stops must not contain NA values", {
-  expect_error(slide_between(1:2, 1:2, 1:2, c(1, NA), identity), "found at location[(]s[)]: 2")
-  expect_error(slide_between(1:2, 1:2, 1:2, c(NA, 1), identity), "found at location[(]s[)]: 1")
+  expect_error(hop_index(1:2, 1:2, 1:2, c(1, NA), identity), "found at location[(]s[)]: 2")
+  expect_error(hop_index(1:2, 1:2, 1:2, c(NA, 1), identity), "found at location[(]s[)]: 1")
 })
 
 test_that("recycling is used for .starts/.stops", {
   expect_equal(
-    slide_between(1:2, 1:2, 1, 1:2, ~.x),
+    hop_index(1:2, 1:2, 1, 1:2, ~.x),
     list(
       1L,
       1:2
@@ -75,18 +75,18 @@ test_that("recycling is used for .starts/.stops", {
   )
 
   expect_equal(
-    slide_between(1:2, 1:2, 1:2, 2, ~.x),
+    hop_index(1:2, 1:2, 1:2, 2, ~.x),
     list(
       1:2,
       2L
     )
   )
 
-  expect_error(slide_between(1:2, 1:2, 1:2, 1:3, ~.x), class = "vctrs_error_incompatible_size")
+  expect_error(hop_index(1:2, 1:2, 1:2, 1:3, ~.x), class = "vctrs_error_incompatible_size")
 })
 
 test_that("0 length .starts/.stops are allowed", {
-  expect_equal(slide_between(1, 1, integer(), integer(), ~.x), list())
+  expect_equal(hop_index(1, 1, integer(), integer(), ~.x), list())
 })
 
 test_that("common type is found among .i/.starts/.stops", {
@@ -95,7 +95,7 @@ test_that("common type is found among .i/.starts/.stops", {
   stop <- i[2]
 
   expect_equal(
-    slide_between(1:2, i, start, stop, ~.x),
+    hop_index(1:2, i, start, stop, ~.x),
     list(
       1:2
     )
@@ -104,53 +104,53 @@ test_that("common type is found among .i/.starts/.stops", {
 
 test_that("output size is the common size of .starts/.stops", {
   expect_equal(
-    slide_between(1:5, 1:5, 1, 2, ~.x),
+    hop_index(1:5, 1:5, 1, 2, ~.x),
     list(1:2)
   )
 
   expect_equal(
-    slide_between(1:2, 1:2, c(1, 1, 2), c(1, 2, 2), ~.x),
+    hop_index(1:2, 1:2, c(1, 1, 2), c(1, 2, 2), ~.x),
     list(1L, 1:2, 2L)
   )
 })
 
 test_that("out of bounds .starts/.stops result in NULLs", {
   expect_equal(
-    slide_between(1:2, 1:2, 3, 4, ~.x),
+    hop_index(1:2, 1:2, 3, 4, ~.x),
     list(integer())
   )
 
   expect_equal(
-    slide_between(1:2, 1:2, c(3, 4), c(4, 6), ~.x),
+    hop_index(1:2, 1:2, c(3, 4), c(4, 6), ~.x),
     list(integer(), integer())
   )
 
   expect_equal(
-    slide_between(1:2, 1:2, c(-1, 4), c(0, 6), ~.x),
+    hop_index(1:2, 1:2, c(-1, 4), c(0, 6), ~.x),
     list(integer(), integer())
   )
 
   expect_equal(
-    slide_between(1:2, 1:2, c(-1, 1, 4), c(0, 2, 6), ~.x),
+    hop_index(1:2, 1:2, c(-1, 1, 4), c(0, 2, 6), ~.x),
     list(integer(), 1:2, integer())
   )
 })
 
 test_that("indexing into gaps in an irregular .i results in 0 size .x values", {
   expect_equal(
-    slide_between(1:4, c(1, 2, 5, 6), 3, 4, ~.x),
+    hop_index(1:4, c(1, 2, 5, 6), 3, 4, ~.x),
     list(integer())
   )
 
   expect_equal(
-    slide_between(1:4, c(1, 2, 5, 6), c(3, 3, 3), c(3, 4, 5), ~.x),
+    hop_index(1:4, c(1, 2, 5, 6), c(3, 3, 3), c(3, 4, 5), ~.x),
     list(integer(), integer(), 3)
   )
 })
 
 test_that("duplicated .starts/.stops pairs are allowed", {
   expect_equal(
-    slide_between(1:4, 1:4, c(1, 2, 2), c(2, 2, 2), ~.x),
+    hop_index(1:4, 1:4, c(1, 2, 2), c(2, 2, 2), ~.x),
     list(
       1:2,
       2L,
@@ -179,7 +179,7 @@ test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issu
   # 3/31 rollback to 2/28
   # 4/01 rollback to 3/01
   expect_equal(
-    slide_between(x, i, starts, stops, identity),
+    hop_index(x, i, starts, stops, identity),
     list(
       1L,
       1:2,
@@ -204,7 +204,7 @@ test_that("can use `%m-%` and `add_with_rollback()` to solve month rollback issu
   # 3/31 rollback to 2/28 then forward to 3/01
   # 4/01 rollback to 3/01
   expect_equal(
-    slide_between(x, i, starts, stops, identity),
+    hop_index(x, i, starts, stops, identity),
     list(
       1L,
       1:2,
@@ -239,7 +239,7 @@ test_that("can order by two vectors using a data frame", {
   # only then will it look to the second column
 
   expect_equal(
-    slide_between(i, i, starts, stops, ~.x),
+    hop_index(i, i, starts, stops, ~.x),
     list(
       # At row 1, subtracting makes no difference
       # Return row 1
