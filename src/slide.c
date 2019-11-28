@@ -62,25 +62,12 @@ SEXP slide_common_impl(SEXP x,
     if (after_positive) {
       iteration_max -= after;
     }
-  } else {
-    if (!before_positive) {
-      iteration_max -= abs(before);
-    }
-    if (!after_positive) {
-      iteration_min += abs(after);
-    }
   }
 
   // Forward adjustment to match the number of iterations
   int offset = 0;
-  if (complete) {
-    if (before_positive) {
-      offset = before;
-    }
-  } else {
-    if (!after_positive) {
-      offset = abs(after);
-    }
+  if (complete && before_positive) {
+    offset = before;
   }
 
   int start;
@@ -122,18 +109,19 @@ SEXP slide_common_impl(SEXP x,
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
 
-  int window_start;
-  int window_stop;
-  int window_size;
-
   for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    window_start = max(start, 0);
-    window_stop = min(stop, size - 1);
-    window_size = window_stop - window_start + 1;
+    int window_start = max(start, 0);
+    int window_stop = min(stop, size - 1);
+    int window_size = window_stop - window_start + 1;
+
+    if (window_stop < window_start) {
+      window_start = 0;
+      window_size = 0;
+    }
 
     init_compact_seq(p_window, window_start, window_size, true);
 
