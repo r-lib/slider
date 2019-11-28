@@ -9,8 +9,6 @@
 struct window_info {
   int* starts;
   int* stops;
-  int starts_pos;
-  int stops_pos;
   SEXP seq;
   int* p_seq_val;
 };

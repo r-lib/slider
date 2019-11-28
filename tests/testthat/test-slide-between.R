@@ -117,22 +117,22 @@ test_that("output size is the common size of .starts/.stops", {
 test_that("out of bounds .starts/.stops result in NULLs", {
   expect_equal(
     slide_between(1:2, 1:2, 3, 4, ~.x),
-    list(NULL)
+    list(integer())
   )
 
   expect_equal(
     slide_between(1:2, 1:2, c(3, 4), c(4, 6), ~.x),
-    list(NULL, NULL)
+    list(integer(), integer())
   )
 
   expect_equal(
     slide_between(1:2, 1:2, c(-1, 4), c(0, 6), ~.x),
-    list(NULL, NULL)
+    list(integer(), integer())
   )
 
   expect_equal(
     slide_between(1:2, 1:2, c(-1, 1, 4), c(0, 2, 6), ~.x),
-    list(NULL, 1:2, NULL)
+    list(integer(), 1:2, integer())
   )
 })
 
