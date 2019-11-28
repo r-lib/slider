@@ -1,8 +1,8 @@
-#' Slide over multiple inputs between boundaries
+#' Hop along multiple inputs simultaneously using an index
 #'
 #' `hop_index2()` and `phop_index()` represent the combination
 #' of [slide2()] and [pslide()] with [hop_index()], allowing you to iterate
-#' over multiple vectors at once, while sliding along an `.i`-ndex with
+#' over multiple vectors at once, while hopping along an `.i`-ndex with
 #' boundaries defined by `.starts` and `.stops`.
 #'
 #' @inheritParams hop_index

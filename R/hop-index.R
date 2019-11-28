@@ -1,4 +1,4 @@
-#' Slide between boundaries
+#' Hop over an index
 #'
 #' `hop_index()` is the lower level engine that powers [slide_index()]. It
 #' has slightly different invariants than `slide_index()`, and is useful when

@@ -19,7 +19,7 @@
 \alias{phop_index_raw}
 \alias{phop_index_dfr}
 \alias{phop_index_dfc}
-\title{Slide over multiple inputs between boundaries}
+\title{Hop along multiple inputs simultaneously using an index}
 \usage{
 hop_index2(.x, .y, .i, .starts, .stops, .f, ...)
 
@@ -174,7 +174,7 @@ they will be used as named arguments to \code{.f}. Elements of \code{.l} with si
 \description{
 \code{hop_index2()} and \code{phop_index()} represent the combination
 of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=hop_index]{hop_index()}}, allowing you to iterate
-over multiple vectors at once, while sliding along an \code{.i}-ndex with
+over multiple vectors at once, while hopping along an \code{.i}-ndex with
 boundaries defined by \code{.starts} and \code{.stops}.
 }
 \section{Invariants}{

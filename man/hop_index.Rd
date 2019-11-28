@@ -10,7 +10,7 @@
 \alias{hop_index_raw}
 \alias{hop_index_dfr}
 \alias{hop_index_dfc}
-\title{Slide between boundaries}
+\title{Hop over an index}
 \usage{
 hop_index(.x, .i, .starts, .stops, .f, ...)
 
