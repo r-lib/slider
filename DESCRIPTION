@@ -41,6 +41,7 @@ Collate:
     'hop.R'
     'hop2.R'
     'phop-index.R'
+    'phop.R'
     'slide-index2.R'
     'pslide-index.R'
     'slide2.R'
