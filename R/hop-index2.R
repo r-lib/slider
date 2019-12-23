@@ -22,7 +22,7 @@
 #'
 #' \subsection{`hop_index2()`}{
 #'
-#'  * `vec_size(hop_index2(.x, .y, .starts, .stops)) == vvec_size_common(.starts, .stops)`
+#'  * `vec_size(hop_index2(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
 #'  * `vec_ptype(hop_index2(.x, .y, .starts, .stops)) == list()`
 #'

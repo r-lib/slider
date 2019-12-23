@@ -182,7 +182,7 @@ boundaries defined by \code{.starts} and \code{.stops}.
 
 \subsection{\code{hop_index2()}}{
 \itemize{
-\item \code{vec_size(hop_index2(.x, .y, .starts, .stops)) == vvec_size_common(.starts, .stops)}
+\item \code{vec_size(hop_index2(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_ptype(hop_index2(.x, .y, .starts, .stops)) == list()}
 }
 
