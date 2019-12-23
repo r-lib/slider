@@ -175,7 +175,7 @@
 #'
 #' hop_index_dbl(x, i, idx$start, idx$stop, mean)
 #'
-#' @seealso [slide2()], [slide_index()], [hop_index()]
+#' @seealso [slide2()], [slide_index()], [hop()]
 #' @export
 slide <- function(.x,
                   .f,

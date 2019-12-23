@@ -301,5 +301,5 @@ hop_index_dbl(x, i, idx$start, idx$stop, mean)
 
 }
 \seealso{
-\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=hop_index]{hop_index()}}
+\code{\link[=slide2]{slide2()}}, \code{\link[=slide_index]{slide_index()}}, \code{\link[=hop]{hop()}}
 }

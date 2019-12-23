@@ -6,7 +6,7 @@ hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
 
   # TODO `convert_values = "none"` would be nice to disallow negative positions
   starts <- vec_coerce_index(starts, allow_types = "position", arg = ".starts")
-  stops <- vec_coerce_index(stops, allow_types = "position", arg = ".starts")
+  stops <- vec_coerce_index(stops, allow_types = "position", arg = ".stops")
 
   size <- vec_size_common(starts, stops)
   args <- vec_recycle_common(starts, stops, .size = size)

@@ -19,7 +19,7 @@ Imports:
     vctrs (>= 0.2.0.9007)
 LinkingTo:
     vctrs
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/DavisVaughan/slide
 BugReports: https://github.com/DavisVaughan/slide/issues
