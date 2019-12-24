@@ -271,7 +271,7 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   range.stop_unbounded = (stops == R_NilValue);
 
   if (!range.start_unbounded && !range.stop_unbounded) {
-    check_starts_not_past_stops(starts, stops);
+    check_slide_starts_not_past_stops(starts, stops);
   }
 
   range.size = size;

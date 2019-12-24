@@ -21,7 +21,7 @@ SEXP hop_common_impl(SEXP x,
 
   bool constrain = pull_constrain(params);
 
-  check_starts_not_past_stops(starts, stops);
+  check_hop_starts_not_past_stops(starts, stops);
 
   R_len_t x_size = compute_size(x, type);
   R_len_t size = vec_size(starts);

@@ -36,22 +36,41 @@ void stop_not_all_size_one(int iteration, int size) {
 
 // -----------------------------------------------------------------------------
 
-static void stop_range_start_past_stop(SEXP starts, SEXP stops) {
+static void stop_slide_start_past_stop(SEXP starts, SEXP stops) {
   SEXP call = PROTECT(
     Rf_lang3(
-      Rf_install("stop_range_start_past_stop"),
+      Rf_install("stop_slide_start_past_stop"),
       starts,
       stops
     )
   );
 
   Rf_eval(call, slide_ns_env);
-  Rf_error("Internal error: `stop_range_start_past_stop()` should have jumped earlier");
+  Rf_error("Internal error: `stop_slide_start_past_stop()` should have jumped earlier");
 }
 
-void check_starts_not_past_stops(SEXP starts, SEXP stops) {
+static void stop_hop_start_past_stop(SEXP starts, SEXP stops) {
+  SEXP call = PROTECT(
+    Rf_lang3(
+      Rf_install("stop_hop_start_past_stop"),
+      starts,
+      stops
+    )
+  );
+
+  Rf_eval(call, slide_ns_env);
+  Rf_error("Internal error: `stop_hop_start_past_stop()` should have jumped earlier");
+}
+
+void check_slide_starts_not_past_stops(SEXP starts, SEXP stops) {
   if (vec_any_gt(starts, stops)) {
-    stop_range_start_past_stop(starts, stops);
+    stop_slide_start_past_stop(starts, stops);
+  }
+}
+
+void check_hop_starts_not_past_stops(SEXP starts, SEXP stops) {
+  if (vec_any_gt(starts, stops)) {
+    stop_hop_start_past_stop(starts, stops);
   }
 }
 
