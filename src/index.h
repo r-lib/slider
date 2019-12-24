@@ -1,5 +1,5 @@
-#ifndef SLIDE_BETWEEN_H
-#define SLIDE_BETWEEN_H
+#ifndef SLIDE_INDEX_H
+#define SLIDE_INDEX_H
 
 #include "slide.h"
 #include "compare.h"
@@ -9,8 +9,6 @@
 struct window_info {
   int* starts;
   int* stops;
-  int starts_pos;
-  int stops_pos;
   SEXP seq;
   int* p_seq_val;
 };

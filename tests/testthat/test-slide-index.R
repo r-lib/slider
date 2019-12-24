@@ -123,7 +123,7 @@ test_that("can use a negative .before with a date index", {
       2L,
       3L,
       4L,
-      NULL
+      integer()
     )
   )
 
@@ -133,7 +133,7 @@ test_that("can use a negative .before with a date index", {
       2:3,
       3:4,
       4L,
-      NULL
+      integer()
     )
   )
 })
@@ -148,7 +148,7 @@ test_that("can use a negative .before with an irregular date index", {
       2:3,
       4L,
       4L,
-      NULL
+      integer()
     )
   )
 })
@@ -163,7 +163,7 @@ test_that("can select no elements when using a negative .before", {
       2:3,
       integer(),
       integer(),
-      NULL
+      integer()
     )
   )
 })
@@ -293,7 +293,7 @@ test_that("can use negative Durations with Dates", {
       2L,
       3L,
       4L,
-      NULL
+      integer()
     )
   )
 
@@ -303,7 +303,7 @@ test_that("can use negative Durations with Dates", {
       2:3,
       3:4,
       4L,
-      NULL
+      integer()
     )
   )
 })
@@ -609,7 +609,7 @@ test_that("can use a negative .after with integer index", {
   expect_equal(
     slide_index(x, i, identity, .before = 2L, .after = -1L),
     list(
-      NULL,
+      integer(),
       1L,
       1:2,
       2:3,
@@ -625,7 +625,7 @@ test_that("can use a negative .after with a date index", {
   expect_equal(
     slide_index(x, i, identity, .after = -1L, .before = 1L),
     list(
-      NULL,
+      integer(),
       1L,
       2L,
       3L
@@ -635,7 +635,7 @@ test_that("can use a negative .after with a date index", {
   expect_equal(
     slide_index(x, i, identity, .after = -1L, .before = 2L),
     list(
-      NULL,
+      integer(),
       1L,
       1:2,
       2:3
@@ -650,7 +650,7 @@ test_that("can use a negative .after with an irregular date index", {
   expect_equal(
     slide_index(x, i, identity, .after = -1L, .before = 2L),
     list(
-      NULL,
+      integer(),
       1L,
       1L,
       2:3
@@ -665,7 +665,7 @@ test_that("can select no elements when using a negative .after", {
   expect_equal(
     slide_index(x, i, identity, .after = -1L, .before = 1L),
     list(
-      NULL,
+      integer(),
       1,
       1,
       integer()
@@ -984,7 +984,7 @@ test_that("can use unbounded .before with negative .after", {
   expect_equal(
     slide_index(x, i, identity, .before = Inf, .after = -1),
     list(
-      NULL,
+      integer(),
       1L,
       1:2,
       1:3,
@@ -1160,8 +1160,8 @@ test_that("can have an irregular index where the window is completely within two
   expect_equal(
     slide_index(1:7, c(10, 11, 13, 17, 18, 19, 20), ~.x, .before = 3, .after = -2),
     list(
-      NULL,
-      NULL,
+      integer(),
+      integer(),
       1:2,
       integer(),
       integer(),
@@ -1174,7 +1174,7 @@ test_that("can have an irregular index where the window is completely within two
 test_that("can select 0 values if before/after are completely out of range", {
   expect_equal(
     slide_index(1:5, 1:5, identity, .before = 10, .after = -10),
-    rep(list(NULL), 5)
+    rep(list(integer()), 5)
   )
 })
 

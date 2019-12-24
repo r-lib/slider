@@ -7,38 +7,24 @@
 // -----------------------------------------------------------------------------
 
 // [[ register() ]]
-SEXP slide_common_impl(SEXP x,
-                       SEXP f_call,
-                       SEXP ptype,
-                       SEXP env,
-                       SEXP params) {
+SEXP hop_common_impl(SEXP x,
+                     SEXP starts,
+                     SEXP stops,
+                     SEXP f_call,
+                     SEXP ptype,
+                     SEXP env,
+                     SEXP params) {
 
   int type = pull_type(params);
 
-  int size = compute_size(x, type);
-
-  // Bail early if inputs are size 0
-  if (size == 0) {
-    return vec_init(ptype, 0);
-  }
-
   int force = compute_force(type);
 
-  bool before_unbounded = false;
-  bool after_unbounded = false;
-
   bool constrain = pull_constrain(params);
-  int before = pull_before(params, &before_unbounded);
-  int after = pull_after(params, &after_unbounded);
-  int step = pull_step(params);
-  bool complete = pull_complete(params);
 
-  bool before_positive = before >= 0;
-  bool after_positive = after >= 0;
+  check_hop_starts_not_past_stops(starts, stops);
 
-  check_double_negativeness(before, after, before_positive, after_positive);
-  check_before_negativeness(before, after, before_positive, after_unbounded);
-  check_after_negativeness(after, before, after_positive, before_unbounded);
+  R_len_t x_size = compute_size(x, type);
+  R_len_t size = vec_size(starts);
 
   // 1 based index for `vec_assign()`
   SEXP index;
@@ -51,51 +37,9 @@ SEXP slide_common_impl(SEXP x,
     index = PROTECT(R_NilValue);
   }
 
-  int iteration_min = 0;
-  int iteration_max = size;
-
-  // Iteration adjustment
-  if (complete) {
-    if (before_positive) {
-      iteration_min += before;
-    }
-    if (after_positive) {
-      iteration_max -= after;
-    }
-  }
-
-  // Forward adjustment to match the number of iterations
-  int offset = 0;
-  if (complete && before_positive) {
-    offset = before;
-  }
-
-  int start;
-  int start_step;
-  if (before_unbounded) {
-    start = 0;
-    start_step = 0;
-  } else {
-    start = offset - before;
-    start_step = step;
-  }
-
-  int stop;
-  int stop_step;
-  if (after_unbounded) {
-    stop = size - 1;
-    stop_step = 0;
-  } else {
-    stop = offset + after;
-    stop_step = step;
-  }
-
   // Init and proxy the `out` container
-  PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, size);
-  PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_proxy(out);
-  REPROTECT(out, out_prot_idx);
+  SEXP out = PROTECT(vec_init(ptype, size));
+  out = PROTECT(vec_proxy(out));
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
@@ -109,15 +53,23 @@ SEXP slide_common_impl(SEXP x,
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
 
-  for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
+  int* p_starts = INTEGER(starts);
+  int* p_stops = INTEGER(stops);
+
+  for (R_len_t i = 0; i < size; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    int window_start = max(start, 0);
-    int window_stop = min(stop, size - 1);
+    int window_start = max(p_starts[i] - 1, 0);
+    int window_stop = min(p_stops[i] - 1, x_size - 1);
     int window_size = window_stop - window_start + 1;
 
+    // This can happen if both `window_start` and `window_stop` are outside
+    // the range of `x`. i.e. `n = 3` but `window_start = 4`, `window_stop = 5`.
+    // The clamp of `max(p_stops[i] - 1, size - 1)` above will make
+    // `window_stop = 3`, then this adjustment is applied so we return a 0-size
+    // slice of `x`
     if (window_stop < window_start) {
       window_start = 0;
       window_size = 0;
@@ -155,12 +107,9 @@ SEXP slide_common_impl(SEXP x,
     }
   }
 
-  out = vec_restore(out, ptype, r_int(size));
-  REPROTECT(out, out_prot_idx);
+  out = PROTECT(vec_restore(out, ptype, r_int(size)));
+  out = PROTECT(copy_names(out, x, type));
 
-  out = copy_names(out, x, type);
-  REPROTECT(out, out_prot_idx);
-
-  UNPROTECT(5);
+  UNPROTECT(8);
   return out;
 }

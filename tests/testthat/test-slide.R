@@ -130,7 +130,7 @@ test_that("can use a negative before to 'look forward'", {
       3L,
       4L,
       5L,
-      NULL
+      integer()
     )
   )
 
@@ -141,7 +141,7 @@ test_that("can use a negative before to 'look forward'", {
       3:5,
       4:5,
       5L,
-      NULL
+      integer()
     )
   )
 })
@@ -161,7 +161,7 @@ test_that("can use a negative .after to 'look backward'", {
   expect_equal(
     slide(1:5, identity, .before = 1, .after = -1),
     list(
-      NULL,
+      integer(),
       1L,
       2L,
       3L,
@@ -172,7 +172,7 @@ test_that("can use a negative .after to 'look backward'", {
   expect_equal(
     slide(1:5, identity, .before = Inf, .after = -1),
     list(
-      NULL,
+      integer(),
       1L,
       1:2,
       1:3,
@@ -315,7 +315,7 @@ test_that("can use Inf in .before + set .after", {
   expect_equal(
     slide(1:5, identity, .before = Inf, .after = -1L),
     list(
-      NULL,
+      integer(),
       1L,
       1:2,
       1:3,
@@ -367,7 +367,7 @@ test_that("can use Inf in .after + set .before", {
       3:5,
       4:5,
       5L,
-      NULL
+      integer()
     )
   )
 })

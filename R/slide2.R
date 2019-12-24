@@ -79,7 +79,7 @@
 #'
 #' slide2(x, y, row_return, .before = 1, .after = 2)
 #'
-#' @seealso [slide()], [slide_index2()], [slide_between2()]
+#' @seealso [slide()], [slide_index2()], [hop_index2()]
 #' @export
 slide2 <- function(.x,
                    .y,

@@ -246,5 +246,5 @@ i[17] - 19 >= i[1] # TRUE
 
 }
 \seealso{
-\code{\link[=slide]{slide()}}, \code{\link[=slide_between]{slide_between()}}, \code{\link[=slide_index2]{slide_index2()}}
+\code{\link[=slide]{slide()}}, \code{\link[=hop_index]{hop_index()}}, \code{\link[=slide_index2]{slide_index2()}}
 }

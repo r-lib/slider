@@ -31,7 +31,7 @@ There are 3 core functions in slide:
 
 - `slide_index()` computes a rolling calculation _relative to an index_. If you have ever wanted to compute something like a "3 month rolling average" where the number of days in each month is irregular, you might like this function.
 
-- `slide_between()` is a lower level version of `slide_index()` that allows you to manually specify sliding boundaries using `.starts` and `.stops`. It can be useful if you want to return a result with a different size from the original input, or want to aggregate data to a less granular frequency using a rolling window (like taking daily data, slicing it into monthly blocks, and then creating a rolling window over those monthly blocks).
+- `hop_index()` is a lower level version of `slide_index()` that allows you to manually specify sliding boundaries using `.starts` and `.stops`. It can be useful if you want to return a result with a different size from the original input, or want to aggregate data to a less granular frequency using a rolling window (like taking daily data, slicing it into monthly blocks, and then creating a rolling window over those monthly blocks).
 
 Each of these 3 functions has the same variants as `purrr::map()`. For example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`, along with the other combinations of these variants that you might expect from having previously used purrr.
 

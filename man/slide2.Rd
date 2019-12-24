@@ -357,5 +357,5 @@ slide2(x, y, row_return, .before = 1, .after = 2)
 
 }
 \seealso{
-\code{\link[=slide]{slide()}}, \code{\link[=slide_index2]{slide_index2()}}, \code{\link[=slide_between2]{slide_between2()}}
+\code{\link[=slide]{slide()}}, \code{\link[=slide_index2]{slide_index2()}}, \code{\link[=hop_index2]{hop_index2()}}
 }

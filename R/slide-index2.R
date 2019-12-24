@@ -68,7 +68,7 @@
 #'
 #' @inheritSection slide_index The `.i`-ndex
 #' @inheritSection slide_index `.before` and `.after`
-#' @seealso [slide2()], [slide_between2()], [slide_index()]
+#' @seealso [slide2()], [hop_index2()], [slide_index()]
 #' @export
 slide_index2 <- function(.x,
                          .y,

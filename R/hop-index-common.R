@@ -1,12 +1,12 @@
-slide_between_common <- function(x,
-                                 i,
-                                 starts,
-                                 stops,
-                                 f_call,
-                                 constrain,
-                                 ptype,
-                                 env,
-                                 type) {
+hop_index_common <- function(x,
+                             i,
+                             starts,
+                             stops,
+                             f_call,
+                             constrain,
+                             ptype,
+                             env,
+                             type) {
 
   x_size <- compute_size(x, type)
 
@@ -32,6 +32,10 @@ slide_between_common <- function(x,
     return(vec_init(ptype, 0L))
   }
 
+  if (x_size == 0L) {
+    return(vec_init(ptype, size))
+  }
+
   i <- args[[1L]]
   starts <- args[[2L]]
   stops <- args[[3L]]
@@ -41,7 +45,7 @@ slide_between_common <- function(x,
   window_indices <- split$pos
 
   .Call(
-    slide_between_common_impl,
+    hop_index_common_impl,
     x,
     i,
     starts,

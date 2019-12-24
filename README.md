@@ -31,7 +31,7 @@ There are 3 core functions in slide:
     rolling average” where the number of days in each month is
     irregular, you might like this function.
 
-  - `slide_between()` is a lower level version of `slide_index()` that
+  - `hop_index()` is a lower level version of `slide_index()` that
     allows you to manually specify sliding boundaries using `.starts`
     and `.stops`. It can be useful if you want to return a result with a
     different size from the original input, or want to aggregate data to
