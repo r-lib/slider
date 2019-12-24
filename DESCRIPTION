@@ -16,7 +16,7 @@ LazyData: true
 Imports: 
     glue,
     rlang (>= 0.4.1),
-    vctrs (>= 0.2.0.9007)
+    vctrs (>= 0.2.99.9000)
 LinkingTo:
     vctrs
 RoxygenNote: 7.0.2
