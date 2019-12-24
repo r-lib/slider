@@ -16,7 +16,8 @@ LazyData: true
 Imports: 
     glue,
     rlang (>= 0.4.1),
-    vctrs (>= 0.2.99.9000)
+    vctrs (>= 0.2.99.9000),
+    warp
 LinkingTo:
     vctrs
 RoxygenNote: 7.0.2
@@ -32,8 +33,10 @@ Suggests:
     testthat (>= 2.1.0),
     xml2
 Remotes:
-    r-lib/vctrs
+    r-lib/vctrs,
+    DavisVaughan/warp
 Collate: 
+    'block.R'
     'hop-common.R'
     'hop-index-common.R'
     'hop-index.R'

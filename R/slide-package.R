@@ -7,6 +7,7 @@
 ## usethis namespace: start
 #' @import rlang
 #' @import vctrs
+#' @importFrom warp warp_boundary
 #' @useDynLib slide, .registration = TRUE
 ## usethis namespace: end
 NULL
