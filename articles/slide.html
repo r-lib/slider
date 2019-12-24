@@ -95,7 +95,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slide)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lubridate, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p>This vignette is meant to serve as an introduction to {slide}. In it, you’ll learn about the three core functions in the package: <code><a href="../reference/slide.html">slide()</a></code>, <code><a href="../reference/slide_index.html">slide_index()</a></code>, and <code><a href="../reference/slide_between.html">slide_between()</a></code>, along with their many variants.</p>
+<p>This vignette is meant to serve as an introduction to {slide}. In it, you’ll learn about the three core functions in the package: <code><a href="../reference/slide.html">slide()</a></code>, <code><a href="../reference/slide_index.html">slide_index()</a></code>, and <code><a href="../reference/hop_index.html">hop_index()</a></code>, along with their many variants.</p>
 <p>slide is a package for rolling analysis using window functions. “Window functions” is a term that I’ve borrowed from SQL that means that some function is repeatedly applied to different “windows” of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.</p>
 <div id="slide" class="section level2">
 <h2 class="hasAnchor">
@@ -247,11 +247,11 @@
 <a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 3     6 2019-09-03 Tue          4        6</span></a>
 <a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 4     2 2019-09-04 Wed          4        4</span></a></code></pre></div>
 </div>
-<div id="slide_between" class="section level2">
+<div id="hop_index" class="section level2">
 <h2 class="hasAnchor">
-<a href="#slide_between" class="anchor"></a>slide_between()</h2>
-<p><code><a href="../reference/slide_between.html">slide_between()</a></code> is a lower level function that you can think of as powering <code><a href="../reference/slide_index.html">slide_index()</a></code>. It has the <code>.i</code> argument for the index, but in place of <code>.before</code> and <code>.after</code> are <code>.starts</code> and <code>.stops</code>, vectors of the same type as <code>.i</code> that allow fine tuned control over the exact windows that are used.</p>
-<p>As a first example, let’s look at how <code><a href="../reference/slide_between.html">slide_between()</a></code> can be equivalent to <code><a href="../reference/slide_index.html">slide_index()</a></code>. Previously we had computed a <code>roll_day</code> column:</p>
+<a href="#hop_index" class="anchor"></a>hop_index()</h2>
+<p><code><a href="../reference/hop_index.html">hop_index()</a></code> is a lower level function that you can think of as powering <code><a href="../reference/slide_index.html">slide_index()</a></code>. It has the <code>.i</code> argument for the index, but in place of <code>.before</code> and <code>.after</code> are <code>.starts</code> and <code>.stops</code>, vectors of the same type as <code>.i</code> that allow fine tuned control over the exact windows that are used.</p>
+<p>As a first example, let’s look at how <code><a href="../reference/hop_index.html">hop_index()</a></code> can be equivalent to <code><a href="../reference/slide_index.html">slide_index()</a></code>. Previously we had computed a <code>roll_day</code> column:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">company <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, index, mean, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</a>
@@ -268,7 +268,7 @@
 <a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3">    <span class="dt">starts =</span> index <span class="op">-</span><span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>),</a>
 <a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="dt">stops =</span> index,</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">    <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/slide_between.html">slide_between_dbl</a></span>(sales, index, starts, stops, mean)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">    <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_dbl</a></span>(sales, index, starts, stops, mean)</a>
 <a class="sourceLine" id="cb14-6" data-line-number="6">  )</a>
 <a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; # A tibble: 4 x 6</span></a>
 <a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   sales index      wday  starts     stops      roll_day</span></a>
@@ -277,7 +277,7 @@
 <a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 2     4 2019-08-30 Fri   2019-08-28 2019-08-30        3</span></a>
 <a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt; 3     6 2019-09-03 Tue   2019-09-01 2019-09-03        6</span></a>
 <a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; 4     2 2019-09-04 Wed   2019-09-02 2019-09-04        4</span></a></code></pre></div>
-<p>The rules that govern the output of <code><a href="../reference/slide_between.html">slide_between()</a></code> are slightly different from <code><a href="../reference/slide.html">slide()</a></code> and <code><a href="../reference/slide_index.html">slide_index()</a></code>. It is still type stable as you’d expect, but the <em>size</em> of the output is different than the other two. Where <code><a href="../reference/slide.html">slide()</a></code> returns an output that is the same size as <code>.x</code>, <code><a href="../reference/slide_between.html">slide_between()</a></code> returns an output that is the same size as <code>.starts</code> and <code>.stops</code>. This is actually <em>extremely</em> useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.</p>
+<p>The rules that govern the output of <code><a href="../reference/hop_index.html">hop_index()</a></code> are slightly different from <code><a href="../reference/slide.html">slide()</a></code> and <code><a href="../reference/slide_index.html">slide_index()</a></code>. It is still type stable as you’d expect, but the <em>size</em> of the output is different than the other two. Where <code><a href="../reference/slide.html">slide()</a></code> returns an output that is the same size as <code>.x</code>, <code><a href="../reference/hop_index.html">hop_index()</a></code> returns an output that is the same size as <code>.starts</code> and <code>.stops</code>. This is actually <em>extremely</em> useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.</p>
 <div id="decreasing-the-size" class="section level3">
 <h3 class="hasAnchor">
 <a href="#decreasing-the-size" class="anchor"></a>Decreasing the size</h3>
@@ -301,7 +301,7 @@
 <a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 8    14 2019-03-08</span></a>
 <a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 9    22 2019-03-11</span></a></code></pre></div>
 <p>You are tasked with computing rolling two month total sales numbers. You should end up with two values, one for the range of <code>[2019-01-01, 2019-02-28]</code> and one for <code>[2019-02-01, 2019-03-31]</code>. Note that this is a bit hard to accomplish using dplyr alone because these ranges overlap, so we can’t construct a column to group on and then summarize it.</p>
-<p>Using <code><a href="../reference/slide_between.html">slide_between()</a></code>, we can manually construct these ranges and pass them as the <code>.starts</code> and <code>.stops</code>, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I’ll generate the ranges programmatically.</p>
+<p>Using <code><a href="../reference/hop_index.html">hop_index()</a></code>, we can manually construct these ranges and pass them as the <code>.starts</code> and <code>.stops</code>, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I’ll generate the ranges programmatically.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">jan_first &lt;-<span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(daily_sales<span class="op">$</span>index), <span class="st">"1 month"</span>)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">apr_first &lt;-<span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">ceiling_date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(daily_sales<span class="op">$</span>index), <span class="st">"1 month"</span>)</a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"></a>
@@ -320,7 +320,7 @@
 <a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 2 2019-02-01 2019-03-31</span></a></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">    <span class="dt">total_sales =</span> <span class="kw"><a href="../reference/slide_between.html">slide_between_dbl</a></span>(</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">    <span class="dt">total_sales =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_dbl</a></span>(</a>
 <a class="sourceLine" id="cb17-4" data-line-number="4">      <span class="dt">.x =</span> daily_sales<span class="op">$</span>sales, </a>
 <a class="sourceLine" id="cb17-5" data-line-number="5">      <span class="dt">.i =</span> daily_sales<span class="op">$</span>index,</a>
 <a class="sourceLine" id="cb17-6" data-line-number="6">      <span class="dt">.starts =</span> starts,</a>
@@ -365,12 +365,12 @@
 <li>…</li>
 <li>1 active on <code>2021-04-02</code> (last day)</li>
 </ul>
-<p>There are multiple ways to solve this problem, and I felt that <code><a href="../reference/slide_between.html">slide_between()</a></code> provided a pretty nice solution! The general idea is as follows:</p>
-<p>The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our <code>.starts</code>, and the <code>.stops</code> is always the last expiration date. So we’ll construct the date column first, and then pass that on to <code><a href="../reference/slide_between.html">slide_between()</a></code> to compute our result, counting all of the active customer <code>id</code>s on any particular day by just taking the <code><a href="https://rdrr.io/r/base/length.html">length()</a></code> of the current window.</p>
+<p>There are multiple ways to solve this problem, and I felt that <code><a href="../reference/hop_index.html">hop_index()</a></code> provided a pretty nice solution! The general idea is as follows:</p>
+<p>The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our <code>.starts</code>, and the <code>.stops</code> is always the last expiration date. So we’ll construct the date column first, and then pass that on to <code><a href="../reference/hop_index.html">hop_index()</a></code> to compute our result, counting all of the active customer <code>id</code>s on any particular day by just taking the <code><a href="https://rdrr.io/r/base/length.html">length()</a></code> of the current window.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">last_expiration &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(customers<span class="op">$</span>date)</a>
 <a class="sourceLine" id="cb19-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co"># We don't need a `.stops` column because it is always </span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co"># `last_expiration` and `slide_between_int()` will recycle it for us</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co"># `last_expiration` and `hop_index_int()` will recycle it for us</span></a>
 <a class="sourceLine" id="cb19-5" data-line-number="5">result &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
 <a class="sourceLine" id="cb19-6" data-line-number="6">  <span class="dt">current_date =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(today, last_expiration, <span class="dt">by =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb19-7" data-line-number="7">)</a>
@@ -393,7 +393,7 @@
 <a class="sourceLine" id="cb19-24" data-line-number="24"></a>
 <a class="sourceLine" id="cb19-25" data-line-number="25">result &lt;-<span class="st"> </span>result <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb19-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb19-27" data-line-number="27">    <span class="dt">active =</span> <span class="kw"><a href="../reference/slide_between.html">slide_between_int</a></span>(</a>
+<a class="sourceLine" id="cb19-27" data-line-number="27">    <span class="dt">active =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_int</a></span>(</a>
 <a class="sourceLine" id="cb19-28" data-line-number="28">      <span class="dt">.x =</span> customers<span class="op">$</span>id, </a>
 <a class="sourceLine" id="cb19-29" data-line-number="29">      <span class="dt">.i =</span> customers<span class="op">$</span>date,</a>
 <a class="sourceLine" id="cb19-30" data-line-number="30">      <span class="dt">.starts =</span> current_date,</a>
@@ -444,7 +444,7 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#slide">slide()</a></li>
       <li><a href="#slide_index">slide_index()</a></li>
-      <li><a href="#slide_between">slide_between()</a></li>
+      <li><a href="#hop_index">hop_index()</a></li>
       </ul>
 </div>
       </div>

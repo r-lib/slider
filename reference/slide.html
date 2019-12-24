@@ -341,7 +341,7 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='slide2.html'>slide2()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code>, <code><a href='slide_between.html'>slide_between()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='slide2.html'>slide2()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code>, <code><a href='hop.html'>hop()</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -378,22 +378,22 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [1] 4 5
 #&gt; </div><div class='input'>
 <span class='co'># This can be used for rolling means</span>
-<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -1.4000435 -0.5723632 -1.1939967 -0.7291726 -0.6070941</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -0.55369938  0.03764133  0.71343585  0.35433918  0.31548748</div><div class='input'>
 <span class='co'># Or more flexible rolling operations</span>
 <span class='fu'>slide</span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), ~ <span class='no'>.x</span> - <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 0
 #&gt; 
 #&gt; [[2]]
-#&gt; [1]  1.485115 -1.485115
+#&gt; [1] -0.6704995  0.6704995
 #&gt; 
 #&gt; [[3]]
-#&gt; [1]  1.45532206 -1.51490721  0.05958515
+#&gt; [1] -1.0504695  0.2905295  0.7599401
 #&gt; 
 #&gt; [[4]]
-#&gt; [1] -1.0507035  0.5237889  0.5269146
+#&gt; [1] -0.51147315 -0.04206255  0.55353570
 #&gt; 
 #&gt; [[5]]
-#&gt; [1]  0.01075148  0.01387718 -0.02462866
+#&gt; [1]  0.08862489  0.68422314 -0.77284803
 #&gt; </div><div class='input'>
 <span class='co'># `.after` allows you to "align to the left" rather than the right</span>
 <span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
@@ -592,11 +592,11 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; [1] 5
 #&gt; 
 #&gt; [[5]]
-#&gt; NULL
+#&gt; integer(0)
 #&gt; </div><div class='input'>
 <span class='co'># `.after` can be negative as well to "look backwards"</span>
 <span class='fu'>slide</span>(<span class='fl'>1</span>:<span class='fl'>5</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.after</span> <span class='kw'>=</span> -<span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; NULL
+#&gt; integer(0)
 #&gt; 
 #&gt; [[2]]
 #&gt; [1] 1
@@ -616,11 +616,11 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 <span class='co'># If you are looking for a way to remove the `NA` values from something like</span>
 <span class='co'># this, then it doesn't exist as a built in option.</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>)
-<span class='fu'>slide_dbl</span>(<span class='no'>x</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1]         NA         NA         NA  0.1273295         NA -0.2291373
-#&gt;  [7]         NA -0.4812997         NA -0.2364232</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='no'>x</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1]          NA          NA          NA  0.06608461          NA  0.30607315
+#&gt;  [7]          NA  0.20981554          NA -0.82274657</div><div class='input'>
 <span class='co'># Adding an option to `slide_dbl()` to remove the `NA` values would destroy</span>
 <span class='co'># its size stability. Instead, you can use a combination of `slide_dfr()`</span>
-<span class='co'># to get the start/stop indices with `slide_between_dbl()`.</span>
+<span class='co'># to get the start/stop indices with `hop_index_dbl()`.</span>
 <span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='no'>x</span>)
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_dfr</span>(
   <span class='no'>i</span>,
@@ -635,7 +635,7 @@ to the type required by the version of <code>slide_*()</code> being used.</p>
 #&gt; 2     3    6
 #&gt; 3     5    8
 #&gt; 4     7   10</div><div class='input'>
-<span class='fu'><a href='slide_between.html'>slide_between_dbl</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>idx</span>$<span class='no'>start</span>, <span class='no'>idx</span>$<span class='no'>stop</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [1]  0.1273295 -0.2291373 -0.4812997 -0.2364232</div><div class='input'>
+<span class='fu'><a href='hop_index.html'>hop_index_dbl</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>idx</span>$<span class='no'>start</span>, <span class='no'>idx</span>$<span class='no'>stop</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [1]  0.06608461  0.30607315  0.20981554 -0.82274657</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
