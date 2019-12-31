@@ -1,13 +1,13 @@
 test_that("block works as expected with year blocks", {
   i <- as.Date("2019-01-01") + c(-2:2, 31)
 
-  expect_equal(block(i, i, by = "year"), list(i[1:2], i[3:6]))
+  expect_equal(block(i, i, period = "year"), list(i[1:2], i[3:6]))
 })
 
 test_that("block works as expected with month blocks", {
   i <- as.Date("2019-01-01") + c(-2:2, 31)
 
-  expect_equal(block(i, i, by = "month"), list(i[1:2], i[3:5], i[6]))
+  expect_equal(block(i, i, period = "month"), list(i[1:2], i[3:5], i[6]))
 })
 
 test_that("`x` must be a vector", {
