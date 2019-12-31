@@ -4,7 +4,7 @@
 \alias{block}
 \title{Break a vector into blocks}
 \usage{
-block(x, i, by = "year", every = 1L, origin = NULL)
+block(x, i, period = "year", every = 1L, origin = NULL)
 }
 \arguments{
 \item{x}{\verb{[vector]}
@@ -21,32 +21,33 @@ are allowed.
 \item \code{i} is not allowed to have missing values.
 }}
 
-\item{by}{\verb{[character(1)]}
+\item{period}{\verb{[character(1)]}
 
 A string defining the period to group by. Valid inputs are:
-\itemize{
-\item \code{"year"}
-\item \code{"quarter"}
-\item \code{"month"}
-\item \code{"week"}
-\item \code{"day"}
-\item \code{"hour"}
-\item \code{"minute"}
-\item \code{"second"}
-\item \code{"millisecond"}
-}}
+
+\code{"year"}, \code{"quarter"}, \code{"month"}, \code{"week"}, \code{"day"}, \code{"hour"}, \code{"minute"},
+\code{"second"}, \code{"millisecond"}}
 
 \item{every}{\verb{[positive integer(1)]}
 
-The number of \code{by} periods to lump together when constructing the groups.
-For example, with the default \code{origin} and \code{by = "year"}, \code{every = 2}
-would put the years \code{1970} and \code{1971} in the same group.}
+The number of \code{period}s to group together.
+
+For example, if \code{period = "year"} and \code{every} is set to \code{2}, then the years
+1970 and 1971 would be placed in the same group.}
 
 \item{origin}{\verb{[Date(1) / POSIXct(1) / POSIXlt(1)]}
 
-The reference value for the distances to be computed from. This is
-particularly important when \code{every > 1} and you need to define when the
-"first" event was to start counting from.}
+The reference date time value. The default when left as \code{NULL} is the
+Unix epoch of \verb{1970-01-01 00:00:00 UTC}.
+
+This is used for two purposes:
+\itemize{
+\item Defining the anchor to count from when \code{every > 1}.
+\item Aligning the time zone with the input. When the input vector and the
+\code{origin} have altering time zones, a warning is issued and the input
+is coerced to the time zone of the \code{origin}. It is highly advised to
+provide your own \code{origin} if your input is a POSIXct.
+}}
 }
 \value{
 A list containing elements of type \code{vctrs::vec_ptype(x)}. The size of the
@@ -69,11 +70,11 @@ Like \code{\link[=slide]{slide()}}, \code{block()} splits data frame \code{x} va
 x <- 1:6
 i <- as.Date("2019-01-01") + c(-2:2, 31)
 
-block(i, i, by = "year")
+block(i, i, period = "year")
 
 # Data frames are split row wise
 df <- data.frame(x = x, i = i)
-block(df, i, by = "month")
+block(df, i, period = "month")
 
 # Iterate over these blocks to apply a function over
 # non-overlapping period blocks. For example, to compute a
@@ -83,9 +84,9 @@ vapply(block(x, i, "month"), mean, numeric(1))
 
 # block by every 2 months, ensuring that we start counting
 # the 1st of the 2 months from `2019-01-01`
-block(i, i, by = "month", every = 2, origin = as.Date("2019-01-01"))
+block(i, i, period = "month", every = 2, origin = as.Date("2019-01-01"))
 
 # Use the `origin` to instead start counting from `2018-12-01`, meaning
 # that [2018-12, 2019-01] gets bucketed together.
-block(i, i, by = "month", every = 2, origin = as.Date("2018-12-01"))
+block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
 }

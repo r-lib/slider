@@ -39,11 +39,11 @@
 #' x <- 1:6
 #' i <- as.Date("2019-01-01") + c(-2:2, 31)
 #'
-#' block(i, i, by = "year")
+#' block(i, i, period = "year")
 #'
 #' # Data frames are split row wise
 #' df <- data.frame(x = x, i = i)
-#' block(df, i, by = "month")
+#' block(df, i, period = "month")
 #'
 #' # Iterate over these blocks to apply a function over
 #' # non-overlapping period blocks. For example, to compute a
@@ -53,12 +53,12 @@
 #'
 #' # block by every 2 months, ensuring that we start counting
 #' # the 1st of the 2 months from `2019-01-01`
-#' block(i, i, by = "month", every = 2, origin = as.Date("2019-01-01"))
+#' block(i, i, period = "month", every = 2, origin = as.Date("2019-01-01"))
 #'
 #' # Use the `origin` to instead start counting from `2018-12-01`, meaning
 #' # that [2018-12, 2019-01] gets bucketed together.
-#' block(i, i, by = "month", every = 2, origin = as.Date("2018-12-01"))
-block <- function(x, i, by = "year", every = 1L, origin = NULL) {
+#' block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
+block <- function(x, i, period = "year", every = 1L, origin = NULL) {
   vec_assert(x)
 
   check_block_index_type(i)
@@ -66,7 +66,7 @@ block <- function(x, i, by = "year", every = 1L, origin = NULL) {
   check_not_na(i, "`i`")
   check_block_index_ascending(i)
 
-  boundaries <- warp_boundary(i, by = by, every = every, origin = origin)
+  boundaries <- warp_boundary(i, period = period, every = every, origin = origin)
 
   .Call(slide_block, x, boundaries$start, boundaries$stop)
 }
