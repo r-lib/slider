@@ -135,7 +135,7 @@ example, it can split <code>x</code> into monthly or yearly blocks. Combined wit
     
     </div>
 
-    <pre class="usage"><span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"year"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"year"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,33 +156,31 @@ are allowed.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>by</th>
+      <th>period</th>
       <td><p><code>[character(1)]</code></p>
-<p>A string defining the period to group by. Valid inputs are:</p><ul>
-<li><p><code>"year"</code></p></li>
-<li><p><code>"quarter"</code></p></li>
-<li><p><code>"month"</code></p></li>
-<li><p><code>"week"</code></p></li>
-<li><p><code>"day"</code></p></li>
-<li><p><code>"hour"</code></p></li>
-<li><p><code>"minute"</code></p></li>
-<li><p><code>"second"</code></p></li>
-<li><p><code>"millisecond"</code></p></li>
-</ul></td>
+<p>A string defining the period to group by. Valid inputs are:</p>
+<p><code>"year"</code>, <code>"quarter"</code>, <code>"month"</code>, <code>"week"</code>, <code>"day"</code>, <code>"hour"</code>, <code>"minute"</code>,
+<code>"second"</code>, <code>"millisecond"</code></p></td>
     </tr>
     <tr>
       <th>every</th>
       <td><p><code>[positive integer(1)]</code></p>
-<p>The number of <code>by</code> periods to lump together when constructing the groups.
-For example, with the default <code>origin</code> and <code>by = "year"</code>, <code>every = 2</code>
-would put the years <code>1970</code> and <code>1971</code> in the same group.</p></td>
+<p>The number of <code>period</code>s to group together.</p>
+<p>For example, if <code>period = "year"</code> and <code>every</code> is set to <code>2</code>, then the years
+1970 and 1971 would be placed in the same group.</p></td>
     </tr>
     <tr>
       <th>origin</th>
       <td><p><code>[Date(1) / POSIXct(1) / POSIXlt(1)]</code></p>
-<p>The reference value for the distances to be computed from. This is
-particularly important when <code>every &gt; 1</code> and you need to define when the
-"first" event was to start counting from.</p></td>
+<p>The reference date time value. The default when left as <code>NULL</code> is the
+Unix epoch of <code>1970-01-01 00:00:00 UTC</code>.</p>
+<p>This is used for two purposes:</p><ul>
+<li><p>Defining the anchor to count from when <code>every &gt; 1</code>.</p></li>
+<li><p>Aligning the time zone with the input. When the input vector and the
+<code>origin</code> have altering time zones, a warning is issued and the input
+is coerced to the time zone of the <code>origin</code>. It is highly advised to
+provide your own <code>origin</code> if your input is a POSIXct.</p></li>
+</ul></td>
     </tr>
     </table>
     
@@ -203,7 +201,7 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>6</span>
 <span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-01"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>2</span>:<span class='fl'>2</span>, <span class='fl'>31</span>)
 
-<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"year"</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"year"</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2018-12-30" "2018-12-31"
 #&gt; 
 #&gt; [[2]]
@@ -211,7 +209,7 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
 #&gt; </div><div class='input'>
 <span class='co'># Data frames are split row wise</span>
 <span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>i</span>)
-<span class='fu'>block</span>(<span class='no'>df</span>, <span class='no'>i</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"month"</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>block</span>(<span class='no'>df</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"month"</span>)</div><div class='output co'>#&gt; [[1]]
 #&gt;   x          i
 #&gt; 1 1 2018-12-30
 #&gt; 2 2 2018-12-31
@@ -232,7 +230,7 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
 <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span>(<span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='st'>"year"</span>), <span class='no'>mean</span>, <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] 1.5 4.5</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span>(<span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='st'>"month"</span>), <span class='no'>mean</span>, <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] 1.5 4.0 6.0</div><div class='input'>
 <span class='co'># block by every 2 months, ensuring that we start counting</span>
 <span class='co'># the 1st of the 2 months from `2019-01-01`</span>
-<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"month"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-01"</span>))</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"month"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-01"</span>))</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2018-12-30" "2018-12-31"
 #&gt; 
 #&gt; [[2]]
@@ -240,7 +238,7 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
 #&gt; </div><div class='input'>
 <span class='co'># Use the `origin` to instead start counting from `2018-12-01`, meaning</span>
 <span class='co'># that [2018-12, 2019-01] gets bucketed together.</span>
-<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"month"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2018-12-01"</span>))</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>block</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"month"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2018-12-01"</span>))</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2018-12-30" "2018-12-31" "2019-01-01" "2019-01-02" "2019-01-03"
 #&gt; 
 #&gt; [[2]]
