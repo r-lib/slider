@@ -23,10 +23,14 @@ are allowed.
 
 \item{period}{\verb{[character(1)]}
 
-A string defining the period to group by. Valid inputs are:
-
-\code{"year"}, \code{"quarter"}, \code{"month"}, \code{"week"}, \code{"day"}, \code{"hour"}, \code{"minute"},
-\code{"second"}, \code{"millisecond"}}
+A string defining the period to group by. Valid inputs can be roughly
+broken into:
+\itemize{
+\item \code{"year"}, \code{"quarter"}, \code{"month"}, \code{"week"}, \code{"day"}
+\item \code{"hour"}, \code{"minute"}, \code{"second"}, \code{"millisecond"}
+\item \code{"yweek"}, \code{"mweek"}
+\item \code{"yday"}, \code{"mday"}
+}}
 
 \item{every}{\verb{[positive integer(1)]}
 
@@ -35,19 +39,13 @@ The number of \code{period}s to group together.
 For example, if \code{period = "year"} and \code{every} is set to \code{2}, then the years
 1970 and 1971 would be placed in the same group.}
 
-\item{origin}{\verb{[Date(1) / POSIXct(1) / POSIXlt(1)]}
+\item{origin}{\verb{[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]}
 
 The reference date time value. The default when left as \code{NULL} is the
-Unix epoch of \verb{1970-01-01 00:00:00 UTC}.
+epoch time of \verb{1970-01-01 00:00:00}, \emph{in the time zone of \code{x}}.
 
-This is used for two purposes:
-\itemize{
-\item Defining the anchor to count from when \code{every > 1}.
-\item Aligning the time zone with the input. When the input vector and the
-\code{origin} have altering time zones, a warning is issued and the input
-is coerced to the time zone of the \code{origin}. It is highly advised to
-provide your own \code{origin} if your input is a POSIXct.
-}}
+This is generally used to define the anchor time to count from, which is
+relevant when \code{every > 1}.}
 }
 \value{
 A list containing elements of type \code{vctrs::vec_ptype(x)}. The size of the
