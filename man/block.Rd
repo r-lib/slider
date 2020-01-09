@@ -96,3 +96,6 @@ block(i, i, period = "month", every = 2, origin = as.Date("2019-01-01"))
 block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
 
 }
+\seealso{
+\code{\link[=slide_period]{slide_period()}}, \code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}
+}

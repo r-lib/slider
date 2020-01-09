@@ -298,3 +298,6 @@ slide_period_dfr(
 )
 
 }
+\seealso{
+\code{\link[=block]{block()}}, \code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}
+}

@@ -82,6 +82,7 @@
 #'    )
 #' )
 #'
+#' @seealso [block()], [slide()], [slide_index()]
 #' @export
 slide_period <- function(.x,
                          .i,

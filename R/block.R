@@ -66,6 +66,7 @@
 #' # that [2018-12, 2019-01] gets bucketed together.
 #' block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
 #'
+#' @seealso [slide_period()], [slide()], [slide_index()]
 #' @export
 block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
