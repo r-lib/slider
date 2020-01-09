@@ -11,28 +11,16 @@
 #'
 #'   If a __function__, it is used as is.
 #'
-#'   If a __formula__, e.g. `~ .x + 2`, it is converted to a function with up
-#'   to two arguments: `.x` (single argument) or `.x` and `.y` (two arguments).
-#'   The `.` placeholder can be used instead of `.x`. This allows you to
-#'   create very compact anonymous functions with up to two inputs.
+#'   If a __formula__, e.g. `~ .x + 2`, it is converted to a function. There
+#'   are three ways to refer to the arguments:
+#'
+#'   * For a single argument function, use `.`
+#'   * For a two argument function, use `.x` and `.y`
+#'   * For more arguments, use `..1`, `..2`, `..3` etc
+#'
+#'   This syntax allows you to create very compact anonymous functions.
 #'
 #' @param ... Additional arguments passed on to the mapped function.
-#'
-#' @param .before `[integer(1) / Inf]`
-#'
-#'   The number of values _before_ the current element to include in the sliding
-#'   window. Set to `Inf` to select all elements before the current
-#'   position, constructing a cumulative window. A negative value is allowed,
-#'   and allows you to "look forward" as well.
-#'
-#' @param .after `[integer(1) / Inf]`
-#'
-#'   The number of values _after_ the current element to include in the
-#'   sliding window. Set to `Inf` to select all elements after the
-#'   current position, constructing the reverse of a cumulative window, where
-#'   you start with as many elements as possible and decrease the amount as
-#'   you move through `.x`. A negative value is allowed, and allows you to
-#'   "look backward" as well.
 #'
 #' @param .step `[positive integer(1)]`
 #'
@@ -40,28 +28,46 @@
 #'
 #' @param .complete `[logical(1)]`
 #'
-#'   Should the sliding be restricted to complete windows only? If `FALSE`,
+#'   Should `.f` be evaluated on complete windows only? If `FALSE`,
 #'   the default, then partial computations will be allowed.
 #'
-#' @param .ptype `[vector]`
+#' @param .ptype `[vector(0)]`
 #'
 #'   The prototype corresponding to the type of the output. Defaults to
 #'   a `list()`.
 #'
+#' @template param-before-after-slide
+#'
 #' @details
 #'
-#' Unlike `lapply()` or `purrr::map()`, which construct calls
-#' like `.f(.x[[i]], ...)`, the equivalent with `slide()`
-#' looks like `.f(vec_slice(.x, i), ...)` which is approximately
-#' `.f(.x[i], ...)` except in the case of data frames or arrays,
-#' which are iterated over row-wise.
+#' Unlike `lapply()` or `purrr::map()`, which construct calls like
+#'
+#' ```
+#' .f(.x[[i]], ...)
+#' ```
+#'
+#' the equivalent with `slide()` looks like
+#'
+#' ```
+#' .f(vctrs::vec_slice(.x, i), ...)
+#' ```
+#'
+#' which is approximately
+#'
+#' ```
+#' .f(.x[i], ...)
+#' ```
+#'
+#' except in the case of data frames or arrays, which are iterated
+#' over row-wise.
 #'
 #' If `.x` has names, then the output will preserve those names.
 #'
 #' Using [vctrs::vec_cast()], the output of `.f` will be automatically cast
-#' to the type required by the version of `slide_*()` being used.
+#' to the type required by the variant of `slide_*()` being used.
 #'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`slide()`}{
 #'

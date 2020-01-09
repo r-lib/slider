@@ -1,26 +1,13 @@
-#' Slide over an index
+#' Slide relative to an index
 #'
+#' @description
 #' `slide_index()` is similar to `slide()`, but allows a secondary `.i`-ndex
-#' vector to be provided. This is often useful in business calculations, when
+#' vector to be provided.
+#'
+#' This is often useful in business calculations, when
 #' you want to compute a rolling computation looking "3 months back", which
 #' is approximately but not equivalent to, 3 * 30 days. `slide_index()` allows
 #' for these irregular window sizes.
-#'
-#' @section The `.i`-ndex:
-#'
-#' There are 3 restrictions on `.i`:
-#'
-#' - The size of `.i` must match the size of `.x`, `.i` will not be recycled.
-#'
-#' - `.i` must be an _increasing_ vector, but duplicate values
-#'   are allowed.
-#'
-#' - `.i` is not allowed to have missing values.
-#'
-#' @section `.before` and `.after`:
-#'
-#' The ranges computed from `.i - .before` and `.i + .after` have the same
-#' restrictions as the three mentioned above for `.i`.
 #'
 #' @inheritParams slide
 #'
@@ -28,34 +15,23 @@
 #'
 #'   The index vector that determines the window sizes. The lower bound
 #'   of the window range will be computed as `.i - .before`, and the upper
-#'   bound will be `.i + .after`. It is faily common to supply a date vector
+#'   bound as `.i + .after`. It is faily common to supply a date vector
 #'   as the index, but not required.
 #'
-#' @param .before `[vector(1) / Inf]`
+#'   There are 3 restrictions on the index:
 #'
-#'   The number of values _before_ the current element of `.i` to include in the
-#'   sliding window. Set to `Inf` to select all elements before the
-#'   current element, constructing a cumulative window. A negative value is
-#'   allowed, and allows you to "look forward" as well.
+#'   - The size of the index must match the size of `.x`, neither will
+#'     be recycled.
 #'
-#'   For `slide_index()`, this can be any object that can be subtracted from
-#'   `.i` with `-`. One common use case is to set this to a lubridate period,
-#'   such as [lubridate::weeks()].
+#'   - The index must be an _increasing_ vector, but duplicate values
+#'     are allowed.
 #'
-#' @param .after `[vector(1) / Inf]`
+#'   - The index cannot have missing values.
 #'
-#'   The number of values _after_ the current element of `.i` to include in the
-#'   sliding window. Set to `Inf` to select all elements after the
-#'   current position, constructing the reverse of a cumulative window, where
-#'   you start with as many elements as possible and decrease the amount as you
-#'   move through `.x`. A negative value is allowed, and allows you to "look
-#'   backward" as well.
+#' @template param-before-after-slide-index
 #'
-#'   For `slide_index()`, this can be any object that can be added to
-#'   `.i` with `+`. One common use case is to set this to a lubridate period,
-#'   such as [lubridate::weeks()].
-#'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`slide_index()`}{
 #'

@@ -25,8 +25,9 @@
 #'
 #' The main difference is that the start and stop values make up ranges of
 #' _possible_ locations along `.x`, and it is not enforced that these locations
-#' index into `.x`. As an example, with `hop()` you can do the following, which
-#' would be an error with `vec_slice()` because `0L` is out of bounds.
+#' actually exist along `.x`. As an example, with `hop()` you can do the
+#' following, which would be an error with `vec_slice()` because `0L` is
+#' out of bounds.
 #'
 #' ```
 #' hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
@@ -52,14 +53,10 @@
 #'
 #' @inheritParams slide
 #'
-#' @param .starts,.stops `[vector]`
+#' @template param-starts-stops-hop
 #'
-#'   Vectors of boundary locations that make up the windows to bucket `.x` with.
-#'   Both `.starts` and `.stops` will be recycled to their common size, and
-#'   that common size will be the size of the result. Both vectors should be
-#'   integer locations along `.x`.
-#'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`hop()`}{
 #'

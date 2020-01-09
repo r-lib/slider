@@ -19,7 +19,7 @@
 \alias{pslide_index_raw}
 \alias{pslide_index_dfr}
 \alias{pslide_index_dfc}
-\title{Slide along multiples inputs simultaneously over an index}
+\title{Slide along multiples inputs simultaneously relative to an index}
 \usage{
 slide_index2(.x, .y, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
@@ -172,50 +172,54 @@ Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
-bound will be \code{.i + .after}. It is faily common to supply a date vector
-as the index, but not required.}
+bound as \code{.i + .after}. It is faily common to supply a date vector
+as the index, but not required.
+
+There are 3 restrictions on the index:
+\itemize{
+\item The size of the index must match the size of \code{.x}, neither will
+be recycled.
+\item The index must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item The index cannot have missing values.
+}}
 
 \item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
-If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
-to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
-The \code{.} placeholder can be used instead of \code{.x}. This allows you to
-create very compact anonymous functions with up to two inputs.}
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\verb{[vector(1) / Inf]}
+\item{.before, .after}{\verb{[vector(1) / Inf]}
 
-The number of values \emph{before} the current element of \code{.i} to include in the
-sliding window. Set to \code{Inf} to select all elements before the
-current element, constructing a cumulative window. A negative value is
-allowed, and allows you to "look forward" as well.
+The number of values before or after the current element of \code{.i} to
+include in the sliding window. Set to \code{Inf} to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+\code{.before} value, or "look backwards" if used as \code{.after}.
 
-For \code{slide_index()}, this can be any object that can be subtracted from
-\code{.i} with \code{-}. One common use case is to set this to a lubridate period,
-such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
+Any object that can be added or subtracted from \code{.i} with \code{+} and \code{-}
+can be used. For example, a lubridate period, such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.
 
-\item{.after}{\verb{[vector(1) / Inf]}
-
-The number of values \emph{after} the current element of \code{.i} to include in the
-sliding window. Set to \code{Inf} to select all elements after the
-current position, constructing the reverse of a cumulative window, where
-you start with as many elements as possible and decrease the amount as you
-move through \code{.x}. A negative value is allowed, and allows you to "look
-backward" as well.
-
-For \code{slide_index()}, this can be any object that can be added to
-\code{.i} with \code{+}. One common use case is to set this to a lubridate period,
-such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.}
+The ranges that result from computing \code{.i - .before} and \code{.i + .after}
+have the same 3 restrictions as \code{.i} itself.}
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should the sliding be restricted to complete windows only? If \code{FALSE},
+Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\verb{[vector]}
+\item{.ptype}{\verb{[vector(0)]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -250,13 +254,8 @@ number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
 }
-\description{
-\code{slide_index2()} and \code{pslide_index()} represent the combination
-of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=slide_index]{slide_index()}}, allowing you to iterate
-over multiple vectors at once, while respecting an \code{.i}-ndex.
-}
-\section{Invariants}{
-
+\value{
+A vector fulfilling the following invariants:
 
 \subsection{\code{slide_index2()}}{
 \itemize{
@@ -292,26 +291,11 @@ over multiple vectors at once, while respecting an \code{.i}-ndex.
 
 }
 }
-
-\section{The \code{.i}-ndex}{
-
-
-There are 3 restrictions on \code{.i}:
-\itemize{
-\item The size of \code{.i} must match the size of \code{.x}, \code{.i} will not be recycled.
-\item \code{.i} must be an \emph{increasing} vector, but duplicate values
-are allowed.
-\item \code{.i} is not allowed to have missing values.
+\description{
+\code{slide_index2()} and \code{pslide_index()} represent the combination
+of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=slide_index]{slide_index()}}, allowing you to iterate
+over multiple vectors at once relative to an \code{.i}-ndex.
 }
-}
-
-\section{\code{.before} and \code{.after}}{
-
-
-The ranges computed from \code{.i - .before} and \code{.i + .after} have the same
-restrictions as the three mentioned above for \code{.i}.
-}
-
 \examples{
 # Notice that `i` is an irregular index!
 x <- 1:5
