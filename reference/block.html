@@ -8,11 +8,13 @@
 
 <title>Break a vector into blocks — block • slide</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -32,13 +34,14 @@
 
 
 
-<meta property="og:title" content="Break a vector into blocks — block" />
 
+<meta property="og:title" content="Break a vector into blocks — block" />
 <meta property="og:description" content="block() splits x into blocks defined by i, a date time index. For
 example, it can split x into monthly or yearly blocks. Combined with
 purrr::map() or lapply(), it is one way to iterate over a vector in
 &quot;time blocks&quot;." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -100,7 +103,6 @@ purrr::map() or lapply(), it is one way to iterate over a vector in
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slide">
@@ -127,16 +129,14 @@ purrr::map() or lapply(), it is one way to iterate over a vector in
     </div>
 
     <div class="ref-description">
-    
     <p><code>block()</code> splits <code>x</code> into blocks defined by <code>i</code>, a date time index. For
 example, it can split <code>x</code> into monthly or yearly blocks. Combined with
 <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code> or <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code>, it is one way to iterate over a vector in
 "time blocks".</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='kw'>period</span> <span class='kw'>=</span> <span class='st'>"year"</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>period</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -158,9 +158,13 @@ are allowed.</p></li>
     <tr>
       <th>period</th>
       <td><p><code>[character(1)]</code></p>
-<p>A string defining the period to group by. Valid inputs are:</p>
-<p><code>"year"</code>, <code>"quarter"</code>, <code>"month"</code>, <code>"week"</code>, <code>"day"</code>, <code>"hour"</code>, <code>"minute"</code>,
-<code>"second"</code>, <code>"millisecond"</code></p></td>
+<p>A string defining the period to group by. Valid inputs can be roughly
+broken into:</p><ul>
+<li><p><code>"year"</code>, <code>"quarter"</code>, <code>"month"</code>, <code>"week"</code>, <code>"day"</code></p></li>
+<li><p><code>"hour"</code>, <code>"minute"</code>, <code>"second"</code>, <code>"millisecond"</code></p></li>
+<li><p><code>"yweek"</code>, <code>"mweek"</code></p></li>
+<li><p><code>"yday"</code>, <code>"mday"</code></p></li>
+</ul></td>
     </tr>
     <tr>
       <th>every</th>
@@ -171,31 +175,24 @@ are allowed.</p></li>
     </tr>
     <tr>
       <th>origin</th>
-      <td><p><code>[Date(1) / POSIXct(1) / POSIXlt(1)]</code></p>
+      <td><p><code>[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]</code></p>
 <p>The reference date time value. The default when left as <code>NULL</code> is the
-Unix epoch of <code>1970-01-01 00:00:00 UTC</code>.</p>
-<p>This is used for two purposes:</p><ul>
-<li><p>Defining the anchor to count from when <code>every &gt; 1</code>.</p></li>
-<li><p>Aligning the time zone with the input. When the input vector and the
-<code>origin</code> have altering time zones, a warning is issued and the input
-is coerced to the time zone of the <code>origin</code>. It is highly advised to
-provide your own <code>origin</code> if your input is a POSIXct.</p></li>
-</ul></td>
+epoch time of <code>1970-01-01 00:00:00</code>, <em>in the time zone of <code>x</code></em>.</p>
+<p>This is generally used to define the anchor time to count from, which is
+relevant when <code>every &gt; 1</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list containing elements of type <code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype.html'>vctrs::vec_ptype(x)</a></code>. The size of the
 output is identical to the number of unique period groups as determined
 by <code><a href='https://rdrr.io/pkg/warp/man/warp_boundary.html'>warp::warp_boundary()</a></code>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>block()</code> determines the indices to block by with <code><a href='https://rdrr.io/pkg/warp/man/warp_boundary.html'>warp::warp_boundary()</a></code>,
 and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_chop.html'>vctrs::vec_chop()</a></code>.</p>
 <p>Like <code><a href='slide.html'>slide()</a></code>, <code>block()</code> splits data frame <code>x</code> values row wise.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>6</span>
@@ -249,11 +246,8 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
