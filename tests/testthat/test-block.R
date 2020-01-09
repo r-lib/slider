@@ -18,7 +18,7 @@ test_that("works with empty input", {
   x <- numeric()
   i <- structure(numeric(), class = "Date")
 
-  expect_equal(block(x, i), list())
+  expect_equal(block(x, i, "year"), list())
 })
 
 test_that("`i` can not have `NA` values", {

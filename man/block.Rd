@@ -4,7 +4,7 @@
 \alias{block}
 \title{Break a vector into blocks}
 \usage{
-block(x, i, period = "year", every = 1L, origin = NULL)
+block(x, i, period, every = 1L, origin = NULL)
 }
 \arguments{
 \item{x}{\verb{[vector]}

@@ -58,7 +58,7 @@
 #' # Use the `origin` to instead start counting from `2018-12-01`, meaning
 #' # that [2018-12, 2019-01] gets bucketed together.
 #' block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
-block <- function(x, i, period = "year", every = 1L, origin = NULL) {
+block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
 
   check_block_index_type(i)
