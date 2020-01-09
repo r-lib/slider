@@ -1,3 +1,12 @@
+#' Slide relative to an index chunked by period
+#'
+#' @description
+#' `slide_period()` breaks up the `.i`ndex by `.period`, and then uses that
+#' to define the indices to slide over `.x` with.
+#'
+#' It can be useful for, say, sliding over daily data in monthly chunks.
+#'
+#' @export
 slide_period <- function(.x,
                          .i,
                          .period,
@@ -24,6 +33,8 @@ slide_period <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_vec <- function(.x,
                              .i,
                              .period,
@@ -97,6 +108,8 @@ slide_period_simplify <- function(.x,
   vec_c(!!!out)
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_dbl <- function(.x,
                              .i,
                              .period,
@@ -122,6 +135,8 @@ slide_period_dbl <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_int <- function(.x,
                              .i,
                              .period,
@@ -147,6 +162,8 @@ slide_period_int <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_lgl <- function(.x,
                              .i,
                              .period,
@@ -172,6 +189,8 @@ slide_period_lgl <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_chr <- function(.x,
                              .i,
                              .period,
@@ -197,6 +216,8 @@ slide_period_chr <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_raw <- function(.x,
                              .i,
                              .period,
@@ -222,6 +243,8 @@ slide_period_raw <- function(.x,
   )
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_dfr <- function(.x,
                              .i,
                              .period,
@@ -250,6 +273,8 @@ slide_period_dfr <- function(.x,
   vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
 }
 
+#' @rdname slide_period
+#' @export
 slide_period_dfc <- function(.x,
                              .i,
                              .period,
