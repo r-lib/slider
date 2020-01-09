@@ -6,6 +6,82 @@
 #'
 #' It can be useful for, say, sliding over daily data in monthly chunks.
 #'
+#' @inheritParams slide
+#' @inheritParams warp::warp_distance
+#'
+#' @template param-before-after-slide
+#'
+#' @param .i `[Date / POSIXct / POSIXlt]`
+#'
+#'   A datetime index to break into periods.
+#'
+#'   There are 3 restrictions on the index:
+#'
+#'   - The size of the index must match the size of `.x`, neither will
+#'     be recycled.
+#'
+#'   - The index must be an _increasing_ vector, but duplicate values
+#'     are allowed.
+#'
+#'   - The index cannot have missing values.
+#'
+#' @return
+#' A vector fulfilling the following invariants:
+#'
+#' \subsection{`slide_period()`}{
+#'
+#'  * `vec_size(slide_period(.x)) == vec_size(unique(warp::warp_distance(.i)))`
+#'
+#'  * `vec_ptype(slide_period(.x)) == list()`
+#'
+#' }
+#'
+#' \subsection{`slide_period_vec()` and `slide_period_*()` variants}{
+#'
+#'  * `vec_size(slide_period_vec(.x)) == vec_size(unique(warp::warp_distance(.i)))`
+#'
+#'  * `vec_size(slide_period_vec(.x)[[1]]) == 1L`
+#'
+#'  * `vec_ptype(slide_period_vec(.x, .ptype = ptype)) == ptype`
+#'
+#' }
+#'
+#' @examples
+#' i <- as.Date("2019-01-28") + 0:5
+#'
+#' # Split `i` into 2-day periods to apply `.f` to
+#' slide_period(i, i, "day", identity, .every = 2)
+#'
+#' # Or into 1-month periods
+#' slide_period(i, i, "month", identity)
+#'
+#' # Now select:
+#' # - The current 2-day period
+#' # - Plus 1 2-day period before the current one
+#' slide_period(i, i, "day", identity, .every = 2, .before = 1)
+#'
+#' # Alter the `origin` to control the reference date for
+#' # how the 2-day groups are formed
+#' origin <- as.Date("2019-01-29")
+#' slide_period(i, i, "day", identity, .every = 2, .origin = origin)
+#'
+#' # This can be useful for, say, monthly averages
+#' daily_sales <- c(2, 5, 3, 6, 9, 4)
+#' slide_period_dbl(daily_sales, i, "month", mean)
+#'
+#' # If you need the index, slide over and return a data frame
+#' sales_df <- data.frame(i = i, sales = daily_sales)
+#'
+#' slide_period_dfr(
+#'   sales_df,
+#'   sales_df$i,
+#'   "month",
+#'   ~data.frame(
+#'      i = max(.x$i),
+#'      sales = mean(.x$sales)
+#'    )
+#' )
+#'
 #' @export
 slide_period <- function(.x,
                          .i,

@@ -134,9 +134,167 @@ slide_period_dfc(
   .name_repair = c("unique", "universal", "check_unique", "minimal")
 )
 }
+\arguments{
+\item{.x}{\verb{[vector]}
+
+The vector to iterate over and apply \code{.f} to.}
+
+\item{.i}{\verb{[Date / POSIXct / POSIXlt]}
+
+A datetime index to break into periods.
+
+There are 3 restrictions on the index:
+\itemize{
+\item The size of the index must match the size of \code{.x}, neither will
+be recycled.
+\item The index must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item The index cannot have missing values.
+}}
+
+\item{.period}{\verb{[character(1)]}
+
+A string defining the period to group by. Valid inputs can be roughly
+broken into:
+\itemize{
+\item \code{"year"}, \code{"quarter"}, \code{"month"}, \code{"week"}, \code{"day"}
+\item \code{"hour"}, \code{"minute"}, \code{"second"}, \code{"millisecond"}
+\item \code{"yweek"}, \code{"mweek"}
+\item \code{"yday"}, \code{"mday"}
+}}
+
+\item{.f}{\verb{[function / formula]}
+
+If a \strong{function}, it is used as is.
+
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
+
+\item{...}{Additional arguments passed on to the mapped function.}
+
+\item{.every}{\verb{[positive integer(1)]}
+
+The number of \code{period}s to group together.
+
+For example, if \code{period = "year"} and \code{every} is set to \code{2}, then the years
+1970 and 1971 would be placed in the same group.}
+
+\item{.origin}{\verb{[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]}
+
+The reference date time value. The default when left as \code{NULL} is the
+epoch time of \verb{1970-01-01 00:00:00}, \emph{in the time zone of \code{x}}.
+
+This is generally used to define the anchor time to count from, which is
+relevant when \code{every > 1}.}
+
+\item{.before, .after}{\verb{[integer(1) / Inf]}
+
+The number of values before or after the current element to
+include in the sliding window. Set to \code{Inf} to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+\code{.before} value, or "look backwards" if used as \code{.after}.}
+
+\item{.complete}{\verb{[logical(1)]}
+
+Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
+the default, then partial computations will be allowed.}
+
+\item{.ptype}{\verb{[vector(0)]}
+
+The prototype corresponding to the type of the output. Defaults to
+a \code{list()}.}
+
+\item{.names_to}{Optionally, the name of a column where the names
+of \code{...} arguments are copied. These names are useful to identify
+which row comes from which input. If supplied and \code{...} is not named,
+an integer column is used to identify the rows.}
+
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
+\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
+options.
+
+With \code{vec_rbind()}, the repair function is applied to all inputs
+separately. This is because \code{vec_rbind()} needs to align their
+columns before binding the rows, and thus needs all inputs to
+have unique names. On the other hand, \code{vec_cbind()} applies the
+repair function after all inputs have been concatenated together
+in a final data frame. Hence \code{vec_cbind()} allows the more
+permissive minimal names repair.}
+
+\item{.size}{If, \code{NULL}, the default, will determine the number of
+rows in \code{vec_cbind()} output by using the standard recycling rules.
+
+Alternatively, specify the desired number of rows, and any inputs
+of length 1 will be recycled appropriately.}
+}
+\value{
+A vector fulfilling the following invariants:
+
+\subsection{\code{slide_period()}}{
+\itemize{
+\item \code{vec_size(slide_period(.x)) == vec_size(unique(warp::warp_distance(.i)))}
+\item \code{vec_ptype(slide_period(.x)) == list()}
+}
+
+}
+
+\subsection{\code{slide_period_vec()} and \verb{slide_period_*()} variants}{
+\itemize{
+\item \code{vec_size(slide_period_vec(.x)) == vec_size(unique(warp::warp_distance(.i)))}
+\item \code{vec_size(slide_period_vec(.x)[[1]]) == 1L}
+\item \code{vec_ptype(slide_period_vec(.x, .ptype = ptype)) == ptype}
+}
+
+}
+}
 \description{
 \code{slide_period()} breaks up the \code{.i}ndex by \code{.period}, and then uses that
 to define the indices to slide over \code{.x} with.
 
 It can be useful for, say, sliding over daily data in monthly chunks.
+}
+\examples{
+i <- as.Date("2019-01-28") + 0:5
+
+# Split `i` into 2-day periods to apply `.f` to
+slide_period(i, i, "day", identity, .every = 2)
+
+# Or into 1-month periods
+slide_period(i, i, "month", identity)
+
+# Now select:
+# - The current 2-day period
+# - Plus 1 2-day period before the current one
+slide_period(i, i, "day", identity, .every = 2, .before = 1)
+
+# Alter the `origin` to control the reference date for
+# how the 2-day groups are formed
+origin <- as.Date("2019-01-29")
+slide_period(i, i, "day", identity, .every = 2, .origin = origin)
+
+# This can be useful for, say, monthly averages
+daily_sales <- c(2, 5, 3, 6, 9, 4)
+slide_period_dbl(daily_sales, i, "month", mean)
+
+# If you need the index, slide over and return a data frame
+sales_df <- data.frame(i = i, sales = daily_sales)
+
+slide_period_dfr(
+  sales_df,
+  sales_df$i,
+  "month",
+  ~data.frame(
+     i = max(.x$i),
+     sales = mean(.x$sales)
+   )
+)
+
 }
