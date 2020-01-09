@@ -82,7 +82,7 @@ check_block_index_type <- function(i) {
   glubort("The index must inherit from 'Date', 'POSIXct', or 'POSIXlt', not `{class}`.")
 }
 
-check_block_index_size <- function(x, i) {
+check_block_index_size <- function(x, i, x_arg = "`x`", i_arg = "`i`") {
   x_size <- vec_size(x)
   i_size <- vec_size(i)
 
@@ -90,7 +90,7 @@ check_block_index_size <- function(x, i) {
     return(invisible())
   }
 
-  glubort("The size of `x` ({x_size}) and `i` ({i_size}) must be the same.")
+  glubort("The size of {x_arg} ({x_size}) and {i_arg} ({i_size}) must be the same.")
 }
 
 check_block_index_ascending <- function(i) {

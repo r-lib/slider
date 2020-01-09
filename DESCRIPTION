@@ -53,6 +53,7 @@ Collate:
     'slide-index-common.R'
     'slide-index.R'
     'slide-package.R'
+    'slide-period.R'
     'slide.R'
     'utils.R'
     'zzz.R'
