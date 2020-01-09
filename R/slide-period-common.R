@@ -12,6 +12,8 @@ slide_period_common <- function(x,
                                 env,
                                 type) {
   check_block_index_type(i)
+  check_not_na(i, "`.i`")
+  check_ascending(i, "The `.i`-ndex")
 
   before <- check_slide_period_before(before)
   after <- check_slide_period_after(after)
