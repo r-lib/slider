@@ -53,7 +53,7 @@ relevant when \code{every > 1}.}
 \value{
 A vector fulfilling the following invariants:
 \itemize{
-\item \code{vec_size(block(x)) == unique(warp::warp_boundary(i))}
+\item \code{vec_size(block(x)) == vec_size(unique(warp::warp_boundary(i)))}
 \item \code{vec_ptype(block(x)) == list()}
 \item \code{vec_ptype(block(x)[[1]]) == vec_ptype(x)}
 }

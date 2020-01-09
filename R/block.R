@@ -36,7 +36,7 @@
 #' @return
 #' A vector fulfilling the following invariants:
 #'
-#'  * `vec_size(block(x)) == unique(warp::warp_boundary(i))`
+#'  * `vec_size(block(x)) == vec_size(unique(warp::warp_boundary(i)))`
 #'
 #'  * `vec_ptype(block(x)) == list()`
 #'
