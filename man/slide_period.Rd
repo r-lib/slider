@@ -297,6 +297,16 @@ slide_period_dfr(
    )
 )
 
+# One of the most unique features about `slide_period()` is that it is
+# aware of how far apart elements of `.i` are in the `.period` you are
+# interested in. For example, if you do a monthly slide with `i2`, selecting
+# the current month and 1 month before it, then it will recognize that
+# `2019-02-01` and `2019-04-01` are not beside each other, and it won't
+# group them together.
+i2 <- as.Date(c("2019-01-01", "2019-02-01", "2019-04-01", "2019-05-01"))
+
+slide_period(i2, i2, "month", identity, .before = 1)
+
 }
 \seealso{
 \code{\link[=block]{block()}}, \code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}
