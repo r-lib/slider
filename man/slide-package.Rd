@@ -6,8 +6,10 @@
 \alias{_PACKAGE}
 \title{slide: Sliding Window Functions}
 \description{
-Provides type stable rolling and cumulative window functions 
-    over any R data type.
+Provides type stable rolling window functions over any R data type.
+    Cumulative and expanding windows are also supported. For more advanced
+    usage, an index can be used as a secondary vector that defines how
+    sliding windows are to be created.
 }
 \seealso{
 Useful links:

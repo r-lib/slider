@@ -21,7 +21,7 @@ test_that("can work with with Date `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(hop_index(1, 1:2, 1, 1, identity), "must be the same")
+  expect_error(hop_index(1, 1:2, 1, 1, identity), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
@@ -38,7 +38,7 @@ test_that(".stops must be ascending", {
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(hop_index(integer(), integer(), integer(), integer(), ~.x), list())
-  expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), "must be the same")
+  expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), class = "slide_error_index_incompatible_size")
 })
 
 test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {

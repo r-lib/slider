@@ -21,7 +21,7 @@ test_that("defaults work with `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_index(1, 1:2, identity), "must be the same")
+  expect_error(slide_index(1, 1:2, identity), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
@@ -30,7 +30,7 @@ test_that(".i must be ascending", {
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_index(integer(), integer(), ~.x), list())
-  expect_error(slide_index(integer(), 1, ~.x), "must be the same")
+  expect_error(slide_index(integer(), 1, ~.x), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must not contain NA values", {

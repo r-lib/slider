@@ -9,8 +9,12 @@ hop_index_common <- function(x,
                              type) {
 
   x_size <- compute_size(x, type)
+  i_size <- vec_size(i)
 
-  check_index_size(x_size, i)
+  if (i_size != x_size) {
+    stop_index_incompatible_size(i_size, x_size, ".i")
+  }
+
   check_not_na(i, "`.i`")
   check_ascending(i, "The `.i`ndex")
 

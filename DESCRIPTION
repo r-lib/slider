@@ -39,6 +39,7 @@ Remotes:
     DavisVaughan/warp
 Collate: 
     'block.R'
+    'conditions.R'
     'hop-common.R'
     'hop-index-common.R'
     'hop-index.R'

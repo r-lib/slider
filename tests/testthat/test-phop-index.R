@@ -3,7 +3,7 @@ test_that("empty input returns a list, but after the index size check", {
   expect_equal(phop_index(list(integer(), 1), integer(), integer(), integer(), ~.x), list())
   expect_equal(phop_index(list(1, integer()), integer(), integer(), integer(), ~.x), list())
 
-  expect_error(phop_index(list(integer(), integer()), 1, integer(), integer(), ~.x), "must be the same")
+  expect_error(phop_index(list(integer(), integer()), 1, integer(), integer(), ~.x), class = "slide_error_index_incompatible_size")
 })
 
 test_that("completely empty input returns a list", {

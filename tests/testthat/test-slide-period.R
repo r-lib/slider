@@ -10,7 +10,7 @@ test_that("`.x` must be a vector", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_period(1, new_date(1:2), "year", identity), "must be the same")
+  expect_error(slide_period(1, new_date(1:2), "year", identity), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
@@ -19,7 +19,7 @@ test_that(".i must be ascending", {
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_period(integer(), new_date(), "year", ~.x), list())
-  expect_error(slide_period(integer(), new_date(0), "year", ~.x), "must be the same")
+  expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must not contain NA values", {
