@@ -1208,3 +1208,15 @@ test_that("slide_index() forces arguments in the same way as base R / map()", {
 test_that("stress test that we don't stack overflow (#34)", {
   expect_error(slide_index(1:1e6, 1:1e6, ~.x), NA)
 })
+
+test_that(paste0(
+            "proof that the `stops_pos < starts_pos` check is required for ",
+            "cases where we have an irregular series and ",
+            "the window is completely between values"
+          ), {
+
+  expect_equal(
+    slide_index(1:3, c(1, 3, 4), identity, .before = -1, .after = 1),
+    list(integer(), 3, integer())
+  )
+})

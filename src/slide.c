@@ -118,6 +118,7 @@ SEXP slide_common_impl(SEXP x,
     int window_stop = min(stop, size - 1);
     int window_size = window_stop - window_start + 1;
 
+    // Happens when the entire window is OOB, we take a 0-slice of `x`.
     if (window_stop < window_start) {
       window_start = 0;
       window_size = 0;
