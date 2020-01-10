@@ -1,7 +1,7 @@
 #' Slide relative to an index chunked by period
 #'
 #' @description
-#' `slide_period()` breaks up the `.i`ndex by `.period`, and then uses that
+#' `slide_period()` breaks up the `.i`-ndex by `.period`, and then uses that
 #' to define the indices to slide over `.x` with.
 #'
 #' It can be useful for, say, sliding over daily data in monthly chunks.

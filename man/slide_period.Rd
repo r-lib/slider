@@ -242,7 +242,7 @@ A vector fulfilling the following invariants:
 }
 }
 \description{
-\code{slide_period()} breaks up the \code{.i}ndex by \code{.period}, and then uses that
+\code{slide_period()} breaks up the \code{.i}-ndex by \code{.period}, and then uses that
 to define the indices to slide over \code{.x} with.
 
 It can be useful for, say, sliding over daily data in monthly chunks.
