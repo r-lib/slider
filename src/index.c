@@ -392,7 +392,7 @@ static int locate_window_starts_pos(struct index_info* index, struct range_info 
     if (index->current_start_pos == index->last_pos) {
       return index->current_start_pos;
     }
-    index->current_start_pos++;
+    ++index->current_start_pos;
   }
 
   return index->current_start_pos;
@@ -415,7 +415,7 @@ static int locate_window_stops_pos(struct index_info* index, struct range_info r
     if (index->current_stop_pos == index->last_pos) {
       return index->current_stop_pos;
     }
-    index->current_stop_pos++;
+    ++index->current_stop_pos;
   }
 
   return index->current_stop_pos - 1;
