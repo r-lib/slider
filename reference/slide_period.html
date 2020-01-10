@@ -38,7 +38,10 @@
 <meta property="og:title" content="Slide relative to an index chunked by period — slide_period" />
 <meta property="og:description" content="slide_period() breaks up the .i-ndex by .period, and then uses that
 to define the indices to slide over .x with.
-It can be useful for, say, sliding over daily data in monthly chunks." />
+It can be useful for, say, sliding over daily data in monthly chunks.
+The underlying engine for breaking up .i is warp::warp_distance().
+If you need more information about the .period types, that is the best
+place to look." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -131,6 +134,9 @@ It can be useful for, say, sliding over daily data in monthly chunks." />
     <p><code>slide_period()</code> breaks up the <code>.i</code>-ndex by <code>.period</code>, and then uses that
 to define the indices to slide over <code>.x</code> with.</p>
 <p>It can be useful for, say, sliding over daily data in monthly chunks.</p>
+<p>The underlying engine for breaking up <code>.i</code> is <code><a href='https://rdrr.io/pkg/warp/man/warp_distance.html'>warp::warp_distance()</a></code>.
+If you need more information about the <code>.period</code> types, that is the best
+place to look.</p>
     </div>
 
     <pre class="usage"><span class='fu'>slide_period</span>(
@@ -293,17 +299,17 @@ are three ways to refer to the arguments:</p><ul>
     <tr>
       <th>.every</th>
       <td><p><code>[positive integer(1)]</code></p>
-<p>The number of <code>period</code>s to group together.</p>
-<p>For example, if <code>period = "year"</code> and <code>every</code> is set to <code>2</code>, then the years
-1970 and 1971 would be placed in the same group.</p></td>
+<p>The number of periods to group together.</p>
+<p>For example, if the period was set to <code>"year"</code> with an every value of <code>2</code>,
+then the years 1970 and 1971 would be placed in the same group.</p></td>
     </tr>
     <tr>
       <th>.origin</th>
       <td><p><code>[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]</code></p>
 <p>The reference date time value. The default when left as <code>NULL</code> is the
-epoch time of <code>1970-01-01 00:00:00</code>, <em>in the time zone of <code>x</code></em>.</p>
+epoch time of <code>1970-01-01 00:00:00</code>, <em>in the time zone of the index</em>.</p>
 <p>This is generally used to define the anchor time to count from, which is
-relevant when <code>every &gt; 1</code>.</p></td>
+relevant when the every value is <code>&gt; 1</code>.</p></td>
     </tr>
     <tr>
       <th>.before, .after</th>
