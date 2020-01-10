@@ -67,7 +67,6 @@ slide_period_common <- function(x,
   }
 
   # Pad with ptype
-  ptype <- list()
   init <- vec_init(ptype, n = 1L)
 
   front <- vec_recycle(init, from - 1L)

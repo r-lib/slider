@@ -64,6 +64,24 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
   )
 })
 
+test_that("with `.complete = TRUE`, `.ptype` is used to pad", {
+  expect_equal(
+    slide_period_dbl(
+      1:3, new_date(1:3),
+      "day", ~1, .before = 1, .complete = TRUE
+    ),
+    c(NA, 1, 1)
+  )
+
+  expect_equal(
+    slide_period_vec(
+      1:3, new_date(1:3),
+      "day", ~new_date(0), .before = 1, .complete = TRUE, .ptype = new_date()
+    ),
+    new_date(c(NA, 0, 0))
+  )
+})
+
 # ------------------------------------------------------------------------------
 # suffix tests
 
