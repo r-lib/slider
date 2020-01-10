@@ -34,7 +34,8 @@ Suggests:
     xml2
 Remotes:
     r-lib/vctrs,
-    DavisVaughan/warp
+    DavisVaughan/warp,
+    r-lib/tidyselect
 Collate: 
     'block.R'
     'hop-common.R'
