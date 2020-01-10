@@ -6,6 +6,10 @@
 #'
 #' It can be useful for, say, sliding over daily data in monthly chunks.
 #'
+#' The underlying engine for breaking up `.i` is [warp::warp_distance()].
+#' If you need more information about the `.period` types, that is the best
+#' place to look.
+#'
 #' @inheritParams slide
 #' @inheritParams warp::warp_distance
 #'

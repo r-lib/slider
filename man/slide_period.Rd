@@ -167,18 +167,18 @@ This syntax allows you to create very compact anonymous functions.}
 
 \item{.every}{\verb{[positive integer(1)]}
 
-The number of \code{period}s to group together.
+The number of periods to group together.
 
-For example, if \code{period = "year"} and \code{every} is set to \code{2}, then the years
-1970 and 1971 would be placed in the same group.}
+For example, if the period was set to \code{"year"} with an every value of \code{2},
+then the years 1970 and 1971 would be placed in the same group.}
 
 \item{.origin}{\verb{[Date(1) / POSIXct(1) / POSIXlt(1) / NULL]}
 
 The reference date time value. The default when left as \code{NULL} is the
-epoch time of \verb{1970-01-01 00:00:00}, \emph{in the time zone of \code{x}}.
+epoch time of \verb{1970-01-01 00:00:00}, \emph{in the time zone of the index}.
 
 This is generally used to define the anchor time to count from, which is
-relevant when \code{every > 1}.}
+relevant when the every value is \verb{> 1}.}
 
 \item{.before, .after}{\verb{[integer(1) / Inf]}
 
@@ -246,6 +246,10 @@ A vector fulfilling the following invariants:
 to define the indices to slide over \code{.x} with.
 
 It can be useful for, say, sliding over daily data in monthly chunks.
+
+The underlying engine for breaking up \code{.i} is \code{\link[warp:warp_distance]{warp::warp_distance()}}.
+If you need more information about the \code{.period} types, that is the best
+place to look.
 }
 \examples{
 i <- as.Date("2019-01-28") + 0:5
