@@ -34,8 +34,8 @@ test_that("empty input returns a list, but after the index size check", {
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_index(1:2, c(1, NA), identity), "found at location[(]s[)]: 2")
-  expect_error(slide_index(1:2, c(NA, 1), identity), "found at location[(]s[)]: 1")
+  expect_error(slide_index(1:2, c(1, NA), identity), class = "slide_error_index_cannot_be_na")
+  expect_error(slide_index(1:2, c(NA, 1), identity), class = "slide_error_index_cannot_be_na")
 })
 
 # ------------------------------------------------------------------------------

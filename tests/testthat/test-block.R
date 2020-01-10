@@ -22,7 +22,7 @@ test_that("works with empty input", {
 })
 
 test_that("`i` can not have `NA` values", {
-  expect_error(block(1:2, new_date(c(0, NA_real_))), "cannot have `NA` values")
+  expect_error(block(1:2, new_date(c(0, NA_real_))), class = "slide_error_index_cannot_be_na")
 })
 
 test_that("type of `i` is validated", {

@@ -23,8 +23,8 @@ test_that("empty input returns a list, but after the index size check", {
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), "found at location[(]s[)]: 2")
-  expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), "found at location[(]s[)]: 1")
+  expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slide_error_index_cannot_be_na")
+  expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slide_error_index_cannot_be_na")
 })
 
 # ------------------------------------------------------------------------------

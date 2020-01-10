@@ -1,5 +1,46 @@
+# TODO - There are other things besides the index that we restrict from being
+# NA. Do they get their own error types?
+
+# TODO - Test individual stop functions with verify_output()
+
+# ------------------------------------------------------------------------------
+
+check_index_cannot_be_na <- function(i, i_arg = "i") {
+  na_indicators <- vec_equal_na(i)
+
+  if (any(na_indicators)) {
+    na_locations <- which(na_indicators)
+    stop_index_cannot_be_na(na_locations, i_arg)
+  }
+
+  invisible(i)
+}
+
+stop_index_cannot_be_na <- function(locations, i_arg = "i") {
+  stop_index(
+    locations = locations,
+    i_arg = i_arg,
+    class = "slide_error_index_cannot_be_na"
+  )
+}
+
+#' @export
+cnd_header.slide_error_index_cannot_be_na <- function(cnd, ...) {
+  glue_data(cnd, "`{i_arg}` cannot be `NA`.")
+}
+
+#' @export
+cnd_body.slide_error_index_cannot_be_na <- function(cnd, ...) {
+  glue_data_bullets(
+    cnd,
+    i = "It is `NA` at locations: {collapse_locations(locations)}."
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 stop_index_incompatible_size <- function(i_size, size, i_arg = "i") {
-  stop_slide(
+  stop_index(
     i_size = i_size,
     size = size,
     i_arg = i_arg,
@@ -19,11 +60,21 @@ cnd_body.slide_error_index_incompatible_size <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
+stop_index <- function(message = NULL, class = character(), ...) {
+  stop_slide(message, class = c(class, "slide_error_index"), ...)
+}
+
+# ------------------------------------------------------------------------------
+
 stop_slide <- function(message = NULL, class = character(), ...) {
   abort(message, class = c(class, "slide_error"), ...)
 }
 
 # ------------------------------------------------------------------------------
+
+collapse_locations <- function(locations) {
+  glue_collapse(locations, sep = ", ", width = 30L)
+}
 
 glue_data_bullets <- function (.data, ..., .env = caller_env()) {
   glue_data_env <- function(...) glue_data(.data, ..., .envir = .env)

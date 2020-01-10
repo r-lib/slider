@@ -73,7 +73,7 @@ block <- function(x, i, period, every = 1L, origin = NULL) {
 
   check_block_index_type(i)
   check_block_index_size(x, i)
-  check_not_na(i, "`i`")
+  check_index_cannot_be_na(i, "i")
   check_block_index_ascending(i)
 
   boundaries <- warp_boundary(i, period = period, every = every, origin = origin)

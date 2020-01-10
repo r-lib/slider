@@ -51,8 +51,8 @@ test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes a
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(hop_index(1:2, c(1, NA), 1:2, 1:2, identity), "found at location[(]s[)]: 2")
-  expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), "found at location[(]s[)]: 1")
+  expect_error(hop_index(1:2, c(1, NA), 1:2, 1:2, identity), class = "slide_error_index_cannot_be_na")
+  expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), class = "slide_error_index_cannot_be_na")
 })
 
 test_that(".starts must not contain NA values", {
