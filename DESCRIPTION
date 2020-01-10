@@ -8,8 +8,10 @@ Authors@R:
              email = "davis@rstudio.com"),
       person(given = "RStudio",
              role = "cph"))
-Description: Provides type stable rolling and cumulative window functions 
-    over any R data type.
+Description: Provides type stable rolling window functions over any R data type.
+    Cumulative and expanding windows are also supported. For more advanced
+    usage, an index can be used as a secondary vector that defines how
+    sliding windows are to be created.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
