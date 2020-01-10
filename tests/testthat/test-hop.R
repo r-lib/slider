@@ -24,7 +24,7 @@ test_that("empty `.x`, but size `n > 0` `.starts` and `.stops` returns size `n` 
 
 test_that("empty `.x`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
   expect_error(hop(integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
-  expect_error(hop(integer(), 1, "x", ~.x), class = "vctrs_error_subscript_bad_type")
+  expect_error(hop(integer(), 1, "x", ~.x), "must be a numeric vector")
 })
 
 test_that(".starts must not contain NA values", {
@@ -83,6 +83,10 @@ test_that("out of bounds .starts/.stops result in size-0 slices", {
     hop(1:2, c(3, 4), c(4, 6), ~.x),
     list(integer(), integer())
   )
+})
+
+test_that("negative / 0 out of bounds .starts/.stops result in size-0 slices", {
+  skip("until `num_as_location(oob = 'ignore')` exists")
 
   expect_equal(
     hop(1:2, c(-1, 4), c(0, 6), ~.x),
@@ -107,6 +111,6 @@ test_that("duplicated .starts/.stops pairs are allowed", {
 })
 
 test_that("`.starts` and `.stops` must be integerish", {
-  expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_bad_type")
-  expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_bad_type")
+  expect_error(hop(1, "x", 1, identity), "must be a numeric vector")
+  expect_error(hop(1, 1, "x", identity), "must be a numeric vector")
 })

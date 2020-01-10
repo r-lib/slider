@@ -16,7 +16,7 @@ LazyData: true
 Imports: 
     glue,
     rlang (>= 0.4.1),
-    vctrs (>= 0.2.99.9000),
+    vctrs (>= 0.2.99.9002),
     warp
 LinkingTo:
     vctrs
