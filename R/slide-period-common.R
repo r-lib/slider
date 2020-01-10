@@ -15,8 +15,11 @@ slide_period_common <- function(x,
   check_not_na(i, "`.i`")
   check_ascending(i, "The `.i`-ndex")
 
-  before <- check_slide_period_before(before)
-  after <- check_slide_period_after(after)
+  before_unbounded <- is_unbounded(before)
+  after_unbounded <- is_unbounded(after)
+
+  before <- check_slide_period_before(before, before_unbounded)
+  after <- check_slide_period_after(after, after_unbounded)
   complete <- check_slide_period_complete(complete)
 
   groups <- warp_distance(
@@ -36,16 +39,14 @@ slide_period_common <- function(x,
     first <- unique[[1]]
     last <- unique[[n]]
 
-    # TODO Eventually rewrite in C
-    from <- compute_from(starts, first, n, before)
-    to <- compute_to(stops, last, n, after)
+    from <- compute_from(starts, first, n, before_unbounded)
+    to <- compute_to(stops, last, n, after_unbounded)
 
     # Only slice if we have to
-    # could use compact_seq() at C level to slice here
-    # would have to check for `from>to->int()`
+    # Important to use seq2()! Could have `from > to`
     if (from != 1L || to != n) {
-      starts <- starts[rlang::seq2(from, to)]
-      stops <- stops[rlang::seq2(from, to)]
+      starts <- starts[seq2(from, to)]
+      stops <- stops[seq2(from, to)]
     }
   }
 
@@ -77,46 +78,18 @@ slide_period_common <- function(x,
   out
 }
 
-compute_from <- function(starts, first, n, before) {
-  from <- 1L
-
-  if (is.infinite(before)) {
-    return(from)
-  }
-
-  for (i in seq_len(n)) {
-    if (first > starts[[i]]) {
-      from <- from + 1L
-    } else {
-      break
-    }
-  }
-
-  from
+compute_from <- function(starts, first, n, before_unbounded) {
+  .Call(slide_compute_from, starts, first, n, before_unbounded)
 }
 
-compute_to <- function(stops, last, n, after) {
-  to <- n
-
-  if (is.infinite(after)) {
-    return(to)
-  }
-
-  for (i in rev(seq_len(n))) {
-    if (last < stops[[i]]) {
-      to <- to - 1L
-    } else {
-      break
-    }
-  }
-
-  to
+compute_to <- function(stops, last, n, after_unbounded) {
+  .Call(slide_compute_to, stops, last, n, after_unbounded)
 }
 
-check_slide_period_before <- function(x) {
+check_slide_period_before <- function(x, unbounded) {
   vec_assert(x, size = 1L, arg = ".before")
 
-  if (is.infinite(x) && x > 0) {
+  if (unbounded) {
     return(x)
   }
 
@@ -129,10 +102,10 @@ check_slide_period_before <- function(x) {
   x
 }
 
-check_slide_period_after <- function(x) {
+check_slide_period_after <- function(x, unbounded) {
   vec_assert(x, size = 1L, arg = ".after")
 
-  if (is.infinite(x) && x > 0) {
+  if (unbounded) {
     return(x)
   }
 
