@@ -72,7 +72,7 @@ result with a size that is different from .x." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slide</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -179,20 +179,24 @@ result with a size that is different from <code>.x</code>.</p>
     </tr>
     <tr>
       <th>.starts, .stops</th>
-      <td><p><code>[vector]</code></p>
+      <td><p><code>[integer]</code></p>
 <p>Vectors of boundary locations that make up the windows to bucket <code>.x</code> with.
 Both <code>.starts</code> and <code>.stops</code> will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
-integer locations along <code>.x</code>.</p></td>
+integer locations along <code>.x</code>, but out-of-bounds values are allowed.</p></td>
     </tr>
     <tr>
       <th>.f</th>
       <td><p><code>[function / formula]</code></p>
 <p>If a <strong>function</strong>, it is used as is.</p>
-<p>If a <strong>formula</strong>, e.g. <code>~ .x + 2</code>, it is converted to a function with up
-to two arguments: <code>.x</code> (single argument) or <code>.x</code> and <code>.y</code> (two arguments).
-The <code>.</code> placeholder can be used instead of <code>.x</code>. This allows you to
-create very compact anonymous functions with up to two inputs.</p></td>
+<p>If a <strong>formula</strong>, e.g. <code>~ .x + 2</code>, it is converted to a function. There
+are three ways to refer to the arguments:</p><ul>
+<li><p>For a single argument function, use <code>.</code></p></li>
+<li><p>For a two argument function, use <code>.x</code> and <code>.y</code></p></li>
+<li><p>For more arguments, use <code>..1</code>, <code>..2</code>, <code>..3</code> etc</p></li>
+</ul>
+
+<p>This syntax allows you to create very compact anonymous functions.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -200,7 +204,7 @@ create very compact anonymous functions with up to two inputs.</p></td>
     </tr>
     <tr>
       <th>.ptype</th>
-      <td><p><code>[vector]</code></p>
+      <td><p><code>[vector(0)]</code></p>
 <p>The prototype corresponding to the type of the output. Defaults to
 a <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></td>
     </tr>
@@ -233,46 +237,9 @@ of length 1 will be recycled appropriately.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>hop()</code> is very close to being a faster version of:</p><pre>map2(
-  .starts,
-  .stops,
-  function(start, stop) {
-    x_slice &lt;- vec_slice(.x, start:stop)
-    .f(x_slice, ...)
-  }
-)
-</pre>
-
-<p>Because of this, <code><a href='hop_index.html'>hop_index()</a></code> is often the more useful function. <code>hop()</code>
-mainly exists for API completeness.</p>
-<p>The main difference is that the start and stop values make up ranges of
-<em>possible</em> locations along <code>.x</code>, and it is not enforced that these locations
-index into <code>.x</code>. As an example, with <code>hop()</code> you can do the following, which
-would be an error with <code>vec_slice()</code> because <code>0L</code> is out of bounds.</p><pre>hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
-#&gt; [[1]]
-#&gt; [1] "a"
-</pre>
-
-<p><code>hop()</code> allows these out of bounds values to be fully compatible with
-<code><a href='slide.html'>slide()</a></code>. It is always possible to construct a <code>hop()</code> call from a <code><a href='slide.html'>slide()</a></code>
-call. For example, the following are equivalent:</p><pre>slide(1:2, ~.x, .before = 1)
-
-hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
-
-#&gt; [[1]]
-#&gt; [1] 1
-#&gt;
-#&gt; [[2]]
-#&gt; [1] 1 2
-</pre>
-
-    <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
-
-    
-
-
+    <p>A vector fulfilling the following invariants:</p>
 <h3><code>hop()</code></h3>
 
 <ul>
@@ -292,6 +259,42 @@ hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
 
 
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>hop()</code> is very close to being a faster version of:</p><pre>map2(
+  .starts,
+  .stops,
+  function(start, stop) {
+    x_slice &lt;- vec_slice(.x, start:stop)
+    .f(x_slice, ...)
+  }
+)
+</pre>
+
+<p>Because of this, <code><a href='hop_index.html'>hop_index()</a></code> is often the more useful function. <code>hop()</code>
+mainly exists for API completeness.</p>
+<p>The main difference is that the start and stop values make up ranges of
+<em>possible</em> locations along <code>.x</code>, and it is not enforced that these locations
+actually exist along <code>.x</code>. As an example, with <code>hop()</code> you can do the
+following, which would be an error with <code>vec_slice()</code> because <code>0L</code> is
+out of bounds.</p><pre>hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
+#&gt; [[1]]
+#&gt; [1] "a"
+</pre>
+
+<p><code>hop()</code> allows these out of bounds values to be fully compatible with
+<code><a href='slide.html'>slide()</a></code>. It is always possible to construct a <code>hop()</code> call from a <code><a href='slide.html'>slide()</a></code>
+call. For example, the following are equivalent:</p><pre>slide(1:2, ~.x, .before = 1)
+
+hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
+
+#&gt; [[1]]
+#&gt; [1] 1
+#&gt;
+#&gt; [[2]]
+#&gt; [1] 1 2
+</pre>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='hop2.html'>hop2()</a></code>, <code><a href='hop_index.html'>hop_index()</a></code>, <code><a href='slide.html'>slide()</a></code></p></div>
@@ -308,7 +311,7 @@ hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
 <span class='co'># to the size of `.x`.</span>
 <span class='fu'>hop</span>(
   <span class='no'>mtcars</span>,
-  <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>),
+  <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fl'>3</span>),
   <span class='kw'>.stops</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>6</span>),
   ~<span class='no'>.x</span>
 )</div><div class='output co'>#&gt; [[1]]
@@ -329,8 +332,8 @@ hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
-      <li><a href="#invariants">Invariants</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>

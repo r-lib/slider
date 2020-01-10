@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Slide over an index — slide_index • slide</title>
+<title>Slide relative to an index — slide_index • slide</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,10 @@
 
 
 
-<meta property="og:title" content="Slide over an index — slide_index" />
+<meta property="og:title" content="Slide relative to an index — slide_index" />
 <meta property="og:description" content="slide_index() is similar to slide(), but allows a secondary .i-ndex
-vector to be provided. This is often useful in business calculations, when
+vector to be provided.
+This is often useful in business calculations, when
 you want to compute a rolling computation looking &quot;3 months back&quot;, which
 is approximately but not equivalent to, 3 * 30 days. slide_index() allows
 for these irregular window sizes." />
@@ -73,7 +74,7 @@ for these irregular window sizes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slide</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -124,14 +125,15 @@ for these irregular window sizes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Slide over an index</h1>
+    <h1>Slide relative to an index</h1>
     <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/slide/blob/master/R/slide-index.R'><code>R/slide-index.R</code></a></small>
     <div class="hidden name"><code>slide_index.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p><code>slide_index()</code> is similar to <code><a href='slide.html'>slide()</a></code>, but allows a secondary <code>.i</code>-ndex
-vector to be provided. This is often useful in business calculations, when
+vector to be provided.</p>
+<p>This is often useful in business calculations, when
 you want to compute a rolling computation looking "3 months back", which
 is approximately but not equivalent to, 3 * 30 days. <code>slide_index()</code> allows
 for these irregular window sizes.</p>
@@ -197,55 +199,55 @@ for these irregular window sizes.</p>
       <td><p><code>[vector]</code></p>
 <p>The index vector that determines the window sizes. The lower bound
 of the window range will be computed as <code>.i - .before</code>, and the upper
-bound will be <code>.i + .after</code>. It is faily common to supply a date vector
-as the index, but not required.</p></td>
+bound as <code>.i + .after</code>. It is faily common to supply a date vector
+as the index, but not required.</p>
+<p>There are 3 restrictions on the index:</p><ul>
+<li><p>The size of the index must match the size of <code>.x</code>, neither will
+be recycled.</p></li>
+<li><p>The index must be an <em>increasing</em> vector, but duplicate values
+are allowed.</p></li>
+<li><p>The index cannot have missing values.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>.f</th>
       <td><p><code>[function / formula]</code></p>
 <p>If a <strong>function</strong>, it is used as is.</p>
-<p>If a <strong>formula</strong>, e.g. <code>~ .x + 2</code>, it is converted to a function with up
-to two arguments: <code>.x</code> (single argument) or <code>.x</code> and <code>.y</code> (two arguments).
-The <code>.</code> placeholder can be used instead of <code>.x</code>. This allows you to
-create very compact anonymous functions with up to two inputs.</p></td>
+<p>If a <strong>formula</strong>, e.g. <code>~ .x + 2</code>, it is converted to a function. There
+are three ways to refer to the arguments:</p><ul>
+<li><p>For a single argument function, use <code>.</code></p></li>
+<li><p>For a two argument function, use <code>.x</code> and <code>.y</code></p></li>
+<li><p>For more arguments, use <code>..1</code>, <code>..2</code>, <code>..3</code> etc</p></li>
+</ul>
+
+<p>This syntax allows you to create very compact anonymous functions.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Additional arguments passed on to the mapped function.</p></td>
     </tr>
     <tr>
-      <th>.before</th>
+      <th>.before, .after</th>
       <td><p><code>[vector(1) / Inf]</code></p>
-<p>The number of values <em>before</em> the current element of <code>.i</code> to include in the
-sliding window. Set to <code>Inf</code> to select all elements before the
-current element, constructing a cumulative window. A negative value is
-allowed, and allows you to "look forward" as well.</p>
-<p>For <code>slide_index()</code>, this can be any object that can be subtracted from
-<code>.i</code> with <code>-</code>. One common use case is to set this to a lubridate period,
-such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>.after</th>
-      <td><p><code>[vector(1) / Inf]</code></p>
-<p>The number of values <em>after</em> the current element of <code>.i</code> to include in the
-sliding window. Set to <code>Inf</code> to select all elements after the
-current position, constructing the reverse of a cumulative window, where
-you start with as many elements as possible and decrease the amount as you
-move through <code>.x</code>. A negative value is allowed, and allows you to "look
-backward" as well.</p>
-<p>For <code>slide_index()</code>, this can be any object that can be added to
-<code>.i</code> with <code>+</code>. One common use case is to set this to a lubridate period,
-such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></td>
+<p>The number of values before or after the current element of <code>.i</code> to
+include in the sliding window. Set to <code>Inf</code> to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p>
+<p>Any object that can be added or subtracted from <code>.i</code> with <code>+</code> and <code>-</code>
+can be used. For example, a lubridate period, such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
+<p>The ranges that result from computing <code>.i - .before</code> and <code>.i + .after</code>
+have the same 3 restrictions as <code>.i</code> itself.</p></td>
     </tr>
     <tr>
       <th>.complete</th>
       <td><p><code>[logical(1)]</code></p>
-<p>Should the sliding be restricted to complete windows only? If <code>FALSE</code>,
+<p>Should <code>.f</code> be evaluated on complete windows only? If <code>FALSE</code>,
 the default, then partial computations will be allowed.</p></td>
     </tr>
     <tr>
       <th>.ptype</th>
-      <td><p><code>[vector]</code></p>
+      <td><p><code>[vector(0)]</code></p>
 <p>The prototype corresponding to the type of the output. Defaults to
 a <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></td>
     </tr>
@@ -278,30 +280,9 @@ of length 1 will be recycled appropriately.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="the-i-ndex"><a class="anchor" href="#the-i-ndex"></a>The <code>.i</code>-ndex</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-
-<p>There are 3 restrictions on <code>.i</code>:</p><ul>
-<li><p>The size of <code>.i</code> must match the size of <code>.x</code>, <code>.i</code> will not be recycled.</p></li>
-<li><p><code>.i</code> must be an <em>increasing</em> vector, but duplicate values
-are allowed.</p></li>
-<li><p><code>.i</code> is not allowed to have missing values.</p></li>
-</ul>
-
-    <h2 class="hasAnchor" id="-before-and-after"><a class="anchor" href="#-before-and-after"></a><code>.before</code> and <code>.after</code></h2>
-
-    
-
-
-<p>The ranges computed from <code>.i - .before</code> and <code>.i + .after</code> have the same
-restrictions as the three mentioned above for <code>.i</code>.</p>
-    <h2 class="hasAnchor" id="invariants"><a class="anchor" href="#invariants"></a>Invariants</h2>
-
-    
-
-
+    <p>A vector fulfilling the following invariants:</p>
 <h3><code>slide_index()</code></h3>
 
 <ul>
@@ -479,9 +460,7 @@ restrictions as the three mentioned above for <code>.i</code>.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#the-i-ndex">The <code>.i</code>-ndex</a></li>
-      <li><a href="#-before-and-after"><code>.before</code> and <code>.after</code></a></li>
-      <li><a href="#invariants">Invariants</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>

@@ -36,10 +36,10 @@
 
 
 <meta property="og:title" content="Break a vector into blocks — block" />
-<meta property="og:description" content="block() splits x into blocks defined by i, a date time index. For
-example, it can split x into monthly or yearly blocks. Combined with
-purrr::map() or lapply(), it is one way to iterate over a vector in
-&quot;time blocks&quot;." />
+<meta property="og:description" content="block() breaks up the i-ndex by period, and then uses that to define
+the indices to chop x with.
+For example, it can split x into monthly or yearly blocks. Combined with
+purrr::map(), it is a way to iterate over a vector in &quot;time blocks&quot;." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -72,7 +72,7 @@ purrr::map() or lapply(), it is one way to iterate over a vector in
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slide</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -129,10 +129,10 @@ purrr::map() or lapply(), it is one way to iterate over a vector in
     </div>
 
     <div class="ref-description">
-    <p><code>block()</code> splits <code>x</code> into blocks defined by <code>i</code>, a date time index. For
-example, it can split <code>x</code> into monthly or yearly blocks. Combined with
-<code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code> or <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code>, it is one way to iterate over a vector in
-"time blocks".</p>
+    <p><code>block()</code> breaks up the <code>i</code>-ndex by <code>period</code>, and then uses that to define
+the indices to chop <code>x</code> with.</p>
+<p>For example, it can split <code>x</code> into monthly or yearly blocks. Combined with
+<code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, it is a way to iterate over a vector in "time blocks".</p>
     </div>
 
     <pre class="usage"><span class='fu'>block</span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>period</span>, <span class='kw'>every</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -148,11 +148,13 @@ example, it can split <code>x</code> into monthly or yearly blocks. Combined wit
     <tr>
       <th>i</th>
       <td><p><code>[Date / POSIXct / POSIXlt]</code></p>
-<p>The datetime index to block by. There are 3 restrictions on <code>i</code>:</p><ul>
-<li><p>The size of <code>i</code> must match the size of <code>x</code>, <code>i</code> will not be recycled.</p></li>
-<li><p><code>i</code> must be an <em>increasing</em> vector, but duplicate values
+<p>The datetime index to block by.</p>
+<p>There are 3 restrictions on the index:</p><ul>
+<li><p>The size of the index must match the size of <code>x</code>, neither will
+be recycled.</p></li>
+<li><p>The index must be an <em>increasing</em> vector, but duplicate values
 are allowed.</p></li>
-<li><p><code>i</code> is not allowed to have missing values.</p></li>
+<li><p>The index cannot have missing values.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -185,14 +187,20 @@ relevant when <code>every &gt; 1</code>.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing elements of type <code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype.html'>vctrs::vec_ptype(x)</a></code>. The size of the
-output is identical to the number of unique period groups as determined
-by <code><a href='https://rdrr.io/pkg/warp/man/warp_boundary.html'>warp::warp_boundary()</a></code>.</p>
+    <p>A vector fulfilling the following invariants:</p><ul>
+<li><p><code>vec_size(block(x)) == vec_size(unique(warp::warp_boundary(i)))</code></p></li>
+<li><p><code>vec_ptype(block(x)) == list()</code></p></li>
+<li><p><code>vec_ptype(block(x)[[1]]) == vec_ptype(x)</code></p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>block()</code> determines the indices to block by with <code><a href='https://rdrr.io/pkg/warp/man/warp_boundary.html'>warp::warp_boundary()</a></code>,
 and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_chop.html'>vctrs::vec_chop()</a></code>.</p>
 <p>Like <code><a href='slide.html'>slide()</a></code>, <code>block()</code> splits data frame <code>x</code> values row wise.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='slide_period.html'>slide_period()</a></code>, <code><a href='slide.html'>slide()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>6</span>
@@ -240,7 +248,8 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
 #&gt; 
 #&gt; [[2]]
 #&gt; [1] "2019-02-01"
-#&gt; </div></pre>
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -248,6 +257,7 @@ and splits <code>x</code> by those indices using <code><a href='https://rdrr.io/
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
