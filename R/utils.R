@@ -7,7 +7,7 @@ collapse_and_trim <- function(x) {
 }
 
 is_unbounded <- function(x) {
-  is.infinite(x) && x == Inf
+  is.infinite(x) & x == Inf
 }
 
 check_all_size_one <- function(out) {
