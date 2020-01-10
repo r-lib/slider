@@ -201,6 +201,24 @@ test_that("`.complete` works", {
   )
 })
 
+test_that(paste0(
+            "proof that we need to be careful about slicing `starts` and `stops` ",
+            "when `.complete = TRUE` if we are completely OOB"
+          ), {
+
+  expect_equal(
+    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 4, .after = -4, .complete = TRUE),
+    list(NULL, NULL, NULL)
+  )
+})
+
+test_that("works when the window is between values and `.complete = TRUE`", {
+  expect_equal(
+    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 1, .after = -1, .complete = TRUE),
+    list(NULL, integer(), 2)
+  )
+})
+
 test_that("`.complete` cannot be NA", {
   expect_error(
     slide_period(1, new_date(0), "year", identity, .complete = NA),
@@ -219,6 +237,23 @@ test_that("error if .complete is NULL", {
   expect_error(
     slide_period(1, new_date(0), "year", identity, .complete = NULL),
     class = "vctrs_error_scalar_type"
+  )
+})
+
+# ------------------------------------------------------------------------------
+# misc
+
+test_that("being completely OOB returns 0-slices of `x`", {
+  expect_equal(
+    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 4, .after = -4),
+    list(integer(), integer(), integer())
+  )
+})
+
+test_that("having a window completely between values returns 0-slices of `x`", {
+  expect_equal(
+    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 1, .after = -1),
+    list(integer(), integer(), 2)
   )
 })
 
