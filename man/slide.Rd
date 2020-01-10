@@ -7,7 +7,6 @@
 \alias{slide_int}
 \alias{slide_lgl}
 \alias{slide_chr}
-\alias{slide_raw}
 \alias{slide_dfr}
 \alias{slide_dfc}
 \title{Slide}
@@ -56,16 +55,6 @@ slide_lgl(
 )
 
 slide_chr(
-  .x,
-  .f,
-  ...,
-  .before = 0L,
-  .after = 0L,
-  .step = 1L,
-  .complete = FALSE
-)
-
-slide_raw(
   .x,
   .f,
   ...,

@@ -152,25 +152,6 @@ phop_index_chr <- function(.l,
 
 #' @rdname hop_index2
 #' @export
-phop_index_raw <- function(.l,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...) {
-  phop_index_vec(
-    .l,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = raw()
-  )
-}
-
-#' @rdname hop_index2
-#' @export
 phop_index_dfr <- function(.l,
                            .i,
                            .starts,

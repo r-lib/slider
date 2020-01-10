@@ -165,27 +165,6 @@ pslide_index_chr <- function(.l,
   )
 }
 
-#' @rdname slide_index2
-#' @export
-pslide_index_raw <- function(.l,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
-  pslide_index_vec(
-    .l,
-    .i,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = raw()
-  )
-}
-
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide_index2
 #' @export

@@ -99,10 +99,6 @@ test_that("slide_period_lgl() can coerce", {
   expect_equal(slide_period_lgl(1, new_date(0), "day", ~.x), TRUE)
 })
 
-test_that("slide_period_raw() works", {
-  expect_equal(slide_period_raw(raw(1), new_date(0), "day", ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

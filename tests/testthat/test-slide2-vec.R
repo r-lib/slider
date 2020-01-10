@@ -56,10 +56,6 @@ test_that("slide2_lgl() can coerce", {
   expect_equivalent(slide2_lgl(1, 0, ~.x + .y), TRUE)
 })
 
-test_that("slide2_raw() works", {
-  expect_equivalent(slide2_raw(raw(1), 1, ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

@@ -227,23 +227,6 @@ hop_chr <- function(.x,
 
 #' @rdname hop
 #' @export
-hop_raw <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...) {
-  hop_vec(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = raw()
-  )
-}
-
-#' @rdname hop
-#' @export
 hop_dfr <- function(.x,
                     .starts,
                     .stops,

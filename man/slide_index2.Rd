@@ -7,7 +7,6 @@
 \alias{slide_index2_int}
 \alias{slide_index2_lgl}
 \alias{slide_index2_chr}
-\alias{slide_index2_raw}
 \alias{slide_index2_dfr}
 \alias{slide_index2_dfc}
 \alias{pslide_index}
@@ -16,7 +15,6 @@
 \alias{pslide_index_int}
 \alias{pslide_index_lgl}
 \alias{pslide_index_chr}
-\alias{pslide_index_raw}
 \alias{pslide_index_dfr}
 \alias{pslide_index_dfc}
 \title{Slide along multiples inputs simultaneously relative to an index}
@@ -79,17 +77,6 @@ slide_index2_chr(
   .complete = FALSE
 )
 
-slide_index2_raw(
-  .x,
-  .y,
-  .i,
-  .f,
-  ...,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
-)
-
 slide_index2_dfr(
   .x,
   .y,
@@ -136,8 +123,6 @@ pslide_index_int(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 pslide_index_lgl(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
 pslide_index_chr(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
-
-pslide_index_raw(.l, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
 pslide_index_dfr(
   .l,

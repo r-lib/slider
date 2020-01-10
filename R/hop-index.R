@@ -237,25 +237,6 @@ hop_index_chr <- function(.x,
 
 #' @rdname hop_index
 #' @export
-hop_index_raw <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
-  hop_index_vec(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = raw()
-  )
-}
-
-#' @rdname hop_index
-#' @export
 hop_index_dfr <- function(.x,
                           .i,
                           .starts,

@@ -7,7 +7,6 @@
 \alias{hop_index2_int}
 \alias{hop_index2_lgl}
 \alias{hop_index2_chr}
-\alias{hop_index2_raw}
 \alias{hop_index2_dfr}
 \alias{hop_index2_dfc}
 \alias{phop_index}
@@ -16,7 +15,6 @@
 \alias{phop_index_int}
 \alias{phop_index_lgl}
 \alias{phop_index_chr}
-\alias{phop_index_raw}
 \alias{phop_index_dfr}
 \alias{phop_index_dfc}
 \title{Hop along multiple inputs simultaneously relative to an index}
@@ -32,8 +30,6 @@ hop_index2_int(.x, .y, .i, .starts, .stops, .f, ...)
 hop_index2_lgl(.x, .y, .i, .starts, .stops, .f, ...)
 
 hop_index2_chr(.x, .y, .i, .starts, .stops, .f, ...)
-
-hop_index2_raw(.x, .y, .i, .starts, .stops, .f, ...)
 
 hop_index2_dfr(
   .x,
@@ -70,8 +66,6 @@ phop_index_int(.l, .i, .starts, .stops, .f, ...)
 phop_index_lgl(.l, .i, .starts, .stops, .f, ...)
 
 phop_index_chr(.l, .i, .starts, .stops, .f, ...)
-
-phop_index_raw(.l, .i, .starts, .stops, .f, ...)
 
 phop_index_dfr(
   .l,

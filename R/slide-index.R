@@ -275,27 +275,6 @@ slide_index_chr <- function(.x,
   )
 }
 
-#' @rdname slide_index
-#' @export
-slide_index_raw <- function(.x,
-                            .i,
-                            .f,
-                            ...,
-                            .before = 0L,
-                            .after = 0L,
-                            .complete = FALSE) {
-  slide_index_vec(
-    .x,
-    .i,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = raw()
-  )
-}
-
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide_index
 #' @export

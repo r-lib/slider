@@ -305,33 +305,6 @@ slide_period_chr <- function(.x,
 
 #' @rdname slide_period
 #' @export
-slide_period_raw <- function(.x,
-                             .i,
-                             .period,
-                             .f,
-                             ...,
-                             .every = 1L,
-                             .origin = NULL,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
-  slide_period_vec(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = raw()
-  )
-}
-
-#' @rdname slide_period
-#' @export
 slide_period_dfr <- function(.x,
                              .i,
                              .period,

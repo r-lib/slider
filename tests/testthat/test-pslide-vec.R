@@ -56,10 +56,6 @@ test_that("pslide_lgl() can coerce", {
   expect_equivalent(pslide_lgl(list(1, 0), ~.x + .y), TRUE)
 })
 
-test_that("pslide_raw() works", {
-  expect_equivalent(pslide_raw(list(raw(1), 1), ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

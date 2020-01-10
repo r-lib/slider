@@ -165,27 +165,6 @@ pslide_chr <- function(.l,
   )
 }
 
-#' @rdname slide2
-#' @export
-pslide_raw <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
-  pslide_vec(
-    .l,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .complete = .complete,
-    .ptype = raw()
-  )
-}
-
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide2
 #' @export

@@ -137,23 +137,6 @@ phop_chr <- function(.l,
 
 #' @rdname hop2
 #' @export
-phop_raw <- function(.l,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...) {
-  phop_vec(
-    .l,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = raw()
-  )
-}
-
-#' @rdname hop2
-#' @export
 phop_dfr <- function(.l,
                      .starts,
                      .stops,

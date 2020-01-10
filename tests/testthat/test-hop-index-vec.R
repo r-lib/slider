@@ -166,10 +166,6 @@ test_that("hop_index_lgl() can coerce", {
   expect_identical(hop_index_lgl(1, 1, 1, 1, ~.x), TRUE)
 })
 
-test_that("hop_index_raw() works", {
-  expect_identical(hop_index_raw(raw(1), 1, 1, 1, ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

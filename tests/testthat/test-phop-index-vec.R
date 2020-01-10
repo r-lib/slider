@@ -68,10 +68,6 @@ test_that("phop_index_lgl() can coerce", {
   expect_equivalent(phop_index_lgl(list(1, 0), 1, 1, 1, ~.x + .y), TRUE)
 })
 
-test_that("phop_index_raw() works", {
-  expect_equivalent(phop_index_raw(list(raw(1), 1), 1, 1, 1, ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

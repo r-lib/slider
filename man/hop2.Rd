@@ -7,7 +7,6 @@
 \alias{hop2_int}
 \alias{hop2_lgl}
 \alias{hop2_chr}
-\alias{hop2_raw}
 \alias{hop2_dfr}
 \alias{hop2_dfc}
 \alias{phop}
@@ -16,7 +15,6 @@
 \alias{phop_int}
 \alias{phop_lgl}
 \alias{phop_chr}
-\alias{phop_raw}
 \alias{phop_dfr}
 \alias{phop_dfc}
 \title{Hop along multiple inputs simultaneously}
@@ -32,8 +30,6 @@ hop2_int(.x, .y, .starts, .stops, .f, ...)
 hop2_lgl(.x, .y, .starts, .stops, .f, ...)
 
 hop2_chr(.x, .y, .starts, .stops, .f, ...)
-
-hop2_raw(.x, .y, .starts, .stops, .f, ...)
 
 hop2_dfr(
   .x,
@@ -68,8 +64,6 @@ phop_int(.l, .starts, .stops, .f, ...)
 phop_lgl(.l, .starts, .stops, .f, ...)
 
 phop_chr(.l, .starts, .stops, .f, ...)
-
-phop_raw(.l, .starts, .stops, .f, ...)
 
 phop_dfr(
   .l,

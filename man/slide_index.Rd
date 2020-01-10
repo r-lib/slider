@@ -7,7 +7,6 @@
 \alias{slide_index_int}
 \alias{slide_index_lgl}
 \alias{slide_index_chr}
-\alias{slide_index_raw}
 \alias{slide_index_dfr}
 \alias{slide_index_dfc}
 \title{Slide relative to an index}
@@ -32,8 +31,6 @@ slide_index_int(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 slide_index_lgl(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
 slide_index_chr(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
-
-slide_index_raw(.x, .i, .f, ..., .before = 0L, .after = 0L, .complete = FALSE)
 
 slide_index_dfr(
   .x,

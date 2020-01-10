@@ -7,7 +7,6 @@
 \alias{hop_index_int}
 \alias{hop_index_lgl}
 \alias{hop_index_chr}
-\alias{hop_index_raw}
 \alias{hop_index_dfr}
 \alias{hop_index_dfc}
 \title{Hop relative to an index}
@@ -23,8 +22,6 @@ hop_index_int(.x, .i, .starts, .stops, .f, ...)
 hop_index_lgl(.x, .i, .starts, .stops, .f, ...)
 
 hop_index_chr(.x, .i, .starts, .stops, .f, ...)
-
-hop_index_raw(.x, .i, .starts, .stops, .f, ...)
 
 hop_index_dfr(
   .x,

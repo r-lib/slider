@@ -7,7 +7,6 @@
 \alias{slide_period_int}
 \alias{slide_period_lgl}
 \alias{slide_period_chr}
-\alias{slide_period_raw}
 \alias{slide_period_dfr}
 \alias{slide_period_dfc}
 \title{Slide relative to an index chunked by period}
@@ -79,19 +78,6 @@ slide_period_lgl(
 )
 
 slide_period_chr(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
-)
-
-slide_period_raw(
   .x,
   .i,
   .period,

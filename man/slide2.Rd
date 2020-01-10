@@ -7,7 +7,6 @@
 \alias{slide2_int}
 \alias{slide2_lgl}
 \alias{slide2_chr}
-\alias{slide2_raw}
 \alias{slide2_dfr}
 \alias{slide2_dfc}
 \alias{pslide}
@@ -16,7 +15,6 @@
 \alias{pslide_int}
 \alias{pslide_lgl}
 \alias{pslide_chr}
-\alias{pslide_raw}
 \alias{pslide_dfr}
 \alias{pslide_dfc}
 \title{Slide over multiple inputs simultaneously}
@@ -78,17 +76,6 @@ slide2_lgl(
 )
 
 slide2_chr(
-  .x,
-  .y,
-  .f,
-  ...,
-  .before = 0L,
-  .after = 0L,
-  .step = 1L,
-  .complete = FALSE
-)
-
-slide2_raw(
   .x,
   .y,
   .f,
@@ -169,16 +156,6 @@ pslide_lgl(
 )
 
 pslide_chr(
-  .l,
-  .f,
-  ...,
-  .before = 0L,
-  .after = 0L,
-  .step = 1L,
-  .complete = FALSE
-)
-
-pslide_raw(
   .l,
   .f,
   ...,

@@ -56,10 +56,6 @@ test_that("hop2_lgl() can coerce", {
   expect_equivalent(hop2_lgl(1, 0, 1, 1, ~.x + .y), TRUE)
 })
 
-test_that("hop2_raw() works", {
-  expect_equivalent(hop2_raw(raw(1), 1, 1, 1, ~.x), raw(1))
-})
-
 # ------------------------------------------------------------------------------
 # data frame suffix tests
 

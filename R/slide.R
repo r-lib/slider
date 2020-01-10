@@ -347,27 +347,6 @@ slide_chr <- function(.x,
   )
 }
 
-#' @rdname slide
-#' @export
-slide_raw <- function(.x,
-                      .f,
-                      ...,
-                      .before = 0L,
-                      .after = 0L,
-                      .step = 1L,
-                      .complete = FALSE) {
-  slide_vec(
-    .x,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .complete = .complete,
-    .ptype = raw()
-  )
-}
-
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide
 #' @export

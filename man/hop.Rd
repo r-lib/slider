@@ -7,7 +7,6 @@
 \alias{hop_int}
 \alias{hop_lgl}
 \alias{hop_chr}
-\alias{hop_raw}
 \alias{hop_dfr}
 \alias{hop_dfc}
 \title{Hop}
@@ -23,8 +22,6 @@ hop_int(.x, .starts, .stops, .f, ...)
 hop_lgl(.x, .starts, .stops, .f, ...)
 
 hop_chr(.x, .starts, .stops, .f, ...)
-
-hop_raw(.x, .starts, .stops, .f, ...)
 
 hop_dfr(
   .x,
