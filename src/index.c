@@ -15,7 +15,9 @@ static void compute_window_stops(int*, int*, int*, int);
 static struct window_info new_window_info(int*, int*, int);
 static struct index_info new_index_info(SEXP);
 static struct range_info new_range_info(SEXP, SEXP, int);
-static struct iteration_info new_iteration_info(struct index_info, struct range_info, bool);
+
+static int compute_min_iteration(struct index_info index, struct range_info range, bool complete);
+static int compute_max_iteration(struct index_info index, struct range_info range, bool complete);
 
 static void increment_window(struct window_info window,
                              struct index_info* index,
@@ -63,14 +65,15 @@ SEXP slide_index_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, index.size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  struct iteration_info iteration = new_iteration_info(index, range, complete);
+  int min_iteration = compute_min_iteration(index, range, complete);
+  int max_iteration = compute_max_iteration(index, range, complete);
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   SEXP out = PROTECT_N(vec_init(ptype, size), &n_prot);
   out = PROTECT_N(vec_proxy(out), &n_prot);
 
-  for (int i = iteration.min; i < iteration.max; ++i) {
+  for (int i = min_iteration; i < max_iteration; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
@@ -163,9 +166,6 @@ SEXP hop_index_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  // `complete = false` for `hop_index()`
-  struct iteration_info iteration = new_iteration_info(index, range, false);
-
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   SEXP out = PROTECT_N(vec_init(ptype, size), &n_prot);
@@ -180,7 +180,7 @@ SEXP hop_index_common_impl(SEXP x,
     p_out_index = INTEGER(out_index);
   }
 
-  for (int i = iteration.min; i < iteration.max; ++i) {
+  for (int i = 0; i < range.size; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
@@ -284,22 +284,28 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
 static int iteration_min_adjustment(struct index_info index, SEXP range, int size);
 static int iteration_max_adjustment(struct index_info index, SEXP range, int size);
 
-static struct iteration_info new_iteration_info(struct index_info index, struct range_info range, bool complete) {
-  struct iteration_info iteration;
+static int compute_min_iteration(struct index_info index, struct range_info range, bool complete) {
+  int out = 0;
 
-  iteration.min = 0;
-  iteration.max = range.size;
-
-  if (complete) {
-    if (!range.start_unbounded) {
-      iteration.min += iteration_min_adjustment(index, range.starts, range.size);
-    }
-    if (!range.stop_unbounded) {
-      iteration.max -= iteration_max_adjustment(index, range.stops, range.size);
-    }
+  if (!complete || range.start_unbounded) {
+    return out;
   }
 
-  return iteration;
+  out += iteration_min_adjustment(index, range.starts, range.size);
+
+  return out;
+}
+
+static int compute_max_iteration(struct index_info index, struct range_info range, bool complete) {
+  int out = range.size;
+
+  if (!complete || range.stop_unbounded) {
+    return out;
+  }
+
+  out -= iteration_max_adjustment(index, range.stops, range.size);
+
+  return out;
 }
 
 static int iteration_min_adjustment(struct index_info index, SEXP range, int size) {
@@ -307,7 +313,7 @@ static int iteration_min_adjustment(struct index_info index, SEXP range, int siz
 
   for (int j = 0; j < size; ++j) {
     if (index.compare_gt(index.data, 0, range, j)) {
-      forward_adjustment++;
+      ++forward_adjustment;
     } else {
       break;
     }
@@ -321,7 +327,7 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
 
   for (int j = size - 1; j >= 0; --j) {
     if (index.compare_lt(index.data, index.last_pos, range, j)) {
-      backward_adjustment++;
+      ++backward_adjustment;
     } else {
       break;
     }
