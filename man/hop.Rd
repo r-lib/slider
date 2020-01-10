@@ -172,7 +172,7 @@ hop(1:3, .starts = c(1, 3), .stops = 3, ~.x)
 # to the size of `.x`.
 hop(
   mtcars,
-  .starts = c(0, 3),
+  .starts = c(-1, 3),
   .stops  = c(2, 6),
   ~.x
 )
