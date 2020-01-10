@@ -95,7 +95,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slide)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lubridate, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p>This vignette is meant to serve as an introduction to {slide}. In it, you’ll learn about the three core functions in the package: <code><a href="../reference/slide.html">slide()</a></code>, <code><a href="../reference/slide_index.html">slide_index()</a></code>, and <code><a href="../reference/hop_index.html">hop_index()</a></code>, along with their many variants.</p>
+<p>This vignette is meant to serve as an introduction to {slide}. In it, you’ll learn about the three core functions in the package: <code><a href="../reference/slide.html">slide()</a></code>, <code><a href="../reference/slide_index.html">slide_index()</a></code>, and <code><a href="../reference/slide_period.html">slide_period()</a></code>, along with their many variants.</p>
 <p>slide is a package for rolling analysis using window functions. “Window functions” is a term that I’ve borrowed from SQL that means that some function is repeatedly applied to different “windows” of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.</p>
 <div id="slide" class="section level2">
 <h2 class="hasAnchor">
@@ -247,193 +247,133 @@
 <a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 3     6 2019-09-03 Tue          4        6</span></a>
 <a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 4     2 2019-09-04 Wed          4        4</span></a></code></pre></div>
 </div>
-<div id="hop_index" class="section level2">
+<div id="slide_period" class="section level2">
 <h2 class="hasAnchor">
-<a href="#hop_index" class="anchor"></a>hop_index()</h2>
-<p><code><a href="../reference/hop_index.html">hop_index()</a></code> is a lower level function that you can think of as powering <code><a href="../reference/slide_index.html">slide_index()</a></code>. It has the <code>.i</code> argument for the index, but in place of <code>.before</code> and <code>.after</code> are <code>.starts</code> and <code>.stops</code>, vectors of the same type as <code>.i</code> that allow fine tuned control over the exact windows that are used.</p>
-<p>As a first example, let’s look at how <code><a href="../reference/hop_index.html">hop_index()</a></code> can be equivalent to <code><a href="../reference/slide_index.html">slide_index()</a></code>. Previously we had computed a <code>roll_day</code> column:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">company <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">    <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, index, mean, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">  )</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; # A tibble: 4 x 4</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;   sales index      wday  roll_day</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 1     2 2019-08-29 Thu          2</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; 2     4 2019-08-30 Fri          3</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; 3     6 2019-09-03 Tue          6</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt; 4     2 2019-09-04 Wed          4</span></a></code></pre></div>
-<p>This would be equivalent to “manually” computing the <code>.starts</code> by subtracting 2 days from <code>index</code>, and “manually” computing the <code>.stops</code>, which is just the <code>index</code> itself since we aren’t looking forward any amount of time.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">company <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">    <span class="dt">starts =</span> index <span class="op">-</span><span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="dt">stops =</span> index,</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">    <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_dbl</a></span>(sales, index, starts, stops, mean)</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6">  )</a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; # A tibble: 4 x 6</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   sales index      wday  starts     stops      roll_day</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt; &lt;date&gt;     &lt;date&gt;        &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; 1     2 2019-08-29 Thu   2019-08-27 2019-08-29        2</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; 2     4 2019-08-30 Fri   2019-08-28 2019-08-30        3</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt; 3     6 2019-09-03 Tue   2019-09-01 2019-09-03        6</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; 4     2 2019-09-04 Wed   2019-09-02 2019-09-04        4</span></a></code></pre></div>
-<p>The rules that govern the output of <code><a href="../reference/hop_index.html">hop_index()</a></code> are slightly different from <code><a href="../reference/slide.html">slide()</a></code> and <code><a href="../reference/slide_index.html">slide_index()</a></code>. It is still type stable as you’d expect, but the <em>size</em> of the output is different than the other two. Where <code><a href="../reference/slide.html">slide()</a></code> returns an output that is the same size as <code>.x</code>, <code><a href="../reference/hop_index.html">hop_index()</a></code> returns an output that is the same size as <code>.starts</code> and <code>.stops</code>. This is actually <em>extremely</em> useful in some scenarios, allowing you to either decrease or increase the size of the output to ranges that you actually care about. The examples below showcase both of the usages.</p>
-<div id="decreasing-the-size" class="section level3">
-<h3 class="hasAnchor">
-<a href="#decreasing-the-size" class="anchor"></a>Decreasing the size</h3>
-<p>Imagine you have another set of some irregular daily sales data, spanning 3 months.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">daily_sales &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">35</span>, <span class="dv">77</span>, <span class="dv">14</span>, <span class="dv">22</span>),</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">  <span class="dt">index =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-01-25"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">42</span>, <span class="dv">45</span>)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">)</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">daily_sales</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; # A tibble: 9 x 2</span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt;   sales index     </span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt; 1    10 2019-01-25</span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; 2    20 2019-01-26</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; 3    50 2019-01-27</span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt; 4    12 2019-01-28</span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 5    14 2019-02-04</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 6    35 2019-02-14</span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 7    77 2019-03-01</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 8    14 2019-03-08</span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 9    22 2019-03-11</span></a></code></pre></div>
-<p>You are tasked with computing rolling two month total sales numbers. You should end up with two values, one for the range of <code>[2019-01-01, 2019-02-28]</code> and one for <code>[2019-02-01, 2019-03-31]</code>. Note that this is a bit hard to accomplish using dplyr alone because these ranges overlap, so we can’t construct a column to group on and then summarize it.</p>
-<p>Using <code><a href="../reference/hop_index.html">hop_index()</a></code>, we can manually construct these ranges and pass them as the <code>.starts</code> and <code>.stops</code>, and we will only get 2 values back. To be slightly more general, rather than hard coding these dates I’ll generate the ranges programmatically.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">jan_first &lt;-<span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(daily_sales<span class="op">$</span>index), <span class="st">"1 month"</span>)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">apr_first &lt;-<span class="st"> </span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">ceiling_date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(daily_sales<span class="op">$</span>index), <span class="st">"1 month"</span>)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">dates &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(jan_first, apr_first, <span class="st">"1 month"</span>)</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">results &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">  <span class="dt">starts =</span> dates[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">  <span class="dt">stops =</span> dates[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>] <span class="op">-</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">results</a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt; # A tibble: 2 x 2</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt;   starts     stops     </span></a>
-<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt;   &lt;date&gt;     &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 1 2019-01-01 2019-02-28</span></a>
-<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 2 2019-02-01 2019-03-31</span></a></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">    <span class="dt">total_sales =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_dbl</a></span>(</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">      <span class="dt">.x =</span> daily_sales<span class="op">$</span>sales, </a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">      <span class="dt">.i =</span> daily_sales<span class="op">$</span>index,</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6">      <span class="dt">.starts =</span> starts,</a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">      <span class="dt">.stops =</span> stops,</a>
-<a class="sourceLine" id="cb17-8" data-line-number="8">      <span class="dt">.f =</span> sum</a>
-<a class="sourceLine" id="cb17-9" data-line-number="9">    )</a>
-<a class="sourceLine" id="cb17-10" data-line-number="10">  ) </a>
-<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt; # A tibble: 2 x 3</span></a>
-<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt;   starts     stops      total_sales</span></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt;   &lt;date&gt;     &lt;date&gt;           &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt; 1 2019-01-01 2019-02-28         141</span></a>
-<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; 2 2019-02-01 2019-03-31         162</span></a></code></pre></div>
-</div>
-<div id="increasing-the-size" class="section level3">
-<h3 class="hasAnchor">
-<a href="#increasing-the-size" class="anchor"></a>Increasing the size</h3>
-<p>This last example is inspired by a real internal question an RStudio employee had.</p>
-<p>Imagine you have a set of customers, each identifiable by an <code>id</code>, and each customer has a contract with you that expires on a particular <code>date</code>. The day is currently <code>2019-09-27</code>, and your boss gives you the following task:</p>
-<p>“For every day from today until our last expiration, I want a count of how many customers are currently active.”</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">today &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-09-27"</span>)</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">customers &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  <span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2019-12-23"</span>, <span class="st">"2020-01-01"</span>, <span class="st">"2021-04-02"</span>))</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8">customers</a>
-<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; # A tibble: 3 x 2</span></a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;      id date      </span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;   &lt;int&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; 1     1 2019-12-23</span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; 2     2 2020-01-01</span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; 3     3 2021-04-02</span></a></code></pre></div>
-<p>With the above data set, we’d have results like:</p>
-<ul>
-<li>3 active on <code>2019-09-27</code>
-</li>
-<li>3 active on <code>2019-09-28</code>
-</li>
-<li>…</li>
-<li>2 active on <code>2019-12-24</code> (id 1 expired)</li>
-<li>…</li>
-<li>1 active on <code>2021-04-02</code> (last day)</li>
-</ul>
-<p>There are multiple ways to solve this problem, and I felt that <code><a href="../reference/hop_index.html">hop_index()</a></code> provided a pretty nice solution! The general idea is as follows:</p>
-<p>The result should be a tibble with a date column containing every day between now and the last expiration, and another column for the count of active customers. This date column represents our <code>.starts</code>, and the <code>.stops</code> is always the last expiration date. So we’ll construct the date column first, and then pass that on to <code><a href="../reference/hop_index.html">hop_index()</a></code> to compute our result, counting all of the active customer <code>id</code>s on any particular day by just taking the <code><a href="https://rdrr.io/r/base/length.html">length()</a></code> of the current window.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">last_expiration &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(customers<span class="op">$</span>date)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co"># We don't need a `.stops` column because it is always </span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co"># `last_expiration` and `hop_index_int()` will recycle it for us</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">result &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">  <span class="dt">current_date =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(today, last_expiration, <span class="dt">by =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">)</a>
-<a class="sourceLine" id="cb19-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb19-9" data-line-number="9">result</a>
-<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co">#&gt; # A tibble: 554 x 1</span></a>
-<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="co">#&gt;    current_date</span></a>
-<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co">#&gt;    &lt;date&gt;      </span></a>
-<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co">#&gt;  1 2019-09-27  </span></a>
-<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt;  2 2019-09-28  </span></a>
-<a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt;  3 2019-09-29  </span></a>
-<a class="sourceLine" id="cb19-16" data-line-number="16"><span class="co">#&gt;  4 2019-09-30  </span></a>
-<a class="sourceLine" id="cb19-17" data-line-number="17"><span class="co">#&gt;  5 2019-10-01  </span></a>
-<a class="sourceLine" id="cb19-18" data-line-number="18"><span class="co">#&gt;  6 2019-10-02  </span></a>
-<a class="sourceLine" id="cb19-19" data-line-number="19"><span class="co">#&gt;  7 2019-10-03  </span></a>
-<a class="sourceLine" id="cb19-20" data-line-number="20"><span class="co">#&gt;  8 2019-10-04  </span></a>
-<a class="sourceLine" id="cb19-21" data-line-number="21"><span class="co">#&gt;  9 2019-10-05  </span></a>
-<a class="sourceLine" id="cb19-22" data-line-number="22"><span class="co">#&gt; 10 2019-10-06  </span></a>
-<a class="sourceLine" id="cb19-23" data-line-number="23"><span class="co">#&gt; # … with 544 more rows</span></a>
-<a class="sourceLine" id="cb19-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb19-25" data-line-number="25">result &lt;-<span class="st"> </span>result <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb19-26" data-line-number="26"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb19-27" data-line-number="27">    <span class="dt">active =</span> <span class="kw"><a href="../reference/hop_index.html">hop_index_int</a></span>(</a>
-<a class="sourceLine" id="cb19-28" data-line-number="28">      <span class="dt">.x =</span> customers<span class="op">$</span>id, </a>
-<a class="sourceLine" id="cb19-29" data-line-number="29">      <span class="dt">.i =</span> customers<span class="op">$</span>date,</a>
-<a class="sourceLine" id="cb19-30" data-line-number="30">      <span class="dt">.starts =</span> current_date,</a>
-<a class="sourceLine" id="cb19-31" data-line-number="31">      <span class="dt">.stops =</span> last_expiration,</a>
-<a class="sourceLine" id="cb19-32" data-line-number="32">      <span class="dt">.f =</span> length</a>
-<a class="sourceLine" id="cb19-33" data-line-number="33">    )</a>
-<a class="sourceLine" id="cb19-34" data-line-number="34">  )</a>
-<a class="sourceLine" id="cb19-35" data-line-number="35"></a>
-<a class="sourceLine" id="cb19-36" data-line-number="36">result</a>
-<a class="sourceLine" id="cb19-37" data-line-number="37"><span class="co">#&gt; # A tibble: 554 x 2</span></a>
-<a class="sourceLine" id="cb19-38" data-line-number="38"><span class="co">#&gt;    current_date active</span></a>
-<a class="sourceLine" id="cb19-39" data-line-number="39"><span class="co">#&gt;    &lt;date&gt;        &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb19-40" data-line-number="40"><span class="co">#&gt;  1 2019-09-27        3</span></a>
-<a class="sourceLine" id="cb19-41" data-line-number="41"><span class="co">#&gt;  2 2019-09-28        3</span></a>
-<a class="sourceLine" id="cb19-42" data-line-number="42"><span class="co">#&gt;  3 2019-09-29        3</span></a>
-<a class="sourceLine" id="cb19-43" data-line-number="43"><span class="co">#&gt;  4 2019-09-30        3</span></a>
-<a class="sourceLine" id="cb19-44" data-line-number="44"><span class="co">#&gt;  5 2019-10-01        3</span></a>
-<a class="sourceLine" id="cb19-45" data-line-number="45"><span class="co">#&gt;  6 2019-10-02        3</span></a>
-<a class="sourceLine" id="cb19-46" data-line-number="46"><span class="co">#&gt;  7 2019-10-03        3</span></a>
-<a class="sourceLine" id="cb19-47" data-line-number="47"><span class="co">#&gt;  8 2019-10-04        3</span></a>
-<a class="sourceLine" id="cb19-48" data-line-number="48"><span class="co">#&gt;  9 2019-10-05        3</span></a>
-<a class="sourceLine" id="cb19-49" data-line-number="49"><span class="co">#&gt; 10 2019-10-06        3</span></a>
-<a class="sourceLine" id="cb19-50" data-line-number="50"><span class="co">#&gt; # … with 544 more rows</span></a></code></pre></div>
-<p>We can filter down to a range of interest to ensure that we computed the correct number of active customers as they expire.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">result <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">    current_date <span class="op">&gt;=</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(customers<span class="op">$</span>date) <span class="op">-</span><span class="st"> </span><span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">    current_date <span class="op">&lt;=</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(customers<span class="op">$</span>date) <span class="op">+</span><span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">  )</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="co">#&gt; # A tibble: 7 x 2</span></a>
-<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">#&gt;   current_date active</span></a>
-<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="co">#&gt;   &lt;date&gt;        &lt;int&gt;</span></a>
-<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="co">#&gt; 1 2019-12-20        3</span></a>
-<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="co">#&gt; 2 2019-12-21        3</span></a>
-<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="co">#&gt; 3 2019-12-22        3</span></a>
-<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="co">#&gt; 4 2019-12-23        3</span></a>
-<a class="sourceLine" id="cb20-13" data-line-number="13"><span class="co">#&gt; 5 2019-12-24        2</span></a>
-<a class="sourceLine" id="cb20-14" data-line-number="14"><span class="co">#&gt; 6 2019-12-25        2</span></a>
-<a class="sourceLine" id="cb20-15" data-line-number="15"><span class="co">#&gt; 7 2019-12-26        2</span></a></code></pre></div>
-</div>
+<a href="#slide_period" class="anchor"></a>slide_period()</h2>
+<p>With <code><a href="../reference/slide_index.html">slide_index()</a></code>, we always returned a vector of the same size as <code>.x</code>, and the idea was to build indices to slice <code>.x</code> with using “the current element of <code>.i</code> + some number of elements before/after it”. <code><a href="../reference/slide_period.html">slide_period()</a></code> works a bit differently. It first breaks <code>.i</code> up into “time blocks” by some period (like monthly), and then uses those blocks to define how to slide over <code>.x</code>.</p>
+<p>To see an example, let’s expand out our <code>company</code> sales data frame.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">big_index_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-08-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-11-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">big_sales_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">big_company &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">  <span class="dt">sales =</span> big_sales_vec,</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">  <span class="dt">index =</span> big_index_vec</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">big_company</a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt; # A tibble: 10 x 2</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt;    sales index     </span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;    </span></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt;  1     2 2019-08-30</span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt;  2     4 2019-08-31</span></a>
+<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt;  3     6 2019-09-01</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#&gt;  4     2 2019-09-02</span></a>
+<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#&gt;  5     8 2019-09-03</span></a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#&gt;  6    10 2019-11-30</span></a>
+<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#&gt;  7     9 2019-12-01</span></a>
+<a class="sourceLine" id="cb13-24" data-line-number="24"><span class="co">#&gt;  8     3 2019-12-02</span></a>
+<a class="sourceLine" id="cb13-25" data-line-number="25"><span class="co">#&gt;  9     5 2019-12-03</span></a>
+<a class="sourceLine" id="cb13-26" data-line-number="26"><span class="co">#&gt; 10     2 2019-12-04</span></a></code></pre></div>
+<p>Now say we want to compute the monthly sales, and just return 1 value per month. Since we have 4 months, we should get 4 values back. What we really want to do here is break the <code>index</code> up into “time blocks” of 1 month, and then slide over those. That’s what <code><a href="../reference/slide_period.html">slide_period()</a></code> does.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/slide_period.html">slide_period</a></span>(big_company, big_company<span class="op">$</span>index, <span class="st">"month"</span>, <span class="op">~</span>.x)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; # A tibble: 2 x 2</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt;   sales index     </span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; 1     2 2019-08-30</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; 2     4 2019-08-31</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; # A tibble: 3 x 2</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;   sales index     </span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; 1     6 2019-09-01</span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 2     2 2019-09-02</span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; 3     8 2019-09-03</span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt; [[3]]</span></a>
+<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt;   sales index     </span></a>
+<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
+<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt; 1    10 2019-11-30</span></a>
+<a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb14-23" data-line-number="23"><span class="co">#&gt; [[4]]</span></a>
+<a class="sourceLine" id="cb14-24" data-line-number="24"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
+<a class="sourceLine" id="cb14-25" data-line-number="25"><span class="co">#&gt;   sales index     </span></a>
+<a class="sourceLine" id="cb14-26" data-line-number="26"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
+<a class="sourceLine" id="cb14-27" data-line-number="27"><span class="co">#&gt; 1     9 2019-12-01</span></a>
+<a class="sourceLine" id="cb14-28" data-line-number="28"><span class="co">#&gt; 2     3 2019-12-02</span></a>
+<a class="sourceLine" id="cb14-29" data-line-number="29"><span class="co">#&gt; 3     5 2019-12-03</span></a>
+<a class="sourceLine" id="cb14-30" data-line-number="30"><span class="co">#&gt; 4     2 2019-12-04</span></a></code></pre></div>
+<p>Since this returns 4 values, and not the same number of values as there are in <code>.x</code>, it won’t fit naturally in a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> or <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> statement. I find the easiest way to do this is to create a helper function that takes a data frame and returns one with the summary result for one time block, and then call that with <code><a href="../reference/slide_period.html">slide_period_dfr()</a></code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">monthly_summary &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(data, <span class="dt">index =</span> <span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(index), <span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">  big_company,</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">  big_company<span class="op">$</span>index,</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">  <span class="st">"month"</span>,</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9">  monthly_summary</a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">)</a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;   index      sales</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 1 2019-08-31     6</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 2 2019-09-03    16</span></a>
+<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 3 2019-11-30    10</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 4 2019-12-04    19</span></a></code></pre></div>
+<p>Now you might be thinking, “I can do that with dplyr and lubridate!”, and you’d be right:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">big_company <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(monthly) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;   monthly    sales</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 1 2019-08-01     6</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 2 2019-09-01    16</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 3 2019-11-01    10</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; 4 2019-12-01    19</span></a></code></pre></div>
+<p>But here is where things get interesting! Now what if we want to compute those monthly sales, but we want the time blocks to be made of the “current month block, plus 1 month block before it”. For example, for the month of <code>2019-09</code>, it would include <code>2019-08</code> and <code>2019-09</code> together in the rolling summary. There isn’t an easy way to do this in dplyr alone. With slide, there are two ways to do this.</p>
+<p>The first is with <code><a href="../reference/slide_period.html">slide_period_dfr()</a></code>, and it is as easy as adding <code>.before = 1</code>, to select the current month block and 1 before it.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">  big_company,</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">  big_company<span class="op">$</span>index,</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">  <span class="st">"month"</span>,</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">  monthly_summary,</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">  <span class="dt">.before =</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt;   index      sales</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt; 1 2019-08-31     6</span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt; 2 2019-09-03    22</span></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt; 3 2019-11-30    10</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt; 4 2019-12-04    29</span></a></code></pre></div>
+<p>Depending on your use case, you might want to append these results as a new column in <code>big_company</code>. To do this, we can instead go back to using <code><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date()</a></code> to generate monthly groupings, and slide over them using <code><a href="../reference/slide_index.html">slide_index_dbl()</a></code> with a lookback period of 1 month.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">big_company <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">    <span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>),</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">    <span class="dt">sales_summary =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, monthly, sum, <span class="dt">.before =</span> <span class="kw"><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months</a></span>(<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5">  )</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt; # A tibble: 10 x 4</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt;    sales index      monthly    sales_summary</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;             &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt;  1     2 2019-08-30 2019-08-01             6</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;  2     4 2019-08-31 2019-08-01             6</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;  3     6 2019-09-01 2019-09-01            22</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;  4     2 2019-09-02 2019-09-01            22</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  5     8 2019-09-03 2019-09-01            22</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;  6    10 2019-11-30 2019-11-01            10</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt;  7     9 2019-12-01 2019-12-01            29</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt;  8     3 2019-12-02 2019-12-01            29</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt;  9     5 2019-12-03 2019-12-01            29</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; 10     2 2019-12-04 2019-12-01            29</span></a></code></pre></div>
 </div>
   </div>
 
@@ -445,7 +385,7 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#slide">slide()</a></li>
       <li><a href="#slide_index">slide_index()</a></li>
-      <li><a href="#hop_index">hop_index()</a></li>
+      <li><a href="#slide_period">slide_period()</a></li>
       </ul>
 </div>
       </div>
