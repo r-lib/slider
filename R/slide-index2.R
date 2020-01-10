@@ -1,23 +1,17 @@
-#' Slide along multiples inputs simultaneously over an index
+#' Slide along multiples inputs simultaneously relative to an index
 #'
 #' `slide_index2()` and `pslide_index()` represent the combination
 #' of [slide2()] and [pslide()] with [slide_index()], allowing you to iterate
-#' over multiple vectors at once, while respecting an `.i`-ndex.
+#' over multiple vectors at once relative to an `.i`-ndex.
 #'
 #' @inheritParams slide_index
 #'
-#' @param .x,.y `[vector]`
+#' @template param-x-y
+#' @template param-l
+#' @template param-before-after-slide-index
 #'
-#'   Vectors to iterate over. Vectors of size 1 will be recycled.
-#'
-#' @param .l `[list]`
-#'
-#'   A list of vectors. The length of `.l` determines the
-#'   number of arguments that `.f` will be called with. If `.l` has names,
-#'   they will be used as named arguments to `.f`. Elements of `.l` with size
-#'   1 will be recycled.
-#'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`slide_index2()`}{
 #'
@@ -66,8 +60,6 @@
 #' # `x` and one from `y`), otherwise, 4 values are returned.
 #' slide_index2(x, y, i, ~c(.x, .y), .before = 1)
 #'
-#' @inheritSection slide_index The `.i`-ndex
-#' @inheritSection slide_index `.before` and `.after`
 #' @seealso [slide2()], [hop_index2()], [slide_index()]
 #' @export
 slide_index2 <- function(.x,

@@ -108,28 +108,25 @@ The vector to iterate over and apply \code{.f} to.}
 
 If a \strong{function}, it is used as is.
 
-If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
-to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
-The \code{.} placeholder can be used instead of \code{.x}. This allows you to
-create very compact anonymous functions with up to two inputs.}
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\verb{[integer(1) / Inf]}
+\item{.before, .after}{\verb{[integer(1) / Inf]}
 
-The number of values \emph{before} the current element to include in the sliding
-window. Set to \code{Inf} to select all elements before the current
-position, constructing a cumulative window. A negative value is allowed,
-and allows you to "look forward" as well.}
-
-\item{.after}{\verb{[integer(1) / Inf]}
-
-The number of values \emph{after} the current element to include in the
-sliding window. Set to \code{Inf} to select all elements after the
-current position, constructing the reverse of a cumulative window, where
-you start with as many elements as possible and decrease the amount as
-you move through \code{.x}. A negative value is allowed, and allows you to
-"look backward" as well.}
+The number of values before or after the current element to
+include in the sliding window. Set to \code{Inf} to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+\code{.before} value, or "look backwards" if used as \code{.after}.}
 
 \item{.step}{\verb{[positive integer(1)]}
 
@@ -137,10 +134,10 @@ The number of elements to shift the window forward between function calls.}
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should the sliding be restricted to complete windows only? If \code{FALSE},
+Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\verb{[vector]}
+\item{.ptype}{\verb{[vector(0)]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -168,24 +165,8 @@ rows in \code{vec_cbind()} output by using the standard recycling rules.
 Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.}
 }
-\description{
-\code{slide()} iterates through \code{.x} using a sliding window, applying \code{.f} to each
-sub-window of \code{.x}.
-}
-\details{
-Unlike \code{lapply()} or \code{purrr::map()}, which construct calls
-like \code{.f(.x[[i]], ...)}, the equivalent with \code{slide()}
-looks like \code{.f(vec_slice(.x, i), ...)} which is approximately
-\code{.f(.x[i], ...)} except in the case of data frames or arrays,
-which are iterated over row-wise.
-
-If \code{.x} has names, then the output will preserve those names.
-
-Using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, the output of \code{.f} will be automatically cast
-to the type required by the version of \verb{slide_*()} being used.
-}
-\section{Invariants}{
-
+\value{
+A vector fulfilling the following invariants:
 
 \subsection{\code{slide()}}{
 \itemize{
@@ -204,7 +185,28 @@ to the type required by the version of \verb{slide_*()} being used.
 
 }
 }
+\description{
+\code{slide()} iterates through \code{.x} using a sliding window, applying \code{.f} to each
+sub-window of \code{.x}.
+}
+\details{
+Unlike \code{lapply()} or \code{purrr::map()}, which construct calls like\preformatted{.f(.x[[i]], ...)
+}
 
+the equivalent with \code{slide()} looks like\preformatted{.f(vctrs::vec_slice(.x, i), ...)
+}
+
+which is approximately\preformatted{.f(.x[i], ...)
+}
+
+except in the case of data frames or arrays, which are iterated
+over row-wise.
+
+If \code{.x} has names, then the output will preserve those names.
+
+Using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, the output of \code{.f} will be automatically cast
+to the type required by the variant of \verb{slide_*()} being used.
+}
 \examples{
 # The defaults work similarly to `map()`
 slide(1:5, ~.x)

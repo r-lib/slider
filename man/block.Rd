@@ -13,12 +13,15 @@ The vector to block.}
 
 \item{i}{\verb{[Date / POSIXct / POSIXlt]}
 
-The datetime index to block by. There are 3 restrictions on \code{i}:
+The datetime index to block by.
+
+There are 3 restrictions on the index:
 \itemize{
-\item The size of \code{i} must match the size of \code{x}, \code{i} will not be recycled.
-\item \code{i} must be an \emph{increasing} vector, but duplicate values
+\item The size of the index must match the size of \code{x}, neither will
+be recycled.
+\item The index must be an \emph{increasing} vector, but duplicate values
 are allowed.
-\item \code{i} is not allowed to have missing values.
+\item The index cannot have missing values.
 }}
 
 \item{period}{\verb{[character(1)]}
@@ -48,15 +51,19 @@ This is generally used to define the anchor time to count from, which is
 relevant when \code{every > 1}.}
 }
 \value{
-A list containing elements of type \code{vctrs::vec_ptype(x)}. The size of the
-output is identical to the number of unique period groups as determined
-by \code{\link[warp:warp_boundary]{warp::warp_boundary()}}.
+A vector fulfilling the following invariants:
+\itemize{
+\item \code{vec_size(block(x)) == vec_size(unique(warp::warp_boundary(i)))}
+\item \code{vec_ptype(block(x)) == list()}
+\item \code{vec_ptype(block(x)[[1]]) == vec_ptype(x)}
+}
 }
 \description{
-\code{block()} splits \code{x} into blocks defined by \code{i}, a date time index. For
-example, it can split \code{x} into monthly or yearly blocks. Combined with
-\code{purrr::map()} or \code{lapply()}, it is one way to iterate over a vector in
-"time blocks".
+\code{block()} breaks up the \code{i}-ndex by \code{period}, and then uses that to define
+the indices to chop \code{x} with.
+
+For example, it can split \code{x} into monthly or yearly blocks. Combined with
+\code{purrr::map()}, it is a way to iterate over a vector in "time blocks".
 }
 \details{
 \code{block()} determines the indices to block by with \code{\link[warp:warp_boundary]{warp::warp_boundary()}},
@@ -87,4 +94,8 @@ block(i, i, period = "month", every = 2, origin = as.Date("2019-01-01"))
 # Use the `origin` to instead start counting from `2018-12-01`, meaning
 # that [2018-12, 2019-01] gets bucketed together.
 block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
+
+}
+\seealso{
+\code{\link[=slide_period]{slide_period()}}, \code{\link[=slide]{slide()}}, \code{\link[=slide_index]{slide_index()}}
 }

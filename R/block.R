@@ -1,10 +1,11 @@
 #' Break a vector into blocks
 #'
 #' @description
-#' `block()` splits `x` into blocks defined by `i`, a date time index. For
-#' example, it can split `x` into monthly or yearly blocks. Combined with
-#' `purrr::map()` or `lapply()`, it is one way to iterate over a vector in
-#' "time blocks".
+#' `block()` breaks up the `i`-ndex by `period`, and then uses that to define
+#' the indices to chop `x` with.
+#'
+#' For example, it can split `x` into monthly or yearly blocks. Combined with
+#' `purrr::map()`, it is a way to iterate over a vector in "time blocks".
 #'
 #' @details
 #' `block()` determines the indices to block by with [warp::warp_boundary()],
@@ -12,29 +13,35 @@
 #'
 #' Like [slide()], `block()` splits data frame `x` values row wise.
 #'
+#' @inheritParams warp::warp_boundary
+#'
 #' @param x `[vector]`
 #'
 #'   The vector to block.
 #'
 #' @param i `[Date / POSIXct / POSIXlt]`
 #'
-#'   The datetime index to block by. There are 3 restrictions on `i`:
+#'   The datetime index to block by.
 #'
-#'   - The size of `i` must match the size of `x`, `i` will not be recycled.
+#'   There are 3 restrictions on the index:
 #'
-#'   - `i` must be an _increasing_ vector, but duplicate values
+#'   - The size of the index must match the size of `x`, neither will
+#'     be recycled.
+#'
+#'   - The index must be an _increasing_ vector, but duplicate values
 #'     are allowed.
 #'
-#'   - `i` is not allowed to have missing values.
-#'
-#' @inheritParams warp::warp_boundary
+#'   - The index cannot have missing values.
 #'
 #' @return
-#' A list containing elements of type `vctrs::vec_ptype(x)`. The size of the
-#' output is identical to the number of unique period groups as determined
-#' by [warp::warp_boundary()].
+#' A vector fulfilling the following invariants:
 #'
-#' @export
+#'  * `vec_size(block(x)) == vec_size(unique(warp::warp_boundary(i)))`
+#'
+#'  * `vec_ptype(block(x)) == list()`
+#'
+#'  * `vec_ptype(block(x)[[1]]) == vec_ptype(x)`
+#'
 #' @examples
 #' x <- 1:6
 #' i <- as.Date("2019-01-01") + c(-2:2, 31)
@@ -58,6 +65,9 @@
 #' # Use the `origin` to instead start counting from `2018-12-01`, meaning
 #' # that [2018-12, 2019-01] gets bucketed together.
 #' block(i, i, period = "month", every = 2, origin = as.Date("2018-12-01"))
+#'
+#' @seealso [slide_period()], [slide()], [slide_index()]
+#' @export
 block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
 
@@ -82,7 +92,7 @@ check_block_index_type <- function(i) {
   glubort("The index must inherit from 'Date', 'POSIXct', or 'POSIXlt', not `{class}`.")
 }
 
-check_block_index_size <- function(x, i) {
+check_block_index_size <- function(x, i, x_arg = "`x`", i_arg = "`i`") {
   x_size <- vec_size(x)
   i_size <- vec_size(i)
 
@@ -90,7 +100,7 @@ check_block_index_size <- function(x, i) {
     return(invisible())
   }
 
-  glubort("The size of `x` ({x_size}) and `i` ({i_size}) must be the same.")
+  glubort("The size of {x_arg} ({x_size}) and {i_arg} ({i_size}) must be the same.")
 }
 
 check_block_index_ascending <- function(i) {

@@ -96,32 +96,30 @@ phop_dfc(
 
 Vectors to iterate over. Vectors of size 1 will be recycled.}
 
-\item{.starts}{\verb{[vector]}
+\item{.starts, .stops}{\verb{[integer]}
 
 Vectors of boundary locations that make up the windows to bucket \code{.x} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
-integer locations along \code{.x}.}
-
-\item{.stops}{\verb{[vector]}
-
-Vectors of boundary locations that make up the windows to bucket \code{.x} with.
-Both \code{.starts} and \code{.stops} will be recycled to their common size, and
-that common size will be the size of the result. Both vectors should be
-integer locations along \code{.x}.}
+integer locations along \code{.x}, but out-of-bounds values are allowed.}
 
 \item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
-If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
-to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
-The \code{.} placeholder can be used instead of \code{.x}. This allows you to
-create very compact anonymous functions with up to two inputs.}
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.ptype}{\verb{[vector]}
+\item{.ptype}{\verb{[vector(0)]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -156,14 +154,8 @@ number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
 }
-\description{
-\code{hop2()} and \code{phop()} represent the combination
-of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=hop]{hop()}}, allowing you to iterate
-over multiple vectors at once, hopping along them using boundaries defined
-by \code{.starts} and \code{.stops}.
-}
-\section{Invariants}{
-
+\value{
+A vector fulfilling the following invariants:
 
 \subsection{\code{hop2()}}{
 \itemize{
@@ -199,9 +191,13 @@ by \code{.starts} and \code{.stops}.
 
 }
 }
-
+\description{
+\code{hop2()} and \code{phop()} represent the combination
+of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=hop]{hop()}}, allowing you to iterate
+over multiple vectors at once, hopping along them using boundaries defined
+by \code{.starts} and \code{.stops}.
+}
 \examples{
-
 hop2(1:2, 3:4, .starts = 1, .stops = c(2, 1), ~c(x = .x, y = .y))
 
 phop(

@@ -1,24 +1,18 @@
-#' Hop along multiple inputs simultaneously using an index
+#' Hop along multiple inputs simultaneously relative to an index
 #'
 #' `hop_index2()` and `phop_index()` represent the combination
 #' of [slide2()] and [pslide()] with [hop_index()], allowing you to iterate
-#' over multiple vectors at once, while hopping along an `.i`-ndex with
+#' over multiple vectors at once, relative to an `.i`-ndex with
 #' boundaries defined by `.starts` and `.stops`.
 #'
 #' @inheritParams hop_index
 #'
-#' @param .x,.y `[vector]`
+#' @template param-x-y
+#' @template param-l
+#' @template param-starts-stops-hop-index
 #'
-#'   Vectors to iterate over. Vectors of size 1 will be recycled.
-#'
-#' @param .l `[list]`
-#'
-#'   A list of vectors. The length of `.l` determines the
-#'   number of arguments that `.f` will be called with. If `.l` has names,
-#'   they will be used as named arguments to `.f`. Elements of `.l` with size
-#'   1 will be recycled.
-#'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`hop_index2()`}{
 #'
@@ -69,7 +63,6 @@
 #' # The output size is equal to the common size of `.starts` and `.stops`
 #' hop_index2(x, i, i, starts, stops, ~data.frame(x = .x, y = .y))
 #'
-#' @inheritSection slide_index The `.i`-ndex
 #' @seealso [slide2()], [slide_index2()], [hop_index()]
 #' @export
 hop_index2 <- function(.x, .y, .i, .starts, .stops, .f, ...) {

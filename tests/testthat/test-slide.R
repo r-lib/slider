@@ -528,4 +528,13 @@ test_that("slide() forces arguments in the same way as base R / map()", {
   expect_equal(f_slide[[2]](0), f_base[[2]](0))
 })
 
+test_that(paste0(
+            "proof that the `window_stop < window_start` check is required for ",
+            "cases where the window is completely OOB"
+          ), {
 
+  expect_equal(
+    slide(1:3, identity, .before = 4, .after = -4),
+    list(integer(), integer(), integer())
+  )
+})

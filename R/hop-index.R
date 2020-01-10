@@ -1,4 +1,4 @@
-#' Hop over an index
+#' Hop relative to an index
 #'
 #' `hop_index()` is the lower level engine that powers [slide_index()]. It
 #' has slightly different invariants than `slide_index()`, and is useful when
@@ -7,16 +7,10 @@
 #'
 #' @inheritParams slide_index
 #'
-#' @param .starts,.stops `[vector]`
+#' @template param-starts-stops-hop-index
 #'
-#'   Vectors of boundary values that make up the windows to bucket `.i` with.
-#'   Both `.starts` and `.stops` will be recycled to their common size, and
-#'   that common size will be the size of the result. Both vectors should be
-#'   the same type as `.i`. These boundaries are both _inclusive_, meaning
-#'   that `.i` will be searched for values that fall into the
-#'   range of `[start, stop]`.
-#'
-#' @section Invariants:
+#' @return
+#' A vector fulfilling the following invariants:
 #'
 #' \subsection{`hop_index()`}{
 #'
@@ -95,7 +89,6 @@
 #'
 #' hop_index(i, i, starts, stops, ~.x)
 #'
-#' @inheritSection slide_index The `.i`-ndex
 #' @seealso [slide()], [slide_index()], [hop_index2()]
 #' @export
 hop_index <- function(.x, .i, .starts, .stops, .f, ...) {

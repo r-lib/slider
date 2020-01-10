@@ -19,7 +19,7 @@
 \alias{phop_index_raw}
 \alias{phop_index_dfr}
 \alias{phop_index_dfc}
-\title{Hop along multiple inputs simultaneously using an index}
+\title{Hop along multiple inputs simultaneously relative to an index}
 \usage{
 hop_index2(.x, .y, .i, .starts, .stops, .f, ...)
 
@@ -104,39 +104,44 @@ Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 The index vector that determines the window sizes. The lower bound
 of the window range will be computed as \code{.i - .before}, and the upper
-bound will be \code{.i + .after}. It is faily common to supply a date vector
-as the index, but not required.}
+bound as \code{.i + .after}. It is faily common to supply a date vector
+as the index, but not required.
 
-\item{.starts}{\verb{[vector]}
+There are 3 restrictions on the index:
+\itemize{
+\item The size of the index must match the size of \code{.x}, neither will
+be recycled.
+\item The index must be an \emph{increasing} vector, but duplicate values
+are allowed.
+\item The index cannot have missing values.
+}}
+
+\item{.starts, .stops}{\verb{[vector]}
 
 Vectors of boundary values that make up the windows to bucket \code{.i} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
 that common size will be the size of the result. Both vectors should be
 the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
-that \code{.i} will be searched for values that fall into the
-range of \verb{[start, stop]}.}
-
-\item{.stops}{\verb{[vector]}
-
-Vectors of boundary values that make up the windows to bucket \code{.i} with.
-Both \code{.starts} and \code{.stops} will be recycled to their common size, and
-that common size will be the size of the result. Both vectors should be
-the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
-that \code{.i} will be searched for values that fall into the
-range of \verb{[start, stop]}.}
+that the slice of \code{.x} that will be used in each call to \code{.f} is where
+\code{.i >= start & .i <= stop} returns \code{TRUE}.}
 
 \item{.f}{\verb{[function / formula]}
 
 If a \strong{function}, it is used as is.
 
-If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
-to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
-The \code{.} placeholder can be used instead of \code{.x}. This allows you to
-create very compact anonymous functions with up to two inputs.}
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.ptype}{\verb{[vector]}
+\item{.ptype}{\verb{[vector(0)]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -171,14 +176,8 @@ number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
 }
-\description{
-\code{hop_index2()} and \code{phop_index()} represent the combination
-of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=hop_index]{hop_index()}}, allowing you to iterate
-over multiple vectors at once, while hopping along an \code{.i}-ndex with
-boundaries defined by \code{.starts} and \code{.stops}.
-}
-\section{Invariants}{
-
+\value{
+A vector fulfilling the following invariants:
 
 \subsection{\code{hop_index2()}}{
 \itemize{
@@ -214,19 +213,12 @@ boundaries defined by \code{.starts} and \code{.stops}.
 
 }
 }
-
-\section{The \code{.i}-ndex}{
-
-
-There are 3 restrictions on \code{.i}:
-\itemize{
-\item The size of \code{.i} must match the size of \code{.x}, \code{.i} will not be recycled.
-\item \code{.i} must be an \emph{increasing} vector, but duplicate values
-are allowed.
-\item \code{.i} is not allowed to have missing values.
+\description{
+\code{hop_index2()} and \code{phop_index()} represent the combination
+of \code{\link[=slide2]{slide2()}} and \code{\link[=pslide]{pslide()}} with \code{\link[=hop_index]{hop_index()}}, allowing you to iterate
+over multiple vectors at once, relative to an \code{.i}-ndex with
+boundaries defined by \code{.starts} and \code{.stops}.
 }
-}
-
 \examples{
 # Notice that `i` is an irregular index!
 x <- 1:5

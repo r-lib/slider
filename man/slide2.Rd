@@ -221,28 +221,25 @@ Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 If a \strong{function}, it is used as is.
 
-If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function with up
-to two arguments: \code{.x} (single argument) or \code{.x} and \code{.y} (two arguments).
-The \code{.} placeholder can be used instead of \code{.x}. This allows you to
-create very compact anonymous functions with up to two inputs.}
+If a \strong{formula}, e.g. \code{~ .x + 2}, it is converted to a function. There
+are three ways to refer to the arguments:
+\itemize{
+\item For a single argument function, use \code{.}
+\item For a two argument function, use \code{.x} and \code{.y}
+\item For more arguments, use \code{..1}, \code{..2}, \code{..3} etc
+}
+
+This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before}{\verb{[integer(1) / Inf]}
+\item{.before, .after}{\verb{[integer(1) / Inf]}
 
-The number of values \emph{before} the current element to include in the sliding
-window. Set to \code{Inf} to select all elements before the current
-position, constructing a cumulative window. A negative value is allowed,
-and allows you to "look forward" as well.}
-
-\item{.after}{\verb{[integer(1) / Inf]}
-
-The number of values \emph{after} the current element to include in the
-sliding window. Set to \code{Inf} to select all elements after the
-current position, constructing the reverse of a cumulative window, where
-you start with as many elements as possible and decrease the amount as
-you move through \code{.x}. A negative value is allowed, and allows you to
-"look backward" as well.}
+The number of values before or after the current element to
+include in the sliding window. Set to \code{Inf} to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+\code{.before} value, or "look backwards" if used as \code{.after}.}
 
 \item{.step}{\verb{[positive integer(1)]}
 
@@ -250,10 +247,10 @@ The number of elements to shift the window forward between function calls.}
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should the sliding be restricted to complete windows only? If \code{FALSE},
+Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\verb{[vector]}
+\item{.ptype}{\verb{[vector(0)]}
 
 The prototype corresponding to the type of the output. Defaults to
 a \code{list()}.}
@@ -288,14 +285,8 @@ number of arguments that \code{.f} will be called with. If \code{.l} has names,
 they will be used as named arguments to \code{.f}. Elements of \code{.l} with size
 1 will be recycled.}
 }
-\description{
-These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in
-parallel. They are parallel in the sense that each input is processed in
-parallel with the others, not in the sense of multicore computing. These
-functions work similarly to \code{map2()} and \code{pmap()} from purrr.
-}
-\section{Invariants}{
-
+\value{
+A vector fulfilling the following invariants:
 
 \subsection{\code{slide2()}}{
 \itemize{
@@ -331,7 +322,12 @@ functions work similarly to \code{map2()} and \code{pmap()} from purrr.
 
 }
 }
-
+\description{
+These are variants of \code{\link[=slide]{slide()}} that iterate over multiple inputs in
+parallel. They are parallel in the sense that each input is processed in
+parallel with the others, not in the sense of multicore computing. These
+functions work similarly to \code{map2()} and \code{pmap()} from purrr.
+}
 \examples{
 # Slide along two inputs at once
 slide2(1:4, 5:8, ~list(.x, .y), .before = 2)

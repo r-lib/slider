@@ -4,9 +4,10 @@ hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
   check_not_na(starts, "`.starts`")
   check_not_na(stops, "`.stops`")
 
-  # TODO `convert_values = "none"` would be nice to disallow negative positions
-  starts <- vec_as_subscript(starts, allow_types = "location", arg = ".starts")
-  stops <- vec_as_subscript(stops, allow_types = "location", arg = ".stops")
+  # TODO Replace `n = .Machine$integer.max` with `n = NULL`
+  # and use `oob = "ignore"` and `zero = "ignore"` when vctrs is updated
+  starts <- num_as_location(starts, n = .Machine$integer.max, negative = "ignore", arg = ".starts")
+  stops <- num_as_location(stops, n = .Machine$integer.max, negative = "ignore", arg = ".stops")
 
   size <- vec_size_common(starts, stops)
   args <- vec_recycle_common(starts, stops, .size = size)
