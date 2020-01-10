@@ -27,13 +27,13 @@ slide provides a family of general purpose "sliding window" functions. The API i
 
 There are 3 core functions in slide:
 
-- `slide()` iterates over your data like `purrr::map()`, but uses a sliding window to do so. It is type stable, and always returns a result with the same size as its input.
+- `slide()` iterates over your data like [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), but uses a sliding window to do so. It is type stable, and always returns a result with the same size as its input.
 
 - `slide_index()` computes a rolling calculation _relative to an index_. If you have ever wanted to compute something like a "3 month rolling average" where the number of days in each month is irregular, you might like this function.
 
-- `hop_index()` is a lower level version of `slide_index()` that allows you to manually specify sliding boundaries using `.starts` and `.stops`. It can be useful if you want to return a result with a different size from the original input, or want to aggregate data to a less granular frequency using a rolling window (like taking daily data, slicing it into monthly blocks, and then creating a rolling window over those monthly blocks).
+- `slide_period()` is similar to `slide_index()` in that it slides relative to an index, but it first breaks the index up into "time blocks", like 2 month blocks of time, and then it slides over `.x` using indices defined by those blocks.
 
-Each of these 3 functions has the same variants as `purrr::map()`. For example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`, along with the other combinations of these variants that you might expect from having previously used purrr.
+Each of these core functions have the same variants as `purrr::map()`. For example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`, along with the other combinations of these variants that you might expect from having previously used purrr.
 
 To learn more about these three functions, read the [introduction vignette](https://davisvaughan.github.io/slide/articles/slide.html).
 
@@ -142,6 +142,24 @@ Powerfully, you can pass through any object to `.before` that computes a value f
 ```{r}
 slide_index(x, i, ~.x, .before = lubridate::days(1))
 ```
+
+## Period sliding
+
+`slide_period()` is different from `slide_index()` in that it first breaks the index into "time blocks" and then slides over `.x` relative to those blocks. For example, in the monthly period slide below, `i` is broken up into 4 time blocks of "the current block of monthly data, plus one block before this one". The locations of those blocks are the locations that are used to slice `.x` with.
+
+```{r}
+i <- as.Date(c(
+  "2019-01-29", 
+  "2019-01-30", 
+  "2019-02-05", 
+  "2019-04-01", 
+  "2019-05-10"
+))
+
+slide_period(i, i, "month", ~.x, .before = 1)
+```
+
+One neat thing to notice is that `slide_period()` is aware of the distance between elements of `.i` in the period you specify. The practical implication of this is that in the above example, group 3 with `2019-04-01` did _not_ include `2019-02-05` in it, because it is more than 1 month group away.
 
 ## Inspiration
 
