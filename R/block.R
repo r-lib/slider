@@ -71,7 +71,7 @@
 block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
 
-  check_block_index_type(i)
+  check_index_incompatible_type(i, "i")
   check_block_index_size(x, i)
   check_index_cannot_be_na(i, "i")
   check_block_index_ascending(i)
@@ -79,17 +79,6 @@ block <- function(x, i, period, every = 1L, origin = NULL) {
   boundaries <- warp_boundary(i, period = period, every = every, origin = origin)
 
   .Call(slide_block, x, boundaries$start, boundaries$stop)
-}
-
-check_block_index_type <- function(i) {
-  ok <- inherits(i, c("Date", "POSIXt"))
-
-  if (ok) {
-    return(invisible())
-  }
-
-  class <- paste0(class(i), collapse = "/")
-  glubort("The index must inherit from 'Date', 'POSIXct', or 'POSIXlt', not `{class}`.")
 }
 
 check_block_index_size <- function(x, i, x_arg = "`x`", i_arg = "`i`") {

@@ -1,3 +1,36 @@
+check_index_incompatible_type <- function(i, i_arg = "i") {
+  is_datelike <- inherits(i, c("Date", "POSIXt"))
+
+  if (is_datelike) {
+    return(invisible(i))
+  }
+
+  stop_index_incompatible_type(i, i_arg)
+}
+
+stop_index_incompatible_type <- function(i, i_arg = "i") {
+  stop_index(
+    i_class = class(i),
+    i_arg = i_arg,
+    class = "slide_error_index_incompatible_type"
+  )
+}
+
+#' @export
+cnd_header.slide_error_index_incompatible_type <- function(cnd, ...) {
+  glue_data(cnd, "`{i_arg}` has an incorrect type.")
+}
+
+#' @export
+cnd_body.slide_error_index_incompatible_type <- function(cnd, ...) {
+  glue_data_bullets(
+    cnd,
+    x = "It must inherit from Date, POSIXct, or POSIXlt, not {paste0(i_class, collapse = '/')}."
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 check_endpoints_must_be_ascending <- function(endpoints, endpoints_arg) {
   locations <- compute_non_ascending_locations(endpoints)
 

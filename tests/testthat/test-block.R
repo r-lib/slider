@@ -26,9 +26,7 @@ test_that("`i` can not have `NA` values", {
 })
 
 test_that("type of `i` is validated", {
-  expect_error(block(1, 1), "must inherit from")
-  expect_error(block(1, 1), "not `numeric`")
-  expect_error(block(1, ordered(1)), "not `ordered/factor`")
+  expect_error(block(1, 1), class = "slide_error_index_incompatible_type")
 })
 
 test_that("length of `i` must be identical to `x`", {

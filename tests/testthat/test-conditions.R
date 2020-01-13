@@ -1,4 +1,23 @@
 # ------------------------------------------------------------------------------
+# stop_index_incompatible_type()
+
+test_that("output is verified", {
+  verify_output(
+    test_path("output/test-stop-index-incompatible-type-1.txt"),
+    check_index_incompatible_type(1, ".i")
+  )
+})
+
+test_that("class names are collapsed", {
+  x <- structure(1, class = c("foo", "bar", "baz"))
+
+  verify_output(
+    test_path("output/test-stop-index-incompatible-type-2.txt"),
+    check_index_incompatible_type(x, ".i")
+  )
+})
+
+# ------------------------------------------------------------------------------
 # stop_endpoints_must_be_ascending()
 
 test_that("output is verified", {
