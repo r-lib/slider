@@ -1,10 +1,3 @@
-# TODO - There are other things besides the index that we restrict from being
-# NA. Do they get their own error types?
-
-# TODO - Test individual stop functions with verify_output()
-
-# ------------------------------------------------------------------------------
-
 check_generated_endpoins_cannot_be_na <- function(endpoints, by_arg) {
   na_indicators <- vec_equal_na(endpoints)
 

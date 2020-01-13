@@ -1,0 +1,4 @@
+> check_endpoints_cannot_be_na(c(NA, 1, NA), ".starts")
+Error: `.starts` cannot be `NA`.
+i It is `NA` at locations: 1, 3.
+
