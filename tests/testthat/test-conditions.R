@@ -1,4 +1,14 @@
 # ------------------------------------------------------------------------------
+# stop_endpoints_must_be_ascending()
+
+test_that("output is verified", {
+  verify_output(
+    test_path("output/test-stop-endpoints-must-be-ascending-1.txt"),
+    check_endpoints_must_be_ascending(c(1, 2, 1, 3, 4, 2), ".starts")
+  )
+})
+
+# ------------------------------------------------------------------------------
 # stop_generated_endpoints_cannot_be_na()
 
 test_that("output is verified", {

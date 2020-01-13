@@ -29,11 +29,11 @@ test_that(".i must be ascending", {
 })
 
 test_that(".starts must be ascending", {
-  expect_error(hop_index(1:2, 1:2, 2:1, 1:2, identity), "`.starts` must be in ascending order")
+  expect_error(hop_index(1:2, 1:2, 2:1, 1:2, identity), class = "slide_error_endpoints_must_be_ascending")
 })
 
 test_that(".stops must be ascending", {
-  expect_error(hop_index(1:2, 1:2, 1:2, 2:1, identity), "`.stops` must be in ascending order")
+  expect_error(hop_index(1:2, 1:2, 1:2, 2:1, identity), class = "slide_error_endpoints_must_be_ascending")
 })
 
 test_that("empty input returns a list, but after the index size check", {

@@ -1,3 +1,36 @@
+check_endpoints_must_be_ascending <- function(endpoints, endpoints_arg) {
+  locations <- compute_non_ascending_locations(endpoints)
+
+  if (identical(locations, integer())) {
+    return(invisible(endpoints))
+  }
+
+  stop_endpoints_must_be_ascending(locations, endpoints_arg)
+}
+
+stop_endpoints_must_be_ascending <- function(locations, endpoints_arg) {
+  stop_endpoints(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    class = "slide_error_endpoints_must_be_ascending"
+  )
+}
+
+#' @export
+cnd_header.slide_error_endpoints_must_be_ascending <- function(cnd, ...) {
+  glue_data(cnd, "`{endpoints_arg}` must be in ascending order.")
+}
+
+#' @export
+cnd_body.slide_error_endpoints_must_be_ascending <- function(cnd, ...) {
+  glue_data_bullets(
+    cnd,
+    i = "It is not ascending at locations: {collapse_locations(locations)}."
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 check_generated_endpoins_cannot_be_na <- function(endpoints, by_arg) {
   na_indicators <- vec_equal_na(endpoints)
 
@@ -10,7 +43,7 @@ check_generated_endpoins_cannot_be_na <- function(endpoints, by_arg) {
 }
 
 stop_generated_endpoints_cannot_be_na <- function(locations, by_arg) {
-  stop_slide(
+  stop_endpoints(
     locations = locations,
     by_arg = by_arg,
     class = "slide_error_generated_endpoints_cannot_be_na"
@@ -44,7 +77,7 @@ check_endpoints_cannot_be_na <- function(endpoints, endpoints_arg) {
 }
 
 stop_endpoints_cannot_be_na <- function(locations, endpoints_arg) {
-  stop_slide(
+  stop_endpoints(
     locations = locations,
     endpoints_arg = endpoints_arg,
     class = "slide_error_endpoints_cannot_be_na"
@@ -67,14 +100,11 @@ cnd_body.slide_error_endpoints_cannot_be_na <- function(cnd, ...) {
 # ------------------------------------------------------------------------------
 
 check_index_must_be_ascending <- function(i, i_arg = "i") {
-  order <- vec_order(i, "asc")
+  locations <- compute_non_ascending_locations(i)
 
-  if (is_sorted(order)) {
+  if (identical(locations, integer())) {
     return(invisible(i))
   }
-
-  problems <- which(diff(order) < 0L)
-  locations <- order[problems]
 
   stop_index_must_be_ascending(locations, i_arg)
 }
@@ -157,6 +187,12 @@ cnd_body.slide_error_index_incompatible_size <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
+stop_endpoints <- function(message = NULL, class = character(), ...) {
+  stop_slide(message, class = c(class, "slide_error_endpoints"), ...)
+}
+
+# ------------------------------------------------------------------------------
+
 stop_index <- function(message = NULL, class = character(), ...) {
   stop_slide(message, class = c(class, "slide_error_index"), ...)
 }
@@ -184,4 +220,17 @@ map_chr <- function(x, f) {
 
 is_sorted <- function(x) {
   !is.unsorted(x)
+}
+
+compute_non_ascending_locations <- function(x) {
+  order <- vec_order(x, "asc")
+
+  if (is_sorted(order)) {
+    return(integer())
+  }
+
+  problems <- which(diff(order) < 0L)
+  locations <- order[problems]
+
+  locations
 }
