@@ -5,6 +5,40 @@
 
 # ------------------------------------------------------------------------------
 
+check_endpoints_cannot_be_na <- function(endpoints, endpoints_arg) {
+  na_indicators <- vec_equal_na(endpoints)
+
+  if (any(na_indicators)) {
+    na_locations <- which(na_indicators)
+    stop_endpoints_cannot_be_na(na_locations, endpoints_arg)
+  }
+
+  invisible(endpoints)
+}
+
+stop_endpoints_cannot_be_na <- function(locations, endpoints_arg) {
+  stop_slide(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    class = "slide_error_endpoints_cannot_be_na"
+  )
+}
+
+#' @export
+cnd_header.slide_error_endpoints_cannot_be_na <- function(cnd, ...) {
+  glue_data(cnd, "`{endpoints_arg}` cannot be `NA`.")
+}
+
+#' @export
+cnd_body.slide_error_endpoints_cannot_be_na <- function(cnd, ...) {
+  glue_data_bullets(
+    cnd,
+    i = "It is `NA` at locations: {collapse_locations(locations)}."
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 check_index_cannot_be_na <- function(i, i_arg = "i") {
   na_indicators <- vec_equal_na(i)
 
