@@ -9,16 +9,20 @@ hop_index_common <- function(x,
                              type) {
 
   x_size <- compute_size(x, type)
+  i_size <- vec_size(i)
 
-  check_index_size(x_size, i)
-  check_not_na(i, "`.i`")
-  check_ascending(i, "The `.i`ndex")
+  if (i_size != x_size) {
+    stop_index_incompatible_size(i_size, x_size, ".i")
+  }
 
-  check_not_na(starts, "`.starts`")
-  check_ascending(starts, "`.starts`")
+  check_index_cannot_be_na(i, ".i")
+  check_index_must_be_ascending(i, ".i")
 
-  check_not_na(stops, "`.stops`")
-  check_ascending(stops, "`.stops`")
+  check_endpoints_cannot_be_na(starts, ".starts")
+  check_endpoints_must_be_ascending(starts, ".starts")
+
+  check_endpoints_cannot_be_na(stops, ".stops")
+  check_endpoints_must_be_ascending(stops, ".stops")
 
   size <- vec_size_common(starts, stops)
 

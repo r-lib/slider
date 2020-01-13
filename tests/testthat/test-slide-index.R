@@ -21,21 +21,21 @@ test_that("defaults work with `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_index(1, 1:2, identity), "must be the same")
+  expect_error(slide_index(1, 1:2, identity), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_index(1:2, 2:1, identity), "`.i`ndex must be in ascending order")
+  expect_error(slide_index(1:2, 2:1, identity), class = "slide_error_index_must_be_ascending")
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_index(integer(), integer(), ~.x), list())
-  expect_error(slide_index(integer(), 1, ~.x), "must be the same")
+  expect_error(slide_index(integer(), 1, ~.x), class = "slide_error_index_incompatible_size")
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_index(1:2, c(1, NA), identity), "found at location[(]s[)]: 2")
-  expect_error(slide_index(1:2, c(NA, 1), identity), "found at location[(]s[)]: 1")
+  expect_error(slide_index(1:2, c(1, NA), identity), class = "slide_error_index_cannot_be_na")
+  expect_error(slide_index(1:2, c(NA, 1), identity), class = "slide_error_index_cannot_be_na")
 })
 
 # ------------------------------------------------------------------------------
@@ -455,7 +455,7 @@ test_that("can generally use (tricky!) month Periods with Dates", {
 
   expect_error(
     slide_index(x, i, identity, .before = months(1)),
-    "`.before` cannot have `NA` values"
+    class = "slide_error_generated_endpoints_cannot_be_na"
   )
 })
 
@@ -810,7 +810,7 @@ test_that("can generally use (tricky!) month Periods with Dates", {
 
   expect_error(
     slide_index(x, i, identity, .after = months(1)),
-    "`.after` cannot have `NA` values"
+    class = "slide_error_generated_endpoints_cannot_be_na"
   )
 })
 

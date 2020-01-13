@@ -11,9 +11,9 @@ slide_period_common <- function(x,
                                 ptype,
                                 env,
                                 type) {
-  check_block_index_type(i)
-  check_not_na(i, "`.i`")
-  check_ascending(i, "The `.i`-ndex")
+  check_index_incompatible_type(i, ".i")
+  check_index_cannot_be_na(i, ".i")
+  check_index_must_be_ascending(i, ".i")
 
   before_unbounded <- is_unbounded(before)
   after_unbounded <- is_unbounded(after)

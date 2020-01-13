@@ -22,19 +22,17 @@ test_that("works with empty input", {
 })
 
 test_that("`i` can not have `NA` values", {
-  expect_error(block(1:2, new_date(c(0, NA_real_))), "cannot have `NA` values")
+  expect_error(block(1:2, new_date(c(0, NA_real_))), class = "slide_error_index_cannot_be_na")
 })
 
 test_that("type of `i` is validated", {
-  expect_error(block(1, 1), "must inherit from")
-  expect_error(block(1, 1), "not `numeric`")
-  expect_error(block(1, ordered(1)), "not `ordered/factor`")
+  expect_error(block(1, 1), class = "slide_error_index_incompatible_type")
 })
 
 test_that("length of `i` must be identical to `x`", {
-  expect_error(block(c(1, 2), new_date(0)), c("`x` [(]2[)] and `i` [(]1[)]"))
+  expect_error(block(c(1, 2), new_date(0)), class = "slide_error_index_incompatible_size")
 })
 
 test_that("`i` must be ascending", {
-  expect_error(block(c(1, 2, 3), new_date(c(2, 1, 0))), "it is not: 1, 2")
+  expect_error(block(c(1, 2, 3), new_date(c(2, 1, 0))), class = "slide_error_index_must_be_ascending")
 })

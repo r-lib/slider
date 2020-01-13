@@ -1,8 +1,8 @@
 hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
   x_size <- compute_size(x, type)
 
-  check_not_na(starts, "`.starts`")
-  check_not_na(stops, "`.stops`")
+  check_endpoints_cannot_be_na(starts, ".starts")
+  check_endpoints_cannot_be_na(stops, ".stops")
 
   # TODO Replace `n = .Machine$integer.max` with `n = NULL`
   # and use `oob = "ignore"` and `zero = "ignore"` when vctrs is updated

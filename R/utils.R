@@ -38,36 +38,6 @@ check_all_size_one <- function(out) {
   invisible(out)
 }
 
-check_not_na <- function(x, what) {
-  na <- vec_equal_na(x)
-
-  if (any(na)) {
-    at <- which(na)
-    at <- collapse_and_trim(at)
-    glubort(
-      "{what} cannot have `NA` values, ",
-      "which were found at location(s): {at}."
-    )
-  }
-
-  invisible(x)
-}
-
-check_ascending <- function(x, what) {
-  order <- vec_order(x, "asc")
-
-  if (is.unsorted(order)) {
-    at <- which(diff(order) < 0L)
-    at <- collapse_and_trim(at)
-    glubort(
-      "{what} must be in ascending order. ",
-      "At the following locations, it is not: {at}."
-    )
-  }
-
-  invisible(x)
-}
-
 check_is_list <- function(.l) {
   if (!is.list(.l)) {
     abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))

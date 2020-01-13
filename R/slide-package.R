@@ -9,6 +9,8 @@
 #' @import vctrs
 #' @importFrom warp warp_boundary
 #' @importFrom warp warp_distance
+#' @importFrom glue glue_data
+#' @importFrom glue glue_collapse
 #' @useDynLib slide, .registration = TRUE
 ## usethis namespace: end
 NULL
