@@ -38,21 +38,6 @@ check_all_size_one <- function(out) {
   invisible(out)
 }
 
-check_not_na <- function(x, what) {
-  na <- vec_equal_na(x)
-
-  if (any(na)) {
-    at <- which(na)
-    at <- collapse_and_trim(at)
-    glubort(
-      "{what} cannot have `NA` values, ",
-      "which were found at location(s): {at}."
-    )
-  }
-
-  invisible(x)
-}
-
 check_ascending <- function(x, what) {
   order <- vec_order(x, "asc")
 

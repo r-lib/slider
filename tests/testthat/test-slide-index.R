@@ -455,7 +455,7 @@ test_that("can generally use (tricky!) month Periods with Dates", {
 
   expect_error(
     slide_index(x, i, identity, .before = months(1)),
-    "`.before` cannot have `NA` values"
+    class = "slide_error_generated_endpoints_cannot_be_na"
   )
 })
 
@@ -810,7 +810,7 @@ test_that("can generally use (tricky!) month Periods with Dates", {
 
   expect_error(
     slide_index(x, i, identity, .after = months(1)),
-    "`.after` cannot have `NA` values"
+    class = "slide_error_generated_endpoints_cannot_be_na"
   )
 })
 
