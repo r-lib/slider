@@ -72,39 +72,17 @@ block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
 
   check_index_incompatible_type(i, "i")
-  check_block_index_size(x, i)
   check_index_cannot_be_na(i, "i")
-  check_block_index_ascending(i)
+  check_index_must_be_ascending(i, "i")
+
+  x_size <- vec_size(x)
+  i_size <- vec_size(i)
+
+  if (x_size != i_size) {
+    stop_index_incompatible_size(i_size, x_size, "i")
+  }
 
   boundaries <- warp_boundary(i, period = period, every = every, origin = origin)
 
   .Call(slide_block, x, boundaries$start, boundaries$stop)
-}
-
-check_block_index_size <- function(x, i, x_arg = "`x`", i_arg = "`i`") {
-  x_size <- vec_size(x)
-  i_size <- vec_size(i)
-
-  if (x_size == i_size) {
-    return(invisible())
-  }
-
-  glubort("The size of {x_arg} ({x_size}) and {i_arg} ({i_size}) must be the same.")
-}
-
-check_block_index_ascending <- function(i) {
-  i <- unclass(i)
-
-  not_ok <- is.unsorted(i, strictly = FALSE)
-
-  if (not_ok) {
-    at <- which(diff(i) < 0L)
-    at <- collapse_and_trim(at)
-    glubort(
-      "`i` must be in ascending order. ",
-      "At the following locations, it is not: {at}."
-    )
-  }
-
-  invisible(i)
 }

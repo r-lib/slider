@@ -30,9 +30,9 @@ test_that("type of `i` is validated", {
 })
 
 test_that("length of `i` must be identical to `x`", {
-  expect_error(block(c(1, 2), new_date(0)), c("`x` [(]2[)] and `i` [(]1[)]"))
+  expect_error(block(c(1, 2), new_date(0)), class = "slide_error_index_incompatible_size")
 })
 
 test_that("`i` must be ascending", {
-  expect_error(block(c(1, 2, 3), new_date(c(2, 1, 0))), "it is not: 1, 2")
+  expect_error(block(c(1, 2, 3), new_date(c(2, 1, 0))), class = "slide_error_index_must_be_ascending")
 })
