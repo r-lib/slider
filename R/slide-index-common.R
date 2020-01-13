@@ -18,7 +18,7 @@ slide_index_common <- function(x,
   }
 
   check_index_cannot_be_na(i, ".i")
-  check_ascending(i, "The `.i`ndex")
+  check_index_must_be_ascending(i, ".i")
 
   # Early exit if empty input
   # (but after the index size check)

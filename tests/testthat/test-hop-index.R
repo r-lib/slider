@@ -25,7 +25,7 @@ test_that(".x must be the same size as .i", {
 })
 
 test_that(".i must be ascending", {
-  expect_error(hop_index(1:2, 2:1, 1:2, 1:2, identity), "`.i`ndex must be in ascending order")
+  expect_error(hop_index(1:2, 2:1, 1:2, 1:2, identity), class = "slide_error_index_must_be_ascending")
 })
 
 test_that(".starts must be ascending", {

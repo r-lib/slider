@@ -25,7 +25,7 @@ test_that(".x must be the same size as .i", {
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_index(1:2, 2:1, identity), "`.i`ndex must be in ascending order")
+  expect_error(slide_index(1:2, 2:1, identity), class = "slide_error_index_must_be_ascending")
 })
 
 test_that("empty input returns a list, but after the index size check", {

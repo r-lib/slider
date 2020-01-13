@@ -16,7 +16,7 @@ hop_index_common <- function(x,
   }
 
   check_index_cannot_be_na(i, ".i")
-  check_ascending(i, "The `.i`ndex")
+  check_index_must_be_ascending(i, ".i")
 
   check_endpoints_cannot_be_na(starts, ".starts")
   check_ascending(starts, "`.starts`")

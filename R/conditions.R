@@ -66,6 +66,42 @@ cnd_body.slide_error_endpoints_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
+check_index_must_be_ascending <- function(i, i_arg = "i") {
+  order <- vec_order(i, "asc")
+
+  if (is_sorted(order)) {
+    return(invisible(i))
+  }
+
+  problems <- which(diff(order) < 0L)
+  locations <- order[problems]
+
+  stop_index_must_be_ascending(locations, i_arg)
+}
+
+stop_index_must_be_ascending <- function(locations, i_arg = "i") {
+  stop_index(
+    locations = locations,
+    i_arg = i_arg,
+    class = "slide_error_index_must_be_ascending"
+  )
+}
+
+#' @export
+cnd_header.slide_error_index_must_be_ascending <- function(cnd, ...) {
+  glue_data(cnd, "`{i_arg}` must be in ascending order.")
+}
+
+#' @export
+cnd_body.slide_error_index_must_be_ascending <- function(cnd, ...) {
+  glue_data_bullets(
+    cnd,
+    i = "It is not ascending at locations: {collapse_locations(locations)}."
+  )
+}
+
+# ------------------------------------------------------------------------------
+
 check_index_cannot_be_na <- function(i, i_arg = "i") {
   na_indicators <- vec_equal_na(i)
 
@@ -144,4 +180,8 @@ glue_data_bullets <- function (.data, ..., .env = caller_env()) {
 
 map_chr <- function(x, f) {
   vapply(x, f, character(1))
+}
+
+is_sorted <- function(x) {
+  !is.unsorted(x)
 }

@@ -19,6 +19,20 @@ test_that("output is verified", {
 })
 
 # ------------------------------------------------------------------------------
+# stop_index_must_be_ascending()
+
+test_that("output is verified", {
+  verify_output(
+    test_path("output/test-stop-index-must-be-ascending-1.txt"),
+    check_index_must_be_ascending(c(1, 2, 1, 4, 5, 3), ".i")
+  )
+})
+
+test_that("not assuming strictly ascending", {
+  expect_silent(check_index_must_be_ascending(c(1, 1)))
+})
+
+# ------------------------------------------------------------------------------
 # stop_index_cannot_be_na()
 
 test_that("output is verified", {
