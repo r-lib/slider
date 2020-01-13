@@ -71,14 +71,14 @@ compute_ranges <- function(i, before, after, start_unbounded, stop_unbounded) {
     starts <- NULL
   } else {
     starts <- i - before
-    check_generated_endpoins_cannot_be_na(starts, ".before")
+    check_generated_endpoints_cannot_be_na(starts, ".before")
   }
 
   if (stop_unbounded) {
     stops <- NULL
   } else {
     stops <- i + after
-    check_generated_endpoins_cannot_be_na(stops, ".after")
+    check_generated_endpoints_cannot_be_na(stops, ".after")
   }
 
   ptype <- vec_ptype_common(i, starts, stops)

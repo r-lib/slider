@@ -14,7 +14,7 @@ test_that("output is verified", {
 test_that("output is verified", {
   verify_output(
     test_path("output/test-stop-generated-endpoints-cannot-be-na-1.txt"),
-    check_generated_endpoins_cannot_be_na(c(NA, 1, NA), ".before")
+    check_generated_endpoints_cannot_be_na(c(NA, 1, NA), ".before")
   )
 })
 

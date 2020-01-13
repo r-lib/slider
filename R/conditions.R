@@ -31,7 +31,7 @@ cnd_body.slide_error_endpoints_must_be_ascending <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoins_cannot_be_na <- function(endpoints, by_arg) {
+check_generated_endpoints_cannot_be_na <- function(endpoints, by_arg) {
   na_indicators <- vec_equal_na(endpoints)
 
   if (any(na_indicators)) {
