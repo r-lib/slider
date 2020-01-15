@@ -4,10 +4,8 @@ hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
   check_endpoints_cannot_be_na(starts, ".starts")
   check_endpoints_cannot_be_na(stops, ".stops")
 
-  # TODO Replace `n = .Machine$integer.max` with `n = NULL`
-  # and use `oob = "ignore"` and `zero = "ignore"` when vctrs is updated
-  starts <- num_as_location(starts, n = .Machine$integer.max, negative = "ignore", arg = ".starts")
-  stops <- num_as_location(stops, n = .Machine$integer.max, negative = "ignore", arg = ".stops")
+  starts <- vec_as_subscript(starts, indicator = "error", name = "error", arg = ".starts")
+  stops <- vec_as_subscript(stops, indicator = "error", name = "error", arg = ".stops")
 
   size <- vec_size_common(starts, stops)
   args <- vec_recycle_common(starts, stops, .size = size)
