@@ -31,11 +31,11 @@ slide_index_common <- function(x,
   complete <- check_complete(complete)
 
   # Compute unique values of `i` to avoid repeated evaluations of `.f`
-  split <- vec_group_pos(i)
+  split <- vec_group_loc(i)
   i <- split$key
 
   # `indices` helps us map back to `.x`
-  indices <- split$pos
+  indices <- split$loc
 
   range <- compute_ranges(i, before, after)
   i <- range$i

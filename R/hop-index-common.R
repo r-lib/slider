@@ -44,9 +44,9 @@ hop_index_common <- function(x,
   starts <- args[[2L]]
   stops <- args[[3L]]
 
-  split <- vec_group_pos(i)
+  split <- vec_group_loc(i)
   i <- split$key
-  window_indices <- split$pos
+  window_indices <- split$loc
 
   .Call(
     hop_index_common_impl,
