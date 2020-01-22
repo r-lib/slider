@@ -24,7 +24,7 @@ test_that("empty `.x`, but size `n > 0` `.starts` and `.stops` returns size `n` 
 
 test_that("empty `.x`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
   expect_error(hop(integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
-  expect_error(hop(integer(), 1, "x", ~.x), class = "vctrs_error_subscript_bad_type")
+  expect_error(hop(integer(), 1, "x", ~.x), class = "vctrs_error_subscript_type")
 })
 
 test_that(".starts must not contain NA values", {
@@ -109,6 +109,6 @@ test_that("duplicated .starts/.stops pairs are allowed", {
 })
 
 test_that("`.starts` and `.stops` must be integerish", {
-  expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_bad_type")
-  expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_bad_type")
+  expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_type")
+  expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_type")
 })
