@@ -35,8 +35,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2
 Remotes:
-    r-lib/vctrs,
-    DavisVaughan/warp
+    r-lib/vctrs
 Collate: 
     'block.R'
     'conditions.R'
