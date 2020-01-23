@@ -11,10 +11,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Sliding Window Functions">
-<meta property="og:description" content="Provides type stable rolling window functions over any R data type.
-    Cumulative and expanding windows are also supported. For more advanced
-    usage, an index can be used as a secondary vector that defines how
-    sliding windows are to be created.">
+<meta property="og:description" content="Provides type-stable rolling window functions over
+    any R data type.  Cumulative and expanding windows are also supported.
+    For more advanced usage, an index can be used as a secondary vector
+    that defines how sliding windows are to be created.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -92,7 +92,7 @@
 <p>slide provides a family of general purpose “sliding window” functions. The API is purposefully <em>very</em> similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other “window” based computations.</p>
 <p>There are 3 core functions in slide:</p>
 <ul>
-<li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <a href="https://purrr.tidyverse.org/reference/map.html"><code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code></a>, but uses a sliding window to do so. It is type stable, and always returns a result with the same size as its input.</p></li>
+<li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <a href="https://purrr.tidyverse.org/reference/map.html"><code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code></a>, but uses a sliding window to do so. It is type-stable, and always returns a result with the same size as its input.</p></li>
 <li><p><code><a href="reference/slide_index.html">slide_index()</a></code> computes a rolling calculation <em>relative to an index</em>. If you have ever wanted to compute something like a “3 month rolling average” where the number of days in each month is irregular, you might like this function.</p></li>
 <li><p><code><a href="reference/slide_period.html">slide_period()</a></code> is similar to <code><a href="reference/slide_index.html">slide_index()</a></code> in that it slides relative to an index, but it first breaks the index up into “time blocks”, like 2 month blocks of time, and then it slides over <code>.x</code> using indices defined by those blocks.</p></li>
 </ul>
