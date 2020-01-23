@@ -78,7 +78,7 @@ pslide_index_simplify <- function(.l,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname slide_index2

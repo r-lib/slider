@@ -196,7 +196,7 @@ slide_period_simplify <- function(.x,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname slide_period
