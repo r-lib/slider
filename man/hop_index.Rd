@@ -3,47 +3,11 @@
 \name{hop_index}
 \alias{hop_index}
 \alias{hop_index_vec}
-\alias{hop_index_dbl}
-\alias{hop_index_int}
-\alias{hop_index_lgl}
-\alias{hop_index_chr}
-\alias{hop_index_dfr}
-\alias{hop_index_dfc}
 \title{Hop relative to an index}
 \usage{
 hop_index(.x, .i, .starts, .stops, .f, ...)
 
 hop_index_vec(.x, .i, .starts, .stops, .f, ..., .ptype = NULL)
-
-hop_index_dbl(.x, .i, .starts, .stops, .f, ...)
-
-hop_index_int(.x, .i, .starts, .stops, .f, ...)
-
-hop_index_lgl(.x, .i, .starts, .stops, .f, ...)
-
-hop_index_chr(.x, .i, .starts, .stops, .f, ...)
-
-hop_index_dfr(
-  .x,
-  .i,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique")
-)
-
-hop_index_dfc(
-  .x,
-  .i,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal")
-)
 }
 \arguments{
 \item{.x}{\verb{[vector]}
@@ -103,29 +67,6 @@ and the final output will have that type.
 
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
-
-\item{.names_to}{Optionally, the name of a column where the names
-of \code{...} arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and \code{...} is not named,
-an integer column is used to identify the rows.}
-
-\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
-options.
-
-With \code{vec_rbind()}, the repair function is applied to all inputs
-separately. This is because \code{vec_rbind()} needs to align their
-columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, \code{vec_cbind()} applies the
-repair function after all inputs have been concatenated together
-in a final data frame. Hence \code{vec_cbind()} allows the more
-permissive minimal names repair.}
-
-\item{.size}{If, \code{NULL}, the default, will determine the number of
-rows in \code{vec_cbind()} output by using the standard recycling rules.
-
-Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.}
 }
 \value{
 A vector fulfilling the following invariants:
@@ -138,7 +79,7 @@ A vector fulfilling the following invariants:
 
 }
 
-\subsection{\code{hop_index_vec()} and \verb{hop_index_*()} variants}{
+\subsection{\code{hop_index_vec()}}{
 \itemize{
 \item \code{vec_size(hop_index_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(hop_index_vec(.x, .starts, .stops)[[1]]) == 1L}
@@ -194,8 +135,14 @@ i <- vec_c(as.Date("2019-02-27") + 0:3, as.Date("2019-03-27") + 0:5)
 x <- rnorm(vec_seq_along(i))
 
 # You might try `slide_index()` like this, but you'd run into this error
-cnd <- try(slide_index(x, i, mean, .before = months(1)), silent = TRUE)
-attr(cnd, "condition")[["message"]]
+library(rlang)
+
+with_options(
+  catch_cnd(
+    slide_index(x, i, mean, .before = months(1))
+  ),
+  rlang_backtrace_on_error = current_env()
+)
 
 # This is because when you actually compute the `.i - .before` sequence,
 # you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.

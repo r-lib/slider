@@ -66,7 +66,7 @@
 #'
 #' }
 #'
-#' \subsection{`hop_vec()` and `hop_*()` variants}{
+#' \subsection{`hop_vec()`}{
 #'
 #'  * `vec_size(hop_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -155,114 +155,6 @@ hop_vec_simplify <- function(.x,
   check_all_size_one(out)
 
   vec_simplify(out)
-}
-
-#' @rdname hop
-#' @export
-hop_dbl <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...) {
-  hop_vec(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = double()
-  )
-}
-
-#' @rdname hop
-#' @export
-hop_int <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...) {
-  hop_vec(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = integer()
-  )
-}
-
-#' @rdname hop
-#' @export
-hop_lgl <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...) {
-  hop_vec(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = logical()
-  )
-}
-
-#' @rdname hop
-#' @export
-hop_chr <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...) {
-  hop_vec(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = character()
-  )
-}
-
-#' @rdname hop
-#' @export
-hop_dfr <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...,
-                    .names_to = NULL,
-                    .name_repair = c("unique", "universal", "check_unique")) {
-  out <- hop(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
-}
-
-#' @rdname hop
-#' @export
-hop_dfc <- function(.x,
-                    .starts,
-                    .stops,
-                    .f,
-                    ...,
-                    .size = NULL,
-                    .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- hop(
-    .x,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
 
 # ------------------------------------------------------------------------------

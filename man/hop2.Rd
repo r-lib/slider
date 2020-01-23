@@ -3,87 +3,17 @@
 \name{hop2}
 \alias{hop2}
 \alias{hop2_vec}
-\alias{hop2_dbl}
-\alias{hop2_int}
-\alias{hop2_lgl}
-\alias{hop2_chr}
-\alias{hop2_dfr}
-\alias{hop2_dfc}
 \alias{phop}
 \alias{phop_vec}
-\alias{phop_dbl}
-\alias{phop_int}
-\alias{phop_lgl}
-\alias{phop_chr}
-\alias{phop_dfr}
-\alias{phop_dfc}
 \title{Hop along multiple inputs simultaneously}
 \usage{
 hop2(.x, .y, .starts, .stops, .f, ...)
 
 hop2_vec(.x, .y, .starts, .stops, .f, ..., .ptype = NULL)
 
-hop2_dbl(.x, .y, .starts, .stops, .f, ...)
-
-hop2_int(.x, .y, .starts, .stops, .f, ...)
-
-hop2_lgl(.x, .y, .starts, .stops, .f, ...)
-
-hop2_chr(.x, .y, .starts, .stops, .f, ...)
-
-hop2_dfr(
-  .x,
-  .y,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique")
-)
-
-hop2_dfc(
-  .x,
-  .y,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal")
-)
-
 phop(.l, .starts, .stops, .f, ...)
 
 phop_vec(.l, .starts, .stops, .f, ..., .ptype = NULL)
-
-phop_dbl(.l, .starts, .stops, .f, ...)
-
-phop_int(.l, .starts, .stops, .f, ...)
-
-phop_lgl(.l, .starts, .stops, .f, ...)
-
-phop_chr(.l, .starts, .stops, .f, ...)
-
-phop_dfr(
-  .l,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique")
-)
-
-phop_dfc(
-  .l,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal")
-)
 }
 \arguments{
 \item{.x, .y}{\verb{[vector]}
@@ -126,29 +56,6 @@ and the final output will have that type.
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
 
-\item{.names_to}{Optionally, the name of a column where the names
-of \code{...} arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and \code{...} is not named,
-an integer column is used to identify the rows.}
-
-\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
-options.
-
-With \code{vec_rbind()}, the repair function is applied to all inputs
-separately. This is because \code{vec_rbind()} needs to align their
-columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, \code{vec_cbind()} applies the
-repair function after all inputs have been concatenated together
-in a final data frame. Hence \code{vec_cbind()} allows the more
-permissive minimal names repair.}
-
-\item{.size}{If, \code{NULL}, the default, will determine the number of
-rows in \code{vec_cbind()} output by using the standard recycling rules.
-
-Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.}
-
 \item{.l}{\verb{[list]}
 
 A list of vectors. The length of \code{.l} determines the
@@ -167,7 +74,7 @@ A vector fulfilling the following invariants:
 
 }
 
-\subsection{\code{hop2_vec()} and \verb{hop2_*()} variants}{
+\subsection{\code{hop2_vec()}}{
 \itemize{
 \item \code{vec_size(hop2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(hop2_vec(.x, .y, .starts, .stops)[[1]]) == 1L}
@@ -184,7 +91,7 @@ A vector fulfilling the following invariants:
 
 }
 
-\subsection{\code{phop_vec()} and \verb{phop_*()} variants}{
+\subsection{\code{phop_vec()}}{
 \itemize{
 \item \code{vec_size(phop_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(phop_vec(.l, .starts, .stops)[[1]]) == 1L}

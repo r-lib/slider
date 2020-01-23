@@ -22,7 +22,7 @@
 #'
 #' }
 #'
-#' \subsection{`hop_index2_vec()` and `hop_index2_*()` variants}{
+#' \subsection{`hop_index2_vec()`}{
 #'
 #'  * `vec_size(hop_index2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -40,7 +40,7 @@
 #'
 #' }
 #'
-#' \subsection{`phop_index_vec()` and `phop_index_*()` variants}{
+#' \subsection{`phop_index_vec()`}{
 #'
 #'  * `vec_size(phop_index_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -137,138 +137,6 @@ hop_index2_vec_simplify <- function(.x,
   check_all_size_one(out)
 
   vec_simplify(out)
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_dbl <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...) {
-  hop_index2_vec(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = double()
-  )
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_int <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...) {
-  hop_index2_vec(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = integer()
-  )
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_lgl <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...) {
-  hop_index2_vec(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = logical()
-  )
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_chr <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...) {
-  hop_index2_vec(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = character()
-  )
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_dfr <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...,
-                           .names_to = NULL,
-                           .name_repair = c("unique", "universal", "check_unique")) {
-  out <- hop_index2(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
-}
-
-#' @rdname hop_index2
-#' @export
-hop_index2_dfc <- function(.x,
-                           .y,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...,
-                           .size = NULL,
-                           .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- hop_index2(
-    .x,
-    .y,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
 
 # ------------------------------------------------------------------------------

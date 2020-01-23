@@ -22,7 +22,7 @@
 #'
 #' }
 #'
-#' \subsection{`hop2_vec()` and `hop2_*()` variants}{
+#' \subsection{`hop2_vec()`}{
 #'
 #'  * `vec_size(hop2_vec(.x, .y, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -40,7 +40,7 @@
 #'
 #' }
 #'
-#' \subsection{`phop_vec()` and `phop_*()` variants}{
+#' \subsection{`phop_vec()`}{
 #'
 #'  * `vec_size(phop_vec(.l, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -128,126 +128,6 @@ hop2_vec_simplify <- function(.x,
   check_all_size_one(out)
 
   vec_simplify(out)
-}
-
-#' @rdname hop2
-#' @export
-hop2_dbl <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...) {
-  hop2_vec(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = double()
-  )
-}
-
-#' @rdname hop2
-#' @export
-hop2_int <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...) {
-  hop2_vec(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = integer()
-  )
-}
-
-#' @rdname hop2
-#' @export
-hop2_lgl <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...) {
-  hop2_vec(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = logical()
-  )
-}
-
-#' @rdname hop2
-#' @export
-hop2_chr <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...) {
-  hop2_vec(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = character()
-  )
-}
-
-#' @rdname hop2
-#' @export
-hop2_dfr <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...,
-                     .names_to = NULL,
-                     .name_repair = c("unique", "universal", "check_unique")) {
-  out <- hop2(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
-}
-
-#' @rdname hop2
-#' @export
-hop2_dfc <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...,
-                     .size = NULL,
-                     .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- hop2(
-    .x,
-    .y,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
 
 # ------------------------------------------------------------------------------
