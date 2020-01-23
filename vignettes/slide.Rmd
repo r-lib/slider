@@ -60,7 +60,7 @@ slide(1:4, ~.x, .before = 1, .after = 1)
 slide(1:4, ~.x, .before = Inf)
 ```
 
-`slide()` is _type stable_, meaning that it always returns an object of the same type, and the base form of `slide()` always returns a list. So far, this is all that we have used to illustrate how it works, but practically you are more likely to use one of the suffixed forms like `slide_dbl()` or `slide_int()`. For example, you might have a vector of sales data that you want to compute a 3 value moving average on.
+`slide()` is _type-stable_, meaning that it always returns an object of the same type, and the base form of `slide()` always returns a list. So far, this is all that we have used to illustrate how it works, but practically you are more likely to use one of the suffixed forms like `slide_dbl()` or `slide_int()`. For example, you might have a vector of sales data that you want to compute a 3 value moving average on.
 
 ```{r}
 sales_vec <- c(2, 4, 6, 2)

@@ -24,7 +24,7 @@ There are 3 core functions in slide:
 
   - `slide()` iterates over your data like
     [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html),
-    but uses a sliding window to do so. It is type stable, and always
+    but uses a sliding window to do so. It is type-stable, and always
     returns a result with the same size as its input.
 
   - `slide_index()` computes a rolling calculation *relative to an

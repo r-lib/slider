@@ -27,7 +27,7 @@ slide provides a family of general purpose "sliding window" functions. The API i
 
 There are 3 core functions in slide:
 
-- `slide()` iterates over your data like [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), but uses a sliding window to do so. It is type stable, and always returns a result with the same size as its input.
+- `slide()` iterates over your data like [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), but uses a sliding window to do so. It is type-stable, and always returns a result with the same size as its input.
 
 - `slide_index()` computes a rolling calculation _relative to an index_. If you have ever wanted to compute something like a "3 month rolling average" where the number of days in each month is irregular, you might like this function.
 
