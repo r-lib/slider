@@ -137,37 +137,7 @@ with a size that is different from <code>.x</code>.</p>
 
     <pre class="usage"><span class='fu'>hop_index</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
 
-<span class='fu'>hop_index_vec</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>hop_index_dbl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_index_int</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_index_lgl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_index_chr</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_index_dfr</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.i</span>,
-  <span class='no'>.starts</span>,
-  <span class='no'>.stops</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
-)
-
-<span class='fu'>hop_index_dfc</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.i</span>,
-  <span class='no'>.starts</span>,
-  <span class='no'>.stops</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
-)</pre>
+<span class='fu'>hop_index_vec</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -230,33 +200,6 @@ and the final output will have that type.</p>
 <p>If <code><a href='https://rdrr.io/r/base/options.html'>getOption("vctrs.no_guessing")</a></code> is <code>TRUE</code>, the <code>.ptype</code> must be
 supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
-    <tr>
-      <th>.names_to</th>
-      <td><p>Optionally, the name of a column where the names
-of <code>...</code> arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and <code>...</code> is not named,
-an integer column is used to identify the rows.</p></td>
-    </tr>
-    <tr>
-      <th>.name_repair</th>
-      <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
-<code>"check_unique"</code>. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
-options.</p>
-<p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
-separately. This is because <code>vec_rbind()</code> needs to align their
-columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, <code>vec_cbind()</code> applies the
-repair function after all inputs have been concatenated together
-in a final data frame. Hence <code>vec_cbind()</code> allows the more
-permissive minimal names repair.</p></td>
-    </tr>
-    <tr>
-      <th>.size</th>
-      <td><p>If, <code>NULL</code>, the default, will determine the number of
-rows in <code>vec_cbind()</code> output by using the standard recycling rules.</p>
-<p>Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -271,7 +214,7 @@ of length 1 will be recycled appropriately.</p></td>
 
 
 
-<h3><code>hop_index_vec()</code> and <code>hop_index_*()</code> variants</h3>
+<h3><code>hop_index_vec()</code></h3>
 
 <ul>
 <li><p><code>vec_size(hop_index_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
@@ -388,8 +331,37 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_seq_along.html'>vec_seq_along</a></span>(<span class='no'>i</span>))
 
 <span class='co'># You might try `slide_index()` like this, but you'd run into this error</span>
-<span class='no'>cnd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'><a href='slide_index.html'>slide_index</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>)), <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>cnd</span>, <span class='st'>"condition"</span>)<span class='kw'>[[</span><span class='st'>"message"</span>]]</div><div class='output co'>#&gt; [1] ""</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rlang</span>)
+
+<span class='fu'><a href='https://rlang.r-lib.org/reference/local_options.html'>with_options</a></span>(
+  <span class='fu'><a href='https://rlang.r-lib.org/reference/catch_cnd.html'>catch_cnd</a></span>(
+    <span class='fu'><a href='slide_index.html'>slide_index</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>))
+  ),
+  <span class='kw'>rlang_backtrace_on_error</span> <span class='kw'>=</span> <span class='fu'><a href='https://rlang.r-lib.org/reference/caller_env.html'>current_env</a></span>()
+)</div><div class='output co'>#&gt; &lt;error/slide_error_generated_endpoints_cannot_be_na&gt;
+#&gt; Endpoints generated by `.before` cannot be `NA`.
+#&gt; ℹ They are `NA` at locations: 7, 8, 9.
+#&gt; Backtrace:
+#&gt;   1. base::tryCatch(...)
+#&gt;  13. pkgdown::build_site(...)
+#&gt;  14. pkgdown:::build_site_local(...)
+#&gt;  15. pkgdown::build_reference(...)
+#&gt;  16. purrr::map(...)
+#&gt;  17. pkgdown:::.f(.x[[i]], ...)
+#&gt;  18. pkgdown:::data_reference_topic(...)
+#&gt;  19. pkgdown:::run_examples(...)
+#&gt;  20. pkgdown:::highlight_examples(code, topic, env = env)
+#&gt;  21. evaluate::evaluate(x, child_env(env), new_device = TRUE)
+#&gt;  22. evaluate:::evaluate_call(...)
+#&gt;  32. [ base::eval(...) ] with 1 more call
+#&gt;  42. slide::slide_index(x, i, mean, .before = months(1))
+#&gt;  43. slide:::slide_index_impl(...)
+#&gt;  44. slide:::slide_index_common(...)
+#&gt;  45. slide:::compute_ranges(i, before, after)
+#&gt;  46. slide:::check_generated_endpoints_cannot_be_na(starts, ".before")
+#&gt;  47. slide:::stop_generated_endpoints_cannot_be_na(na_locations, by_arg)
+#&gt;  48. slide:::stop_endpoints(...)
+#&gt;  49. slide:::stop_slide(...)</div><div class='input'>
 <span class='co'># This is because when you actually compute the `.i - .before` sequence,</span>
 <span class='co'># you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.</span>
 <span class='no'>i</span> - <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span>(<span class='fl'>1</span>)</div><div class='output co'>#&gt;  [1] "2019-01-27" "2019-01-28" "2019-02-01" "2019-02-02" "2019-02-27"

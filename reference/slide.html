@@ -611,7 +611,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 #&gt;  [7]          NA  0.20981554          NA -0.82274657</div><div class='input'>
 <span class='co'># Adding an option to `slide_dbl()` to remove the `NA` values would destroy</span>
 <span class='co'># its size stability. Instead, you can use a combination of `slide_dfr()`</span>
-<span class='co'># to get the start/stop indices with `hop_index_dbl()`.</span>
+<span class='co'># to get the start/stop indices with `hop_index_vec()`.</span>
 <span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='no'>x</span>)
 <span class='no'>idx</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_dfr</span>(
   <span class='no'>i</span>,
@@ -626,7 +626,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 #&gt; 2     3    6
 #&gt; 3     5    8
 #&gt; 4     7   10</div><div class='input'>
-<span class='fu'><a href='hop_index.html'>hop_index_dbl</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>idx</span>$<span class='no'>start</span>, <span class='no'>idx</span>$<span class='no'>stop</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [1]  0.06608461  0.30607315  0.20981554 -0.82274657</div><div class='input'>
+<span class='fu'><a href='hop_index.html'>hop_index_vec</a></span>(<span class='no'>x</span>, <span class='no'>i</span>, <span class='no'>idx</span>$<span class='no'>start</span>, <span class='no'>idx</span>$<span class='no'>stop</span>, <span class='no'>mean</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span>())</div><div class='output co'>#&gt; [1]  0.06608461  0.30607315  0.20981554 -0.82274657</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -137,35 +137,7 @@ result with a size that is different from <code>.x</code>.</p>
 
     <pre class="usage"><span class='fu'>hop</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
 
-<span class='fu'>hop_vec</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>hop_dbl</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_int</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_lgl</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_chr</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
-
-<span class='fu'>hop_dfr</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.starts</span>,
-  <span class='no'>.stops</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
-)
-
-<span class='fu'>hop_dfc</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.starts</span>,
-  <span class='no'>.stops</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
-)</pre>
+<span class='fu'>hop_vec</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,33 +183,6 @@ and the final output will have that type.</p>
 <p>If <code><a href='https://rdrr.io/r/base/options.html'>getOption("vctrs.no_guessing")</a></code> is <code>TRUE</code>, the <code>.ptype</code> must be
 supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
-    <tr>
-      <th>.names_to</th>
-      <td><p>Optionally, the name of a column where the names
-of <code>...</code> arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and <code>...</code> is not named,
-an integer column is used to identify the rows.</p></td>
-    </tr>
-    <tr>
-      <th>.name_repair</th>
-      <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
-<code>"check_unique"</code>. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
-options.</p>
-<p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
-separately. This is because <code>vec_rbind()</code> needs to align their
-columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, <code>vec_cbind()</code> applies the
-repair function after all inputs have been concatenated together
-in a final data frame. Hence <code>vec_cbind()</code> allows the more
-permissive minimal names repair.</p></td>
-    </tr>
-    <tr>
-      <th>.size</th>
-      <td><p>If, <code>NULL</code>, the default, will determine the number of
-rows in <code>vec_cbind()</code> output by using the standard recycling rules.</p>
-<p>Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -252,7 +197,7 @@ of length 1 will be recycled appropriately.</p></td>
 
 
 
-<h3><code>hop_vec()</code> and <code>hop_*()</code> variants</h3>
+<h3><code>hop_vec()</code></h3>
 
 <ul>
 <li><p><code>vec_size(hop_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
