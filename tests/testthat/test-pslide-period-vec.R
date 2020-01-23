@@ -10,7 +10,7 @@ test_that("size of each `.f` result must be 1", {
 
 test_that("inner type is allowed to be different", {
   expect_equal(
-    pslide_period_vec(list(1:2, 1:2), new_date(1:2), "day", ~if (.x == 1L) {1} else {"hi"}),
+    pslide_period_vec(list(1:2, 1:2), new_date(1:2), "day", ~if (.x == 1L) {1} else {"hi"}, .ptype = list()),
     list(1, "hi")
   )
 })
@@ -26,7 +26,7 @@ test_that("inner type can be restricted with list_of", {
 # .ptype
 
 test_that(".ptype is respected", {
-  expect_equal(pslide_period_vec(list(1, 1), new_date(0), "day", ~.x), list(1))
+  expect_equal(pslide_period_vec(list(1, 1), new_date(0), "day", ~.x), 1)
   expect_equal(pslide_period_vec(list(1, 1), new_date(0), "day", ~.x, .ptype = int()), 1L)
   expect_equal(pslide_period_vec(list(1, 1), new_date(0), "day", ~.x, .ptype = new_date()), as.Date("1970-01-02"))
   expect_error(pslide_period_vec(list(1, 1), new_date(0), "day", ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy")

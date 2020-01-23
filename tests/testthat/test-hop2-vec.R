@@ -2,11 +2,11 @@
 # hop2_vec
 
 test_that("hop2_vec() works", {
-  expect_equivalent(hop2_vec(1L, 1L, 1, 1, ~.x + .y), list(2L))
+  expect_equivalent(hop2_vec(1L, 1L, 1, 1, ~.x + .y), 2L)
 })
 
 test_that("hop2_vec() retains names of x", {
-  expect_equivalent(hop2_vec(c(x = 1L), c(y = 1L), 1, 1, ~.x + .y), list(x = 2L))
+  expect_equivalent(hop2_vec(c(x = 1L), c(y = 1L), 1, 1, ~.x + .y), c(x = 2L))
 })
 
 test_that("hop2_vec() can simplify automatically", {

@@ -21,7 +21,7 @@
 \usage{
 hop_index2(.x, .y, .i, .starts, .stops, .f, ...)
 
-hop_index2_vec(.x, .y, .i, .starts, .stops, .f, ..., .ptype = list())
+hop_index2_vec(.x, .y, .i, .starts, .stops, .f, ..., .ptype = NULL)
 
 hop_index2_dbl(.x, .y, .i, .starts, .stops, .f, ...)
 
@@ -57,7 +57,7 @@ hop_index2_dfc(
 
 phop_index(.l, .i, .starts, .stops, .f, ...)
 
-phop_index_vec(.l, .i, .starts, .stops, .f, ..., .ptype = list())
+phop_index_vec(.l, .i, .starts, .stops, .f, ..., .ptype = NULL)
 
 phop_index_dbl(.l, .i, .starts, .stops, .f, ...)
 
@@ -135,10 +135,18 @@ This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.ptype}{\verb{[vector(0)]}
+\item{.ptype}{\verb{[vector(0) / NULL]}
 
-The prototype corresponding to the type of the output. Defaults to
-a \code{list()}.}
+A prototype corresponding to the type of the output.
+
+If \code{NULL}, the default, the output type is determined by computing the
+common type across the results of the calls to \code{.f}.
+
+If supplied, the result of each call to \code{.f} will be cast to that type,
+and the final output will have that type.
+
+If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
+supplied. This is a way to make production code demand fixed types.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify

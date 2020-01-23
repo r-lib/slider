@@ -30,7 +30,7 @@ pslide_vec <- function(.l,
                        .after = 0L,
                        .step = 1L,
                        .complete = FALSE,
-                       .ptype = list()) {
+                       .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- pslide_vec_simplify(

@@ -2,11 +2,11 @@
 # slide2_vec
 
 test_that("slide2_vec() works", {
-  expect_equivalent(slide2_vec(1L, 1L, ~.x + .y), list(2L))
+  expect_equivalent(slide2_vec(1L, 1L, ~.x + .y), 2L)
 })
 
 test_that("slide2_vec() retains names of x", {
-  expect_equivalent(slide2_vec(c(x = 1L), c(y = 1L), ~.x + .y), list(x = 2L))
+  expect_equivalent(slide2_vec(c(x = 1L), c(y = 1L), ~.x + .y), c(x = 2L))
 })
 
 test_that("slide2_vec() can simplify automatically", {

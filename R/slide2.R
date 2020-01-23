@@ -107,7 +107,7 @@ slide2_vec <- function(.x,
                        .after = 0L,
                        .step = 1L,
                        .complete = FALSE,
-                       .ptype = list()) {
+                       .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- slide2_vec_simplify(

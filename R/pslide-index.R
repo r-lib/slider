@@ -30,7 +30,7 @@ pslide_index_vec <- function(.l,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE,
-                             .ptype = list()) {
+                             .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- pslide_index_simplify(

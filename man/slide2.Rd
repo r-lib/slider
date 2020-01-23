@@ -39,7 +39,7 @@ slide2_vec(
   .after = 0L,
   .step = 1L,
   .complete = FALSE,
-  .ptype = list()
+  .ptype = NULL
 )
 
 slide2_dbl(
@@ -122,7 +122,7 @@ pslide_vec(
   .after = 0L,
   .step = 1L,
   .complete = FALSE,
-  .ptype = list()
+  .ptype = NULL
 )
 
 pslide_dbl(
@@ -227,10 +227,18 @@ The number of elements to shift the window forward between function calls.}
 Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
-\item{.ptype}{\verb{[vector(0)]}
+\item{.ptype}{\verb{[vector(0) / NULL]}
 
-The prototype corresponding to the type of the output. Defaults to
-a \code{list()}.}
+A prototype corresponding to the type of the output.
+
+If \code{NULL}, the default, the output type is determined by computing the
+common type across the results of the calls to \code{.f}.
+
+If supplied, the result of each call to \code{.f} will be cast to that type,
+and the final output will have that type.
+
+If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
+supplied. This is a way to make production code demand fixed types.}
 
 \item{.names_to}{Optionally, the name of a column where the names
 of \code{...} arguments are copied. These names are useful to identify

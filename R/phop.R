@@ -24,7 +24,7 @@ phop_vec <- function(.l,
                      .stops,
                      .f,
                      ...,
-                     .ptype = list()) {
+                     .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- phop_simplify(

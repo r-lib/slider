@@ -140,7 +140,7 @@ slide_index_vec <- function(.x,
                             .before = 0L,
                             .after = 0L,
                             .complete = FALSE,
-                            .ptype = list()) {
+                            .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- slide_index_simplify(

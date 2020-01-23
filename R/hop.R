@@ -114,7 +114,7 @@ hop_vec <- function(.x,
                     .stops,
                     .f,
                     ...,
-                    .ptype = list()) {
+                    .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- hop_vec_simplify(
