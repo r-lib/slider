@@ -21,8 +21,8 @@
 #'
 #'   There are 3 restrictions on the index:
 #'
-#'   - The size of the index must match the size of `.x`, neither will
-#'     be recycled.
+#'   - The size of the index must match the size of `.x`, they will not be
+#'     recycled to their common size.
 #'
 #'   - The index must be an _increasing_ vector, but duplicate values
 #'     are allowed.
