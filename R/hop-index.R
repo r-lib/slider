@@ -71,8 +71,14 @@
 #' x <- rnorm(vec_seq_along(i))
 #'
 #' # You might try `slide_index()` like this, but you'd run into this error
-#' cnd <- try(slide_index(x, i, mean, .before = months(1)), silent = TRUE)
-#' attr(cnd, "condition")[["message"]]
+#' library(rlang)
+#'
+#' with_options(
+#'   catch_cnd(
+#'     slide_index(x, i, mean, .before = months(1))
+#'   ),
+#'   rlang_backtrace_on_error = current_env()
+#' )
 #'
 #' # This is because when you actually compute the `.i - .before` sequence,
 #' # you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.
