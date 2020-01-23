@@ -30,7 +30,7 @@ pslide_vec <- function(.l,
                        .after = 0L,
                        .step = 1L,
                        .complete = FALSE,
-                       .ptype = list()) {
+                       .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- pslide_vec_simplify(
@@ -78,7 +78,7 @@ pslide_vec_simplify <- function(.l,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname slide2

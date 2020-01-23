@@ -136,7 +136,7 @@ slide_period_vec <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE,
-                             .ptype = list()) {
+                             .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- slide_period_simplify(
@@ -196,7 +196,7 @@ slide_period_simplify <- function(.x,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname slide_period

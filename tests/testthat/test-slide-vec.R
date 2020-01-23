@@ -10,7 +10,7 @@ test_that("size of each `.f` result must be 1", {
 
 test_that("inner type is allowed to be different", {
   expect_equal(
-    slide_vec(1:2, ~if (.x == 1L) {1} else {"hi"}),
+    slide_vec(1:2, ~if (.x == 1L) {1} else {"hi"}, .ptype = list()),
     list(1, "hi")
   )
 })
@@ -26,7 +26,7 @@ test_that("inner type can be restricted with list_of", {
 # .ptype
 
 test_that(".ptype is respected", {
-  expect_equal(slide_vec(1, ~.x), list(1))
+  expect_equal(slide_vec(1, ~.x), 1)
   expect_equal(slide_vec(1, ~.x, .ptype = int()), 1L)
   expect_equal(slide_vec(1, ~.x, .ptype = new_date()), as.Date("1970-01-02"))
   expect_error(slide_vec(1, ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy")
@@ -80,6 +80,15 @@ test_that("names can be placed on atomics", {
   expect_equal(names(slide_vec(x, ~.x)), names)
   expect_equal(names(slide_vec(x, ~.x, .ptype = int())), names)
   expect_equal(names(slide_vec(x, ~.x, .ptype = dbl())), names)
+})
+
+test_that("when simplifying, names from `.x` are kept, and new names from `.f` results are dropped", {
+  x <- set_names(1, "x")
+
+  expect_identical(
+    slide_vec(x, ~c(y = 2), .ptype = NULL),
+    c(x = 2)
+  )
 })
 
 test_that("names are not placed on data frames rownames", {

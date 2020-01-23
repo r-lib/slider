@@ -27,7 +27,7 @@ phop_index_vec <- function(.l,
                            .stops,
                            .f,
                            ...,
-                           .ptype = list()) {
+                           .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- phop_index_simplify(
@@ -71,7 +71,7 @@ phop_index_simplify <- function(.l,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname hop_index2

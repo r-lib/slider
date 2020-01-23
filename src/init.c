@@ -11,6 +11,8 @@ extern SEXP hop_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP
 extern SEXP slide_block(SEXP, SEXP, SEXP);
 extern SEXP slide_compute_from(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slide_compute_to(SEXP, SEXP, SEXP, SEXP);
+extern SEXP slide_vec_set_names(SEXP, SEXP);
+extern SEXP slide_vec_names(SEXP);
 
 // Defined below
 SEXP slide_init(SEXP);
@@ -23,6 +25,8 @@ static const R_CallMethodDef CallEntries[] = {
   {"slide_block",               (DL_FUNC) &slide_block, 3},
   {"slide_compute_from",        (DL_FUNC) &slide_compute_from, 4},
   {"slide_compute_to",          (DL_FUNC) &slide_compute_to, 4},
+  {"slide_vec_set_names",       (DL_FUNC) &slide_vec_set_names, 2},
+  {"slide_vec_names",           (DL_FUNC) &slide_vec_names, 1},
   {"slide_init",                (DL_FUNC) &slide_init, 1},
   {NULL, NULL, 0}
 };

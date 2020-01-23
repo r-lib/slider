@@ -2,11 +2,11 @@
 # pslide_vec
 
 test_that("pslide_vec() works", {
-  expect_equivalent(pslide_vec(list(1L, 1L), ~.x + .y), list(2L))
+  expect_equivalent(pslide_vec(list(1L, 1L), ~.x + .y), 2L)
 })
 
 test_that("pslide_vec() retains names of first input", {
-  expect_equivalent(pslide_vec(list(c(x = 1L), c(y = 1L)), ~.x + .y), list(x = 2L))
+  expect_equivalent(pslide_vec(list(c(x = 1L), c(y = 1L)), ~.x + .y), c(x = 2L))
 })
 
 test_that("pslide_vec() can simplify automatically", {

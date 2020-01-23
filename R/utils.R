@@ -92,3 +92,21 @@ compute_size <- function(x, type) {
     vec_size(x[[1L]])
   }
 }
+
+# Ensures that `slide_vec(c(x = 1), ~.x, .ptype = NULL)` works, and keeps it
+# in line with what `map_dbl(c(x = 1), ~c(y = 2))` does by only keeping names
+# from `x`
+vec_simplify <- function(x) {
+  names <- vec_names(x)
+
+  if (is.null(names)) {
+    out <- vec_c(!!!x)
+    return(out)
+  }
+
+  x <- vec_set_names(x, NULL)
+
+  out <- vec_c(!!!x)
+
+  vec_set_names(out, names)
+}

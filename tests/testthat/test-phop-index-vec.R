@@ -2,11 +2,11 @@
 # phop_index_vec
 
 test_that("phop_index_vec() works", {
-  expect_equivalent(phop_index_vec(list(1L, 1L), 1, 1, 1, ~.x + .y), list(2L))
+  expect_equivalent(phop_index_vec(list(1L, 1L), 1, 1, 1, ~.x + .y), 2L)
 })
 
 test_that("phop_index_vec() retains names of first input", {
-  expect_equivalent(phop_index_vec(list(c(x = 1L), c(y = 1L)), 1, 1, 1, ~.x + .y), list(x = 2L))
+  expect_equivalent(phop_index_vec(list(c(x = 1L), c(y = 1L)), 1, 1, 1, ~.x + .y), c(x = 2L))
 })
 
 test_that("phop_index_vec() can simplify automatically", {
@@ -22,7 +22,8 @@ test_that("phop_index_vec() errors if it can't simplify", {
 })
 
 test_that("completely empty input returns ptype", {
-  expect_equal(phop_index_vec(list(), integer(), integer(), integer(), ~.x), list())
+  expect_equal(phop_index_vec(list(), integer(), integer(), integer(), ~.x), NULL)
+  expect_equal(phop_index_vec(list(), integer(), integer(), integer(), ~.x, .ptype = list()), list())
   expect_equal(phop_index_vec(list(), integer(), integer(), integer(), ~.x, .ptype = int()), int())
 })
 

@@ -31,10 +31,18 @@
 #'   Should `.f` be evaluated on complete windows only? If `FALSE`,
 #'   the default, then partial computations will be allowed.
 #'
-#' @param .ptype `[vector(0)]`
+#' @param .ptype `[vector(0) / NULL]`
 #'
-#'   The prototype corresponding to the type of the output. Defaults to
-#'   a `list()`.
+#'   A prototype corresponding to the type of the output.
+#'
+#'   If `NULL`, the default, the output type is determined by computing the
+#'   common type across the results of the calls to `.f`.
+#'
+#'   If supplied, the result of each call to `.f` will be cast to that type,
+#'   and the final output will have that type.
+#'
+#'   If `getOption("vctrs.no_guessing")` is `TRUE`, the `.ptype` must be
+#'   supplied. This is a way to make production code demand fixed types.
 #'
 #' @template param-before-after-slide
 #'
@@ -212,7 +220,7 @@ slide_vec <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .complete = FALSE,
-                      .ptype = list()) {
+                      .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- slide_vec_simplify(
@@ -260,7 +268,7 @@ slide_vec_simplify <- function(.x,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname slide

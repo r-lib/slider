@@ -83,7 +83,7 @@ hop2_vec <- function(.x,
                      .stops,
                      .f,
                      ...,
-                     .ptype = list()) {
+                     .ptype = NULL) {
 
   if (is.null(.ptype)) {
     out <- hop2_vec_simplify(
@@ -127,7 +127,7 @@ hop2_vec_simplify <- function(.x,
 
   check_all_size_one(out)
 
-  vec_c(!!!out)
+  vec_simplify(out)
 }
 
 #' @rdname hop2
