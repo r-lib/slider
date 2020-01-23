@@ -49,6 +49,8 @@ Collate:
     'phop.R'
     'slide-index2.R'
     'pslide-index.R'
+    'slide-period2.R'
+    'pslide-period.R'
     'slide2.R'
     'pslide.R'
     'slide-common.R'

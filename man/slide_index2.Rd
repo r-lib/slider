@@ -162,8 +162,8 @@ as the index, but not required.
 
 There are 3 restrictions on the index:
 \itemize{
-\item The size of the index must match the size of \code{.x}, neither will
-be recycled.
+\item The size of the index must match the size of \code{.x}, they will not be
+recycled to their common size.
 \item The index must be an \emph{increasing} vector, but duplicate values
 are allowed.
 \item The index cannot have missing values.
