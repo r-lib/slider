@@ -1,6 +1,5 @@
 test_that("Empty starts/stops results in empty `ptype` returned", {
   expect_equal(phop(list(1), integer(), integer(), ~.x), list())
-  expect_equal(phop_dbl(list("x"), integer(), integer(), ~.x), numeric())
   expect_equal(phop_vec(list(1), integer(), integer(), ~.x, .ptype = integer()), integer())
 })
 

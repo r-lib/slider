@@ -284,7 +284,7 @@ slide_dbl(x, mean, .before = 3, .step = 2, .complete = TRUE)
 
 # Adding an option to `slide_dbl()` to remove the `NA` values would destroy
 # its size stability. Instead, you can use a combination of `slide_dfr()`
-# to get the start/stop indices with `hop_index_dbl()`.
+# to get the start/stop indices with `hop_index_vec()`.
 i <- seq_along(x)
 idx <- slide_dfr(
   i,
@@ -296,7 +296,7 @@ idx <- slide_dfr(
 
 idx
 
-hop_index_dbl(x, i, idx$start, idx$stop, mean)
+hop_index_vec(x, i, idx$start, idx$stop, mean, .ptype = double())
 
 }
 \seealso{

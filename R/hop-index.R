@@ -20,7 +20,7 @@
 #'
 #' }
 #'
-#' \subsection{`hop_index_vec()` and `hop_index_*()` variants}{
+#' \subsection{`hop_index_vec()`}{
 #'
 #'  * `vec_size(hop_index_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)`
 #'
@@ -157,126 +157,6 @@ hop_index_vec_simplify <- function(.x,
   check_all_size_one(out)
 
   vec_simplify(out)
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_dbl <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
-  hop_index_vec(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = double()
-  )
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_int <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
-  hop_index_vec(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = integer()
-  )
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_lgl <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
-  hop_index_vec(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = logical()
-  )
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_chr <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
-  hop_index_vec(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = character()
-  )
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_dfr <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...,
-                          .names_to = NULL,
-                          .name_repair = c("unique", "universal", "check_unique")) {
-  out <- hop_index(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
-}
-
-#' @rdname hop_index
-#' @export
-hop_index_dfc <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...,
-                          .size = NULL,
-                          .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- hop_index(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...
-  )
-
-  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
 
 # ------------------------------------------------------------------------------

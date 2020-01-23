@@ -3,45 +3,11 @@
 \name{hop}
 \alias{hop}
 \alias{hop_vec}
-\alias{hop_dbl}
-\alias{hop_int}
-\alias{hop_lgl}
-\alias{hop_chr}
-\alias{hop_dfr}
-\alias{hop_dfc}
 \title{Hop}
 \usage{
 hop(.x, .starts, .stops, .f, ...)
 
 hop_vec(.x, .starts, .stops, .f, ..., .ptype = NULL)
-
-hop_dbl(.x, .starts, .stops, .f, ...)
-
-hop_int(.x, .starts, .stops, .f, ...)
-
-hop_lgl(.x, .starts, .stops, .f, ...)
-
-hop_chr(.x, .starts, .stops, .f, ...)
-
-hop_dfr(
-  .x,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .names_to = NULL,
-  .name_repair = c("unique", "universal", "check_unique")
-)
-
-hop_dfc(
-  .x,
-  .starts,
-  .stops,
-  .f,
-  ...,
-  .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal")
-)
 }
 \arguments{
 \item{.x}{\verb{[vector]}
@@ -83,29 +49,6 @@ and the final output will have that type.
 
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
-
-\item{.names_to}{Optionally, the name of a column where the names
-of \code{...} arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and \code{...} is not named,
-an integer column is used to identify the rows.}
-
-\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
-options.
-
-With \code{vec_rbind()}, the repair function is applied to all inputs
-separately. This is because \code{vec_rbind()} needs to align their
-columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, \code{vec_cbind()} applies the
-repair function after all inputs have been concatenated together
-in a final data frame. Hence \code{vec_cbind()} allows the more
-permissive minimal names repair.}
-
-\item{.size}{If, \code{NULL}, the default, will determine the number of
-rows in \code{vec_cbind()} output by using the standard recycling rules.
-
-Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.}
 }
 \value{
 A vector fulfilling the following invariants:
@@ -118,7 +61,7 @@ A vector fulfilling the following invariants:
 
 }
 
-\subsection{\code{hop_vec()} and \verb{hop_*()} variants}{
+\subsection{\code{hop_vec()}}{
 \itemize{
 \item \code{vec_size(hop_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)}
 \item \code{vec_size(hop_vec(.x, .starts, .stops)[[1]]) == 1L}
