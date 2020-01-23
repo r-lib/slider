@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slide</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -132,17 +132,71 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-slide-family" class="hasAnchor"><a href="#section-slide-family" class="anchor"></a>Slide family</h2>
+          <p class="section-desc"><p>The <code><a href="../reference/slide.html">slide(.x, .f)</a></code> functions are similar to <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map(.x, .f)</a></code>. Both iterate over <code>.x</code>, applying <code>.f</code> as they go. The difference is that <code><a href="../reference/slide.html">slide()</a></code> moves over <code>.x</code> in sliding windows, rather than one element at a time. The return value size is always the same size as <code>.x</code>, and the type is defined by the function suffix.</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="block.html">block()</a></code> </p>
+          <p><code><a href="slide.html">slide()</a></code> <code><a href="slide.html">slide_vec()</a></code> <code><a href="slide.html">slide_dbl()</a></code> <code><a href="slide.html">slide_int()</a></code> <code><a href="slide.html">slide_lgl()</a></code> <code><a href="slide.html">slide_chr()</a></code> <code><a href="slide.html">slide_dfr()</a></code> <code><a href="slide.html">slide_dfc()</a></code> </p>
         </td>
-        <td><p>Break a vector into blocks</p></td>
+        <td><p>Slide</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="slide2.html">slide2()</a></code> <code><a href="slide2.html">slide2_vec()</a></code> <code><a href="slide2.html">slide2_dbl()</a></code> <code><a href="slide2.html">slide2_int()</a></code> <code><a href="slide2.html">slide2_lgl()</a></code> <code><a href="slide2.html">slide2_chr()</a></code> <code><a href="slide2.html">slide2_dfr()</a></code> <code><a href="slide2.html">slide2_dfc()</a></code> <code><a href="slide2.html">pslide()</a></code> <code><a href="slide2.html">pslide_vec()</a></code> <code><a href="slide2.html">pslide_dbl()</a></code> <code><a href="slide2.html">pslide_int()</a></code> <code><a href="slide2.html">pslide_lgl()</a></code> <code><a href="slide2.html">pslide_chr()</a></code> <code><a href="slide2.html">pslide_dfr()</a></code> <code><a href="slide2.html">pslide_dfc()</a></code> </p>
+        </td>
+        <td><p>Slide over multiple inputs simultaneously</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-slide-index-family" class="hasAnchor"><a href="#section-slide-index-family" class="anchor"></a>Slide index family</h2>
+          <p class="section-desc"><p>These functions iterate over <code>.x</code> using sliding windows defined with a secondary index vector, <code>.i</code>. The windows are constructed by “looking back” and “looking forward” a certain number of periods from each element of <code>.i</code>. This is useful for constructing irregular sliding windows, such as sliding with a look back period of two months when you have daily data. In that example, not all months have the same number of days, and some months might be missing data, so a fixed window size wouldn’t be useful.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="slide_index.html">slide_index()</a></code> <code><a href="slide_index.html">slide_index_vec()</a></code> <code><a href="slide_index.html">slide_index_dbl()</a></code> <code><a href="slide_index.html">slide_index_int()</a></code> <code><a href="slide_index.html">slide_index_lgl()</a></code> <code><a href="slide_index.html">slide_index_chr()</a></code> <code><a href="slide_index.html">slide_index_dfr()</a></code> <code><a href="slide_index.html">slide_index_dfc()</a></code> </p>
+        </td>
+        <td><p>Slide relative to an index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="slide_index2.html">slide_index2()</a></code> <code><a href="slide_index2.html">slide_index2_vec()</a></code> <code><a href="slide_index2.html">slide_index2_dbl()</a></code> <code><a href="slide_index2.html">slide_index2_int()</a></code> <code><a href="slide_index2.html">slide_index2_lgl()</a></code> <code><a href="slide_index2.html">slide_index2_chr()</a></code> <code><a href="slide_index2.html">slide_index2_dfr()</a></code> <code><a href="slide_index2.html">slide_index2_dfc()</a></code> <code><a href="slide_index2.html">pslide_index()</a></code> <code><a href="slide_index2.html">pslide_index_vec()</a></code> <code><a href="slide_index2.html">pslide_index_dbl()</a></code> <code><a href="slide_index2.html">pslide_index_int()</a></code> <code><a href="slide_index2.html">pslide_index_lgl()</a></code> <code><a href="slide_index2.html">pslide_index_chr()</a></code> <code><a href="slide_index2.html">pslide_index_dfr()</a></code> <code><a href="slide_index2.html">pslide_index_dfc()</a></code> </p>
+        </td>
+        <td><p>Slide along multiples inputs simultaneously relative to an index</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-slide-period-family" class="hasAnchor"><a href="#section-slide-period-family" class="anchor"></a>Slide period family</h2>
+          <p class="section-desc"><p>These functions work by iterating over <code>.x</code> in “period blocks”, such as one month blocks of data. The blocks are defined using a combination of a secondary date-like index vector, <code>.i</code>, and a period to block by.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="slide_period.html">slide_period()</a></code> <code><a href="slide_period.html">slide_period_vec()</a></code> <code><a href="slide_period.html">slide_period_dbl()</a></code> <code><a href="slide_period.html">slide_period_int()</a></code> <code><a href="slide_period.html">slide_period_lgl()</a></code> <code><a href="slide_period.html">slide_period_chr()</a></code> <code><a href="slide_period.html">slide_period_dfr()</a></code> <code><a href="slide_period.html">slide_period_dfc()</a></code> </p>
+        </td>
+        <td><p>Slide relative to an index chunked by period</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="slide_period2.html">slide_period2()</a></code> <code><a href="slide_period2.html">slide_period2_vec()</a></code> <code><a href="slide_period2.html">slide_period2_dbl()</a></code> <code><a href="slide_period2.html">slide_period2_int()</a></code> <code><a href="slide_period2.html">slide_period2_lgl()</a></code> <code><a href="slide_period2.html">slide_period2_chr()</a></code> <code><a href="slide_period2.html">slide_period2_dfr()</a></code> <code><a href="slide_period2.html">slide_period2_dfc()</a></code> <code><a href="slide_period2.html">pslide_period()</a></code> <code><a href="slide_period2.html">pslide_period_vec()</a></code> <code><a href="slide_period2.html">pslide_period_dbl()</a></code> <code><a href="slide_period2.html">pslide_period_int()</a></code> <code><a href="slide_period2.html">pslide_period_lgl()</a></code> <code><a href="slide_period2.html">pslide_period_chr()</a></code> <code><a href="slide_period2.html">pslide_period_dfr()</a></code> <code><a href="slide_period2.html">pslide_period_dfc()</a></code> </p>
+        </td>
+        <td><p>Slide along multiple inputs simultaneously relative to an index chunked by period</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-hop-family" class="hasAnchor"><a href="#section-hop-family" class="anchor"></a>Hop family</h2>
+          <p class="section-desc"><p>These functions are lower level versions of their <code><a href="../reference/slide.html">slide()</a></code> equivalents. They allow you to manually construct the boundaries to slide with, and are useful if you need more flexibility than what <code><a href="../reference/slide.html">slide()</a></code> provides.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="hop.html">hop()</a></code> <code><a href="hop.html">hop_vec()</a></code> <code><a href="hop.html">hop_dbl()</a></code> <code><a href="hop.html">hop_int()</a></code> <code><a href="hop.html">hop_lgl()</a></code> <code><a href="hop.html">hop_chr()</a></code> <code><a href="hop.html">hop_dfr()</a></code> <code><a href="hop.html">hop_dfc()</a></code> </p>
@@ -166,42 +220,20 @@
           <p><code><a href="hop_index2.html">hop_index2()</a></code> <code><a href="hop_index2.html">hop_index2_vec()</a></code> <code><a href="hop_index2.html">hop_index2_dbl()</a></code> <code><a href="hop_index2.html">hop_index2_int()</a></code> <code><a href="hop_index2.html">hop_index2_lgl()</a></code> <code><a href="hop_index2.html">hop_index2_chr()</a></code> <code><a href="hop_index2.html">hop_index2_dfr()</a></code> <code><a href="hop_index2.html">hop_index2_dfc()</a></code> <code><a href="hop_index2.html">phop_index()</a></code> <code><a href="hop_index2.html">phop_index_vec()</a></code> <code><a href="hop_index2.html">phop_index_dbl()</a></code> <code><a href="hop_index2.html">phop_index_int()</a></code> <code><a href="hop_index2.html">phop_index_lgl()</a></code> <code><a href="hop_index2.html">phop_index_chr()</a></code> <code><a href="hop_index2.html">phop_index_dfr()</a></code> <code><a href="hop_index2.html">phop_index_dfc()</a></code> </p>
         </td>
         <td><p>Hop along multiple inputs simultaneously relative to an index</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-block" class="hasAnchor"><a href="#section-block" class="anchor"></a>Block</h2>
+          <p class="section-desc"><p><code><a href="../reference/block.html">block()</a></code> breaks <code>.x</code> into its “period blocks”. The blocks are defined using a combination of a secondary date-like index vector, <code>.i</code>, and a period to block by. The return value is always a list, and the elements of the list are slices of <code>.x</code>.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
-          <p><code><a href="slide.html">slide()</a></code> <code><a href="slide.html">slide_vec()</a></code> <code><a href="slide.html">slide_dbl()</a></code> <code><a href="slide.html">slide_int()</a></code> <code><a href="slide.html">slide_lgl()</a></code> <code><a href="slide.html">slide_chr()</a></code> <code><a href="slide.html">slide_dfr()</a></code> <code><a href="slide.html">slide_dfc()</a></code> </p>
+          <p><code><a href="block.html">block()</a></code> </p>
         </td>
-        <td><p>Slide</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slide2.html">slide2()</a></code> <code><a href="slide2.html">slide2_vec()</a></code> <code><a href="slide2.html">slide2_dbl()</a></code> <code><a href="slide2.html">slide2_int()</a></code> <code><a href="slide2.html">slide2_lgl()</a></code> <code><a href="slide2.html">slide2_chr()</a></code> <code><a href="slide2.html">slide2_dfr()</a></code> <code><a href="slide2.html">slide2_dfc()</a></code> <code><a href="slide2.html">pslide()</a></code> <code><a href="slide2.html">pslide_vec()</a></code> <code><a href="slide2.html">pslide_dbl()</a></code> <code><a href="slide2.html">pslide_int()</a></code> <code><a href="slide2.html">pslide_lgl()</a></code> <code><a href="slide2.html">pslide_chr()</a></code> <code><a href="slide2.html">pslide_dfr()</a></code> <code><a href="slide2.html">pslide_dfc()</a></code> </p>
-        </td>
-        <td><p>Slide over multiple inputs simultaneously</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slide_index.html">slide_index()</a></code> <code><a href="slide_index.html">slide_index_vec()</a></code> <code><a href="slide_index.html">slide_index_dbl()</a></code> <code><a href="slide_index.html">slide_index_int()</a></code> <code><a href="slide_index.html">slide_index_lgl()</a></code> <code><a href="slide_index.html">slide_index_chr()</a></code> <code><a href="slide_index.html">slide_index_dfr()</a></code> <code><a href="slide_index.html">slide_index_dfc()</a></code> </p>
-        </td>
-        <td><p>Slide relative to an index</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slide_index2.html">slide_index2()</a></code> <code><a href="slide_index2.html">slide_index2_vec()</a></code> <code><a href="slide_index2.html">slide_index2_dbl()</a></code> <code><a href="slide_index2.html">slide_index2_int()</a></code> <code><a href="slide_index2.html">slide_index2_lgl()</a></code> <code><a href="slide_index2.html">slide_index2_chr()</a></code> <code><a href="slide_index2.html">slide_index2_dfr()</a></code> <code><a href="slide_index2.html">slide_index2_dfc()</a></code> <code><a href="slide_index2.html">pslide_index()</a></code> <code><a href="slide_index2.html">pslide_index_vec()</a></code> <code><a href="slide_index2.html">pslide_index_dbl()</a></code> <code><a href="slide_index2.html">pslide_index_int()</a></code> <code><a href="slide_index2.html">pslide_index_lgl()</a></code> <code><a href="slide_index2.html">pslide_index_chr()</a></code> <code><a href="slide_index2.html">pslide_index_dfr()</a></code> <code><a href="slide_index2.html">pslide_index_dfc()</a></code> </p>
-        </td>
-        <td><p>Slide along multiples inputs simultaneously relative to an index</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slide_period.html">slide_period()</a></code> <code><a href="slide_period.html">slide_period_vec()</a></code> <code><a href="slide_period.html">slide_period_dbl()</a></code> <code><a href="slide_period.html">slide_period_int()</a></code> <code><a href="slide_period.html">slide_period_lgl()</a></code> <code><a href="slide_period.html">slide_period_chr()</a></code> <code><a href="slide_period.html">slide_period_dfr()</a></code> <code><a href="slide_period.html">slide_period_dfc()</a></code> </p>
-        </td>
-        <td><p>Slide relative to an index chunked by period</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="slide_period2.html">slide_period2()</a></code> <code><a href="slide_period2.html">slide_period2_vec()</a></code> <code><a href="slide_period2.html">slide_period2_dbl()</a></code> <code><a href="slide_period2.html">slide_period2_int()</a></code> <code><a href="slide_period2.html">slide_period2_lgl()</a></code> <code><a href="slide_period2.html">slide_period2_chr()</a></code> <code><a href="slide_period2.html">slide_period2_dfr()</a></code> <code><a href="slide_period2.html">slide_period2_dfc()</a></code> <code><a href="slide_period2.html">pslide_period()</a></code> <code><a href="slide_period2.html">pslide_period_vec()</a></code> <code><a href="slide_period2.html">pslide_period_dbl()</a></code> <code><a href="slide_period2.html">pslide_period_int()</a></code> <code><a href="slide_period2.html">pslide_period_lgl()</a></code> <code><a href="slide_period2.html">pslide_period_chr()</a></code> <code><a href="slide_period2.html">pslide_period_dfr()</a></code> <code><a href="slide_period2.html">pslide_period_dfc()</a></code> </p>
-        </td>
-        <td><p>Slide along multiple inputs simultaneously relative to an index chunked by period</p></td>
+        <td><p>Break a vector into blocks</p></td>
       </tr>
     </tbody>
     </table>
@@ -210,7 +242,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-slide-family">Slide family</a></li>
+      <li><a href="#section-slide-index-family">Slide index family</a></li>
+      <li><a href="#section-slide-period-family">Slide period family</a></li>
+      <li><a href="#section-hop-family">Hop family</a></li>
+      <li><a href="#section-block">Block</a></li>
     </ul>
   </div>
 </div>
