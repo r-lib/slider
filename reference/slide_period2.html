@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Slide relative to an index chunked by period — slide_period • slide</title>
+<title>Slide along multiple inputs simultaneously relative to an index chunked by period — slide_period2 • slide</title>
 
 
 <!-- jquery -->
@@ -35,13 +35,11 @@
 
 
 
-<meta property="og:title" content="Slide relative to an index chunked by period — slide_period" />
-<meta property="og:description" content="slide_period() breaks up the .i-ndex by .period, and then uses that
-to define the indices to slide over .x with.
-It can be useful for, say, sliding over daily data in monthly chunks.
-The underlying engine for breaking up .i is warp::warp_distance().
-If you need more information about the .period types, that is the best
-place to look." />
+<meta property="og:title" content="Slide along multiple inputs simultaneously relative to an index chunked by period — slide_period2" />
+<meta property="og:description" content="slide_period2() and pslide_period() represent the combination
+of slide2() and pslide() with slide_period(), allowing you to slide
+over multiple vectors at once, using indices defined by breaking up the
+.i-ndex by .period." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,22 +123,21 @@ place to look." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Slide relative to an index chunked by period</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/slide/blob/master/R/slide-period.R'><code>R/slide-period.R</code></a></small>
-    <div class="hidden name"><code>slide_period.Rd</code></div>
+    <h1>Slide along multiple inputs simultaneously relative to an index chunked by period</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DavisVaughan/slide/blob/master/R/slide-period2.R'><code>R/slide-period2.R</code></a>, <a href='https://github.com/DavisVaughan/slide/blob/master/R/pslide-period.R'><code>R/pslide-period.R</code></a></small>
+    <div class="hidden name"><code>slide_period2.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>slide_period()</code> breaks up the <code>.i</code>-ndex by <code>.period</code>, and then uses that
-to define the indices to slide over <code>.x</code> with.</p>
-<p>It can be useful for, say, sliding over daily data in monthly chunks.</p>
-<p>The underlying engine for breaking up <code>.i</code> is <code><a href='https://rdrr.io/pkg/warp/man/warp_distance.html'>warp::warp_distance()</a></code>.
-If you need more information about the <code>.period</code> types, that is the best
-place to look.</p>
+    <p><code>slide_period2()</code> and <code>pslide_period()</code> represent the combination
+of <code><a href='slide2.html'>slide2()</a></code> and <code><a href='slide2.html'>pslide()</a></code> with <code><a href='slide_period.html'>slide_period()</a></code>, allowing you to slide
+over multiple vectors at once, using indices defined by breaking up the
+<code>.i</code>-ndex by <code>.period</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slide_period</span>(
+    <pre class="usage"><span class='fu'>slide_period2</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -152,8 +149,9 @@ place to look.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>slide_period_vec</span>(
+<span class='fu'>slide_period2_vec</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -166,8 +164,9 @@ place to look.</p>
   <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
 )
 
-<span class='fu'>slide_period_dbl</span>(
+<span class='fu'>slide_period2_dbl</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -179,8 +178,9 @@ place to look.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>slide_period_int</span>(
+<span class='fu'>slide_period2_int</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -192,8 +192,9 @@ place to look.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>slide_period_lgl</span>(
+<span class='fu'>slide_period2_lgl</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -205,8 +206,9 @@ place to look.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>slide_period_chr</span>(
+<span class='fu'>slide_period2_chr</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -218,8 +220,9 @@ place to look.</p>
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'>slide_period_dfr</span>(
+<span class='fu'>slide_period2_dfr</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -233,8 +236,118 @@ place to look.</p>
   <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
 )
 
-<span class='fu'>slide_period_dfc</span>(
+<span class='fu'>slide_period2_dfc</span>(
   <span class='no'>.x</span>,
+  <span class='no'>.y</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
+)
+
+<span class='fu'>pslide_period</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>pslide_period_vec</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+)
+
+<span class='fu'>pslide_period_dbl</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>pslide_period_int</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>pslide_period_lgl</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>pslide_period_chr</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
+
+<span class='fu'>pslide_period_dfr</span>(
+  <span class='no'>.l</span>,
+  <span class='no'>.i</span>,
+  <span class='no'>.period</span>,
+  <span class='no'>.f</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
+  <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
+  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
+)
+
+<span class='fu'>pslide_period_dfc</span>(
+  <span class='no'>.l</span>,
   <span class='no'>.i</span>,
   <span class='no'>.period</span>,
   <span class='no'>.f</span>,
@@ -252,9 +365,9 @@ place to look.</p>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.x</th>
+      <th>.x, .y</th>
       <td><p><code>[vector]</code></p>
-<p>The vector to iterate over and apply <code>.f</code> to.</p></td>
+<p>Vectors to iterate over. Vectors of size 1 will be recycled.</p></td>
     </tr>
     <tr>
       <th>.i</th>
@@ -312,7 +425,16 @@ epoch time of <code>1970-01-01 00:00:00</code>, <em>in the time zone of the inde
 relevant when the every value is <code>&gt; 1</code>.</p></td>
     </tr>
     <tr>
-      <th>.before, .after</th>
+      <th>.before</th>
+      <td><p><code>[integer(1) / Inf]</code></p>
+<p>The number of values before or after the current element to
+include in the sliding window. Set to <code>Inf</code> to select all elements
+before or after the current element. Negative values are allowed, which
+allows you to "look forward" from the current element if used as the
+<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p></td>
+    </tr>
+    <tr>
+      <th>.after</th>
       <td><p><code>[integer(1) / Inf]</code></p>
 <p>The number of values before or after the current element to
 include in the sliding window. Set to <code>Inf</code> to select all elements
@@ -359,117 +481,98 @@ rows in <code>vec_cbind()</code> output by using the standard recycling rules.</
 <p>Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.</p></td>
     </tr>
+    <tr>
+      <th>.l</th>
+      <td><p><code>[list]</code></p>
+<p>A list of vectors. The length of <code>.l</code> determines the
+number of arguments that <code>.f</code> will be called with. If <code>.l</code> has names,
+they will be used as named arguments to <code>.f</code>. Elements of <code>.l</code> with size
+1 will be recycled.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector fulfilling the following invariants:</p>
-<h3><code>slide_period()</code></h3>
+<h3><code>slide_period2()</code></h3>
 
 <ul>
-<li><p><code>vec_size(slide_period(.x)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
-<li><p><code>vec_ptype(slide_period(.x)) == list()</code></p></li>
+<li><p><code>vec_size(slide_period2(.x, .y)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
+<li><p><code>vec_ptype(slide_period2(.x, .y)) == list()</code></p></li>
 </ul>
 
 
 
-<h3><code>slide_period_vec()</code> and <code>slide_period_*()</code> variants</h3>
+<h3><code>slide_period2_vec()</code> and <code>slide_period2_*()</code> variants</h3>
 
 <ul>
-<li><p><code>vec_size(slide_period_vec(.x)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
-<li><p><code>vec_size(slide_period_vec(.x)[[1]]) == 1L</code></p></li>
-<li><p><code>vec_ptype(slide_period_vec(.x, .ptype = ptype)) == ptype</code></p></li>
+<li><p><code>vec_size(slide_period2_vec(.x, .y)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
+<li><p><code>vec_size(slide_period2_vec(.x, .y)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(slide_period2_vec(.x, .y, .ptype = ptype)) == ptype</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_period()</code></h3>
+
+<ul>
+<li><p><code>vec_size(pslide_period(.l)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
+<li><p><code>vec_ptype(pslide_period(.l)) == list()</code></p></li>
+</ul>
+
+
+
+<h3><code>pslide_period_vec()</code> and <code>pslide_period_*()</code> variants</h3>
+
+<ul>
+<li><p><code>vec_size(pslide_period_vec(.l)) == vec_size(unique(warp::warp_distance(.i)))</code></p></li>
+<li><p><code>vec_size(pslide_period_vec(.l)[[1]]) == 1L</code></p></li>
+<li><p><code>vec_ptype(pslide_period_vec(.l, .ptype = ptype)) == ptype</code></p></li>
 </ul>
 
 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='block.html'>block()</a></code>, <code><a href='slide.html'>slide()</a></code>, <code><a href='slide_index.html'>slide_index()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='slide2.html'>slide2()</a></code>, <code><a href='slide_index2.html'>slide_index2()</a></code>, <code><a href='slide_period.html'>slide_period()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-28"</span>) + <span class='fl'>0</span>:<span class='fl'>5</span>
 
-<span class='co'># Split `i` into 2-day periods to apply `.f` to</span>
-<span class='fu'>slide_period</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='st'>"day"</span>, <span class='no'>identity</span>, <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-01-28" "2019-01-29"
+<span class='fu'>slide_period2</span>(
+  <span class='kw'>.x</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>6</span>,
+  <span class='kw'>.y</span> <span class='kw'>=</span> <span class='no'>i</span>,
+  <span class='kw'>.i</span> <span class='kw'>=</span> <span class='no'>i</span>,
+  <span class='kw'>.period</span> <span class='kw'>=</span> <span class='st'>"month"</span>,
+  <span class='kw'>.f</span> <span class='kw'>=</span> ~<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>.x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>.y</span>)
+)</div><div class='output co'>#&gt; [[1]]
+#&gt;   x          i
+#&gt; 1 1 2019-01-28
+#&gt; 2 2 2019-01-29
+#&gt; 3 3 2019-01-30
+#&gt; 4 4 2019-01-31
 #&gt; 
 #&gt; [[2]]
-#&gt; [1] "2019-01-30" "2019-01-31"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "2019-02-01" "2019-02-02"
+#&gt;   x          i
+#&gt; 1 5 2019-02-01
+#&gt; 2 6 2019-02-02
 #&gt; </div><div class='input'>
-<span class='co'># Or into 1-month periods</span>
-<span class='fu'>slide_period</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='st'>"month"</span>, <span class='no'>identity</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-01-28" "2019-01-29" "2019-01-30" "2019-01-31"
+<span class='fu'>pslide_period</span>(
+  <span class='kw'>.l</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fl'>1</span>:<span class='fl'>6</span>, <span class='fl'>7</span>:<span class='fl'>12</span>, <span class='no'>i</span>),
+  <span class='kw'>.i</span> <span class='kw'>=</span> <span class='no'>i</span>,
+  <span class='kw'>.period</span> <span class='kw'>=</span> <span class='st'>"month"</span>,
+  <span class='kw'>.f</span> <span class='kw'>=</span> ~<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>.x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>.y</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>..3</span>)
+)</div><div class='output co'>#&gt; [[1]]
+#&gt;   x  y          i
+#&gt; 1 1  7 2019-01-28
+#&gt; 2 2  8 2019-01-29
+#&gt; 3 3  9 2019-01-30
+#&gt; 4 4 10 2019-01-31
 #&gt; 
 #&gt; [[2]]
-#&gt; [1] "2019-02-01" "2019-02-02"
-#&gt; </div><div class='input'>
-<span class='co'># Now select:</span>
-<span class='co'># - The current 2-day period</span>
-<span class='co'># - Plus 1 2-day period before the current one</span>
-<span class='fu'>slide_period</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='st'>"day"</span>, <span class='no'>identity</span>, <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-01-28" "2019-01-29"
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] "2019-01-28" "2019-01-29" "2019-01-30" "2019-01-31"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "2019-01-30" "2019-01-31" "2019-02-01" "2019-02-02"
-#&gt; </div><div class='input'>
-<span class='co'># Alter the `origin` to control the reference date for</span>
-<span class='co'># how the 2-day groups are formed</span>
-<span class='no'>origin</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-01-29"</span>)
-<span class='fu'>slide_period</span>(<span class='no'>i</span>, <span class='no'>i</span>, <span class='st'>"day"</span>, <span class='no'>identity</span>, <span class='kw'>.every</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.origin</span> <span class='kw'>=</span> <span class='no'>origin</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-01-28"
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] "2019-01-29" "2019-01-30"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "2019-01-31" "2019-02-01"
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] "2019-02-02"
-#&gt; </div><div class='input'>
-<span class='co'># This can be useful for, say, monthly averages</span>
-<span class='no'>daily_sales</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span>, <span class='fl'>4</span>)
-<span class='fu'>slide_period_dbl</span>(<span class='no'>daily_sales</span>, <span class='no'>i</span>, <span class='st'>"month"</span>, <span class='no'>mean</span>)</div><div class='output co'>#&gt; [1] 4.0 6.5</div><div class='input'>
-<span class='co'># If you need the index, slide over and return a data frame</span>
-<span class='no'>sales_df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>i</span>, <span class='kw'>sales</span> <span class='kw'>=</span> <span class='no'>daily_sales</span>)
-
-<span class='fu'>slide_period_dfr</span>(
-  <span class='no'>sales_df</span>,
-  <span class='no'>sales_df</span>$<span class='no'>i</span>,
-  <span class='st'>"month"</span>,
-  ~<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-     <span class='kw'>i</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>.x</span>$<span class='no'>i</span>),
-     <span class='kw'>sales</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>.x</span>$<span class='no'>sales</span>)
-   )
-)</div><div class='output co'>#&gt;            i sales
-#&gt; 1 2019-01-31   4.0
-#&gt; 2 2019-02-02   6.5</div><div class='input'>
-<span class='co'># One of the most unique features about `slide_period()` is that it is</span>
-<span class='co'># aware of how far apart elements of `.i` are in the `.period` you are</span>
-<span class='co'># interested in. For example, if you do a monthly slide with `i2`, selecting</span>
-<span class='co'># the current month and 1 month before it, then it will recognize that</span>
-<span class='co'># `2019-02-01` and `2019-04-01` are not beside each other, and it won't</span>
-<span class='co'># group them together.</span>
-<span class='no'>i2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2019-01-01"</span>, <span class='st'>"2019-02-01"</span>, <span class='st'>"2019-04-01"</span>, <span class='st'>"2019-05-01"</span>))
-
-<span class='fu'>slide_period</span>(<span class='no'>i2</span>, <span class='no'>i2</span>, <span class='st'>"month"</span>, <span class='no'>identity</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "2019-01-01"
-#&gt; 
-#&gt; [[2]]
-#&gt; [1] "2019-01-01" "2019-02-01"
-#&gt; 
-#&gt; [[3]]
-#&gt; [1] "2019-04-01"
-#&gt; 
-#&gt; [[4]]
-#&gt; [1] "2019-04-01" "2019-05-01"
+#&gt;   x  y          i
+#&gt; 1 5 11 2019-02-01
+#&gt; 2 6 12 2019-02-02
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

@@ -150,8 +150,8 @@ the indices to chop <code>x</code> with.</p>
       <td><p><code>[Date / POSIXct / POSIXlt]</code></p>
 <p>The datetime index to block by.</p>
 <p>There are 3 restrictions on the index:</p><ul>
-<li><p>The size of the index must match the size of <code>x</code>, neither will
-be recycled.</p></li>
+<li><p>The size of the index must match the size of <code>x</code>, they will not be
+recycled to their common size.</p></li>
 <li><p>The index must be an <em>increasing</em> vector, but duplicate values
 are allowed.</p></li>
 <li><p>The index cannot have missing values.</p></li>

@@ -200,8 +200,8 @@ of the window range will be computed as <code>.i - .before</code>, and the upper
 bound as <code>.i + .after</code>. It is faily common to supply a date vector
 as the index, but not required.</p>
 <p>There are 3 restrictions on the index:</p><ul>
-<li><p>The size of the index must match the size of <code>.x</code>, neither will
-be recycled.</p></li>
+<li><p>The size of the index must match the size of <code>.x</code>, they will not be
+recycled to their common size.</p></li>
 <li><p>The index must be an <em>increasing</em> vector, but duplicate values
 are allowed.</p></li>
 <li><p>The index cannot have missing values.</p></li>
