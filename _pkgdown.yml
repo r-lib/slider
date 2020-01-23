@@ -1,1 +1,58 @@
 destination: docs
+
+development:
+  mode: auto
+
+reference:
+- title: Slide family
+  desc: |
+    The `slide(.x, .f)` functions are similar to `purrr::map(.x, .f)`. Both
+    iterate over `.x`, applying `.f` as they go. The difference is that
+    `slide()` moves over `.x` in sliding windows, rather than one element at
+    a time. The return value size is always the same size as `.x`, and the
+    type is defined by the function suffix.
+  contents:
+  - slide
+  - slide2
+
+- title: Slide index family
+  desc: |
+    These functions iterate over `.x` using sliding windows defined with a
+    secondary index vector, `.i`. The windows are constructed by "looking back"
+    and "looking forward" a certain number of periods from each element of `.i`.
+    This is useful for constructing irregular sliding windows, such as sliding
+    with a look back period of two months when you have daily data. In that
+    example, not all months have the same number of days, and some months might
+    be missing data, so a fixed window size wouldn't be useful.
+  contents:
+  - slide_index
+  - slide_index2
+
+- title: Slide period family
+  desc: |
+    These functions work by iterating over `.x` in "period blocks", such as
+    one month blocks of data. The blocks are defined using a combination of
+    a secondary date-like index vector, `.i`, and a period to block by.
+  contents:
+  - slide_period
+  - slide_period2
+
+- title: Hop family
+  desc: |
+    These functions are lower level versions of their `slide()` equivalents.
+    They allow you to manually construct the boundaries to slide with, and
+    are useful if you need more flexibility than what `slide()` provides.
+  contents:
+  - hop
+  - hop2
+  - hop_index
+  - hop_index2
+
+- title: Block
+  desc: |
+    `block()` breaks `.x` into its "period blocks". The blocks are defined
+    using a combination of a secondary date-like index vector, `.i`, and a
+    period to block by. The return value is always a list, and the elements
+    of the list are slices of `.x`.
+  contents:
+  - block
