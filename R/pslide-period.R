@@ -1,76 +1,7 @@
-#' Slide along multiple inputs simultaneously relative to an index chunked by period
-#'
-#' `slide_period2()` and `pslide_period()` represent the combination
-#' of [slide2()] and [pslide()] with [slide_period()], allowing you to slide
-#' over multiple vectors at once, using indices defined by breaking up the
-#' `.i`-ndex by `.period`.
-#'
-#' @inheritParams slide_period
-#'
-#' @template param-x-y
-#' @template param-l
-#'
-#' @return
-#' A vector fulfilling the following invariants:
-#'
-#' \subsection{`slide_period2()`}{
-#'
-#'  * `vec_size(slide_period2(.x, .y)) == vec_size(unique(warp::warp_distance(.i)))`
-#'
-#'  * `vec_ptype(slide_period2(.x, .y)) == list()`
-#'
-#' }
-#'
-#' \subsection{`slide_period2_vec()` and `slide_period2_*()` variants}{
-#'
-#'  * `vec_size(slide_period2_vec(.x, .y)) == vec_size(unique(warp::warp_distance(.i)))`
-#'
-#'  * `vec_size(slide_period2_vec(.x, .y)[[1]]) == 1L`
-#'
-#'  * `vec_ptype(slide_period2_vec(.x, .y, .ptype = ptype)) == ptype`
-#'
-#' }
-#'
-#' \subsection{`pslide_period()`}{
-#'
-#'  * `vec_size(pslide_period(.l)) == vec_size(unique(warp::warp_distance(.i)))`
-#'
-#'  * `vec_ptype(pslide_period(.l)) == list()`
-#'
-#' }
-#'
-#' \subsection{`pslide_period_vec()` and `pslide_period_*()` variants}{
-#'
-#'  * `vec_size(pslide_period_vec(.l)) == vec_size(unique(warp::warp_distance(.i)))`
-#'
-#'  * `vec_size(pslide_period_vec(.l)[[1]]) == 1L`
-#'
-#'  * `vec_ptype(pslide_period_vec(.l, .ptype = ptype)) == ptype`
-#'
-#' }
-#'
-#' @examples
-#' i <- as.Date("2019-01-28") + 0:5
-#'
-#' slide_period2(
-#'   .x = 1:6,
-#'   .y = i,
-#'   .i = i,
-#'   .period = "month",
-#'   .f = ~data.frame(x = .x, i = .y)
-#' )
-#'
-#' pslide_period(
-#'   .l = list(1:6, 7:12, i),
-#'   .i = i,
-#'   .period = "month",
-#'   .f = ~data.frame(x = .x, y = .y, i = ..3)
-#' )
-#'
-#' @seealso [slide2()], [slide_index2()], [slide_period()]
+#' @include slide-period2.R
+#' @rdname slide_period2
 #' @export
-slide_period2 <- function(.x,
-                          .y,
+pslide_period <- function(.l,
                           .i,
                           .period,
                           .f,
@@ -80,9 +11,8 @@ slide_period2 <- function(.x,
                           .before = 0L,
                           .after = 0L,
                           .complete = FALSE) {
-  slide_period2_impl(
-    .x,
-    .y,
+  pslide_period_impl(
+    .l,
     .i,
     .period,
     .f,
@@ -99,8 +29,7 @@ slide_period2 <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_vec <- function(.x,
-                              .y,
+pslide_period_vec <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -113,9 +42,8 @@ slide_period2_vec <- function(.x,
                               .ptype = list()) {
 
   if (is.null(.ptype)) {
-    out <- slide_period2_vec_simplify(
-      .x,
-      .y,
+    out <- pslide_period_vec_simplify(
+      .l,
       .i,
       .period,
       .f,
@@ -130,9 +58,8 @@ slide_period2_vec <- function(.x,
     return(out)
   }
 
-  slide_period2_impl(
-    .x,
-    .y,
+  pslide_period_impl(
+    .l,
     .i,
     .period,
     .f,
@@ -147,8 +74,7 @@ slide_period2_vec <- function(.x,
   )
 }
 
-slide_period2_vec_simplify <- function(.x,
-                                       .y,
+pslide_period_vec_simplify <- function(.l,
                                        .i,
                                        .period,
                                        .f,
@@ -158,9 +84,8 @@ slide_period2_vec_simplify <- function(.x,
                                        .before,
                                        .after,
                                        .complete) {
-  out <- slide_period2(
-    .x,
-    .y,
+  out <- pslide_period(
+    .l,
     .i,
     .period,
     .f,
@@ -179,8 +104,7 @@ slide_period2_vec_simplify <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_dbl <- function(.x,
-                              .y,
+pslide_period_dbl <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -190,9 +114,8 @@ slide_period2_dbl <- function(.x,
                               .before = 0L,
                               .after = 0L,
                               .complete = FALSE) {
-  slide_period2_vec(
-    .x,
-    .y,
+  pslide_period_vec(
+    .l,
     .i,
     .period,
     .f,
@@ -208,8 +131,7 @@ slide_period2_dbl <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_int <- function(.x,
-                              .y,
+pslide_period_int <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -219,9 +141,8 @@ slide_period2_int <- function(.x,
                               .before = 0L,
                               .after = 0L,
                               .complete = FALSE) {
-  slide_period2_vec(
-    .x,
-    .y,
+  pslide_period_vec(
+    .l,
     .i,
     .period,
     .f,
@@ -237,8 +158,7 @@ slide_period2_int <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_lgl <- function(.x,
-                              .y,
+pslide_period_lgl <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -248,9 +168,8 @@ slide_period2_lgl <- function(.x,
                               .before = 0L,
                               .after = 0L,
                               .complete = FALSE) {
-  slide_period2_vec(
-    .x,
-    .y,
+  pslide_period_vec(
+    .l,
     .i,
     .period,
     .f,
@@ -266,8 +185,7 @@ slide_period2_lgl <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_chr <- function(.x,
-                              .y,
+pslide_period_chr <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -277,9 +195,8 @@ slide_period2_chr <- function(.x,
                               .before = 0L,
                               .after = 0L,
                               .complete = FALSE) {
-  slide_period2_vec(
-    .x,
-    .y,
+  pslide_period_vec(
+    .l,
     .i,
     .period,
     .f,
@@ -295,8 +212,7 @@ slide_period2_chr <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_dfr <- function(.x,
-                              .y,
+pslide_period_dfr <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -308,9 +224,8 @@ slide_period2_dfr <- function(.x,
                               .complete = FALSE,
                               .names_to = NULL,
                               .name_repair = c("unique", "universal", "check_unique")) {
-  out <- slide_period2(
-    .x,
-    .y,
+  out <- pslide_period(
+    .l,
     .i,
     .period,
     .f,
@@ -327,8 +242,7 @@ slide_period2_dfr <- function(.x,
 
 #' @rdname slide_period2
 #' @export
-slide_period2_dfc <- function(.x,
-                              .y,
+pslide_period_dfc <- function(.l,
                               .i,
                               .period,
                               .f,
@@ -340,9 +254,8 @@ slide_period2_dfc <- function(.x,
                               .complete = FALSE,
                               .size = NULL,
                               .name_repair = c("unique", "universal", "check_unique", "minimal")) {
-  out <- slide_period2(
-    .x,
-    .y,
+  out <- pslide_period(
+    .l,
     .i,
     .period,
     .f,
@@ -359,8 +272,7 @@ slide_period2_dfc <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-slide_period2_impl <- function(.x,
-                               .y,
+pslide_period_impl <- function(.l,
                                .i,
                                .period,
                                .f,
@@ -372,22 +284,32 @@ slide_period2_impl <- function(.x,
                                .complete,
                                .constrain,
                                .ptype) {
-  vec_assert(.x)
-  vec_assert(.y)
+  check_is_list(.l)
 
-  # TODO - Do more efficiently internally by reusing rather than recycling
-  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
-  # But use `vec_size_common()` to check sizes and get `.size`
-  args <- vec_recycle_common(.x, .y)
+  lapply(.l, vec_assert)
 
   .f <- as_function(.f)
 
-  f_call <- expr(.f(.x, .y, ...))
+  # TODO - more efficiently? reuse elements rather than recycle
+  .l <- vec_recycle_common(!!!.l)
 
-  type <- -2L
+  type <- vec_size(.l)
+
+  slicers <- lapply(
+    seq_len(type),
+    function(x) {
+      expr(.l[[!!x]])
+    }
+  )
+
+  # Ensure names of `.l` are kept so they can be spliced
+  # into `.f` as argument names
+  names(slicers) <- names(.l)
+
+  f_call <- expr(.f(!!! slicers, ...))
 
   slide_period_common(
-    x = args,
+    x = .l,
     i = .i,
     period = .period,
     f_call = f_call,
