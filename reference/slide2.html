@@ -155,7 +155,7 @@ functions work similarly to <code>map2()</code> and <code>pmap()</code> from pur
   <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
   <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )
 
 <span class='fu'>slide2_dbl</span>(
@@ -238,7 +238,7 @@ functions work similarly to <code>map2()</code> and <code>pmap()</code> from pur
   <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
   <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )
 
 <span class='fu'>pslide_dbl</span>(
@@ -352,9 +352,14 @@ the default, then partial computations will be allowed.</p></td>
     </tr>
     <tr>
       <th>.ptype</th>
-      <td><p><code>[vector(0)]</code></p>
-<p>The prototype corresponding to the type of the output. Defaults to
-a <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code>.</p></td>
+      <td><p><code>[vector(0) / NULL]</code></p>
+<p>A prototype corresponding to the type of the output.</p>
+<p>If <code>NULL</code>, the default, the output type is determined by computing the
+common type across the results of the calls to <code>.f</code>.</p>
+<p>If supplied, the result of each call to <code>.f</code> will be cast to that type,
+and the final output will have that type.</p>
+<p>If <code><a href='https://rdrr.io/r/base/options.html'>getOption("vctrs.no_guessing")</a></code> is <code>TRUE</code>, the <code>.ptype</code> must be
+supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
