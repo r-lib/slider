@@ -57,6 +57,7 @@ Collate:
     'slide-package.R'
     'slide-period-common.R'
     'slide-period.R'
+    'slide-period2.R'
     'slide.R'
     'utils.R'
     'zzz.R'
