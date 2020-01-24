@@ -18,7 +18,7 @@ BugReports: https://github.com/DavisVaughan/slide/issues
 Imports: 
     glue,
     rlang (>= 0.4.1),
-    vctrs (>= 0.2.99.9004),
+    vctrs (>= 0.2.2),
     warp
 Suggests: 
     covr,
@@ -32,8 +32,6 @@ LinkingTo:
     vctrs
 VignetteBuilder: 
     knitr
-Remotes:
-    r-lib/vctrs
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

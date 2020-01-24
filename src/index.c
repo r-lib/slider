@@ -103,14 +103,14 @@ SEXP slide_index_common_impl(SEXP x,
         stop_not_all_size_one(i + 1, elt_size);
       }
 
-      int recycled = 0;
+      // Must always PROTECT() to avoid rchk note, see #58
       if (out_index_size != 1) {
-        elt = PROTECT(vec_recycle(elt, out_index_size));
-        recycled = 1;
+        elt = vec_recycle(elt, out_index_size);
       }
+      PROTECT(elt);
 
       vec_assign_impl(out, out_index, elt, false);
-      UNPROTECT(2 + recycled);
+      UNPROTECT(3);
     } else {
       int* p_out_index = INTEGER(out_index);
 

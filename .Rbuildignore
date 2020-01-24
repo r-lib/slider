@@ -9,3 +9,4 @@
 ^pkgdown$
 ^\.github$
 ^man-roxygen$
+^cran-comments\.md$
