@@ -47,10 +47,14 @@ vignette](https://davisvaughan.github.io/slider/articles/slider.html).
 
 ## Installation
 
-slider is NOT yet on [CRAN](https://CRAN.R-project.org).
+Install the released version from [CRAN](https://CRAN.R-project.org)
+with:
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+``` r
+install.packages("slider")
+```
+
+Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 remotes::install_github("DavisVaughan/slider")
