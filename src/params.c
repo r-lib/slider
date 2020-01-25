@@ -1,5 +1,5 @@
-#include "slide.h"
-#include "slide-vctrs.h"
+#include "slider.h"
+#include "slider-vctrs.h"
 #include "utils.h"
 #include <vctrs.h>
 #include "params.h"
@@ -28,11 +28,11 @@ static SEXP check_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
 }
 
 static SEXP check_int(SEXP x, SEXP x_arg) {
-  return check_ptype(x, slide_shared_empty_int, x_arg);
+  return check_ptype(x, slider_shared_empty_int, x_arg);
 }
 
 static SEXP check_lgl(SEXP x, SEXP x_arg) {
-  return check_ptype(x, slide_shared_empty_lgl, x_arg);
+  return check_ptype(x, slider_shared_empty_lgl, x_arg);
 }
 
 static SEXP check_scalar_int(SEXP x, SEXP x_arg) {

@@ -1,7 +1,7 @@
-#ifndef SLIDE_PARAMS_H
-#define SLIDE_PARAMS_H
+#ifndef SLIDER_PARAMS_H
+#define SLIDER_PARAMS_H
 
-#include "slide.h"
+#include "slider.h"
 
 int pull_type(SEXP params);
 bool pull_constrain(SEXP params);

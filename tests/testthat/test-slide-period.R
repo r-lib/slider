@@ -10,21 +10,21 @@ test_that("`.x` must be a vector", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_period(1, new_date(1:2), "year", identity), class = "slide_error_index_incompatible_size")
+  expect_error(slide_period(1, new_date(1:2), "year", identity), class = "slider_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_period(1:2, new_date(2:1), "year", identity), class = "slide_error_index_must_be_ascending")
+  expect_error(slide_period(1:2, new_date(2:1), "year", identity), class = "slider_error_index_must_be_ascending")
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_period(integer(), new_date(), "year", ~.x), list())
-  expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slide_error_index_incompatible_size")
+  expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size")
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slide_error_index_cannot_be_na")
-  expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slide_error_index_cannot_be_na")
+  expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na")
+  expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na")
 })
 
 # ------------------------------------------------------------------------------

@@ -1,9 +1,9 @@
-#include "slide.h"
-#include "slide-vctrs.h"
+#include "slider.h"
+#include "slider-vctrs.h"
 #include <vctrs.h>
 
 // [[ export() ]]
-SEXP slide_block(SEXP x, SEXP starts, SEXP stops) {
+SEXP slider_block(SEXP x, SEXP starts, SEXP stops) {
   R_xlen_t size = Rf_xlength(starts);
 
   double* p_starts = REAL(starts);

@@ -28,13 +28,13 @@ test_that("empty `.x`, but size `n > 0` `.starts` and `.stops`: sizes and types 
 })
 
 test_that(".starts must not contain NA values", {
-  expect_error(hop(1:2, c(1, NA), 1:2, identity), class = "slide_error_endpoints_cannot_be_na")
-  expect_error(hop(1:2, c(NA, 1), 1:2, identity), class = "slide_error_endpoints_cannot_be_na")
+  expect_error(hop(1:2, c(1, NA), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_error(hop(1:2, c(NA, 1), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
 })
 
 test_that(".stops must not contain NA values", {
-  expect_error(hop(1:2, 1:2, c(1, NA), identity), class = "slide_error_endpoints_cannot_be_na")
-  expect_error(hop(1:2, 1:2, c(NA, 1), identity), class = "slide_error_endpoints_cannot_be_na")
+  expect_error(hop(1:2, 1:2, c(1, NA), identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_error(hop(1:2, 1:2, c(NA, 1), identity), class = "slider_error_endpoints_cannot_be_na")
 })
 
 test_that("recycling is used for .starts/.stops", {

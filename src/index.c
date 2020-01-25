@@ -1,6 +1,6 @@
-#include "slide.h"
+#include "slider.h"
 #include "index.h"
-#include "slide-vctrs.h"
+#include "slider-vctrs.h"
 #include "utils.h"
 #include "compare.h"
 #include <vctrs.h>

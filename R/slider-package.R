@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @aliases slide-package
+#' @aliases slider-package
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
@@ -11,6 +11,6 @@
 #' @importFrom warp warp_distance
 #' @importFrom glue glue_data
 #' @importFrom glue glue_collapse
-#' @useDynLib slide, .registration = TRUE
+#' @useDynLib slider, .registration = TRUE
 ## usethis namespace: end
 NULL

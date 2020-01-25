@@ -3,7 +3,7 @@ test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_index2(integer(), 1, integer(), ~.x), list())
   expect_equal(slide_index2(1, integer(), integer(), ~.x), list())
 
-  expect_error(slide_index2(integer(), integer(), 1, ~.x), class = "slide_error_index_incompatible_size")
+  expect_error(slide_index2(integer(), integer(), 1, ~.x), class = "slider_error_index_incompatible_size")
 })
 
 test_that("slide_index2() forces arguments in the same way as base R / map2()", {

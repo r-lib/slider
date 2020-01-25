@@ -1,4 +1,4 @@
-Package: slide
+Package: slider
 Title: Sliding Window Functions
 Version: 0.0.0.9003
 Authors@R: 
@@ -13,8 +13,10 @@ Description: Provides type-stable rolling window functions over
     For more advanced usage, an index can be used as a secondary vector
     that defines how sliding windows are to be created.
 License: MIT + file LICENSE
-URL: https://github.com/DavisVaughan/slide
-BugReports: https://github.com/DavisVaughan/slide/issues
+URL: https://github.com/DavisVaughan/slider
+BugReports: https://github.com/DavisVaughan/slider/issues
+Depends: 
+    R (>= 3.2)
 Imports: 
     glue,
     rlang (>= 0.4.1),
@@ -57,9 +59,9 @@ Collate:
     'slide-common.R'
     'slide-index-common.R'
     'slide-index.R'
-    'slide-package.R'
     'slide-period-common.R'
     'slide-period.R'
     'slide.R'
+    'slider-package.R'
     'utils.R'
     'zzz.R'

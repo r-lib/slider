@@ -1,7 +1,7 @@
-#ifndef SLIDE_UTILS_H
-#define SLIDE_UTILS_H
+#ifndef SLIDER_UTILS_H
+#define SLIDER_UTILS_H
 
-#include "slide.h"
+#include "slider.h"
 
 #define PROTECT_N(x, n) (++*n, PROTECT(x))
 
@@ -41,10 +41,10 @@ extern SEXP syms_dot_x;
 extern SEXP syms_dot_y;
 extern SEXP syms_dot_l;
 
-extern SEXP slide_shared_empty_lgl;
-extern SEXP slide_shared_empty_int;
+extern SEXP slider_shared_empty_lgl;
+extern SEXP slider_shared_empty_int;
 
-extern SEXP slide_ns_env;
+extern SEXP slider_ns_env;
 
 void stop_not_all_size_one(int iteration, int size);
 

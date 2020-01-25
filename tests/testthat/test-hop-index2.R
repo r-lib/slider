@@ -44,7 +44,7 @@ test_that("empty input returns a list, but after the index size check", {
       .stops = integer(),
       .f = ~.x
     ),
-    class = "slide_error_index_incompatible_size"
+    class = "slider_error_index_incompatible_size"
   )
 })
 

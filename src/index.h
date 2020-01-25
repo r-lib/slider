@@ -1,7 +1,7 @@
-#ifndef SLIDE_INDEX_H
-#define SLIDE_INDEX_H
+#ifndef SLIDER_INDEX_H
+#define SLIDER_INDEX_H
 
-#include "slide.h"
+#include "slider.h"
 #include "compare.h"
 
 // -----------------------------------------------------------------------------
@@ -26,9 +26,9 @@ struct index_info {
   int last_pos;
   int current_start_pos;
   int current_stop_pos;
-  slide_compare_fn_t compare_lt;
-  slide_compare_fn_t compare_gt;
-  slide_compare_fn_t compare_lte;
+  slider_compare_fn_t compare_lt;
+  slider_compare_fn_t compare_gt;
+  slider_compare_fn_t compare_lte;
 };
 
 #define PROTECT_INDEX_INFO(index, n) do {  \

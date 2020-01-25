@@ -1,7 +1,7 @@
 // - Modified version of `vctrs::vec_compare()`
 // - We don't care about `NA`s because the index is not allowed to have any
 
-#include "slide-vctrs.h"
+#include "slider-vctrs.h"
 #include "compare.h"
 #include <vctrs.h>
 #include <strings.h>
@@ -206,7 +206,7 @@ static bool df_compare_lte(SEXP x, R_len_t i, SEXP y, R_len_t j) {
 }
 
 // [[ include("compare.h") ]]
-slide_compare_fn_t get_compare_fn_lt(SEXP x) {
+slider_compare_fn_t get_compare_fn_lt(SEXP x) {
   switch (TYPEOF(x)) {
   case LGLSXP: return lgl_compare_lt;
   case INTSXP: return int_compare_lt;
@@ -224,7 +224,7 @@ slide_compare_fn_t get_compare_fn_lt(SEXP x) {
 }
 
 // [[ include("compare.h") ]]
-slide_compare_fn_t get_compare_fn_gt(SEXP x) {
+slider_compare_fn_t get_compare_fn_gt(SEXP x) {
   switch (TYPEOF(x)) {
   case LGLSXP: return lgl_compare_gt;
   case INTSXP: return int_compare_gt;
@@ -242,7 +242,7 @@ slide_compare_fn_t get_compare_fn_gt(SEXP x) {
 }
 
 // [[ include("compare.h") ]]
-slide_compare_fn_t get_compare_fn_lte(SEXP x) {
+slider_compare_fn_t get_compare_fn_lte(SEXP x) {
   switch (TYPEOF(x)) {
   case LGLSXP: return lgl_compare_lte;
   case INTSXP: return int_compare_lte;

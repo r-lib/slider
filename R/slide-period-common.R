@@ -78,11 +78,11 @@ slide_period_common <- function(x,
 }
 
 compute_from <- function(starts, first, n, before_unbounded) {
-  .Call(slide_compute_from, starts, first, n, before_unbounded)
+  .Call(slider_compute_from, starts, first, n, before_unbounded)
 }
 
 compute_to <- function(stops, last, n, after_unbounded) {
-  .Call(slide_compute_to, stops, last, n, after_unbounded)
+  .Call(slider_compute_to, stops, last, n, after_unbounded)
 }
 
 check_slide_period_before <- function(x, unbounded) {

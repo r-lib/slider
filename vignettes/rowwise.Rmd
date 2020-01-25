@@ -1,8 +1,8 @@
 ---
-title: "Row-wise iteration with slide"
+title: "Row-wise iteration with slider"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Row-wise iteration with slide}
+  %\VignetteIndexEntry{Row-wise iteration with slider}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(slide)
+library(slider)
 library(dplyr, warn.conflicts = FALSE)
 ```
 
-{slide} is implemented with a new convention that began in {vctrs}, treating a data frame as a vector of rows. This makes `slide()` a _row-wise iterator_ over a data frame, which can be useful in solving some long standing problem points in the tidyverse.
+{slider} is implemented with a new convention that began in {vctrs}, treating a data frame as a vector of rows. This makes `slide()` a _row-wise iterator_ over a data frame, which can be useful in solving some long standing problem points in the tidyverse.
 
 The point of this vignette is to go through a few examples of a row-oriented workflow. The examples are adapted from [Jenny Bryan's talk of row-oriented workflows with purrr](https://github.com/jennybc/row-oriented-workflows), to show how this workflow is improved with `slide()`.
 
