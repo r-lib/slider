@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Row-wise iteration with slide • slide</title>
+<title>Row-wise iteration with slider • slider</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Row-wise iteration with slide">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Row-wise iteration with slider">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -30,7 +30,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">slide</a>
+        <a class="navbar-link" href="../index.html">slider</a>
         <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9003</span>
       </span>
     </div>
@@ -44,7 +44,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/slide.html">Get started</a>
+  <a href="../articles/slider.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -57,14 +57,14 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/rowwise.html">Row-wise iteration with slide</a>
+      <a href="../articles/rowwise.html">Row-wise iteration with slider</a>
     </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/DavisVaughan/slide">
+  <a href="https://github.com/DavisVaughan/slider">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -82,19 +82,19 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Row-wise iteration with slide</h1>
+      <h1>Row-wise iteration with slider</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DavisVaughan/slide/blob/master/vignettes/rowwise.Rmd"><code>vignettes/rowwise.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DavisVaughan/slider/blob/master/vignettes/rowwise.Rmd"><code>vignettes/rowwise.Rmd</code></a></small>
       <div class="hidden name"><code>rowwise.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slide)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slider)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p>{slide} is implemented with a new convention that began in {vctrs}, treating a data frame as a vector of rows. This makes <code><a href="../reference/slide.html">slide()</a></code> a <em>row-wise iterator</em> over a data frame, which can be useful in solving some long standing problem points in the tidyverse.</p>
+<p>{slider} is implemented with a new convention that began in {vctrs}, treating a data frame as a vector of rows. This makes <code><a href="../reference/slide.html">slide()</a></code> a <em>row-wise iterator</em> over a data frame, which can be useful in solving some long standing problem points in the tidyverse.</p>
 <p>The point of this vignette is to go through a few examples of a row-oriented workflow. The examples are adapted from <a href="https://github.com/jennybc/row-oriented-workflows">Jenny Bryan’s talk of row-oriented workflows with purrr</a>, to show how this workflow is improved with <code><a href="../reference/slide.html">slide()</a></code>.</p>
 <div id="row-wise-iteration" class="section level2">
 <h2 class="hasAnchor">
