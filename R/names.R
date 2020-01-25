@@ -2,9 +2,9 @@
 # them through the C API
 
 vec_set_names <- function(x, names) {
-  .Call(slide_vec_set_names, x, names)
+  .Call(slider_vec_set_names, x, names)
 }
 
 vec_names <- function(x) {
-  .Call(slide_vec_names, x)
+  .Call(slider_vec_names, x)
 }

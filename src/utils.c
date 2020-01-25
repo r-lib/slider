@@ -1,7 +1,7 @@
-#include "slide.h"
+#include "slider.h"
 #include "utils.h"
 #include "compare.h"
-#include "slide-vctrs.h"
+#include "slider-vctrs.h"
 #include <vctrs.h>
 
 SEXP strings_empty = NULL;
@@ -14,10 +14,10 @@ SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
 
-SEXP slide_shared_empty_lgl = NULL;
-SEXP slide_shared_empty_int = NULL;
+SEXP slider_shared_empty_lgl = NULL;
+SEXP slider_shared_empty_int = NULL;
 
-SEXP slide_ns_env = NULL;
+SEXP slider_ns_env = NULL;
 
 // -----------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ void stop_not_all_size_one(int iteration, int size) {
     )
   );
 
-  Rf_eval(call, slide_ns_env);
+  Rf_eval(call, slider_ns_env);
   Rf_error("Internal error: `stop_not_all_size_one()` should have jumped earlier");
 }
 
@@ -45,7 +45,7 @@ static void stop_slide_start_past_stop(SEXP starts, SEXP stops) {
     )
   );
 
-  Rf_eval(call, slide_ns_env);
+  Rf_eval(call, slider_ns_env);
   Rf_error("Internal error: `stop_slide_start_past_stop()` should have jumped earlier");
 }
 
@@ -58,7 +58,7 @@ static void stop_hop_start_past_stop(SEXP starts, SEXP stops) {
     )
   );
 
-  Rf_eval(call, slide_ns_env);
+  Rf_eval(call, slider_ns_env);
   Rf_error("Internal error: `stop_hop_start_past_stop()` should have jumped earlier");
 }
 
@@ -178,8 +178,8 @@ void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP containe
 // -----------------------------------------------------------------------------
 
 // [[register()]]
-void slide_init_utils(SEXP ns) {
-  slide_ns_env = ns;
+void slider_init_utils(SEXP ns) {
+  slider_ns_env = ns;
 
   syms_dot_x = Rf_install(".x");
   syms_dot_y = Rf_install(".y");
@@ -205,11 +205,11 @@ void slide_init_utils(SEXP ns) {
   R_PreserveObject(strings_dot_complete);
   SET_STRING_ELT(strings_dot_complete, 0, Rf_mkChar(".complete"));
 
-  slide_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
-  R_PreserveObject(slide_shared_empty_lgl);
-  MARK_NOT_MUTABLE(slide_shared_empty_lgl);
+  slider_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
+  R_PreserveObject(slider_shared_empty_lgl);
+  MARK_NOT_MUTABLE(slider_shared_empty_lgl);
 
-  slide_shared_empty_int = Rf_allocVector(INTSXP, 0);
-  R_PreserveObject(slide_shared_empty_int);
-  MARK_NOT_MUTABLE(slide_shared_empty_int);
+  slider_shared_empty_int = Rf_allocVector(INTSXP, 0);
+  R_PreserveObject(slider_shared_empty_int);
+  MARK_NOT_MUTABLE(slider_shared_empty_int);
 }

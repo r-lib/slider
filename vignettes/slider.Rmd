@@ -1,8 +1,8 @@
 ---
-title: "Getting started with slide"
+title: "Getting started with slider"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{slide}
+  %\VignetteIndexEntry{slider}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -17,14 +17,14 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(slide)
+library(slider)
 library(dplyr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
 ```
 
-This vignette is meant to serve as an introduction to {slide}. In it, you'll learn about the three core functions in the package: `slide()`, `slide_index()`, and `slide_period()`, along with their many variants.
+This vignette is meant to serve as an introduction to {slider}. In it, you'll learn about the three core functions in the package: `slide()`, `slide_index()`, and `slide_period()`, along with their many variants.
 
-slide is a package for rolling analysis using window functions. "Window functions" is a term that I've borrowed from SQL that means that some function is repeatedly applied to different "windows" of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.
+slider is a package for rolling analysis using window functions. "Window functions" is a term that I've borrowed from SQL that means that some function is repeatedly applied to different "windows" of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.
 
 ## slide()
 
@@ -177,7 +177,7 @@ big_company %>%
   summarise(sales = sum(sales))
 ```
 
-But here is where things get interesting! Now what if we want to compute those monthly sales, but we want the time blocks to be made of the "current month block, plus 1 month block before it". For example, for the month of `2019-09`, it would include `2019-08` and `2019-09` together in the rolling summary. There isn't an easy way to do this in dplyr alone. With slide, there are two ways to do this.
+But here is where things get interesting! Now what if we want to compute those monthly sales, but we want the time blocks to be made of the "current month block, plus 1 month block before it". For example, for the month of `2019-09`, it would include `2019-08` and `2019-09` together in the rolling summary. There isn't an easy way to do this in dplyr alone. With slider, there are two ways to do this.
 
 The first is with `slide_period_dfr()`, and it is as easy as adding `.before = 1`, to select the current month block and 1 before it.
 

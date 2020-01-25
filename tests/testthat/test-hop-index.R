@@ -21,24 +21,24 @@ test_that("can work with with Date `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(hop_index(1, 1:2, 1, 1, identity), class = "slide_error_index_incompatible_size")
+  expect_error(hop_index(1, 1:2, 1, 1, identity), class = "slider_error_index_incompatible_size")
 })
 
 test_that(".i must be ascending", {
-  expect_error(hop_index(1:2, 2:1, 1:2, 1:2, identity), class = "slide_error_index_must_be_ascending")
+  expect_error(hop_index(1:2, 2:1, 1:2, 1:2, identity), class = "slider_error_index_must_be_ascending")
 })
 
 test_that(".starts must be ascending", {
-  expect_error(hop_index(1:2, 1:2, 2:1, 1:2, identity), class = "slide_error_endpoints_must_be_ascending")
+  expect_error(hop_index(1:2, 1:2, 2:1, 1:2, identity), class = "slider_error_endpoints_must_be_ascending")
 })
 
 test_that(".stops must be ascending", {
-  expect_error(hop_index(1:2, 1:2, 1:2, 2:1, identity), class = "slide_error_endpoints_must_be_ascending")
+  expect_error(hop_index(1:2, 1:2, 1:2, 2:1, identity), class = "slider_error_endpoints_must_be_ascending")
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(hop_index(integer(), integer(), integer(), integer(), ~.x), list())
-  expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), class = "slide_error_index_incompatible_size")
+  expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), class = "slider_error_index_incompatible_size")
 })
 
 test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
@@ -51,18 +51,18 @@ test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes a
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(hop_index(1:2, c(1, NA), 1:2, 1:2, identity), class = "slide_error_index_cannot_be_na")
-  expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), class = "slide_error_index_cannot_be_na")
+  expect_error(hop_index(1:2, c(1, NA), 1:2, 1:2, identity), class = "slider_error_index_cannot_be_na")
+  expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), class = "slider_error_index_cannot_be_na")
 })
 
 test_that(".starts must not contain NA values", {
-  expect_error(hop_index(1:2, 1:2, c(1, NA), 1:2, identity), class = "slide_error_endpoints_cannot_be_na")
-  expect_error(hop_index(1:2, 1:2, c(NA, 1), 1:2, identity), class = "slide_error_endpoints_cannot_be_na")
+  expect_error(hop_index(1:2, 1:2, c(1, NA), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_error(hop_index(1:2, 1:2, c(NA, 1), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
 })
 
 test_that(".stops must not contain NA values", {
-  expect_error(hop_index(1:2, 1:2, 1:2, c(1, NA), identity), class = "slide_error_endpoints_cannot_be_na")
-  expect_error(hop_index(1:2, 1:2, 1:2, c(NA, 1), identity), class = "slide_error_endpoints_cannot_be_na")
+  expect_error(hop_index(1:2, 1:2, 1:2, c(1, NA), identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_error(hop_index(1:2, 1:2, 1:2, c(NA, 1), identity), class = "slider_error_endpoints_cannot_be_na")
 })
 
 test_that("recycling is used for .starts/.stops", {

@@ -84,5 +84,5 @@ block <- function(x, i, period, every = 1L, origin = NULL) {
 
   boundaries <- warp_boundary(i, period = period, every = every, origin = origin)
 
-  .Call(slide_block, x, boundaries$start, boundaries$stop)
+  .Call(slider_block, x, boundaries$start, boundaries$stop)
 }

@@ -4,8 +4,8 @@
   # Load vctrs namespace for access to C callables
   requireNamespace("vctrs", quietly = TRUE)
 
-  # Initialize slide C globals
-  .Call(slide_init, ns_env("slide"))
+  # Initialize slider C globals
+  .Call(slider_init, ns_env("slider"))
 }
 
 # nocov end

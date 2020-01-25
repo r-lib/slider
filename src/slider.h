@@ -1,5 +1,5 @@
-#ifndef SLIDE_H
-#define SLIDE_H
+#ifndef SLIDER_H
+#define SLIDER_H
 
 #define R_NO_REMAP
 #include <R.h>

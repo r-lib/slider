@@ -1,4 +1,4 @@
-#include "slide.h"
+#include "slider.h"
 #include "compare.h"
 
 // -----------------------------------------------------------------------------
@@ -6,7 +6,7 @@
 static SEXP compute_from(SEXP starts, double first, R_xlen_t n, bool before_unbounded);
 
 // [[ export() ]]
-SEXP slide_compute_from(SEXP starts, SEXP first, SEXP n, SEXP before_unbounded) {
+SEXP slider_compute_from(SEXP starts, SEXP first, SEXP n, SEXP before_unbounded) {
   double first_ = REAL(first)[0];
 
   // Support long vectors
@@ -48,7 +48,7 @@ static SEXP compute_from(SEXP starts, double first, R_xlen_t n, bool before_unbo
 static SEXP compute_to(SEXP stops, double last, R_xlen_t n, bool after_unbounded);
 
 // [[ export() ]]
-SEXP slide_compute_to(SEXP stops, SEXP last, SEXP n, SEXP after_unbounded) {
+SEXP slider_compute_to(SEXP stops, SEXP last, SEXP n, SEXP after_unbounded) {
   double last_ = REAL(last)[0];
 
   // Support long vectors

@@ -1,26 +1,26 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# slide
+# slider
 
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/DavisVaughan/slide.svg?branch=master)](https://travis-ci.org/DavisVaughan/slide)
+status](https://travis-ci.org/DavisVaughan/slider.svg?branch=master)](https://travis-ci.org/DavisVaughan/slider)
 [![Codecov test
-coverage](https://codecov.io/gh/DavisVaughan/slide/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slide?branch=master)
+coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build
-status](https://github.com/DavisVaughan/slide/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slide)
+status](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider)
 <!-- badges: end -->
 
-slide provides a family of general purpose “sliding window” functions.
+slider provides a family of general purpose “sliding window” functions.
 The API is purposefully *very* similar to purrr. The goal of these
 functions is usually to compute rolling averages, cumulative sums,
 rolling regressions, or other “window” based computations.
 
-There are 3 core functions in slide:
+There are 3 core functions in slider:
 
   - `slide()` iterates over your data like
     [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html),
@@ -43,27 +43,27 @@ along with the other combinations of these variants that you might
 expect from having previously used purrr.
 
 To learn more about these three functions, read the [introduction
-vignette](https://davisvaughan.github.io/slide/articles/slide.html).
+vignette](https://davisvaughan.github.io/slider/articles/slider.html).
 
 ## Installation
 
-slide is NOT yet on [CRAN](https://CRAN.R-project.org).
+slider is NOT yet on [CRAN](https://CRAN.R-project.org).
 
 You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-remotes::install_github("DavisVaughan/slide")
+remotes::install_github("DavisVaughan/slider")
 ```
 
 ## Examples
 
 The [help page for
-`slide()`](https://davisvaughan.github.io/slide/reference/slide.html)
+`slide()`](https://davisvaughan.github.io/slider/reference/slide.html)
 has many examples, but here are a few:
 
 ``` r
-library(slide)
+library(slider)
 ```
 
 The classic example would be to do a moving average. `slide()` handles
@@ -148,7 +148,7 @@ generic row wise iterator, with nice syntax for accessing data frame
 columns.
 
 There is a [vignette specifically about
-this](https://davisvaughan.github.io/slide/articles/rowwise.html).
+this](https://davisvaughan.github.io/slider/articles/rowwise.html).
 
 ``` r
 cars <- mtcars[1:4,]
@@ -323,7 +323,7 @@ There have been multiple attempts at creating sliding window functions
   - `tibbletime::rollify()`
   - `tsibble::slide()`
 
-I believe that slide is the next iteration of these. There are a few
+I believe that slider is the next iteration of these. There are a few
 reasons for this:
 
   - To me, the API is more intuitive, and is more flexible because
@@ -343,20 +343,20 @@ reasons for this:
     the parameters.
 
 Earo and I have spoken, and we have mututally agreed that it would be
-best to deprecate `tsibble::slide()` in favor of `slide::slide()`.
+best to deprecate `tsibble::slide()` in favor of `slider::slide()`.
 
 Additionally, [data.table](https://github.com/Rdatatable/data.table)’s
 non-equi joins have been pretty much the only solution to the problem
 that `slide_index()` tries to solve. Their solution is robust and quite
-fast, and has been a nice benchmark for slide. slide is trying to solve
-a much narrower problem, so the API here is more focused.
+fast, and has been a nice benchmark for slider. slider is trying to
+solve a much narrower problem, so the API here is more focused.
 
 ## Performance
 
 In terms of performance, be aware that any specialized package that
-shifts the function calls to C are going to be faster than slide. For
+shifts the function calls to C are going to be faster than slider. For
 example, `RcppRoll::roll_mean()` computes the rolling mean *at the C
-level*, which is bound to be faster. The purpose of slide is to be
+level*, which is bound to be faster. The purpose of slider is to be
 *general purpose*, while still being as fast as possible. This means
 that it can be used for more abstract things, like rolling regressions,
 or any other custom function that you want to use in a rolling fashion.

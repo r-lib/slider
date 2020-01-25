@@ -1,5 +1,5 @@
 #include <vctrs.c>
-#include "slide-vctrs.h"
+#include "slider-vctrs.h"
 
 SEXP (*vctrs_cast)(SEXP, SEXP, SEXP, SEXP) = NULL;
 SEXP (*compact_seq)(R_len_t, R_len_t, bool) = NULL;
@@ -10,7 +10,7 @@ SEXP (*vec_init)(SEXP, R_len_t) = NULL;
 R_len_t (*vec_size)(SEXP) = NULL;
 SEXP (*vec_recycle)(SEXP, R_len_t) = NULL;
 
-void slide_init_vctrs() {
+void slider_init_vctrs() {
   vctrs_init_api();
 
   // Initialize the experimental exported but non-exposed vctrs API

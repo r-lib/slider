@@ -1,5 +1,5 @@
-#include "slide.h"
-#include "slide-vctrs.h"
+#include "slider.h"
+#include "slider-vctrs.h"
 #include "utils.h"
 #include "params.h"
 #include <vctrs.h>

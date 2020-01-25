@@ -7,7 +7,7 @@ test_that("empty input returns a list, but after the index size check", {
 
   i <- new_date(0)
 
-  expect_error(pslide_period(list(integer(), integer()), i, "day", ~.x), class = "slide_error_index_incompatible_size")
+  expect_error(pslide_period(list(integer(), integer()), i, "day", ~.x), class = "slider_error_index_incompatible_size")
 })
 
 test_that("completely empty input returns a list", {
