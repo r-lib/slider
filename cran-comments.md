@@ -5,9 +5,12 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* This is a new release.
+## 0.1.1 Submission
+
+Fixes a multiple declaration C issue uncovered by CRAN's check under gcc10. We
+link against the vctrs C API, which also has this issue, so currently gcc10 is going to continue to fail. That is being tracked by the following issue, and we will submit a patch for vctrs shortly. https://github.com/r-lib/vctrs/pull/797
 
 ## 0.1.0 Resubmission
 
