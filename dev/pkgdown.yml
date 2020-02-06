@@ -1,0 +1,7 @@
+pandoc: '2.2'
+pkgdown: 1.4.1
+pkgdown_sha: ~
+articles:
+  rowwise: rowwise.html
+  slider: slider.html
+
