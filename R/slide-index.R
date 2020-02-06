@@ -15,7 +15,7 @@
 #'
 #'   The index vector that determines the window sizes. The lower bound
 #'   of the window range will be computed as `.i - .before`, and the upper
-#'   bound as `.i + .after`. It is faily common to supply a date vector
+#'   bound as `.i + .after`. It is fairly common to supply a date vector
 #'   as the index, but not required.
 #'
 #'   There are 3 restrictions on the index:
