@@ -7,6 +7,10 @@
 
 0 errors | 0 warnings | 0 notes
 
+## 0.1.1 Resubmission
+
+vctrs 0.2.3 is now on CRAN, so the gcc10 warning should no longer occur.
+
 ## 0.1.1 Submission
 
 Fixes a multiple declaration C issue uncovered by CRAN's check under gcc10. We
