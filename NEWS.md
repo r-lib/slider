@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.1.1
 
 * Fixed a "multiple definition" C issue when compiling with gcc10.
