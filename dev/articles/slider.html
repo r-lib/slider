@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Getting started with slider • slider</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Getting started with slider">
 <meta property="og:description" content="">
@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -96,107 +96,107 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slider)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lubridate, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slider)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lubridate, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <p>This vignette is meant to serve as an introduction to {slider}. In it, you’ll learn about the three core functions in the package: <code><a href="../reference/slide.html">slide()</a></code>, <code><a href="../reference/slide_index.html">slide_index()</a></code>, and <code><a href="../reference/slide_period.html">slide_period()</a></code>, along with their many variants.</p>
 <p>slider is a package for rolling analysis using window functions. “Window functions” is a term that I’ve borrowed from SQL that means that some function is repeatedly applied to different “windows” of your data as you step through it. Typical examples of applications of window functions include rolling averages, cumulative sums, and more complex things such as rolling regressions.</p>
 <div id="slide" class="section level2">
 <h2 class="hasAnchor">
 <a href="#slide" class="anchor"></a>slide()</h2>
 <p>To better understand window functions, we’ll turn to our first core function, <code><a href="../reference/slide.html">slide()</a></code>. <code><a href="../reference/slide.html">slide()</a></code> is a bit like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>. You supply a vector to slide over, <code>.x</code>, and a function to apply to each window, <code>.f</code>. With those two things alone, <code><a href="../reference/slide.html">slide()</a></code> is almost identical to <code>map()</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; [1] 2</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; [1] 3</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; [1] 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; </span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; [1] 4</span></span></code></pre></div>
 <p>On top of this, you can control the size and placement of the window by using the additional arguments to <code><a href="../reference/slide.html">slide()</a></code>. For example, you can ask for a window of size 3 containing “the current element, as well as the 2 before it” like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; [1] 2 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; </span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; </span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; [1] 2 3 4</span></span></code></pre></div>
 <p>You’ll notice that the first two elements of the list contain partial or “incomplete” windows. By default, <code><a href="../reference/slide.html">slide()</a></code> assumes that you want to compute on these windows anyways, but if you don’t care about them, you can change the <code>.complete</code> argument.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; [1] 2 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; </span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; </span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; [1] 2 3 4</span></span></code></pre></div>
 <p><code><a href="../reference/slide.html">slide()</a></code> is <em>size stable</em>, so you always get an output that is the same size as your input. Because of that, the partial results have been replaced by the corresponding missing value. For a list, that is <code>NULL</code>.</p>
 <p>Sometimes, changing the placement of the window is a critical part of your calculation. For example, you might want a “center alignment” where you have an equal number of values before and after the current element. To accomplish this, you can combine the <code>.before</code> argument with <code>.after</code> to get a centered window. Here we ask for a window of size 3 containing “the current element, as well as 1 element before and 1 element after”. It is “centered” because in position 2 we have a complete window of the current element (2), along with one element before (1) and one after (3).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>, <span class="dt">.after =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; [1] 2 3 4</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [1] 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>, <span class="dt">.after =</span> <span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; </span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; [1] 2 3 4</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; </span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; [1] 3 4</span></span></code></pre></div>
 <p><code><a href="../reference/slide.html">slide()</a></code> can also perform <em>expanding</em> windows. These are the type that allow <em>cumulative</em> operations to work. In prose, an expanding window would be “the current element, along with every element before this one”. To construct this kind of window, you can set <code>.before</code> to <code>Inf</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="ot">Inf</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; [1] 1 2 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="ot">Inf</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
 <p><code><a href="../reference/slide.html">slide()</a></code> is <em>type-stable</em>, meaning that it always returns an object of the same type, and the base form of <code><a href="../reference/slide.html">slide()</a></code> always returns a list. So far, this is all that we have used to illustrate how it works, but practically you are more likely to use one of the suffixed forms like <code><a href="../reference/slide.html">slide_dbl()</a></code> or <code><a href="../reference/slide.html">slide_int()</a></code>. For example, you might have a vector of sales data that you want to compute a 3 value moving average on.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">sales_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="../reference/slide.html">slide_dbl</a></span>(sales_vec, mean, <span class="dt">.before =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; [1] 2 3 4 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>sales_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw"><a href="../reference/slide.html">slide_dbl</a></span>(sales_vec, mean, <span class="dt">.before =</span> <span class="dv">2</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [1] 2 3 4 4</span></span></code></pre></div>
 </div>
 <div id="slide_index" class="section level2">
 <h2 class="hasAnchor">
 <a href="#slide_index" class="anchor"></a>slide_index()</h2>
 <p>To make things a bit more interesting, let’s assume that the sales vector from the example above is also tied to some “index”, like a date vector of when the sale actually occurred.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">index_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-08-29"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">wday_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw"><a href="http://lubridate.tidyverse.org/reference/day.html">wday</a></span>(index_vec, <span class="dt">label =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">company &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">sales =</span> sales_vec,</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">index =</span> index_vec,</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="dt">wday =</span> wday_vec</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">company</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;   sales index      wday </span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; 1     2 2019-08-29 Thu  </span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; 2     4 2019-08-30 Fri  </span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; 3     6 2019-09-03 Tue  </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; 4     2 2019-09-04 Wed</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>index_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-08-29"</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">6</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>wday_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw"><a href="http://lubridate.tidyverse.org/reference/day.html">wday</a></span>(index_vec, <span class="dt">label =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>company &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="dt">sales =</span> sales_vec,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="dt">index =</span> index_vec,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="dt">wday =</span> wday_vec</span>
+<span id="cb8-8"><a href="#cb8-8"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>company</span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt;   sales index      wday </span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; 1     2 2019-08-29 Thu  </span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; 2     4 2019-08-30 Fri  </span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; 3     6 2019-09-03 Tue  </span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; 4     2 2019-09-04 Wed</span></span></code></pre></div>
 <p>This index is increasing but irregular, meaning that we “jumped” from Friday to Tuesday because there were no sales between those dates. For the purpose of this example, let’s assume that this is an online company where it is perfectly reasonable that you <em>could</em> have sales on both Saturday and Sunday (If your use case requires that you “skip over” weekends and even holidays, you might like <a href="https://github.com/DavisVaughan/almanac">{almanac}</a>).</p>
 <p>A reasonable business question to ask would be to compute a <em>3 day</em> moving average. Is this different from the 3 value moving average we computed before? Here is the expected result, side by side with the 3 value one computed using <code><a href="../reference/slide.html">slide_dbl()</a></code> from before.</p>
 <pre><code>#&gt; # A tibble: 4 x 5
@@ -209,179 +209,179 @@
 <p>The difference shows up in the third row, when computing the 3 day moving average looking back from Tuesday. To understand why they are different, consider what <code><a href="../reference/slide.html">slide_dbl()</a></code> does. It uses the <code>sales</code> column and looks at the “current row, along with two rows before it” to compute the result. When you are on row 3, this would select rows 1-3 giving the date range of <code>[Thu, Tue]</code>, which isn’t 3 days. The correct answer would have been to look back 2 days from Tuesday, not 2 rows from row 3. This would have given us the date window of <code>[Sun, Tue]</code>, and only values in that range should be included in the moving average calculation for row 3. The only row in that range is row 3, so we should just be averaging the single value of <code>6</code> to get our result.</p>
 <p><code><a href="../reference/slide.html">slide_dbl()</a></code> doesn’t give us what we want because it is <em>unaware of the index column</em>. It just looks back a set number of values. What we need is a function that “knows” about the <code>index</code> and can adjust accordingly. For that, you can use <code><a href="../reference/slide_index.html">slide_index(.x, .i, .f, ...)</a></code> which has a <code>.i</code> argument to pass an index vector through.</p>
 <p>To understand how <code><a href="../reference/slide_index.html">slide_index()</a></code> works, take a look at the following comparison to <code><a href="../reference/slide.html">slide()</a></code>. For illustration, the current window of the weekday vector is printed out. Notice that in position 3, <code><a href="../reference/slide.html">slide()</a></code> gives us the “wrong” result of Thursday, Friday and Tuesday, because it just looks back 2 values.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">wday_vec</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; [1] "Thu" "Fri" "Tue" "Wed"</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="../reference/slide.html">slide</a></span>(wday_vec, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [1] "Thu"</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; [1] "Thu" "Fri"</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; [1] "Thu" "Fri" "Tue"</span></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; [1] "Fri" "Tue" "Wed"</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>wday_vec</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; [1] "Thu" "Fri" "Tue" "Wed"</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="kw"><a href="../reference/slide.html">slide</a></span>(wday_vec, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; [1] "Thu"</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; </span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; [1] "Thu" "Fri"</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; </span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; [1] "Thu" "Fri" "Tue"</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; </span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; [1] "Fri" "Tue" "Wed"</span></span></code></pre></div>
 <p>On the other hand, <code><a href="../reference/slide_index.html">slide_index()</a></code> can be “aware” of the irregular index vector. By passing it through as <code>.i</code>, and by swapping a look back period of 2 for the lubridate object of <code><a href="http://lubridate.tidyverse.org/reference/period.html">days(2)</a></code>, the start of the range is computed as <code>.i - days(2)</code>, which correctly computes a date window of <code>[Sun, Tue]</code> for the third element, so that we only capture Tuesday in the window.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/slide_index.html">slide_index</a></span>(wday_vec, index_vec, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; [1] "Thu"</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; [1] "Thu" "Fri"</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; [1] "Tue"</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; [1] "Tue" "Wed"</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="../reference/slide_index.html">slide_index</a></span>(wday_vec, index_vec, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt; [1] "Thu"</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; </span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; [1] "Thu" "Fri"</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; </span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; [1] "Tue"</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; </span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [1] "Tue" "Wed"</span></span></code></pre></div>
 <p>Knowing this, we can swap out <code><a href="../reference/slide.html">slide_dbl()</a></code> for <code><a href="../reference/slide_index.html">slide_index_dbl()</a></code> to see how to correctly compute our 3 day rolling average.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  company, </a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">roll_val =</span> <span class="kw"><a href="../reference/slide.html">slide_dbl</a></span>(sales, mean, <span class="dt">.before =</span> <span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">  <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, index, mean, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; # A tibble: 4 x 5</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;   sales index      wday  roll_val roll_day</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt; 1     2 2019-08-29 Thu          2        2</span></a>
-<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt; 2     4 2019-08-30 Fri          3        3</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 3     6 2019-09-03 Tue          4        6</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt; 4     2 2019-09-04 Wed          4        4</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  company, </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="dt">roll_val =</span> <span class="kw"><a href="../reference/slide.html">slide_dbl</a></span>(sales, mean, <span class="dt">.before =</span> <span class="dv">2</span>),</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="dt">roll_day =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, index, mean, <span class="dt">.before =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">2</span>))</span>
+<span id="cb12-5"><a href="#cb12-5"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; # A tibble: 4 x 5</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;   sales index      wday  roll_val roll_day</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; 1     2 2019-08-29 Thu          2        2</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; 2     4 2019-08-30 Fri          3        3</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt; 3     6 2019-09-03 Tue          4        6</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt; 4     2 2019-09-04 Wed          4        4</span></span></code></pre></div>
 </div>
 <div id="slide_period" class="section level2">
 <h2 class="hasAnchor">
 <a href="#slide_period" class="anchor"></a>slide_period()</h2>
 <p>With <code><a href="../reference/slide_index.html">slide_index()</a></code>, we always returned a vector of the same size as <code>.x</code>, and the idea was to build indices to slice <code>.x</code> with using “the current element of <code>.i</code> + some number of elements before/after it”. <code><a href="../reference/slide_period.html">slide_period()</a></code> works a bit differently. It first breaks <code>.i</code> up into “time blocks” by some period (like monthly), and then uses those blocks to define how to slide over <code>.x</code>.</p>
 <p>To see an example, let’s expand out our <code>company</code> sales data frame.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">big_index_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-08-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-11-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">)</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">big_sales_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">big_company &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">  <span class="dt">sales =</span> big_sales_vec,</a>
-<a class="sourceLine" id="cb13-10" data-line-number="10">  <span class="dt">index =</span> big_index_vec</a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">)</a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13">big_company</a>
-<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt; # A tibble: 10 x 2</span></a>
-<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt;    sales index     </span></a>
-<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt;  1     2 2019-08-30</span></a>
-<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt;  2     4 2019-08-31</span></a>
-<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt;  3     6 2019-09-01</span></a>
-<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#&gt;  4     2 2019-09-02</span></a>
-<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#&gt;  5     8 2019-09-03</span></a>
-<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#&gt;  6    10 2019-11-30</span></a>
-<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#&gt;  7     9 2019-12-01</span></a>
-<a class="sourceLine" id="cb13-24" data-line-number="24"><span class="co">#&gt;  8     3 2019-12-02</span></a>
-<a class="sourceLine" id="cb13-25" data-line-number="25"><span class="co">#&gt;  9     5 2019-12-03</span></a>
-<a class="sourceLine" id="cb13-26" data-line-number="26"><span class="co">#&gt; 10     2 2019-12-04</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>big_index_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-08-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span>,</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="st">"2019-11-30"</span>) <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">4</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a>big_sales_vec &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb13-7"><a href="#cb13-7"></a></span>
+<span id="cb13-8"><a href="#cb13-8"></a>big_company &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(</span>
+<span id="cb13-9"><a href="#cb13-9"></a>  <span class="dt">sales =</span> big_sales_vec,</span>
+<span id="cb13-10"><a href="#cb13-10"></a>  <span class="dt">index =</span> big_index_vec</span>
+<span id="cb13-11"><a href="#cb13-11"></a>)</span>
+<span id="cb13-12"><a href="#cb13-12"></a></span>
+<span id="cb13-13"><a href="#cb13-13"></a>big_company</span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt;    sales index     </span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt;  1     2 2019-08-30</span></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt;  2     4 2019-08-31</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="co">#&gt;  3     6 2019-09-01</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a><span class="co">#&gt;  4     2 2019-09-02</span></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="co">#&gt;  5     8 2019-09-03</span></span>
+<span id="cb13-22"><a href="#cb13-22"></a><span class="co">#&gt;  6    10 2019-11-30</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="co">#&gt;  7     9 2019-12-01</span></span>
+<span id="cb13-24"><a href="#cb13-24"></a><span class="co">#&gt;  8     3 2019-12-02</span></span>
+<span id="cb13-25"><a href="#cb13-25"></a><span class="co">#&gt;  9     5 2019-12-03</span></span>
+<span id="cb13-26"><a href="#cb13-26"></a><span class="co">#&gt; 10     2 2019-12-04</span></span></code></pre></div>
 <p>Now say we want to compute the monthly sales, and just return 1 value per month. Since we have 4 months, we should get 4 values back. What we really want to do here is break the <code>index</code> up into “time blocks” of 1 month, and then slide over those. That’s what <code><a href="../reference/slide_period.html">slide_period()</a></code> does.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/slide_period.html">slide_period</a></span>(big_company, big_company<span class="op">$</span>index, <span class="st">"month"</span>, <span class="op">~</span>.x)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; # A tibble: 2 x 2</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt;   sales index     </span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; 1     2 2019-08-30</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; 2     4 2019-08-31</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt; # A tibble: 3 x 2</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;   sales index     </span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; 1     6 2019-09-01</span></a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 2     2 2019-09-02</span></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; 3     8 2019-09-03</span></a>
-<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
-<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#&gt;   sales index     </span></a>
-<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#&gt; 1    10 2019-11-30</span></a>
-<a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb14-23" data-line-number="23"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb14-24" data-line-number="24"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
-<a class="sourceLine" id="cb14-25" data-line-number="25"><span class="co">#&gt;   sales index     </span></a>
-<a class="sourceLine" id="cb14-26" data-line-number="26"><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></a>
-<a class="sourceLine" id="cb14-27" data-line-number="27"><span class="co">#&gt; 1     9 2019-12-01</span></a>
-<a class="sourceLine" id="cb14-28" data-line-number="28"><span class="co">#&gt; 2     3 2019-12-02</span></a>
-<a class="sourceLine" id="cb14-29" data-line-number="29"><span class="co">#&gt; 3     5 2019-12-03</span></a>
-<a class="sourceLine" id="cb14-30" data-line-number="30"><span class="co">#&gt; 4     2 2019-12-04</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw"><a href="../reference/slide_period.html">slide_period</a></span>(big_company, big_company<span class="op">$</span>index, <span class="st">"month"</span>, <span class="op">~</span>.x)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt;   sales index     </span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; 1     2 2019-08-30</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; 2     4 2019-08-31</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; </span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; # A tibble: 3 x 2</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;   sales index     </span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt; 1     6 2019-09-01</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; 2     2 2019-09-02</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt; 3     8 2019-09-03</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt; </span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt; # A tibble: 1 x 2</span></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt;   sales index     </span></span>
+<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt; 1    10 2019-11-30</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt; </span></span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt;   sales index     </span></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt; 1     9 2019-12-01</span></span>
+<span id="cb14-28"><a href="#cb14-28"></a><span class="co">#&gt; 2     3 2019-12-02</span></span>
+<span id="cb14-29"><a href="#cb14-29"></a><span class="co">#&gt; 3     5 2019-12-03</span></span>
+<span id="cb14-30"><a href="#cb14-30"></a><span class="co">#&gt; 4     2 2019-12-04</span></span></code></pre></div>
 <p>Since this returns 4 values, and not the same number of values as there are in <code>.x</code>, it won’t fit naturally in a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> or <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> statement. I find the easiest way to do this is to create a helper function that takes a data frame and returns one with the summary result for one time block, and then call that with <code><a href="../reference/slide_period.html">slide_period_dfr()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">monthly_summary &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(data, <span class="dt">index =</span> <span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(index), <span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">  big_company,</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">  big_company<span class="op">$</span>index,</a>
-<a class="sourceLine" id="cb15-8" data-line-number="8">  <span class="st">"month"</span>,</a>
-<a class="sourceLine" id="cb15-9" data-line-number="9">  monthly_summary</a>
-<a class="sourceLine" id="cb15-10" data-line-number="10">)</a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt;   index      sales</span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 1 2019-08-31     6</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 2 2019-09-03    16</span></a>
-<a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 3 2019-11-30    10</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 4 2019-12-04    19</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>monthly_summary &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(data, <span class="dt">index =</span> <span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(index), <span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</span>
+<span id="cb15-3"><a href="#cb15-3"></a>}</span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</span>
+<span id="cb15-6"><a href="#cb15-6"></a>  big_company,</span>
+<span id="cb15-7"><a href="#cb15-7"></a>  big_company<span class="op">$</span>index,</span>
+<span id="cb15-8"><a href="#cb15-8"></a>  <span class="st">"month"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9"></a>  monthly_summary</span>
+<span id="cb15-10"><a href="#cb15-10"></a>)</span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt;   index      sales</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt; 1 2019-08-31     6</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="co">#&gt; 2 2019-09-03    16</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="co">#&gt; 3 2019-11-30    10</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="co">#&gt; 4 2019-12-04    19</span></span></code></pre></div>
 <p>Now you might be thinking, “I can do that with dplyr and lubridate!”, and you’d be right:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">big_company <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(monthly) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;   monthly    sales</span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 1 2019-08-01     6</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 2 2019-09-01    16</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 3 2019-11-01    10</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; 4 2019-12-01    19</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>big_company <span class="op">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(monthly) <span class="op">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">sales =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(sales))</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt;   monthly    sales</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt; 1 2019-08-01     6</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt; 2 2019-09-01    16</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; 3 2019-11-01    10</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt; 4 2019-12-01    19</span></span></code></pre></div>
 <p>But here is where things get interesting! Now what if we want to compute those monthly sales, but we want the time blocks to be made of the “current month block, plus 1 month block before it”. For example, for the month of <code>2019-09</code>, it would include <code>2019-08</code> and <code>2019-09</code> together in the rolling summary. There isn’t an easy way to do this in dplyr alone. With slider, there are two ways to do this.</p>
 <p>The first is with <code><a href="../reference/slide_period.html">slide_period_dfr()</a></code>, and it is as easy as adding <code>.before = 1</code>, to select the current month block and 1 before it.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">  big_company,</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">  big_company<span class="op">$</span>index,</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">  <span class="st">"month"</span>,</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">  monthly_summary,</a>
-<a class="sourceLine" id="cb17-6" data-line-number="6">  <span class="dt">.before =</span> <span class="dv">1</span></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7">)</a>
-<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt; # A tibble: 4 x 2</span></a>
-<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt;   index      sales</span></a>
-<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt; 1 2019-08-31     6</span></a>
-<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt; 2 2019-09-03    22</span></a>
-<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt; 3 2019-11-30    10</span></a>
-<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt; 4 2019-12-04    29</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="../reference/slide_period.html">slide_period_dfr</a></span>(</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  big_company,</span>
+<span id="cb17-3"><a href="#cb17-3"></a>  big_company<span class="op">$</span>index,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="st">"month"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  monthly_summary,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="dt">.before =</span> <span class="dv">1</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co">#&gt;   index      sales</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; 1 2019-08-31     6</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; 2 2019-09-03    22</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt; 3 2019-11-30    10</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; 4 2019-12-04    29</span></span></code></pre></div>
 <p>Depending on your use case, you might want to append these results as a new column in <code>big_company</code>. To do this, we can instead go back to using <code><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date()</a></code> to generate monthly groupings, and slide over them using <code><a href="../reference/slide_index.html">slide_index_dbl()</a></code> with a lookback period of 1 month.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">big_company <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">    <span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>),</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">    <span class="dt">sales_summary =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, monthly, sum, <span class="dt">.before =</span> <span class="kw"><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months</a></span>(<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  )</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt; # A tibble: 10 x 4</span></a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt;    sales index      monthly    sales_summary</span></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;             &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt;  1     2 2019-08-30 2019-08-01             6</span></a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;  2     4 2019-08-31 2019-08-01             6</span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;  3     6 2019-09-01 2019-09-01            22</span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;  4     2 2019-09-02 2019-09-01            22</span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  5     8 2019-09-03 2019-09-01            22</span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;  6    10 2019-11-30 2019-11-01            10</span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt;  7     9 2019-12-01 2019-12-01            29</span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt;  8     3 2019-12-02 2019-12-01            29</span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt;  9     5 2019-12-03 2019-12-01            29</span></a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; 10     2 2019-12-04 2019-12-01            29</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>big_company <span class="op">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="dt">monthly =</span> <span class="kw"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span>(index, <span class="st">"month"</span>),</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    <span class="dt">sales_summary =</span> <span class="kw"><a href="../reference/slide_index.html">slide_index_dbl</a></span>(sales, monthly, sum, <span class="dt">.before =</span> <span class="kw"><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months</a></span>(<span class="dv">1</span>))</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  )</span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; # A tibble: 10 x 4</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt;    sales index      monthly    sales_summary</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;             &lt;dbl&gt;</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt;  1     2 2019-08-30 2019-08-01             6</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt;  2     4 2019-08-31 2019-08-01             6</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt;  3     6 2019-09-01 2019-09-01            22</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt;  4     2 2019-09-02 2019-09-01            22</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt;  5     8 2019-09-03 2019-09-01            22</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt;  6    10 2019-11-30 2019-11-01            10</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt;  7     9 2019-12-01 2019-12-01            29</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#&gt;  8     3 2019-12-02 2019-12-01            29</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#&gt;  9     5 2019-12-03 2019-12-01            29</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#&gt; 10     2 2019-12-04 2019-12-01            29</span></span></code></pre></div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
         <div id="tocnav">
       <h2 class="hasAnchor">
@@ -403,7 +403,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>

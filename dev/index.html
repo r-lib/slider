@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sliding Window Functions • slider</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Sliding Window Functions">
 <meta property="og:description" content="Provides type-stable rolling window functions over
@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">slider</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -106,191 +106,191 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install the released version from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"slider"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"slider"</span>)</span></code></pre></div>
 <p>Install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"DavisVaughan/slider"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>remotes<span class="op">::</span><span class="kw"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"DavisVaughan/slider"</span>)</span></code></pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p>The <a href="https://davisvaughan.github.io/slider/reference/slide.html">help page for <code><a href="reference/slide.html">slide()</a></code></a> has many examples, but here are a few:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slider)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(slider)</span></code></pre></div>
 <p>The classic example would be to do a moving average. <code><a href="reference/slide.html">slide()</a></code> handles this with a combination of the <code>.before</code> and <code>.after</code> arguments, which control the width of the window and the alignment.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Moving average (Aligned right)</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># "The current element + 2 elements before"</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.before =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1] 1.0 1.5 2.0 3.0 4.0</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co"># Align left</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co"># "The current element + 2 elements after"</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.after =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [1] 2.0 3.0 4.0 4.5 5.0</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co"># Center aligned</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co"># "The current element + 1 element before + 1 element after"</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.before =</span> <span class="dv">1</span>, <span class="dt">.after =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; [1] 1.5 2.0 3.0 4.0 4.5</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Moving average (Aligned right)</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># "The current element + 2 elements before"</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.before =</span> <span class="dv">2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] 1.0 1.5 2.0 3.0 4.0</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Align left</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># "The current element + 2 elements after"</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.after =</span> <span class="dv">2</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; [1] 2.0 3.0 4.0 4.5 5.0</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co"># Center aligned</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co"># "The current element + 1 element before + 1 element after"</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(.x), <span class="dt">.before =</span> <span class="dv">1</span>, <span class="dt">.after =</span> <span class="dv">1</span>)</span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; [1] 1.5 2.0 3.0 4.0 4.5</span></span></code></pre></div>
 <p>With <code>Inf</code>, you can do a “cumulative slide” to compute cumulative expressions. I think of this as saying “give me everything before the current element.”</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="ot">Inf</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [1] 1 2 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="ot">Inf</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; </span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; </span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
 <p>With <code>.complete</code>, you can decide whether or not <code>.f</code> should be evaluated on incomplete windows. In the following example, the requested window size is 3, but the first two results are computed on windows of size 1 and 2 because partial results are allowed by default. When <code>.complete</code> is set to <code>TRUE</code>, the first two results are not computed.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; [1] 2 3 4</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; NULL</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] 1 2 3</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; [1] 2 3 4</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; [1] 2 3 4</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="kw"><a href="reference/slide.html">slide</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">2</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt; </span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; NULL</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; </span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co">#&gt; </span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#&gt; [1] 2 3 4</span></span></code></pre></div>
 </div>
 <div id="data-frames" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-frames" class="anchor"></a>Data frames</h2>
 <p>Unlike <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> iterates over data frames in a row wise fashion. Interestingly this means the default of <code><a href="reference/slide.html">slide()</a></code> becomes a generic row wise iterator, with nice syntax for accessing data frame columns.</p>
 <p>There is a <a href="https://davisvaughan.github.io/slider/articles/rowwise.html">vignette specifically about this</a>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">cars &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="reference/slide.html">slide</a></span>(cars, <span class="op">~</span>.x)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;           mpg cyl disp  hp drat   wt  qsec vs am gear carb</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;             mpg cyl disp hp drat   wt  qsec vs am gear carb</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;                 mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt; Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(cars, <span class="op">~</span>.x<span class="op">$</span>mpg <span class="op">+</span><span class="st"> </span>.x<span class="op">$</span>drat)</a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt; [1] 24.90 24.90 26.65 24.48</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>cars &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw"><a href="reference/slide.html">slide</a></span>(cars, <span class="op">~</span>.x)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt;           mpg cyl disp  hp drat   wt  qsec vs am gear carb</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; </span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; </span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt;             mpg cyl disp hp drat   wt  qsec vs am gear carb</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; </span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt;                 mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt; Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="kw"><a href="reference/slide.html">slide_dbl</a></span>(cars, <span class="op">~</span>.x<span class="op">$</span>mpg <span class="op">+</span><span class="st"> </span>.x<span class="op">$</span>drat)</span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#&gt; [1] 24.90 24.90 26.65 24.48</span></span></code></pre></div>
 <p>This makes rolling regressions trivial!</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tibble)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">df &lt;-<span class="st"> </span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">y =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">)</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co"># Window size of 20 rows</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co"># The current row + 19 before</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co"># (see slide_index() for how to do this relative to a date vector!)</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">df<span class="op">$</span>regressions &lt;-<span class="st"> </span><span class="kw"><a href="reference/slide.html">slide</a></span>(df, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> .x), <span class="dt">.before =</span> <span class="dv">19</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">df[<span class="dv">15</span><span class="op">:</span><span class="dv">25</span>,]</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; # A tibble: 11 x 3</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;         y      x regressions</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;list&gt;     </span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;  1 -0.556  0.519 &lt;NULL&gt;     </span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  2  1.79   0.301 &lt;NULL&gt;     </span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  3  0.498  0.106 &lt;NULL&gt;     </span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  4 -1.97  -0.641 &lt;NULL&gt;     </span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  5  0.701 -0.850 &lt;NULL&gt;     </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt;  6 -0.473 -1.02  &lt;lm&gt;       </span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt;  7 -1.07   0.118 &lt;lm&gt;       </span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt;  8 -0.218 -0.947 &lt;lm&gt;       </span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt;  9 -1.03  -0.491 &lt;lm&gt;       </span></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; 10 -0.729 -0.256 &lt;lm&gt;       </span></a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; 11 -0.625  1.84  &lt;lm&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tibble)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>df &lt;-<span class="st"> </span><span class="kw"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="dt">y =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">100</span>),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">100</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Window size of 20 rows</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co"># The current row + 19 before</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># (see slide_index() for how to do this relative to a date vector!)</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>df<span class="op">$</span>regressions &lt;-<span class="st"> </span><span class="kw"><a href="reference/slide.html">slide</a></span>(df, <span class="op">~</span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> .x), <span class="dt">.before =</span> <span class="dv">19</span>, <span class="dt">.complete =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a>df[<span class="dv">15</span><span class="op">:</span><span class="dv">25</span>,]</span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; # A tibble: 11 x 3</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt;         y      x regressions</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;list&gt;     </span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt;  1 -0.556  0.519 &lt;NULL&gt;     </span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt;  2  1.79   0.301 &lt;NULL&gt;     </span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt;  3  0.498  0.106 &lt;NULL&gt;     </span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt;  4 -1.97  -0.641 &lt;NULL&gt;     </span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="co">#&gt;  5  0.701 -0.850 &lt;NULL&gt;     </span></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="co">#&gt;  6 -0.473 -1.02  &lt;lm&gt;       </span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="co">#&gt;  7 -1.07   0.118 &lt;lm&gt;       </span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="co">#&gt;  8 -0.218 -0.947 &lt;lm&gt;       </span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="co">#&gt;  9 -1.03  -0.491 &lt;lm&gt;       </span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="co">#&gt; 10 -0.729 -0.256 &lt;lm&gt;       </span></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="co">#&gt; 11 -0.625  1.84  &lt;lm&gt;</span></span></code></pre></div>
 </div>
 <div id="index-sliding" class="section level2">
 <h2 class="hasAnchor">
 <a href="#index-sliding" class="anchor"></a>Index sliding</h2>
 <p>In many business settings, the value you want to compute is tied to some <em>index</em>, like a date vector. In these cases, you’ll probably want to compute sliding windows relative to the index, and not using the fixed window that <code><a href="reference/slide.html">slide()</a></code> provides. You can use <code><a href="reference/slide_index.html">slide_index()</a></code> to pass in both <code>.x</code> and an index, <code>.i</code>, and the window will be calculated relative to that index.</p>
 <p>Here, when computing a “2 day window”, you probably don’t want <code>"2019-08-16"</code> and <code>"2019-08-18"</code> to be grouped together. <code><a href="reference/slide.html">slide()</a></code> has no concept of an index, so when you specify a window size of 2, it will group these two together. <code><a href="reference/slide_index.html">slide_index()</a></code>, on the other hand, will do the right thing.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">i &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2019-08-15"</span>, <span class="st">"2019-08-16"</span>, <span class="st">"2019-08-18"</span>))</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co"># slide() has no concept of an "index"</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw"><a href="reference/slide.html">slide</a></span>(x, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; [1] 2 3</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co"># "index aware"</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="kw"><a href="reference/slide_index.html">slide_index</a></span>(x, i, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt; [1] 3</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>i &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2019-08-15"</span>, <span class="st">"2019-08-16"</span>, <span class="st">"2019-08-18"</span>))</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># slide() has no concept of an "index"</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw"><a href="reference/slide.html">slide</a></span>(x, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; </span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; </span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; [1] 2 3</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co"># "index aware"</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="kw"><a href="reference/slide_index.html">slide_index</a></span>(x, i, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; </span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; </span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 <p>Essentially what happens is that when we get to <code>"2019-08-18"</code>, it “looks backwards” 1 day to set a window boundary at <code>"2019-08-17"</code>. Since the date at position 2, <code>"2019-08-16"</code>, is before <code>"2019-08-17"</code>, it is not included.</p>
 <p>Powerfully, you can pass through any object to <code>.before</code> that computes a value from <code>.i - .before</code>. This means that you could also have used a lubridate period object (which gets even more interesting when you use <code>weeks()</code> or <code><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months()</a></code>):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="reference/slide_index.html">slide_index</a></span>(x, i, <span class="op">~</span>.x, <span class="dt">.before =</span> lubridate<span class="op">::</span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; [1] 1</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; [1] 1 2</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; [1] 3</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="reference/slide_index.html">slide_index</a></span>(x, i, <span class="op">~</span>.x, <span class="dt">.before =</span> lubridate<span class="op">::</span><span class="kw"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="dv">1</span>))</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; </span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
 </div>
 <div id="period-sliding" class="section level2">
 <h2 class="hasAnchor">
 <a href="#period-sliding" class="anchor"></a>Period sliding</h2>
 <p><code><a href="reference/slide_period.html">slide_period()</a></code> is different from <code><a href="reference/slide_index.html">slide_index()</a></code> in that it first breaks the index into “time blocks” and then slides over <code>.x</code> relative to those blocks. For example, in the monthly period slide below, <code>i</code> is broken up into 4 time blocks of “the current block of monthly data, plus one block before this one”. The locations of those blocks are the locations that are used to slice <code>.x</code> with.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">i &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="st">"2019-01-29"</span>, </a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="st">"2019-01-30"</span>, </a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="st">"2019-02-05"</span>, </a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="st">"2019-04-01"</span>, </a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">  <span class="st">"2019-05-10"</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">))</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="kw"><a href="reference/slide_period.html">slide_period</a></span>(i, i, <span class="st">"month"</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; [1] "2019-01-29" "2019-01-30"</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; [1] "2019-01-29" "2019-01-30" "2019-02-05"</span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; [[3]]</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; [1] "2019-04-01"</span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; [[4]]</span></a>
-<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; [1] "2019-04-01" "2019-05-10"</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>i &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="st">"2019-01-29"</span>, </span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="st">"2019-01-30"</span>, </span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="st">"2019-02-05"</span>, </span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="st">"2019-04-01"</span>, </span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="st">"2019-05-10"</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>))</span>
+<span id="cb11-8"><a href="#cb11-8"></a></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="kw"><a href="reference/slide_period.html">slide_period</a></span>(i, i, <span class="st">"month"</span>, <span class="op">~</span>.x, <span class="dt">.before =</span> <span class="dv">1</span>)</span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [1] "2019-01-29" "2019-01-30"</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; </span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; [1] "2019-01-29" "2019-01-30" "2019-02-05"</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; </span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; [1] "2019-04-01"</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; </span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; [1] "2019-04-01" "2019-05-10"</span></span></code></pre></div>
 <p>One neat thing to notice is that <code><a href="reference/slide_period.html">slide_period()</a></code> is aware of the distance between elements of <code>.i</code> in the period you specify. The practical implication of this is that in the above example, group 3 with <code>2019-04-01</code> did <em>not</em> include <code>2019-02-05</code> in it, because it is more than 1 month group away.</p>
 </div>
 <div id="inspiration" class="section level2">
@@ -334,7 +334,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
@@ -379,7 +379,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>
