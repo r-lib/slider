@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 # slider
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/DavisVaughan/slider.svg?branch=master)](https://travis-ci.org/DavisVaughan/slider)
 [![Codecov test coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build status](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider)

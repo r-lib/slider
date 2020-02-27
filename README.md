@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/DavisVaughan/slider.svg?branch=master)](https://travis-ci.org/DavisVaughan/slider)
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
 [![Lifecycle:
