@@ -64,6 +64,14 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
   )
 })
 
+test_that("can return a matrix and rowwise bind the results together", {
+  mat <- matrix(1, ncol = 2)
+  expect_equal(
+    slide_vec(1:5, ~mat, .ptype = mat),
+    rbind(mat, mat, mat, mat, mat)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # input names
 
@@ -176,29 +184,3 @@ test_that("slide_dfc() works", {
     data.frame(x...1 = c(1, 1), x...2 = c(1, 2))
   )
 })
-
-# ------------------------------------------------------------------------------
-# failing tests
-
-# TODO - failing test for OBJECT() that doesn't implement a proxy?
-# would also need to use `vec_assign_fallback()`
-
-# (need to use `vec_assign_fallback()`, there is a note in slice.c)
-test_that("can return a matrix and rowwise bind the results together", {
-  mat <- matrix(1, ncol = 2)
-  expect_failure({
-    expect_error(
-      slide_vec(1:5, ~mat, .ptype = mat),
-      NA
-    )
-  })
-
-  # expect_equal(
-  #   slide_vec(1:5, ~mat, .ptype = mat),
-  #   rbind(mat, mat, mat, mat, mat)
-  # )
-})
-
-
-
-
