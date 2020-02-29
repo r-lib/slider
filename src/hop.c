@@ -90,7 +90,7 @@ SEXP hop_common_impl(SEXP x,
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
     if (constrain) {
-      elt = vctrs_cast(elt, ptype, strings_empty, strings_empty);
+      elt = vec_cast(elt, ptype);
       REPROTECT(elt, elt_prot_idx);
       elt = vec_proxy(elt);
       REPROTECT(elt, elt_prot_idx);

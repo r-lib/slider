@@ -94,7 +94,7 @@ SEXP slide_index_common_impl(SEXP x,
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
     if (constrain) {
-      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
+      elt = PROTECT(vec_cast(elt, ptype));
       elt = PROTECT(vec_proxy(elt));
 
       R_len_t elt_size = vec_size(elt);
@@ -198,7 +198,7 @@ SEXP hop_index_common_impl(SEXP x,
     // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
     if (constrain) {
-      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
+      elt = PROTECT(vec_cast(elt, ptype));
       elt = PROTECT(vec_proxy(elt));
 
       R_len_t elt_size = vec_size(elt);

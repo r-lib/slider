@@ -4,7 +4,7 @@
 #include "slider.h"
 
 // Experimental exported but non-exposed vctrs API
-extern SEXP (*vctrs_cast)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*vec_cast)(SEXP, SEXP);
 extern SEXP (*compact_seq)(R_len_t, R_len_t, bool);
 extern SEXP (*init_compact_seq)(int*, R_len_t, R_len_t, bool);
 
