@@ -15,11 +15,11 @@ void slider_init_vctrs() {
 
   // Initialize the experimental exported but non-exposed vctrs API
   vec_cast = (SEXP (*)(SEXP, SEXP)) R_GetCCallable("vctrs", "exp_vec_cast");
-  compact_seq = (SEXP (*)(R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "compact_seq");
-  init_compact_seq = (SEXP (*)(int*, R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "init_compact_seq");
+  compact_seq = (SEXP (*)(R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "exp_short_compact_seq");
+  init_compact_seq = (SEXP (*)(int*, R_len_t, R_len_t, bool)) R_GetCCallable("vctrs", "exp_short_init_compact_seq");
 
   // `short_*()` callables
-  vec_init = (SEXP (*)(SEXP, R_len_t)) R_GetCCallable("vctrs", "short_vec_init");
-  vec_size = (R_len_t (*)(SEXP)) R_GetCCallable("vctrs", "short_vec_size");
-  vec_recycle = (SEXP (*)(SEXP, R_len_t)) R_GetCCallable("vctrs", "short_vec_recycle");
+  vec_init = (SEXP (*)(SEXP, R_len_t)) R_GetCCallable("vctrs", "exp_short_vec_init");
+  vec_size = (R_len_t (*)(SEXP)) R_GetCCallable("vctrs", "exp_short_vec_size");
+  vec_recycle = (SEXP (*)(SEXP, R_len_t)) R_GetCCallable("vctrs", "exp_short_vec_recycle");
 }
