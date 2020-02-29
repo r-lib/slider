@@ -94,9 +94,6 @@ SEXP slide_index_common_impl(SEXP x,
     SEXP out_index = VECTOR_ELT(indices, i);
     int out_index_size = vec_size(out_index);
 
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
     if (constrain) {
       elt = PROTECT(vec_cast(elt, ptype));
 
@@ -205,9 +202,6 @@ SEXP hop_index_common_impl(SEXP x,
 #else
     SEXP elt = PROTECT(Rf_eval(f_call, env));
 #endif
-
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
 
     if (constrain) {
       elt = PROTECT(vec_cast(elt, ptype));

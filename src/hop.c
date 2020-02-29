@@ -90,9 +90,6 @@ SEXP hop_common_impl(SEXP x,
 #endif
     REPROTECT(elt, elt_prot_idx);
 
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
     if (constrain) {
       elt = vec_cast(elt, ptype);
       REPROTECT(elt, elt_prot_idx);
