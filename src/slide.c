@@ -141,8 +141,6 @@ SEXP slide_common_impl(SEXP x,
     if (constrain) {
       elt = vec_cast(elt, ptype);
       REPROTECT(elt, elt_prot_idx);
-      elt = vec_proxy(elt);
-      REPROTECT(elt, elt_prot_idx);
 
       if (vec_size(elt) != 1) {
         stop_not_all_size_one(i + 1, vec_size(elt));
@@ -150,7 +148,8 @@ SEXP slide_common_impl(SEXP x,
 
       *p_index = i + 1;
 
-      vec_assign_impl(out, index, elt, false);
+      out = vec_proxy_assign(out, index, elt);
+      REPROTECT(out, out_prot_idx);
     } else {
       SET_VECTOR_ELT(out, i, elt);
     }
