@@ -74,7 +74,7 @@ int pull_before(SEXP params, bool* before_unbounded) {
     return 0;
   }
 
-  before = PROTECT(check_int(before, strings_dot_before));
+  before = PROTECT(check_int(before));
   UNPROTECT(1);
   return r_scalar_int_get(before);
 }
@@ -90,7 +90,7 @@ int pull_after(SEXP params, bool* after_unbounded) {
     return 0;
   }
 
-  after = PROTECT(check_int(after, strings_dot_after));
+  after = PROTECT(check_int(after));
   UNPROTECT(1);
   return r_scalar_int_get(after);
 }
