@@ -1,4 +1,4 @@
-#include <vctrs.h>
+#include "slider-vctrs.h"
 
 // [[ export() ]]
 SEXP slider_vec_set_names(SEXP x, SEXP names) {

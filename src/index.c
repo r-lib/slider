@@ -3,7 +3,6 @@
 #include "slider-vctrs.h"
 #include "utils.h"
 #include "compare.h"
-#include <vctrs.h>
 
 // -----------------------------------------------------------------------------
 // All defined below
@@ -124,7 +123,7 @@ SEXP slide_index_common_impl(SEXP x,
     UNPROTECT(1);
   }
 
-  out = vec_restore(out, ptype, size_);
+  out = vec_restore(out, ptype);
   REPROTECT(out, out_prot_idx);
 
   out = copy_names(out, x, type);
@@ -225,7 +224,7 @@ SEXP hop_index_common_impl(SEXP x,
     UNPROTECT(1);
   }
 
-  out = vec_restore(out, ptype, size_);
+  out = vec_restore(out, ptype);
   REPROTECT(out, out_prot_idx);
 
   out = copy_names(out, x, type);

@@ -1,7 +1,6 @@
 #include "slider.h"
 #include "slider-vctrs.h"
 #include "utils.h"
-#include <vctrs.h>
 #include "params.h"
 
 // -----------------------------------------------------------------------------

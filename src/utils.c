@@ -2,7 +2,6 @@
 #include "utils.h"
 #include "compare.h"
 #include "slider-vctrs.h"
-#include <vctrs.h>
 
 SEXP strings_dot_before = NULL;
 SEXP strings_dot_after = NULL;

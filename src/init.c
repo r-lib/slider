@@ -37,14 +37,18 @@ void R_init_slider(DllInfo *dll)
   R_useDynamicSymbols(dll, FALSE);
 }
 
-// slider-vctrs.c
-void slider_init_vctrs();
+// slider-vctrs-private.c
+void slider_init_vctrs_private();
+
+// slider-vctrs-public.c
+void slider_init_vctrs_public();
 
 // utils.c
 void slider_init_utils(SEXP);
 
 SEXP slider_init(SEXP ns) {
-  slider_init_vctrs();
+  slider_init_vctrs_private();
+  slider_init_vctrs_public();
   slider_init_utils(ns);
   return R_NilValue;
 }
