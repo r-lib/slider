@@ -3,7 +3,6 @@
 #include "slider-vctrs.h"
 #include "utils.h"
 #include "compare.h"
-#include <vctrs.h>
 
 // -----------------------------------------------------------------------------
 // All defined below
@@ -70,8 +69,12 @@ SEXP slide_index_common_impl(SEXP x,
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  SEXP out = PROTECT_N(vec_init(ptype, size), &n_prot);
-  out = PROTECT_N(vec_proxy(out), &n_prot);
+  PROTECT_INDEX out_prot_idx;
+  SEXP out = vec_init(ptype, size);
+  PROTECT_WITH_INDEX(out, &out_prot_idx);
+  out = vec_proxy(out);
+  REPROTECT(out, out_prot_idx);
+  ++n_prot;
 
   for (int i = min_iteration; i < max_iteration; ++i) {
     if (i % 1024 == 0) {
@@ -90,12 +93,8 @@ SEXP slide_index_common_impl(SEXP x,
     SEXP out_index = VECTOR_ELT(indices, i);
     int out_index_size = vec_size(out_index);
 
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
     if (constrain) {
-      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
-      elt = PROTECT(vec_proxy(elt));
+      elt = PROTECT(vec_cast(elt, ptype));
 
       R_len_t elt_size = vec_size(elt);
 
@@ -109,8 +108,10 @@ SEXP slide_index_common_impl(SEXP x,
       }
       PROTECT(elt);
 
-      vec_assign_impl(out, out_index, elt, false);
-      UNPROTECT(3);
+      out = vec_proxy_assign(out, out_index, elt);
+      REPROTECT(out, out_prot_idx);
+
+      UNPROTECT(2);
     } else {
       int* p_out_index = INTEGER(out_index);
 
@@ -122,8 +123,11 @@ SEXP slide_index_common_impl(SEXP x,
     UNPROTECT(1);
   }
 
-  out = PROTECT_N(vec_restore(out, ptype, size_), &n_prot);
-  out = PROTECT_N(copy_names(out, x, type), &n_prot);
+  out = vec_restore(out, ptype);
+  REPROTECT(out, out_prot_idx);
+
+  out = copy_names(out, x, type);
+  REPROTECT(out, out_prot_idx);
 
   UNPROTECT(n_prot);
   return out;
@@ -168,8 +172,12 @@ SEXP hop_index_common_impl(SEXP x,
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  SEXP out = PROTECT_N(vec_init(ptype, size), &n_prot);
-  out = PROTECT_N(vec_proxy(out), &n_prot);
+  PROTECT_INDEX out_prot_idx;
+  SEXP out = vec_init(ptype, size);
+  PROTECT_WITH_INDEX(out, &out_prot_idx);
+  out = vec_proxy(out);
+  REPROTECT(out, out_prot_idx);
+  ++n_prot;
 
   // 1 based index for `vec_assign()`
   SEXP out_index;
@@ -194,12 +202,8 @@ SEXP hop_index_common_impl(SEXP x,
     SEXP elt = PROTECT(Rf_eval(f_call, env));
 #endif
 
-    // TODO - Worry about needing fallback method when no proxy is defined / is a matrix
-    // https://github.com/r-lib/vctrs/blob/8d12bfc0e29e056966e0549af619253253752a64/src/slice-assign.c#L46
-
     if (constrain) {
-      elt = PROTECT(vctrs_cast(elt, ptype, strings_empty, strings_empty));
-      elt = PROTECT(vec_proxy(elt));
+      elt = PROTECT(vec_cast(elt, ptype));
 
       R_len_t elt_size = vec_size(elt);
 
@@ -209,8 +213,10 @@ SEXP hop_index_common_impl(SEXP x,
 
       *p_out_index = i + 1;
 
-      vec_assign_impl(out, out_index, elt, false);
-      UNPROTECT(2);
+      out = vec_proxy_assign(out, out_index, elt);
+      REPROTECT(out, out_prot_idx);
+
+      UNPROTECT(1);
     } else {
       SET_VECTOR_ELT(out, i, elt);
     }
@@ -218,8 +224,11 @@ SEXP hop_index_common_impl(SEXP x,
     UNPROTECT(1);
   }
 
-  out = PROTECT_N(vec_restore(out, ptype, size_), &n_prot);
-  out = PROTECT_N(copy_names(out, x, type), &n_prot);
+  out = vec_restore(out, ptype);
+  REPROTECT(out, out_prot_idx);
+
+  out = copy_names(out, x, type);
+  REPROTECT(out, out_prot_idx);
 
   UNPROTECT(n_prot);
   return out;

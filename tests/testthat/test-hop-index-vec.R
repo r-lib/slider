@@ -86,6 +86,14 @@ test_that(".ptypes with a vec_proxy() are restored to original type", {
   )
 })
 
+test_that("can return a matrix and rowwise bind the results together", {
+  mat <- matrix(1, ncol = 2)
+  expect_equal(
+    hop_index_vec(1:5, 1:5, 1:5, 1:5, ~mat, .ptype = mat),
+    rbind(mat, mat, mat, mat, mat)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # input names
 
@@ -130,29 +138,3 @@ test_that("names can be placed correctly on proxied objects", {
   out <- hop_index_vec(x, i, i, i, ~datetime_lt, .ptype = datetime_lt)
   expect_equal(names(out), names)
 })
-
-# ------------------------------------------------------------------------------
-# failing tests
-
-# TODO - failing test for OBJECT() that doesn't implement a proxy?
-# would also need to use `vec_assign_fallback()`
-
-# (need to use `vec_assign_fallback()`, there is a note in slice.c)
-test_that("can return a matrix and rowwise bind the results together", {
-  mat <- matrix(1, ncol = 2)
-  expect_failure({
-    expect_error(
-      hop_index_vec(1:5, 1:5, 1:5, 1:5, ~mat, .ptype = mat),
-      NA
-    )
-  })
-
-  # expect_equal(
-  #   hop_index_vec(1:5, 1:5, 1:5, 1:5, ~mat, .ptype = mat),
-  #   rbind(mat, mat, mat, mat, mat)
-  # )
-})
-
-
-
-

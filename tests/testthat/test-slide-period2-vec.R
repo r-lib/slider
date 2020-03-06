@@ -82,6 +82,14 @@ test_that("with `.complete = TRUE`, `.ptype` is used to pad", {
   )
 })
 
+test_that("can return a matrix and rowwise bind the results together", {
+  mat <- matrix(1, ncol = 2)
+  expect_equal(
+    slide_period2_vec(1:5, 1:5, new_date(1:5), "day", ~mat, .ptype = mat),
+    rbind(mat, mat, mat, mat, mat)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # suffix tests
 
@@ -145,29 +153,3 @@ test_that("slide_period2_dfc() works", {
     slide_dfc(x, ~data.frame(x = .x), .before = 1)
   )
 })
-
-# ------------------------------------------------------------------------------
-# failing tests
-
-# TODO - failing test for OBJECT() that doesn't implement a proxy?
-# would also need to use `vec_assign_fallback()`
-
-# (need to use `vec_assign_fallback()`, there is a note in slice.c)
-test_that("can return a matrix and rowwise bind the results together", {
-  mat <- matrix(1, ncol = 2)
-  expect_failure({
-    expect_error(
-      slide_period2_vec(1:5, 1:5, new_date(1:5), "day", ~mat, .ptype = mat),
-      NA
-    )
-  })
-
-  # expect_equal(
-  #   slide_period2_vec(1:5, 1:5, ~mat, .ptype = mat),
-  #   rbind(mat, mat, mat, mat, mat)
-  # )
-})
-
-
-
-

@@ -31,7 +31,6 @@ static inline const char* r_scalar_chr_get(SEXP x) {
   return CHAR(STRING_ELT(x, 0));
 }
 
-extern SEXP strings_empty;
 extern SEXP strings_dot_before;
 extern SEXP strings_dot_after;
 extern SEXP strings_dot_step;

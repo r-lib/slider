@@ -1,6 +1,5 @@
 #include "slider.h"
 #include "slider-vctrs.h"
-#include <vctrs.h>
 
 // [[ export() ]]
 SEXP slider_block(SEXP x, SEXP starts, SEXP stops) {

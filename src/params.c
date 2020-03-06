@@ -1,7 +1,6 @@
 #include "slider.h"
 #include "slider-vctrs.h"
 #include "utils.h"
-#include <vctrs.h>
 #include "params.h"
 
 // -----------------------------------------------------------------------------
@@ -23,26 +22,26 @@ static void check_scalar(SEXP x, SEXP arg) {
   stop_scalar(r_scalar_chr_get(arg), vec_size(x));
 }
 
-static SEXP check_ptype(SEXP x, SEXP ptype, SEXP x_arg) {
-  return vctrs_cast(x, ptype, x_arg, strings_empty);
+static SEXP check_ptype(SEXP x, SEXP ptype) {
+  return vec_cast(x, ptype);
 }
 
-static SEXP check_int(SEXP x, SEXP x_arg) {
-  return check_ptype(x, slider_shared_empty_int, x_arg);
+static SEXP check_int(SEXP x) {
+  return check_ptype(x, slider_shared_empty_int);
 }
 
-static SEXP check_lgl(SEXP x, SEXP x_arg) {
-  return check_ptype(x, slider_shared_empty_lgl, x_arg);
+static SEXP check_lgl(SEXP x) {
+  return check_ptype(x, slider_shared_empty_lgl);
 }
 
 static SEXP check_scalar_int(SEXP x, SEXP x_arg) {
   check_scalar(x, x_arg);
-  return check_int(x, x_arg);
+  return check_int(x);
 }
 
 static SEXP check_scalar_lgl(SEXP x, SEXP x_arg) {
   check_scalar(x, x_arg);
-  return check_lgl(x, x_arg);
+  return check_lgl(x);
 }
 
 // -----------------------------------------------------------------------------
@@ -74,7 +73,7 @@ int pull_before(SEXP params, bool* before_unbounded) {
     return 0;
   }
 
-  before = PROTECT(check_int(before, strings_dot_before));
+  before = PROTECT(check_int(before));
   UNPROTECT(1);
   return r_scalar_int_get(before);
 }
@@ -90,7 +89,7 @@ int pull_after(SEXP params, bool* after_unbounded) {
     return 0;
   }
 
-  after = PROTECT(check_int(after, strings_dot_after));
+  after = PROTECT(check_int(after));
   UNPROTECT(1);
   return r_scalar_int_get(after);
 }

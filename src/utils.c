@@ -2,9 +2,7 @@
 #include "utils.h"
 #include "compare.h"
 #include "slider-vctrs.h"
-#include <vctrs.h>
 
-SEXP strings_empty = NULL;
 SEXP strings_dot_before = NULL;
 SEXP strings_dot_after = NULL;
 SEXP strings_dot_step = NULL;
@@ -184,10 +182,6 @@ void slider_init_utils(SEXP ns) {
   syms_dot_x = Rf_install(".x");
   syms_dot_y = Rf_install(".y");
   syms_dot_l = Rf_install(".l");
-
-  strings_empty = Rf_allocVector(STRSXP, 1);
-  R_PreserveObject(strings_empty);
-  SET_STRING_ELT(strings_empty, 0, Rf_mkChar(""));
 
   strings_dot_before = Rf_allocVector(STRSXP, 1);
   R_PreserveObject(strings_dot_before);

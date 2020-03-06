@@ -3,7 +3,6 @@
 
 #include "slider-vctrs.h"
 #include "compare.h"
-#include <vctrs.h>
 #include <strings.h>
 
 static void stop_not_comparable(SEXP x, SEXP y, const char* message) {
