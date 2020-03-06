@@ -70,9 +70,9 @@ SEXP slide_index_common_impl(SEXP x,
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, size);
+  SEXP out = vec_proxy(ptype);
   PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_proxy(out);
+  out = vec_init(out, size);
   REPROTECT(out, out_prot_idx);
   ++n_prot;
 
@@ -173,9 +173,9 @@ SEXP hop_index_common_impl(SEXP x,
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, size);
+  SEXP out = vec_proxy(ptype);
   PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_proxy(out);
+  out = vec_init(out, size);
   REPROTECT(out, out_prot_idx);
   ++n_prot;
 

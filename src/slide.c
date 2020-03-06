@@ -89,11 +89,11 @@ SEXP slide_common_impl(SEXP x,
     stop_step = step;
   }
 
-  // Init and proxy the `out` container
+  // Proxy and init the `out` container
   PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_init(ptype, size);
+  SEXP out = vec_proxy(ptype);
   PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_proxy(out);
+  out = vec_init(out, size);
   REPROTECT(out, out_prot_idx);
 
   // The indices to slice x with
