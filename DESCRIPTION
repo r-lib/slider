@@ -19,7 +19,7 @@ Depends:
     R (>= 3.2)
 Imports: 
     glue,
-    rlang (>= 0.4.4.9001),
+    rlang (>= 0.4.5),
     vctrs (>= 0.2.99.9009),
     warp
 Suggests: 
@@ -66,5 +66,4 @@ Collate:
     'utils.R'
     'zzz.R'
 Remotes:
-    r-lib/rlang,
     r-lib/vctrs
