@@ -1,4 +1,4 @@
-# slider (development version)
+# slider 0.1.2
 
 * Updated to stay compatible with the latest version of vctrs.
 
