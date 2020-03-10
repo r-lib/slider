@@ -10,7 +10,7 @@ coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.sv
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![R build
-status](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider)
+status](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
 <!-- badges: end -->
 
 slider provides a family of general purpose “sliding window” functions.
