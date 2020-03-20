@@ -66,4 +66,4 @@ Collate:
     'utils.R'
     'zzz.R'
 Remotes:
-    r-lib/vctrs
+    r-lib/vctrs#923
