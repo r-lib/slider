@@ -90,11 +90,15 @@ test_that("names can be placed on atomics", {
   expect_equal(names(hop_vec(x, 1:5, 1:5, ~.x, .ptype = dbl())), names)
 })
 
-test_that("names are not placed on data frames rownames", {
+test_that("names can be placed on data frames rownames", {
   names <- letters[1:2]
   x <- set_names(1:2, names)
+
+  out <- hop_vec(x, 1:2, 1:2, ~data.frame(x = .x))
+  expect_equal(rownames(out), names)
+
   out <- hop_vec(x, 1:2, 1:2, ~data.frame(x = .x), .ptype = data.frame(x = int()))
-  expect_equal(rownames(out), c("1", "2"))
+  expect_equal(rownames(out), names)
 })
 
 test_that("names can be placed on arrays", {

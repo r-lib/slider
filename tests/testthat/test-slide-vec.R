@@ -99,11 +99,15 @@ test_that("when simplifying, names from `.x` are kept, and new names from `.f` r
   )
 })
 
-test_that("names are not placed on data frames rownames", {
+test_that("names can be placed on data frames", {
   names <- letters[1:2]
   x <- set_names(1:2, names)
+
+  out <- slide_vec(x, ~data.frame(x = .x))
+  expect_equal(rownames(out), names)
+
   out <- slide_vec(x, ~data.frame(x = .x), .ptype = data.frame(x = int()))
-  expect_equal(rownames(out), c("1", "2"))
+  expect_equal(rownames(out), names)
 })
 
 test_that("names can be placed on arrays", {
