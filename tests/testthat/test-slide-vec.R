@@ -93,10 +93,8 @@ test_that("names can be placed on atomics", {
 test_that("when simplifying, names from `.x` are kept, and new names from `.f` results are dropped", {
   x <- set_names(1, "x")
 
-  expect_identical(
-    slide_vec(x, ~c(y = 2), .ptype = NULL),
-    c(x = 2)
-  )
+  expect_identical(slide_vec(x, ~c(y = 2), .ptype = NULL), c(x = 2))
+  expect_identical(slide_vec(1, ~c(y = 2), .ptype = NULL), 2)
 })
 
 test_that("names can be placed on data frames", {
