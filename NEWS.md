@@ -1,5 +1,9 @@
 # slider (development version)
 
+* With data frames containing row names, `slide()` and friends now copy those
+  row names onto the output. This is an implicit benefit from vctrs
+  gaining better support for data frame row names.
+
 # slider 0.1.2
 
 * Updated to stay compatible with the latest version of vctrs.
