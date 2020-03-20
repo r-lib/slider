@@ -20,7 +20,7 @@ Depends:
 Imports: 
     glue,
     rlang (>= 0.4.5),
-    vctrs (>= 0.2.4),
+    vctrs (>= 0.2.99.9010),
     warp
 Suggests: 
     covr,
@@ -65,3 +65,5 @@ Collate:
     'slider-package.R'
     'utils.R'
     'zzz.R'
+Remotes:
+    r-lib/vctrs
