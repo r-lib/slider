@@ -112,3 +112,18 @@ test_that("`.starts` and `.stops` must be integerish", {
   expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_type")
   expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_type")
 })
+
+# ------------------------------------------------------------------------------
+# input names
+
+test_that("names exist on inner sliced elements", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- as.list(names)
+  expect_equal(hop(x, 1:5, 1:5, ~names(.x)), exp)
+})
+
+test_that("names are never placed on the output", {
+  x <- set_names(1:5, letters[1:5])
+  expect_null(names(hop(x, 1:5, 1:5, ~.x)))
+})

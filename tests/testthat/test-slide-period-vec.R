@@ -153,3 +153,19 @@ test_that("slide_period_dfc() works", {
     slide_dfc(x, ~data.frame(x = .x), .before = 1)
   )
 })
+
+# ------------------------------------------------------------------------------
+# input names
+
+test_that("names exist on inner sliced elements", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- as.list(names)
+  expect_equal(slide_period_vec(x, new_date(1:5), "day", ~list(names(.x))), exp)
+})
+
+test_that("names are never placed on the output", {
+  x <- set_names(1:5, letters[1:5])
+  expect_null(names(slide_period_vec(x, new_date(1:5), "day", ~.x)))
+  expect_null(names(slide_period_vec(x, new_date(1:5), "day", ~.x, .ptype = int())))
+})

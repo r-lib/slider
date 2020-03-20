@@ -109,9 +109,6 @@ SEXP hop_common_impl(SEXP x,
   out = vec_restore(out, ptype);
   REPROTECT(out, out_prot_idx);
 
-  out = copy_names(out, x, type);
-  REPROTECT(out, out_prot_idx);
-
   UNPROTECT(5);
   return out;
 }
