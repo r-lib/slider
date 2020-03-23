@@ -21,23 +21,6 @@ is_unbounded <- function(x) {
   }
 }
 
-check_all_size_one <- function(out) {
-  if (vec_size(out) == 0L) {
-    return(invisible(out))
-  }
-
-  size <- vec_size_common(!!!out)
-
-  if (size != 1L) {
-    sizes <- vapply(out, vec_size, integer(1))
-    iteration <- which(sizes != 1L)[[1L]]
-    bad_size <- sizes[[iteration]]
-    stop_not_all_size_one(iteration, bad_size)
-  }
-
-  invisible(out)
-}
-
 check_is_list <- function(.l) {
   if (!is.list(.l)) {
     abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))

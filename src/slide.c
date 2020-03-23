@@ -12,28 +12,29 @@ SEXP slide_common_impl(SEXP x,
                        SEXP env,
                        SEXP params) {
 
-  int type = pull_type(params);
+  const int type = pull_type(params);
 
-  int size = compute_size(x, type);
+  const int size = compute_size(x, type);
 
   // Bail early if inputs are size 0
   if (size == 0) {
     return vec_init(ptype, 0);
   }
 
-  int force = compute_force(type);
+  const int force = compute_force(type);
 
   bool before_unbounded = false;
   bool after_unbounded = false;
 
-  bool constrain = pull_constrain(params);
-  int before = pull_before(params, &before_unbounded);
-  int after = pull_after(params, &after_unbounded);
-  int step = pull_step(params);
-  bool complete = pull_complete(params);
+  const bool constrain = pull_constrain(params);
+  const bool atomic = pull_atomic(params);
+  const int before = pull_before(params, &before_unbounded);
+  const int after = pull_after(params, &after_unbounded);
+  const int step = pull_step(params);
+  const bool complete = pull_complete(params);
 
-  bool before_positive = before >= 0;
-  bool after_positive = after >= 0;
+  const bool before_positive = before >= 0;
+  const bool after_positive = after >= 0;
 
   check_double_negativeness(before, after, before_positive, after_positive);
   check_before_negativeness(before, after, before_positive, after_unbounded);
@@ -96,6 +97,13 @@ SEXP slide_common_impl(SEXP x,
   out = vec_init(out, size);
   REPROTECT(out, out_prot_idx);
 
+  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
+  if (atomic && !constrain) {
+    for (R_len_t i = 0; i < size; ++i) {
+      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
+    }
+  }
+
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
   int* p_window = INTEGER(window);
@@ -134,15 +142,15 @@ SEXP slide_common_impl(SEXP x,
 #endif
     REPROTECT(elt, elt_prot_idx);
 
+    if (atomic && vec_size(elt) != 1) {
+      stop_not_all_size_one(i + 1, vec_size(elt));
+    }
+
     if (constrain) {
+      *p_index = i + 1;
+
       elt = vec_cast(elt, ptype);
       REPROTECT(elt, elt_prot_idx);
-
-      if (vec_size(elt) != 1) {
-        stop_not_all_size_one(i + 1, vec_size(elt));
-      }
-
-      *p_index = i + 1;
 
       out = vec_proxy_assign(out, index, elt);
       REPROTECT(out, out_prot_idx);

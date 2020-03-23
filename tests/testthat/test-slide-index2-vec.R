@@ -85,3 +85,10 @@ test_that("slide_index2_dfc() works", {
     slide_dfc(x, ~data.frame(x = .x), .before = 1)
   )
 })
+
+# ------------------------------------------------------------------------------
+# .ptype
+
+test_that("`.ptype = NULL` is size stable (#78)", {
+  expect_length(slide_index2_vec(1:4, 1:4, 1:4, ~1, .before = 1, .complete = TRUE), 4)
+})

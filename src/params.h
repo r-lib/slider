@@ -5,6 +5,7 @@
 
 int pull_type(SEXP params);
 bool pull_constrain(SEXP params);
+bool pull_atomic(SEXP params);
 int pull_before(SEXP params, bool* before_unbounded);
 int pull_after(SEXP params, bool* after_unbounded);
 int pull_step(SEXP params);

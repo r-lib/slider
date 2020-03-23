@@ -63,8 +63,13 @@ bool pull_constrain(SEXP params) {
 }
 
 // [[ include("params.h") ]]
+bool pull_atomic(SEXP params) {
+  return r_scalar_lgl_get(r_lst_get(params, 2));
+}
+
+// [[ include("params.h") ]]
 int pull_before(SEXP params, bool* before_unbounded) {
-  SEXP before = r_lst_get(params, 2);
+  SEXP before = r_lst_get(params, 3);
 
   check_scalar(before, strings_dot_before);
 
@@ -80,7 +85,7 @@ int pull_before(SEXP params, bool* before_unbounded) {
 
 // [[ include("params.h") ]]
 int pull_after(SEXP params, bool* after_unbounded) {
-  SEXP after = r_lst_get(params, 3);
+  SEXP after = r_lst_get(params, 4);
 
   check_scalar(after, strings_dot_after);
 
@@ -96,7 +101,7 @@ int pull_after(SEXP params, bool* after_unbounded) {
 
 // [[ include("params.h") ]]
 int pull_step(SEXP params) {
-  SEXP step_ = r_lst_get(params, 4);
+  SEXP step_ = r_lst_get(params, 5);
   step_ = PROTECT(check_scalar_int(step_, strings_dot_step));
 
   int step = r_scalar_int_get(step_);
@@ -111,7 +116,7 @@ int pull_step(SEXP params) {
 
 // [[ include("params.h") ]]
 int pull_complete(SEXP params) {
-  SEXP complete = r_lst_get(params, 5);
+  SEXP complete = r_lst_get(params, 6);
   complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
   UNPROTECT(1);
   return r_scalar_lgl_get(complete);

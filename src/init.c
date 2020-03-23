@@ -6,8 +6,8 @@
 /* .Call calls */
 extern SEXP slide_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP hop_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slide_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP hop_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slide_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP hop_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_block(SEXP, SEXP, SEXP);
 extern SEXP slider_compute_from(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
@@ -20,8 +20,8 @@ SEXP slider_init(SEXP);
 static const R_CallMethodDef CallEntries[] = {
   {"slide_common_impl",         (DL_FUNC) &slide_common_impl, 5},
   {"hop_common_impl",           (DL_FUNC) &hop_common_impl, 7},
-  {"slide_index_common_impl",   (DL_FUNC) &slide_index_common_impl, 12},
-  {"hop_index_common_impl",     (DL_FUNC) &hop_index_common_impl, 11},
+  {"slide_index_common_impl",   (DL_FUNC) &slide_index_common_impl, 13},
+  {"hop_index_common_impl",     (DL_FUNC) &hop_index_common_impl, 12},
   {"slider_block",              (DL_FUNC) &slider_block, 3},
   {"slider_compute_from",       (DL_FUNC) &slider_compute_from, 4},
   {"slider_compute_to",         (DL_FUNC) &slider_compute_to, 4},

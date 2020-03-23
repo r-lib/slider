@@ -7,8 +7,9 @@ slide_period_common <- function(x,
                                 before,
                                 after,
                                 complete,
-                                constrain,
                                 ptype,
+                                constrain,
+                                atomic,
                                 env,
                                 type) {
   check_index_incompatible_type(i, ".i")
@@ -56,8 +57,9 @@ slide_period_common <- function(x,
     starts = starts,
     stops = stops,
     f_call = f_call,
-    constrain = constrain,
     ptype = ptype,
+    constrain = constrain,
+    atomic = atomic,
     env = env,
     type = type
   )

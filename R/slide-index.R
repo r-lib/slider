@@ -126,8 +126,9 @@ slide_index <- function(.x,
     .before = .before,
     .after = .after,
     .complete = .complete,
+    .ptype = list(),
     .constrain = FALSE,
-    .ptype = list()
+    .atomic = FALSE
   )
 }
 
@@ -164,8 +165,9 @@ slide_index_vec <- function(.x,
     .before = .before,
     .after = .after,
     .complete = .complete,
+    .ptype = .ptype,
     .constrain = TRUE,
-    .ptype = .ptype
+    .atomic = TRUE
   )
 }
 
@@ -176,17 +178,18 @@ slide_index_simplify <- function(.x,
                                  .before,
                                  .after,
                                  .complete) {
-  out <- slide_index(
+  out <- slide_index_impl(
     .x,
     .i,
     .f,
     ...,
     .before = .before,
     .after = .after,
-    .complete = .complete
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
   )
-
-  check_all_size_one(out)
 
   vec_simplify(out)
 }
@@ -334,8 +337,9 @@ slide_index_impl <- function(.x,
                              .before,
                              .after,
                              .complete,
+                             .ptype,
                              .constrain,
-                             .ptype) {
+                             .atomic) {
   vec_assert(.x)
 
   .f <- as_function(.f)
@@ -351,8 +355,9 @@ slide_index_impl <- function(.x,
     before = .before,
     after = .after,
     complete = .complete,
-    constrain = .constrain,
     ptype = .ptype,
+    constrain = .constrain,
+    atomic = .atomic,
     env = environment(),
     type = type
   )

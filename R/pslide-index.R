@@ -16,8 +16,9 @@ pslide_index <- function(.l,
     .before = .before,
     .after = .after,
     .complete = .complete,
+    .ptype = list(),
     .constrain = FALSE,
-    .ptype = list()
+    .atomic = FALSE
   )
 }
 
@@ -54,8 +55,9 @@ pslide_index_vec <- function(.l,
     .before = .before,
     .after = .after,
     .complete = .complete,
+    .ptype = .ptype,
     .constrain = TRUE,
-    .ptype = .ptype
+    .atomic = TRUE
   )
 }
 
@@ -66,17 +68,18 @@ pslide_index_simplify <- function(.l,
                                   .before,
                                   .after,
                                   .complete) {
-  out <- pslide_index(
+  out <- pslide_index_impl(
     .l,
     .i,
     .f,
     ...,
     .before = .before,
     .after = .after,
-    .complete = .complete
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
   )
-
-  check_all_size_one(out)
 
   vec_simplify(out)
 }
@@ -224,8 +227,9 @@ pslide_index_impl <- function(.l,
                               .before,
                               .after,
                               .complete,
+                              .ptype,
                               .constrain,
-                              .ptype) {
+                              .atomic) {
   check_is_list(.l)
 
   lapply(.l, vec_assert)
@@ -257,8 +261,9 @@ pslide_index_impl <- function(.l,
     before = .before,
     after = .after,
     complete = .complete,
-    constrain = .constrain,
     ptype = .ptype,
+    constrain = .constrain,
+    atomic = .atomic,
     env = environment(),
     type = type
   )

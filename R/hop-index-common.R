@@ -3,8 +3,9 @@ hop_index_common <- function(x,
                              starts,
                              stops,
                              f_call,
-                             constrain,
                              ptype,
+                             constrain,
+                             atomic,
                              env,
                              type) {
 
@@ -60,6 +61,7 @@ hop_index_common <- function(x,
     window_indices,
     type,
     constrain,
+    atomic,
     size
   )
 }

@@ -74,8 +74,9 @@ hop_index2 <- function(.x, .y, .i, .starts, .stops, .f, ...) {
     .stops,
     .f,
     ...,
+    .ptype = list(),
     .constrain = FALSE,
-    .ptype = list()
+    .atomic = FALSE
   )
 }
 
@@ -112,8 +113,9 @@ hop_index2_vec <- function(.x,
     .stops,
     .f,
     ...,
+    .ptype = .ptype,
     .constrain = TRUE,
-    .ptype = .ptype
+    .atomic = TRUE
   )
 }
 
@@ -124,24 +126,25 @@ hop_index2_vec_simplify <- function(.x,
                                     .stops,
                                     .f,
                                     ...) {
-  out <- hop_index2(
+  out <- hop_index2_impl(
     .x,
     .y,
     .i,
     .starts,
     .stops,
     .f,
-    ...
+    ...,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
   )
-
-  check_all_size_one(out)
 
   vec_simplify(out)
 }
 
 # ------------------------------------------------------------------------------
 
-hop_index2_impl <- function(.x, .y, .i, .starts, .stops, .f, ..., .constrain, .ptype) {
+hop_index2_impl <- function(.x, .y, .i, .starts, .stops, .f, ..., .ptype, .constrain, .atomic) {
   vec_assert(.x)
   vec_assert(.y)
 
@@ -162,8 +165,9 @@ hop_index2_impl <- function(.x, .y, .i, .starts, .stops, .f, ..., .constrain, .p
     starts = .starts,
     stops = .stops,
     f_call = f_call,
-    constrain = .constrain,
     ptype = .ptype,
+    constrain = .constrain,
+    atomic = .atomic,
     env = environment(),
     type = type
   )

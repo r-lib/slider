@@ -51,6 +51,10 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
     slide_period_vec(1:2, new_date(0:1), "day", ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
     "In iteration 1, the result of `.f` had size 2, not 1."
   )
+  expect_error(
+    slide_period_vec(1:2, new_date(0:1), "day", ~if(.x == 1L) {NULL} else {1}, .ptype = NULL),
+    "In iteration 1, the result of `.f` had size 0, not 1."
+  )
 })
 
 test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {

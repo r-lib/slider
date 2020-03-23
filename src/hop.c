@@ -19,6 +19,7 @@ SEXP hop_common_impl(SEXP x,
   int force = compute_force(type);
 
   bool constrain = pull_constrain(params);
+  bool atomic = pull_atomic(params);
 
   check_hop_starts_not_past_stops(starts, stops);
 
@@ -43,6 +44,12 @@ SEXP hop_common_impl(SEXP x,
   out = vec_init(out, size);
   REPROTECT(out, out_prot_idx);
 
+  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
+  if (atomic && !constrain) {
+    for (R_len_t i = 0; i < size; ++i) {
+      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
+    }
+  }
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
@@ -89,15 +96,15 @@ SEXP hop_common_impl(SEXP x,
 #endif
     REPROTECT(elt, elt_prot_idx);
 
+    if (atomic && vec_size(elt) != 1) {
+      stop_not_all_size_one(i + 1, vec_size(elt));
+    }
+
     if (constrain) {
+      *p_index = i + 1;
+
       elt = vec_cast(elt, ptype);
       REPROTECT(elt, elt_prot_idx);
-
-      if (vec_size(elt) != 1) {
-        stop_not_all_size_one(i + 1, vec_size(elt));
-      }
-
-      *p_index = i + 1;
 
       out = vec_proxy_assign(out, index, elt);
       REPROTECT(out, out_prot_idx);

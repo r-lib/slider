@@ -1,5 +1,8 @@
 # slider (development version)
 
+* All `*_vec()` variants now maintain size stability when auto-simplifying
+  (i.e. when `.ptype = NULL`) (#78).
+
 * `hop()` and its variants no longer place the names of `.x` on the output.
   Because there is no _size_ guarantee on the output, the size of `.x` can
   be different than the size of the output, meaning that the names might not
