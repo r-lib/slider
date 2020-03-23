@@ -27,11 +27,11 @@ SEXP slide_common_impl(SEXP x,
   bool after_unbounded = false;
 
   const bool constrain = pull_constrain(params);
+  const bool atomic = pull_atomic(params);
   const int before = pull_before(params, &before_unbounded);
   const int after = pull_after(params, &after_unbounded);
   const int step = pull_step(params);
   const bool complete = pull_complete(params);
-  const bool atomic = pull_atomic(params);
 
   const bool before_positive = before >= 0;
   const bool after_positive = after >= 0;

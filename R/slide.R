@@ -431,11 +431,11 @@ slide_impl <- function(.x,
   params <- list(
     type = type,
     constrain = .constrain,
+    atomic = .atomic,
     before = .before,
     after = .after,
     step = .step,
-    complete = .complete,
-    atomic = .atomic
+    complete = .complete
   )
 
   slide_common(

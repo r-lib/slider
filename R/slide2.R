@@ -341,11 +341,11 @@ slide2_impl <- function(.x,
   params <- list(
     type,
     .constrain,
+    .atomic,
     .before,
     .after,
     .step,
-    .complete,
-    .atomic
+    .complete
   )
 
   slide_common(

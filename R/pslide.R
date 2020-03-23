@@ -259,11 +259,11 @@ pslide_impl <- function(.l,
   params <- list(
     type,
     .constrain,
+    .atomic,
     .before,
     .after,
     .step,
-    .complete,
-    .atomic
+    .complete
   )
 
   slide_common(
