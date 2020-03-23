@@ -12,29 +12,29 @@ SEXP slide_common_impl(SEXP x,
                        SEXP env,
                        SEXP params) {
 
-  int type = pull_type(params);
+  const int type = pull_type(params);
 
-  int size = compute_size(x, type);
+  const int size = compute_size(x, type);
 
   // Bail early if inputs are size 0
   if (size == 0) {
     return vec_init(ptype, 0);
   }
 
-  int force = compute_force(type);
+  const int force = compute_force(type);
 
   bool before_unbounded = false;
   bool after_unbounded = false;
 
-  bool constrain = pull_constrain(params);
-  int before = pull_before(params, &before_unbounded);
-  int after = pull_after(params, &after_unbounded);
-  int step = pull_step(params);
-  bool complete = pull_complete(params);
-  bool atomic = pull_atomic(params);
+  const bool constrain = pull_constrain(params);
+  const int before = pull_before(params, &before_unbounded);
+  const int after = pull_after(params, &after_unbounded);
+  const int step = pull_step(params);
+  const bool complete = pull_complete(params);
+  const bool atomic = pull_atomic(params);
 
-  bool before_positive = before >= 0;
-  bool after_positive = after >= 0;
+  const bool before_positive = before >= 0;
+  const bool after_positive = after >= 0;
 
   check_double_negativeness(before, after, before_positive, after_positive);
   check_before_negativeness(before, after, before_positive, after_unbounded);
