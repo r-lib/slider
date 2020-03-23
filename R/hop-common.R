@@ -1,4 +1,4 @@
-hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
+hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain, atomic) {
   x_size <- compute_size(x, type)
 
   check_endpoints_cannot_be_na(starts, ".starts")
@@ -25,7 +25,8 @@ hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain) {
 
   params <- list(
     type = type,
-    constrain = constrain
+    constrain = constrain,
+    atomic = atomic
   )
 
   .Call(hop_common_impl, x, starts, stops, f_call, ptype, env, params)
