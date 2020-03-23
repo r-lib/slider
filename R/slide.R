@@ -417,9 +417,9 @@ slide_impl <- function(.x,
                        .after,
                        .step,
                        .complete,
+                       .ptype,
                        .constrain,
-                       .atomic,
-                       .ptype) {
+                       .atomic) {
   vec_assert(.x)
 
   .f <- as_function(.f)
