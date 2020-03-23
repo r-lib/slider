@@ -43,6 +43,8 @@ extern SEXP syms_dot_l;
 extern SEXP slider_shared_empty_lgl;
 extern SEXP slider_shared_empty_int;
 
+extern SEXP slider_shared_na_lgl;
+
 extern SEXP slider_ns_env;
 
 void stop_not_all_size_one(int iteration, int size);
