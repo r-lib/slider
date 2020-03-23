@@ -4,8 +4,9 @@ slide_index_common <- function(x,
                                before,
                                after,
                                complete,
-                               constrain,
                                ptype,
+                               constrain,
+                               atomic,
                                env,
                                type) {
   vec_assert(i)
@@ -54,6 +55,7 @@ slide_index_common <- function(x,
     indices,
     type,
     constrain,
+    atomic,
     x_size,
     complete
   )

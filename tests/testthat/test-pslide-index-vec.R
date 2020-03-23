@@ -95,3 +95,10 @@ test_that("pslide_index_dfc() works", {
     )
   )
 })
+
+# ------------------------------------------------------------------------------
+# .ptype
+
+test_that("`.ptype = NULL` is size stable (#78)", {
+  expect_length(pslide_index_vec(list(1:4, 1:4), 1:4, ~1, .before = 1, .complete = TRUE), 4)
+})

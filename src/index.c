@@ -36,12 +36,14 @@ SEXP slide_index_common_impl(SEXP x,
                              SEXP indices,
                              SEXP type_,
                              SEXP constrain_,
+                             SEXP atomic_,
                              SEXP size_,
                              SEXP complete_) {
   int n_prot = 0;
 
   int type = r_scalar_int_get(type_);
   bool constrain = r_scalar_lgl_get(constrain_);
+  bool atomic = r_scalar_lgl_get(atomic_);
   int size = r_scalar_int_get(size_);
   bool complete = r_scalar_lgl_get(complete_);
 
@@ -76,6 +78,13 @@ SEXP slide_index_common_impl(SEXP x,
   REPROTECT(out, out_prot_idx);
   ++n_prot;
 
+  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
+  if (atomic && !constrain) {
+    for (R_len_t i = 0; i < size; ++i) {
+      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
+    }
+  }
+
   for (int i = min_iteration; i < max_iteration; ++i) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
@@ -93,14 +102,12 @@ SEXP slide_index_common_impl(SEXP x,
     SEXP out_index = VECTOR_ELT(indices, i);
     int out_index_size = vec_size(out_index);
 
+    if (atomic && vec_size(elt) != 1) {
+      stop_not_all_size_one(i + 1, vec_size(elt));
+    }
+
     if (constrain) {
       elt = PROTECT(vec_cast(elt, ptype));
-
-      R_len_t elt_size = vec_size(elt);
-
-      if (elt_size != 1) {
-        stop_not_all_size_one(i + 1, elt_size);
-      }
 
       // Must always PROTECT() to avoid rchk note, see #58
       if (out_index_size != 1) {
