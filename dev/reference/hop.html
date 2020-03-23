@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -40,7 +44,6 @@
 It has slightly different invariants than slide(), and is useful
 when you either need to hand craft boundary locations, or want to compute a
 result with a size that is different from .x." />
-<meta name="twitter:card" content="summary" />
 
 
 <meta name="robots" content="noindex">
@@ -58,7 +61,7 @@ result with a size that is different from .x." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -108,7 +111,7 @@ result with a size that is different from .x." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DavisVaughan/slider">
+  <a href="https://github.com/DavisVaughan/slider/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -212,15 +215,14 @@ supplied. This is a way to make production code demand fixed types.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>hop()</code> is very close to being a faster version of:</p><pre>map2(
-  .starts,
-  .stops,
-  function(start, stop) {
-    x_slice &lt;- vec_slice(.x, start:stop)
-    .f(x_slice, ...)
+    <p><code>hop()</code> is very close to being a faster version of:</p><pre><span class='fu'>map2</span>(
+  <span class='no'>.starts</span>,
+  <span class='no'>.stops</span>,
+  <span class='kw'>function</span>(<span class='no'>start</span>, <span class='no'>stop</span>) {
+    <span class='no'>x_slice</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>vec_slice</span>(<span class='no'>.x</span>, <span class='no'>start</span>:<span class='no'>stop</span>)
+    <span class='fu'>.f</span>(<span class='no'>x_slice</span>, <span class='no'>...</span>)
   }
-)
-</pre>
+)</pre>
 
 <p>Because of this, <code><a href='hop_index.html'>hop_index()</a></code> is often the more useful function. <code>hop()</code>
 mainly exists for API completeness.</p>
@@ -228,23 +230,21 @@ mainly exists for API completeness.</p>
 <em>possible</em> locations along <code>.x</code>, and it is not enforced that these locations
 actually exist along <code>.x</code>. As an example, with <code>hop()</code> you can do the
 following, which would be an error with <code>vec_slice()</code> because <code>0L</code> is
-out of bounds.</p><pre>hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
-#&gt; [[1]]
-#&gt; [1] "a"
-</pre>
+out of bounds.</p><pre><span class='fu'>hop</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>), <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fl'>1L</span>, ~<span class='no'>.x</span>)
+<span class='co'>#&amp;gt; [[1]]</span>
+<span class='co'>#&amp;gt; [1] "a"</span></pre>
 
 <p><code>hop()</code> allows these out of bounds values to be fully compatible with
 <code><a href='slide.html'>slide()</a></code>. It is always possible to construct a <code>hop()</code> call from a <code><a href='slide.html'>slide()</a></code>
-call. For example, the following are equivalent:</p><pre>slide(1:2, ~.x, .before = 1)
+call. For example, the following are equivalent:</p><pre><span class='fu'><a href='slide.html'>slide</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
-hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
+<span class='fu'>hop</span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), ~<span class='no'>.x</span>)
 
-#&gt; [[1]]
-#&gt; [1] 1
-#&gt;
-#&gt; [[2]]
-#&gt; [1] 1 2
-</pre>
+<span class='co'>#&amp;gt; [[1]]</span>
+<span class='co'>#&amp;gt; [1] 1</span>
+<span class='co'>#&amp;gt;</span>
+<span class='co'>#&amp;gt; [[2]]</span>
+<span class='co'>#&amp;gt; [1] 1 2</span></pre>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -280,15 +280,9 @@ hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
