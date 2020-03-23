@@ -266,3 +266,18 @@ test_that("can order by two vectors using a data frame", {
     )
   )
 })
+
+# ------------------------------------------------------------------------------
+# input names
+
+test_that("names exist on inner sliced elements", {
+  names <- letters[1:5]
+  x <- set_names(1:5, names)
+  exp <- as.list(names)
+  expect_equal(hop_index(x, 1:5, 1:5, 1:5, ~names(.x)), exp)
+})
+
+test_that("names are never placed on the output", {
+  x <- set_names(1:5, letters[1:5])
+  expect_null(names(hop_index(x, 1:5, 1:5, 1:5, ~.x)))
+})

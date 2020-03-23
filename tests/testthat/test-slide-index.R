@@ -1063,10 +1063,10 @@ test_that("input names are retained from proxied objects", {
   expect_equal(names(slide_index(x, i, ~.x)), names)
 })
 
-test_that("row names are not extracted from data frames", {
+test_that("row names are extracted from data frames", {
   x <- data.frame(x = 1:5, row.names = letters[1:5])
   i <- vec_seq_along(x)
-  expect_equal(names(slide_index(x, i, ~.x)), NULL)
+  expect_equal(names(slide_index(x, i, ~.x)), letters[1:5])
 })
 
 test_that("row names are extracted from arrays", {
@@ -1082,9 +1082,11 @@ test_that("names are retained on inner sliced object", {
   exp <- set_names(as.list(names), names)
   expect_equal(slide_index(x, i, ~names(.x)), exp)
 
-  x <- data.frame(x = 1:5, row.names = letters[1:5])
+  names <- letters[1:5]
+  x <- data.frame(x = 1:5, row.names = names)
   i <- vec_seq_along(x)
-  expect_equal(slide_index(x, i, ~rownames(.x)), as.list(rownames(x)))
+  expect <- set_names(as.list(names), names)
+  expect_equal(slide_index(x, i, ~rownames(.x)), expect)
 
   names <- c("r1", "r2")
   x <- array(1:4, c(2, 2), dimnames = list(names, c("c1", "c2")))
