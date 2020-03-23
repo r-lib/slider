@@ -17,7 +17,8 @@ pslide <- function(.l,
     .step = .step,
     .complete = .complete,
     .ptype = list(),
-    .constrain = FALSE
+    .constrain = FALSE,
+    .atomic = FALSE
   )
 }
 
@@ -55,7 +56,8 @@ pslide_vec <- function(.l,
     .step = .step,
     .complete = .complete,
     .ptype = .ptype,
-    .constrain = TRUE
+    .constrain = TRUE,
+    .atomic = TRUE
   )
 }
 
@@ -66,17 +68,18 @@ pslide_vec_simplify <- function(.l,
                                 .after,
                                 .step,
                                 .complete) {
-  out <- pslide(
+  out <- pslide_impl(
     .l,
     .f,
     ...,
     .before = .before,
     .after = .after,
     .step = .step,
-    .complete = .complete
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
   )
-
-  check_all_size_one(out)
 
   vec_simplify(out)
 }
@@ -225,7 +228,8 @@ pslide_impl <- function(.l,
                         .step,
                         .complete,
                         .ptype,
-                        .constrain) {
+                        .constrain,
+                        .atomic) {
   check_is_list(.l)
 
   lapply(.l, vec_assert)
@@ -258,7 +262,8 @@ pslide_impl <- function(.l,
     .before,
     .after,
     .step,
-    .complete
+    .complete,
+    .atomic
   )
 
   slide_common(

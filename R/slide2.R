@@ -93,7 +93,8 @@ slide2 <- function(.x,
     .step = .step,
     .complete = .complete,
     .ptype = list(),
-    .constrain = FALSE
+    .constrain = FALSE,
+    .atomic = FALSE
   )
 }
 
@@ -134,7 +135,8 @@ slide2_vec <- function(.x,
     .step = .step,
     .complete = .complete,
     .ptype = .ptype,
-    .constrain = TRUE
+    .constrain = TRUE,
+    .atomic = TRUE
   )
 }
 
@@ -146,7 +148,7 @@ slide2_vec_simplify <- function(.x,
                                 .after,
                                 .step,
                                 .complete) {
-  out <- slide2(
+  out <- slide2_impl(
     .x,
     .y,
     .f,
@@ -154,10 +156,11 @@ slide2_vec_simplify <- function(.x,
     .before = .before,
     .after = .after,
     .step = .step,
-    .complete = .complete
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
   )
-
-  check_all_size_one(out)
 
   vec_simplify(out)
 }
@@ -319,7 +322,8 @@ slide2_impl <- function(.x,
                         .step,
                         .complete,
                         .ptype,
-                        .constrain) {
+                        .constrain,
+                        .atomic) {
   vec_assert(.x)
   vec_assert(.y)
 
@@ -340,7 +344,8 @@ slide2_impl <- function(.x,
     .before,
     .after,
     .step,
-    .complete
+    .complete,
+    .atomic
   )
 
   slide_common(

@@ -57,6 +57,11 @@ test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {
   expect_equal(slide_vec(integer(), ~.x, .ptype = NULL), NULL)
 })
 
+test_that("`.ptype = NULL` is size stable (#78)", {
+  expect_length(slide_vec(1:4, ~.x, .step = 2), 4)
+  expect_length(slide_vec(1:4, ~1, .before = 1, .complete = TRUE), 4)
+})
+
 test_that(".ptypes with a vec_proxy() are restored to original type", {
   expect_is(
     slide_vec(Sys.Date() + 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),

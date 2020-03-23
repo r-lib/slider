@@ -117,6 +117,11 @@ int pull_complete(SEXP params) {
   return r_scalar_lgl_get(complete);
 }
 
+// [[ include("params.h") ]]
+bool pull_atomic(SEXP params) {
+  return r_scalar_lgl_get(r_lst_get(params, 6));
+}
+
 // -----------------------------------------------------------------------------
 
 // [[ include("params.h") ]]
