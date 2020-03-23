@@ -151,11 +151,13 @@ SEXP hop_index_common_impl(SEXP x,
                            SEXP window_indices,
                            SEXP type_,
                            SEXP constrain_,
+                           SEXP atomic_,
                            SEXP size_) {
   int n_prot = 0;
 
   int type = r_scalar_int_get(type_);
   bool constrain = r_scalar_lgl_get(constrain_);
+  bool atomic = r_scalar_lgl_get(atomic_);
   int size = r_scalar_int_get(size_);
 
   int force = compute_force(type);
@@ -186,6 +188,13 @@ SEXP hop_index_common_impl(SEXP x,
   REPROTECT(out, out_prot_idx);
   ++n_prot;
 
+  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
+  if (atomic && !constrain) {
+    for (R_len_t i = 0; i < size; ++i) {
+      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
+    }
+  }
+
   // 1 based index for `vec_assign()`
   SEXP out_index;
   int* p_out_index;
@@ -209,16 +218,14 @@ SEXP hop_index_common_impl(SEXP x,
     SEXP elt = PROTECT(Rf_eval(f_call, env));
 #endif
 
+    if (atomic && vec_size(elt) != 1) {
+      stop_not_all_size_one(i + 1, vec_size(elt));
+    }
+
     if (constrain) {
-      elt = PROTECT(vec_cast(elt, ptype));
-
-      R_len_t elt_size = vec_size(elt);
-
-      if (elt_size != 1) {
-        stop_not_all_size_one(i + 1, elt_size);
-      }
-
       *p_out_index = i + 1;
+
+      elt = PROTECT(vec_cast(elt, ptype));
 
       out = vec_proxy_assign(out, out_index, elt);
       REPROTECT(out, out_prot_idx);
