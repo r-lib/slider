@@ -102,8 +102,6 @@ pslide_period_vec_simplify <- function(.l,
     .atomic = TRUE
   )
 
-  check_all_size_one(out)
-
   vec_simplify(out)
 }
 
