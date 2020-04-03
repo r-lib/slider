@@ -45,8 +45,8 @@ test_that("slide_index2_chr() works", {
   expect_equal(slide_index2_chr("x", 1, 1, ~.x), "x")
 })
 
-test_that("slide_index2_chr() can coerce", {
-  expect_equal(slide_index2_chr(1, 1, 1, ~.x), "1")
+test_that("slide_index2_chr() cannot coerce", {
+  expect_error(slide_index2_chr(1, 1, 1, ~.x), class = "vctrs_error_incompatible_cast")
 })
 
 test_that("slide_index2_lgl() works", {
