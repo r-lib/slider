@@ -12,6 +12,9 @@ SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
 
+SEXP slider_private_iteration = NULL;
+int* p_slider_private_iteration = NULL;
+
 SEXP slider_shared_empty_lgl = NULL;
 SEXP slider_shared_empty_int = NULL;
 
@@ -213,4 +216,8 @@ void slider_init_utils(SEXP ns) {
   R_PreserveObject(slider_shared_na_lgl);
   LOGICAL(slider_shared_na_lgl)[0] = NA_LOGICAL;
   MARK_NOT_MUTABLE(slider_shared_na_lgl);
+
+  slider_private_iteration = Rf_ScalarInteger(NA_INTEGER);
+  R_PreserveObject(slider_private_iteration);
+  p_slider_private_iteration = INTEGER(slider_private_iteration);
 }

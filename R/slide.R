@@ -438,6 +438,8 @@ slide_impl <- function(.x,
     complete = .complete
   )
 
+  slider_iteration_reset_on_exit()
+
   slide_common(
     x = .x,
     f_call = f_call,

@@ -117,6 +117,8 @@ SEXP slide_common_impl(SEXP x,
   SEXP container = PROTECT(make_slice_container(type));
 
   for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
+    *p_slider_private_iteration = i + 1;
+
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }

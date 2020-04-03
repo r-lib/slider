@@ -13,21 +13,25 @@ extern SEXP slider_compute_from(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_vec_set_names(SEXP, SEXP);
 extern SEXP slider_vec_names(SEXP);
+extern SEXP slider_iteration_impl();
+extern SEXP slider_iteration_reset_impl();
 
 // Defined below
 SEXP slider_init(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-  {"slide_common_impl",         (DL_FUNC) &slide_common_impl, 5},
-  {"hop_common_impl",           (DL_FUNC) &hop_common_impl, 7},
-  {"slide_index_common_impl",   (DL_FUNC) &slide_index_common_impl, 13},
-  {"hop_index_common_impl",     (DL_FUNC) &hop_index_common_impl, 12},
-  {"slider_block",              (DL_FUNC) &slider_block, 3},
-  {"slider_compute_from",       (DL_FUNC) &slider_compute_from, 4},
-  {"slider_compute_to",         (DL_FUNC) &slider_compute_to, 4},
-  {"slider_vec_set_names",      (DL_FUNC) &slider_vec_set_names, 2},
-  {"slider_vec_names",          (DL_FUNC) &slider_vec_names, 1},
-  {"slider_init",               (DL_FUNC) &slider_init, 1},
+  {"slide_common_impl",           (DL_FUNC) &slide_common_impl, 5},
+  {"hop_common_impl",             (DL_FUNC) &hop_common_impl, 7},
+  {"slide_index_common_impl",     (DL_FUNC) &slide_index_common_impl, 13},
+  {"hop_index_common_impl",       (DL_FUNC) &hop_index_common_impl, 12},
+  {"slider_block",                (DL_FUNC) &slider_block, 3},
+  {"slider_compute_from",         (DL_FUNC) &slider_compute_from, 4},
+  {"slider_compute_to",           (DL_FUNC) &slider_compute_to, 4},
+  {"slider_vec_set_names",        (DL_FUNC) &slider_vec_set_names, 2},
+  {"slider_vec_names",            (DL_FUNC) &slider_vec_names, 1},
+  {"slider_iteration_impl",       (DL_FUNC) &slider_iteration_impl, 0},
+  {"slider_iteration_reset_impl", (DL_FUNC) &slider_iteration_reset_impl, 0},
+  {"slider_init",                 (DL_FUNC) &slider_init, 1},
   {NULL, NULL, 0}
 };
 
