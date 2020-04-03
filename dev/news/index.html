@@ -134,7 +134,7 @@
 <a href="#slider-development-version" class="anchor"></a>slider (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>All <code>*_vec()</code> variants now maintain size stability when auto-simplifying (i.e. when <code>.ptype = NULL</code>) (<a href='https://github.com/DavisVaughan/slider/issues/78'>#78</a>).</p></li>
+<li><p>All <code>*_vec()</code> variants now maintain size stability when auto-simplifying (i.e.Â when <code>.ptype = NULL</code>) (<a href='https://github.com/DavisVaughan/slider/issues/78'>#78</a>).</p></li>
 <li><p><code><a href="../reference/hop.html">hop()</a></code> and its variants no longer place the names of <code>.x</code> on the output. Because there is no <em>size</em> guarantee on the output, the size of <code>.x</code> can be different than the size of the output, meaning that the names might not line up. This also affects <code><a href="../reference/slide_period.html">slide_period()</a></code>, which is implemented using a <code><a href="../reference/hop.html">hop()</a></code> variant (<a href='https://github.com/DavisVaughan/slider/issues/75'>#75</a>).</p></li>
 <li><p>With data frames containing row names, <code><a href="../reference/slide.html">slide()</a></code> and its variants now copy those row names onto the output. This is an implicit benefit from vctrs gaining better support for data frame row names.</p></li>
 </ul>
@@ -152,7 +152,7 @@
 <a href="#slider-011" class="anchor"></a>slider 0.1.1<small> 2020-02-23 </small>
 </h1>
 <ul>
-<li>Fixed a “multiple definition” C issue when compiling with gcc10.</li>
+<li>Fixed a âmultiple definitionâ C issue when compiling with gcc10.</li>
 </ul>
 </div>
     <div id="slider-010" class="section level1">
@@ -180,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
 </div>
 
       </footer>
