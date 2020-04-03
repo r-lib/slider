@@ -63,7 +63,7 @@ slide_index_common <- function(x,
 
 # ------------------------------------------------------------------------------
 
-compute_ranges <- function(i, before, after, start_unbounded, stop_unbounded) {
+compute_ranges <- function(i, before, after) {
   start_unbounded <- is_unbounded(before)
   stop_unbounded <- is_unbounded(after)
 
