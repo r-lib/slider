@@ -10,15 +10,15 @@ test_that("size of each `.f` result must be 1", {
 
 test_that("inner type is allowed to be different", {
   expect_equal(
-    slide_period_vec(1:2, new_date(1:2), "day", ~if (.x == 1L) {1} else {"hi"}, .ptype = list()),
+    slide_period_vec(1:2, new_date(1:2), "day", ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list()),
     list(1, "hi")
   )
 })
 
 test_that("inner type can be restricted with list_of", {
   expect_error(
-    slide_period_vec(1:2, new_date(1:2), "day", ~if (.x == 1L) {1} else {"hi"}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_cast_lossy"
+    slide_period_vec(1:2, new_date(1:2), "day", ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_cast"
   )
 })
 
@@ -28,7 +28,6 @@ test_that("inner type can be restricted with list_of", {
 test_that(".ptype is respected", {
   expect_equal(slide_period_vec(1, new_date(0), "day", ~.x), 1)
   expect_equal(slide_period_vec(1, new_date(0), "day", ~.x, .ptype = int()), 1L)
-  expect_equal(slide_period_vec(1, new_date(0), "day", ~.x, .ptype = new_date()), as.Date("1970-01-02"))
   expect_error(slide_period_vec(1, new_date(0), "day", ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy")
 })
 
@@ -117,8 +116,8 @@ test_that("slide_period_chr() works", {
   expect_equal(slide_period_chr("x", new_date(0), "day", ~.x), "x")
 })
 
-test_that("slide_period_chr() can coerce", {
-  expect_equal(slide_period_chr(1, new_date(0), "day", ~.x), "1")
+test_that("slide_period_chr() cannot coerce", {
+  expect_error(slide_period_chr(1, new_date(0), "day", ~.x), class = "vctrs_error_incompatible_cast")
 })
 
 test_that("slide_period_lgl() works", {

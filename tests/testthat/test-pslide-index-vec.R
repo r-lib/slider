@@ -50,8 +50,8 @@ test_that("pslide_index_chr() works", {
   expect_equivalent(pslide_index_chr(list("x", 1), 1, ~.x), "x")
 })
 
-test_that("pslide_index_chr() can coerce", {
-  expect_equivalent(pslide_index_chr(list(1, 1), 1, ~.x + .y), "2")
+test_that("pslide_index_chr() cannot coerce", {
+  expect_error(pslide_index_chr(list(1, 1), 1, ~.x + .y), class = "vctrs_error_incompatible_cast")
 })
 
 test_that("pslide_index_lgl() works", {

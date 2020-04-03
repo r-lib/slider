@@ -10,15 +10,15 @@ test_that("size of each `.f` result must be 1", {
 
 test_that("inner type is allowed to be different", {
   expect_equal(
-    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {1} else {"hi"}, .ptype = list()),
+    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list()),
     list(1, "hi")
   )
 })
 
 test_that("inner type can be restricted with list_of", {
   expect_error(
-    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {1} else {"hi"}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_cast_lossy"
+    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_cast"
   )
 })
 
@@ -28,7 +28,6 @@ test_that("inner type can be restricted with list_of", {
 test_that(".ptype is respected", {
   expect_equal(slide_index_vec(1, 1, ~.x), 1)
   expect_equal(slide_index_vec(1, 1, ~.x, .ptype = int()), 1L)
-  expect_equal(slide_index_vec(1, 1, ~.x, .ptype = new_date()), as.Date("1970-01-02"))
   expect_error(slide_index_vec(1, 1, ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy")
 })
 
@@ -99,8 +98,8 @@ test_that("slide_index_chr() works", {
   expect_equal(slide_index_chr("x", 1, ~.x), "x")
 })
 
-test_that("slide_index_chr() can coerce", {
-  expect_equal(slide_index_chr(1, 1, ~.x), "1")
+test_that("slide_index_chr() cannot coerce", {
+  expect_error(slide_index_chr(1, 1, ~.x), class = "vctrs_error_incompatible_cast")
 })
 
 test_that("slide_index_lgl() works", {
