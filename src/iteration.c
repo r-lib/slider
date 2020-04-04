@@ -13,6 +13,7 @@ SEXP slider_iteration_impl() {
 }
 
 SEXP slider_iteration_reset_impl() {
-  slider_private_iteration = NA_INTEGER;
+  slider_private_iteration = slider_private_old_iteration;
+  slider_private_old_iteration = NA_INTEGER;
   return R_NilValue;
 }

@@ -116,6 +116,8 @@ SEXP slide_common_impl(SEXP x,
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
 
+  slider_private_old_iteration = slider_private_iteration;
+
   for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
     slider_private_iteration = i + 1;
 
