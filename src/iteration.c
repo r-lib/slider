@@ -1,6 +1,7 @@
-#include "slider.h"
+#include "iteration.h"
 #include "utils.h"
 
+// [[ register() ]]
 SEXP slider_iteration_impl() {
   if (slider_private_iteration == NA_INTEGER) {
     Rf_errorcall(
@@ -12,8 +13,7 @@ SEXP slider_iteration_impl() {
   return Rf_ScalarInteger(slider_private_iteration);
 }
 
-SEXP slider_iteration_reset_impl() {
+void slider_iteration_cleanup(void* p_data) {
   slider_private_iteration = slider_private_old_iteration;
   slider_private_old_iteration = NA_INTEGER;
-  return R_NilValue;
 }

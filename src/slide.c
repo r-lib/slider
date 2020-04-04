@@ -2,8 +2,19 @@
 #include "slider-vctrs.h"
 #include "utils.h"
 #include "params.h"
+#include "iteration.h"
 
 // -----------------------------------------------------------------------------
+
+struct slide_info {
+  SEXP x;
+  SEXP f_call;
+  SEXP ptype;
+  SEXP env;
+  SEXP params;
+};
+
+SEXP slide_common_impl_internal(void* p_data);
 
 // [[ register() ]]
 SEXP slide_common_impl(SEXP x,
@@ -11,6 +22,30 @@ SEXP slide_common_impl(SEXP x,
                        SEXP ptype,
                        SEXP env,
                        SEXP params) {
+  struct slide_info data = {
+    .x = x,
+    .f_call = f_call,
+    .ptype = ptype,
+    .env = env,
+    .params = params
+  };
+
+  SEXP out = R_ExecWithCleanup(
+    slide_common_impl_internal, &data,
+    slider_iteration_cleanup, NULL
+  );
+
+  return out;
+}
+
+SEXP slide_common_impl_internal(void* p_data) {
+  struct slide_info* p_info = p_data;
+
+  SEXP x = p_info->x;
+  SEXP f_call = p_info->f_call;
+  SEXP ptype = p_info->ptype;
+  SEXP env = p_info->env;
+  SEXP params = p_info->params;
 
   const int type = pull_type(params);
 

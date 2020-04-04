@@ -14,7 +14,6 @@ extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_vec_set_names(SEXP, SEXP);
 extern SEXP slider_vec_names(SEXP);
 extern SEXP slider_iteration_impl();
-extern SEXP slider_iteration_reset_impl();
 
 // Defined below
 SEXP slider_init(SEXP);
@@ -30,7 +29,6 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_vec_set_names",        (DL_FUNC) &slider_vec_set_names, 2},
   {"slider_vec_names",            (DL_FUNC) &slider_vec_names, 1},
   {"slider_iteration_impl",       (DL_FUNC) &slider_iteration_impl, 0},
-  {"slider_iteration_reset_impl", (DL_FUNC) &slider_iteration_reset_impl, 0},
   {"slider_init",                 (DL_FUNC) &slider_init, 1},
   {NULL, NULL, 0}
 };

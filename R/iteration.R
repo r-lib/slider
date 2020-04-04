@@ -15,13 +15,3 @@
 slider_iteration <- function() {
   .Call(slider_iteration_impl)
 }
-
-slider_iteration_reset <- function() {
-  .Call(slider_iteration_reset_impl)
-}
-
-slider_iteration_reset_on_exit <- function(env = caller_env()) {
-  expr <- expr(on.exit(slider_iteration_reset(), add = TRUE))
-  eval_bare(expr, env)
-  invisible()
-}
