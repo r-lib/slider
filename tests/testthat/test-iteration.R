@@ -3,19 +3,19 @@ test_that("can retrieve the iteration", {
 })
 
 test_that("can compute the correct iteration in nested slide calls", {
-  x <- slide(1:3, ~list(slider_iteration(), slide_int(1:3, ~slider_iteration())))
-  y <- slide(1:3, ~list(slide_int(1:3, ~slider_iteration()), slider_iteration()))
+  x <- slide(1:3, ~list(slider_iteration(), slide_int(1:4, ~slider_iteration())))
+  y <- slide(1:3, ~list(slide_int(1:4, ~slider_iteration()), slider_iteration()))
 
   x_expect <- list(
-    list(1L, 1:3),
-    list(2L, 1:3),
-    list(3L, 1:3)
+    list(1L, 1:4),
+    list(2L, 1:4),
+    list(3L, 1:4)
   )
 
   y_expect <- list(
-    list(1:3, 1L),
-    list(1:3, 2L),
-    list(1:3, 3L)
+    list(1:4, 1L),
+    list(1:4, 2L),
+    list(1:4, 3L)
   )
 
   expect_identical(x, x_expect)
