@@ -41,7 +41,6 @@ extern SEXP syms_dot_y;
 extern SEXP syms_dot_l;
 
 extern int slider_private_iteration;
-extern int slider_private_old_iteration;
 
 extern SEXP slider_shared_empty_lgl;
 extern SEXP slider_shared_empty_int;

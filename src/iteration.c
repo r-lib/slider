@@ -14,6 +14,6 @@ SEXP slider_iteration_impl() {
 }
 
 void slider_iteration_cleanup(void* p_data) {
-  slider_private_iteration = slider_private_old_iteration;
-  slider_private_old_iteration = NA_INTEGER;
+  struct iteration_cleanup_info* p_info = p_data;
+  slider_private_iteration = p_info->old_iteration;
 }

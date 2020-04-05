@@ -13,7 +13,6 @@ SEXP syms_dot_y = NULL;
 SEXP syms_dot_l = NULL;
 
 int slider_private_iteration = 0;
-int slider_private_old_iteration = 0;
 
 SEXP slider_shared_empty_lgl = NULL;
 SEXP slider_shared_empty_int = NULL;
@@ -218,5 +217,4 @@ void slider_init_utils(SEXP ns) {
   MARK_NOT_MUTABLE(slider_shared_na_lgl);
 
   slider_private_iteration = NA_INTEGER;
-  slider_private_old_iteration = NA_INTEGER;
 }

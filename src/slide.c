@@ -22,7 +22,7 @@ SEXP slide_common_impl(SEXP x,
                        SEXP ptype,
                        SEXP env,
                        SEXP params) {
-  struct slide_info data = {
+  struct slide_info slide_data = {
     .x = x,
     .f_call = f_call,
     .ptype = ptype,
@@ -30,9 +30,13 @@ SEXP slide_common_impl(SEXP x,
     .params = params
   };
 
+  struct iteration_cleanup_info cleanup_data = {
+    .old_iteration = slider_private_iteration
+  };
+
   SEXP out = R_ExecWithCleanup(
-    slide_common_impl_internal, &data,
-    slider_iteration_cleanup, NULL
+    slide_common_impl_internal, &slide_data,
+    slider_iteration_cleanup, &cleanup_data
   );
 
   return out;
@@ -150,8 +154,6 @@ SEXP slide_common_impl_internal(void* p_data) {
 
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
-
-  slider_private_old_iteration = slider_private_iteration;
 
   for (int i = iteration_min; i < iteration_max; i += step, start += start_step, stop += stop_step) {
     slider_private_iteration = i + 1;
