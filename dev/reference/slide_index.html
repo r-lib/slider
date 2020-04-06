@@ -462,7 +462,75 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='co'># window. But on the 17th index position, `""2019-09-03"`, if we look</span>
 <span class='co'># back 19 days we get to `""2019-08-15"`, which is the same value as</span>
 <span class='co'># `i[1]` so a full window can be constructed.</span>
-<span class='no'>i</span>[<span class='fl'>16</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># FALSE</span></div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='no'>i</span>[<span class='fl'>17</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># TRUE</span></div><div class='output co'>#&gt; [1] NA</div><div class='input'>
+<span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>16</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># FALSE</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>17</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># TRUE</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Accessing the current index value</span>
+
+<span class='co'># A very simplistic version of `purrr::map2()`</span>
+<span class='no'>fake_map2</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>.x</span>, <span class='no'>.y</span>, <span class='no'>.f</span>, <span class='no'>...</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Map</a></span>(<span class='no'>.f</span>, <span class='no'>.x</span>, <span class='no'>.y</span>, <span class='no'>...</span>)
+}
+
+<span class='co'># Occasionally you need to access the index value that you are currently on.</span>
+<span class='co'># This is generally not possible with a single call to `slide_index()`, but</span>
+<span class='co'># can be easily accomplished by following up a `slide_index()` call with a</span>
+<span class='co'># `purrr::map2()`. In this example, we want to use the distance from the</span>
+<span class='co'># current index value (in days) as a multiplier on `x`. Values further</span>
+<span class='co'># away from the current date get a higher multiplier.</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
+
+<span class='co'># 25 random days past 2000-01-01</span>
+<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2000-01-01"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>100</span>, <span class='fl'>25</span>))
+
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>i</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>25</span>))
+
+<span class='no'>weight_by_distance</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>df</span>, <span class='no'>i</span>) {
+  <span class='no'>df</span>$<span class='no'>weight</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>df</span>$<span class='no'>i</span> - <span class='no'>i</span>))
+  <span class='no'>df</span>$<span class='no'>x_weighted</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>x</span> * <span class='no'>df</span>$<span class='no'>weight</span>
+  <span class='no'>df</span>
+}
+
+<span class='co'># Use `slide_index()` to just generate the rolling data.</span>
+<span class='co'># Here we take the current date + 5 days before + 5 days after.</span>
+<span class='no'>dfs</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_index</span>(<span class='no'>df</span>, <span class='no'>df</span>$<span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+
+<span class='co'># Follow up with a `map2()` with `i` as the second input.</span>
+<span class='co'># This allows you to track the current `i` value and weight accordingly.</span>
+<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>fake_map2</span>(<span class='no'>dfs</span>, <span class='no'>df</span>$<span class='no'>i</span>, <span class='no'>weight_by_distance</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>result</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt;            i          x weight x_weighted
+#&gt; 1 2000-01-08 -0.2179749      0   0.000000
+#&gt; 2 2000-01-10 -1.0260044      2  -2.052009
+#&gt; 
+#&gt; [[2]]
+#&gt;            i          x weight x_weighted
+#&gt; 1 2000-01-08 -0.2179749      2 -0.4359498
+#&gt; 2 2000-01-10 -1.0260044      0  0.0000000
+#&gt; 3 2000-01-15 -0.7288912      5 -3.6444561
+#&gt; 
+#&gt; [[3]]
+#&gt;            i          x weight x_weighted
+#&gt; 1 2000-01-10 -1.0260044      5 -5.1300222
+#&gt; 2 2000-01-15 -0.7288912      0  0.0000000
+#&gt; 3 2000-01-16 -0.6250393      1 -0.6250393
+#&gt; 
+#&gt; [[4]]
+#&gt;            i          x weight x_weighted
+#&gt; 1 2000-01-15 -0.7288912      1 -0.7288912
+#&gt; 2 2000-01-16 -0.6250393      0  0.0000000
+#&gt; 
+#&gt; [[5]]
+#&gt;            i         x weight x_weighted
+#&gt; 1 2000-01-26 -1.686693      0   0.000000
+#&gt; 2 2000-01-27  0.837787      1   0.837787
+#&gt; 
+#&gt; [[6]]
+#&gt;            i          x weight x_weighted
+#&gt; 1 2000-01-26 -1.6866933      1 -1.6866933
+#&gt; 2 2000-01-27  0.8377870      0  0.0000000
+#&gt; 3 2000-02-01  0.1533731      5  0.7668656
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
