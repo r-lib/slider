@@ -232,8 +232,8 @@ regr[16:18]
 # window. But on the 17th index position, `""2019-09-03"`, if we look
 # back 19 days we get to `""2019-08-15"`, which is the same value as
 # `i[1]` so a full window can be constructed.
-i[16] - 19 >= i[1] # FALSE
-i[17] - 19 >= i[1] # TRUE
+df$i[16] - 19 >= df$i[1] # FALSE
+df$i[17] - 19 >= df$i[1] # TRUE
 
 }
 \seealso{
