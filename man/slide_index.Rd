@@ -235,6 +235,43 @@ regr[16:18]
 df$i[16] - 19 >= df$i[1] # FALSE
 df$i[17] - 19 >= df$i[1] # TRUE
 
+# ---------------------------------------------------------------------------
+# Accessing the current index value
+
+# A very simplistic version of `purrr::map2()`
+fake_map2 <- function(.x, .y, .f, ...) {
+  Map(.f, .x, .y, ...)
+}
+
+# Occasionally you need to access the index value that you are currently on.
+# This is generally not possible with a single call to `slide_index()`, but
+# can be easily accomplished by following up a `slide_index()` call with a
+# `purrr::map2()`. In this example, we want to use the distance from the
+# current index value (in days) as a multiplier on `x`. Values further
+# away from the current date get a higher multiplier.
+set.seed(123)
+
+# 25 random days past 2000-01-01
+i <- sort(as.Date("2000-01-01") + sample(100, 25))
+
+df <- data.frame(i = i, x = rnorm(25))
+
+weight_by_distance <- function(df, i) {
+  df$weight = abs(as.integer(df$i - i))
+  df$x_weighted = df$x * df$weight
+  df
+}
+
+# Use `slide_index()` to just generate the rolling data.
+# Here we take the current date + 5 days before + 5 days after.
+dfs <- slide_index(df, df$i, ~.x, .before = 5, .after = 5)
+
+# Follow up with a `map2()` with `i` as the second input.
+# This allows you to track the current `i` value and weight accordingly.
+result <- fake_map2(dfs, df$i, weight_by_distance)
+
+head(result)
+
 }
 \seealso{
 \code{\link[=slide]{slide()}}, \code{\link[=hop_index]{hop_index()}}, \code{\link[=slide_index2]{slide_index2()}}
