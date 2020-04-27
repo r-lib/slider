@@ -93,12 +93,12 @@
 <a href="#slider" class="anchor"></a>slider</h1></div>
 <!-- badges: start -->
 
-<p>slider provides a family of general purpose âsliding windowâ functions. The API is purposefully <em>very</em> similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other âwindowâ based computations.</p>
+<p>slider provides a family of general purpose “sliding window” functions. The API is purposefully <em>very</em> similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other “window” based computations.</p>
 <p>There are 3 core functions in slider:</p>
 <ul>
 <li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <a href="https://purrr.tidyverse.org/reference/map.html"><code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code></a>, but uses a sliding window to do so. It is type-stable, and always returns a result with the same size as its input.</p></li>
-<li><p><code><a href="reference/slide_index.html">slide_index()</a></code> computes a rolling calculation <em>relative to an index</em>. If you have ever wanted to compute something like a â3 month rolling averageâ where the number of days in each month is irregular, you might like this function.</p></li>
-<li><p><code><a href="reference/slide_period.html">slide_period()</a></code> is similar to <code><a href="reference/slide_index.html">slide_index()</a></code> in that it slides relative to an index, but it first breaks the index up into âtime blocksâ, like 2 month blocks of time, and then it slides over <code>.x</code> using indices defined by those blocks.</p></li>
+<li><p><code><a href="reference/slide_index.html">slide_index()</a></code> computes a rolling calculation <em>relative to an index</em>. If you have ever wanted to compute something like a “3 month rolling average” where the number of days in each month is irregular, you might like this function.</p></li>
+<li><p><code><a href="reference/slide_period.html">slide_period()</a></code> is similar to <code><a href="reference/slide_index.html">slide_index()</a></code> in that it slides relative to an index, but it first breaks the index up into “time blocks”, like 2 month blocks of time, and then it slides over <code>.x</code> using indices defined by those blocks.</p></li>
 </ul>
 <p>Each of these core functions have the same variants as <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>. For example, <code><a href="reference/slide.html">slide()</a></code> has <code><a href="reference/slide.html">slide_dbl()</a></code>, <code><a href="reference/slide2.html">slide2()</a></code>, and <code><a href="reference/slide2.html">pslide()</a></code>, along with the other combinations of these variants that you might expect from having previously used purrr.</p>
 <p>To learn more about these three functions, read the <a href="https://davisvaughan.github.io/slider/articles/slider.html">introduction vignette</a>.</p>
@@ -130,7 +130,7 @@
 <span class="co"># "The current element + 1 element before + 1 element after"</span>
 <span class="fu"><a href="reference/slide.html">slide_dbl</a></span>(<span class="fl">1</span>:<span class="fl">5</span>, ~<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">.x</span>), <span class="kw">.before</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">.after</span> <span class="kw">=</span> <span class="fl">1</span>)
 <span class="co">#&gt; [1] 1.5 2.0 3.0 4.0 4.5</span></pre></div>
-<p>With <code>Inf</code>, you can do a âcumulative slideâ to compute cumulative expressions. I think of this as saying âgive me everything before the current element.â</p>
+<p>With <code>Inf</code>, you can do a “cumulative slide” to compute cumulative expressions. I think of this as saying “give me everything before the current element.”</p>
 <div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/slide.html">slide</a></span>(<span class="fl">1</span>:<span class="fl">4</span>, ~<span class="no">.x</span>, <span class="kw">.before</span> <span class="kw">=</span> <span class="fl">Inf</span>)
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [1] 1</span>
@@ -229,8 +229,8 @@
 <div id="index-sliding" class="section level2">
 <h2 class="hasAnchor">
 <a href="#index-sliding" class="anchor"></a>Index sliding</h2>
-<p>In many business settings, the value you want to compute is tied to some <em>index</em>, like a date vector. In these cases, youâll probably want to compute sliding windows relative to the index, and not using the fixed window that <code><a href="reference/slide.html">slide()</a></code> provides. You can use <code><a href="reference/slide_index.html">slide_index()</a></code> to pass in both <code>.x</code> and an index, <code>.i</code>, and the window will be calculated relative to that index.</p>
-<p>Here, when computing a â2 day windowâ, you probably donât want <code>"2019-08-16"</code> and <code>"2019-08-18"</code> to be grouped together. <code><a href="reference/slide.html">slide()</a></code> has no concept of an index, so when you specify a window size of 2, it will group these two together. <code><a href="reference/slide_index.html">slide_index()</a></code>, on the other hand, will do the right thing.</p>
+<p>In many business settings, the value you want to compute is tied to some <em>index</em>, like a date vector. In these cases, you’ll probably want to compute sliding windows relative to the index, and not using the fixed window that <code><a href="reference/slide.html">slide()</a></code> provides. You can use <code><a href="reference/slide_index.html">slide_index()</a></code> to pass in both <code>.x</code> and an index, <code>.i</code>, and the window will be calculated relative to that index.</p>
+<p>Here, when computing a “2 day window”, you probably don’t want <code>"2019-08-16"</code> and <code>"2019-08-18"</code> to be grouped together. <code><a href="reference/slide.html">slide()</a></code> has no concept of an index, so when you specify a window size of 2, it will group these two together. <code><a href="reference/slide_index.html">slide_index()</a></code>, on the other hand, will do the right thing.</p>
 <div class="sourceCode" id="cb9"><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fl">1</span>:<span class="fl">3</span>
 <span class="no">i</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2019-08-15"</span>, <span class="st">"2019-08-16"</span>, <span class="st">"2019-08-18"</span>))
 
@@ -255,7 +255,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt; [1] 3</span></pre></div>
-<p>Essentially what happens is that when we get to <code>"2019-08-18"</code>, it âlooks backwardsâ 1 day to set a window boundary at <code>"2019-08-17"</code>. Since the date at position 2, <code>"2019-08-16"</code>, is before <code>"2019-08-17"</code>, it is not included.</p>
+<p>Essentially what happens is that when we get to <code>"2019-08-18"</code>, it “looks backwards” 1 day to set a window boundary at <code>"2019-08-17"</code>. Since the date at position 2, <code>"2019-08-16"</code>, is before <code>"2019-08-17"</code>, it is not included.</p>
 <p>Powerfully, you can pass through any object to <code>.before</code> that computes a value from <code>.i - .before</code>. This means that you could also have used a lubridate period object (which gets even more interesting when you use <code>weeks()</code> or <code><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months()</a></code>):</p>
 <div class="sourceCode" id="cb10"><pre class="r"><span class="fu"><a href="reference/slide_index.html">slide_index</a></span>(<span class="no">x</span>, <span class="no">i</span>, ~<span class="no">.x</span>, <span class="kw">.before</span> <span class="kw">=</span> <span class="kw pkg">lubridate</span><span class="kw ns">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span>(<span class="fl">1</span>))
 <span class="co">#&gt; [[1]]</span>
@@ -270,7 +270,7 @@
 <div id="period-sliding" class="section level2">
 <h2 class="hasAnchor">
 <a href="#period-sliding" class="anchor"></a>Period sliding</h2>
-<p><code><a href="reference/slide_period.html">slide_period()</a></code> is different from <code><a href="reference/slide_index.html">slide_index()</a></code> in that it first breaks the index into âtime blocksâ and then slides over <code>.x</code> relative to those blocks. For example, in the monthly period slide below, <code>i</code> is broken up into 4 time blocks of âthe current block of monthly data, plus one block before this oneâ. The locations of those blocks are the locations that are used to slice <code>.x</code> with.</p>
+<p><code><a href="reference/slide_period.html">slide_period()</a></code> is different from <code><a href="reference/slide_index.html">slide_index()</a></code> in that it first breaks the index into “time blocks” and then slides over <code>.x</code> relative to those blocks. For example, in the monthly period slide below, <code>i</code> is broken up into 4 time blocks of “the current block of monthly data, plus one block before this one”. The locations of those blocks are the locations that are used to slice <code>.x</code> with.</p>
 <div class="sourceCode" id="cb11"><pre class="r"><span class="no">i</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
   <span class="st">"2019-01-29"</span>,
   <span class="st">"2019-01-30"</span>,
@@ -296,7 +296,7 @@
 <div id="inspiration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#inspiration" class="anchor"></a>Inspiration</h2>
-<p>This package is inspired heavily by SQLâs window functions. The API is similar, but more general because you can iterate over any kind of R object.</p>
+<p>This package is inspired heavily by SQL’s window functions. The API is similar, but more general because you can iterate over any kind of R object.</p>
 <p>There have been multiple attempts at creating sliding window functions (I personally created <code>rollify()</code>, and worked a little bit on <code>tsibble::slide()</code> with <a href="https://github.com/earowang">Earo Wang</a>).</p>
 <ul>
 <li><code>zoo::rollapply()</code></li>
@@ -312,7 +312,7 @@
 <li><p>I believe it is overall more consistent, backed by a theory that can always justify the sliding window generated by any combination of the parameters.</p></li>
 </ul>
 <p>Earo and I have spoken, and we have mutually agreed that it would be best to deprecate <code>tsibble::slide()</code> in favor of <code><a href="reference/slide.html">slider::slide()</a></code>.</p>
-<p>Additionally, <a href="https://github.com/Rdatatable/data.table">data.table</a>âs non-equi joins have been pretty much the only solution to the problem that <code><a href="reference/slide_index.html">slide_index()</a></code> tries to solve. Their solution is robust and quite fast, and has been a nice benchmark for slider. slider is trying to solve a much narrower problem, so the API here is more focused.</p>
+<p>Additionally, <a href="https://github.com/Rdatatable/data.table">data.table</a>’s non-equi joins have been pretty much the only solution to the problem that <code><a href="reference/slide_index.html">slide_index()</a></code> tries to solve. Their solution is robust and quite fast, and has been a nice benchmark for slider. slider is trying to solve a much narrower problem, so the API here is more focused.</p>
 </div>
 <div id="performance" class="section level2">
 <h2 class="hasAnchor">
@@ -323,7 +323,7 @@
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
-<p>Iâve found the following references very useful to understand more about window functions:</p>
+<p>I’ve found the following references very useful to understand more about window functions:</p>
 <ul>
 <li><p><a href="https://www.postgresql.org/docs/9.1/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS">Postgres SQL documentation</a></p></li>
 <li><p><a href="https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions">dbplyr window function vignette</a></p></li>
@@ -378,7 +378,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

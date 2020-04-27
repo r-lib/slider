@@ -280,7 +280,7 @@ an integer column is used to identify the rows.</p></td>
     <tr>
       <th>.name_repair</th>
       <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
-<code>"check_unique"</code>. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
+<code>"check_unique"</code>. See <code><a href='https://vctrs.r-lib.org/reference/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
 options.</p>
 <p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
 separately. This is because <code>vec_rbind()</code> needs to align their
@@ -325,14 +325,14 @@ of length 1 will be recycled appropriately.</p></td>
 
     <p>Unlike <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls like</p><pre><span class='fu'>.f</span>(<span class='no'>.x</span><span class='kw'>[[</span><span class='no'>i</span>]], <span class='no'>...</span>)</pre>
 
-<p>the equivalent with <code>slide()</code> looks like</p><pre><span class='fu'>.f</span>(<span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/vec_slice.html'>vec_slice</a></span>(<span class='no'>.x</span>, <span class='no'>i</span>), <span class='no'>...</span>)</pre>
+<p>the equivalent with <code>slide()</code> looks like</p><pre><span class='fu'>.f</span>(<span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://vctrs.r-lib.org/reference/vec_slice.html'>vec_slice</a></span>(<span class='no'>.x</span>, <span class='no'>i</span>), <span class='no'>...</span>)</pre>
 
 <p>which is approximately</p><pre><span class='fu'>.f</span>(<span class='no'>.x</span>[<span class='no'>i</span>], <span class='no'>...</span>)</pre>
 
 <p>except in the case of data frames or arrays, which are iterated
 over row-wise.</p>
 <p>If <code>.x</code> has names, then the output will preserve those names.</p>
-<p>Using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
+<p>Using <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
 to the type required by the variant of <code>slide_*()</code> being used.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -659,7 +659,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
