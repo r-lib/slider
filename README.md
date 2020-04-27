@@ -153,33 +153,34 @@ There is a [vignette specifically about
 this](https://davisvaughan.github.io/slider/articles/rowwise.html).
 
 ``` r
-cars <- mtcars[1:4,]
+mini_cars <- cars[1:4,]
 
-slide(cars, ~.x)
+slide(mini_cars, ~.x)
 #> [[1]]
-#>           mpg cyl disp  hp drat   wt  qsec vs am gear carb
-#> Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4
+#>   speed dist
+#> 1     4    2
 #> 
 #> [[2]]
-#>               mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#> Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
+#>   speed dist
+#> 1     4   10
 #> 
 #> [[3]]
-#>             mpg cyl disp hp drat   wt  qsec vs am gear carb
-#> Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1
+#>   speed dist
+#> 1     7    4
 #> 
 #> [[4]]
-#>                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
-#> Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+#>   speed dist
+#> 1     7   22
 
-slide_dbl(cars, ~.x$mpg + .x$drat)
-#> [1] 24.90 24.90 26.65 24.48
+slide_dbl(mini_cars, ~.x$speed + .x$dist)
+#> [1]  6 14 11 29
 ```
 
 This makes rolling regressions trivial\!
 
 ``` r
 library(tibble)
+#> Warning: package 'tibble' was built under R version 3.6.2
 set.seed(123)
 
 df <- tibble(
