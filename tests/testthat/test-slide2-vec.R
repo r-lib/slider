@@ -45,7 +45,7 @@ test_that("slide2_chr() works", {
 })
 
 test_that("slide2_chr() cannot coerce", {
-  expect_error(slide2_chr(1, 1, ~.x + .y), class = "vctrs_error_incompatible_cast")
+  expect_error(slide2_chr(1, 1, ~.x + .y), class = "vctrs_error_incompatible_type")
 })
 
 test_that("slide2_lgl() works", {

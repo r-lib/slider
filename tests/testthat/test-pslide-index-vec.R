@@ -51,7 +51,7 @@ test_that("pslide_index_chr() works", {
 })
 
 test_that("pslide_index_chr() cannot coerce", {
-  expect_error(pslide_index_chr(list(1, 1), 1, ~.x + .y), class = "vctrs_error_incompatible_cast")
+  expect_error(pslide_index_chr(list(1, 1), 1, ~.x + .y), class = "vctrs_error_incompatible_type")
 })
 
 test_that("pslide_index_lgl() works", {

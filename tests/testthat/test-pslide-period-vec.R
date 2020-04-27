@@ -17,8 +17,8 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_error(
-    pslide_period_vec(list(1:2, 1:2), new_date(1:2), "day", ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_cast"
+    pslide_period_vec(list(1:2, 1:2), new_date(1:2), "day", ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_type"
   )
 })
 
@@ -117,7 +117,7 @@ test_that("pslide_period_chr() works", {
 })
 
 test_that("pslide_period_chr() cannot coerce", {
-  expect_error(pslide_period_chr(list(1, 1), new_date(0), "day", ~.x), class = "vctrs_error_incompatible_cast")
+  expect_error(pslide_period_chr(list(1, 1), new_date(0), "day", ~.x), class = "vctrs_error_incompatible_type")
 })
 
 test_that("pslide_period_lgl() works", {

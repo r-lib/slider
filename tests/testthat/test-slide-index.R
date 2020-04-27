@@ -922,7 +922,7 @@ test_that(".complete only ensures that there is at least 1 value before that cou
 test_that("cannot use an invalid .complete value", {
   expect_error(
     slide_index(1, 1, identity, .complete = "hi"),
-    class = "vctrs_error_incompatible_cast"
+    class = "vctrs_error_incompatible_type"
   )
 })
 

@@ -17,8 +17,8 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_error(
-    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_cast"
+    slide_index_vec(1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_type"
   )
 })
 
@@ -99,7 +99,7 @@ test_that("slide_index_chr() works", {
 })
 
 test_that("slide_index_chr() cannot coerce", {
-  expect_error(slide_index_chr(1, 1, ~.x), class = "vctrs_error_incompatible_cast")
+  expect_error(slide_index_chr(1, 1, ~.x), class = "vctrs_error_incompatible_type")
 })
 
 test_that("slide_index_lgl() works", {
