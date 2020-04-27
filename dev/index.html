@@ -175,29 +175,30 @@
 <a href="#data-frames" class="anchor"></a>Data frames</h2>
 <p>Unlike <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> iterates over data frames in a row wise fashion. Interestingly this means the default of <code><a href="reference/slide.html">slide()</a></code> becomes a generic row wise iterator, with nice syntax for accessing data frame columns.</p>
 <p>There is a <a href="https://davisvaughan.github.io/slider/articles/rowwise.html">vignette specifically about this</a>.</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="no">cars</span> <span class="kw">&lt;-</span> <span class="no">mtcars</span>[<span class="fl">1</span>:<span class="fl">4</span>,]
+<div class="sourceCode" id="cb7"><pre class="r"><span class="no">mini_cars</span> <span class="kw">&lt;-</span> <span class="no">cars</span>[<span class="fl">1</span>:<span class="fl">4</span>,]
 
-<span class="fu"><a href="reference/slide.html">slide</a></span>(<span class="no">cars</span>, ~<span class="no">.x</span>)
+<span class="fu"><a href="reference/slide.html">slide</a></span>(<span class="no">mini_cars</span>, ~<span class="no">.x</span>)
 <span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt;           mpg cyl disp  hp drat   wt  qsec vs am gear carb</span>
-<span class="co">#&gt; Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4</span>
+<span class="co">#&gt;   speed dist</span>
+<span class="co">#&gt; 1     4    2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
-<span class="co">#&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4</span>
+<span class="co">#&gt;   speed dist</span>
+<span class="co">#&gt; 1     4   10</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt;             mpg cyl disp hp drat   wt  qsec vs am gear carb</span>
-<span class="co">#&gt; Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1</span>
+<span class="co">#&gt;   speed dist</span>
+<span class="co">#&gt; 1     7    4</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt;                 mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
-<span class="co">#&gt; Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span>
+<span class="co">#&gt;   speed dist</span>
+<span class="co">#&gt; 1     7   22</span>
 
-<span class="fu"><a href="reference/slide.html">slide_dbl</a></span>(<span class="no">cars</span>, ~<span class="no">.x</span>$<span class="no">mpg</span> + <span class="no">.x</span>$<span class="no">drat</span>)
-<span class="co">#&gt; [1] 24.90 24.90 26.65 24.48</span></pre></div>
+<span class="fu"><a href="reference/slide.html">slide_dbl</a></span>(<span class="no">mini_cars</span>, ~<span class="no">.x</span>$<span class="no">speed</span> + <span class="no">.x</span>$<span class="no">dist</span>)
+<span class="co">#&gt; [1]  6 14 11 29</span></pre></div>
 <p>This makes rolling regressions trivial!</p>
 <div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
+<span class="co">#&gt; Warning: package 'tibble' was built under R version 3.6.2</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
 
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(
