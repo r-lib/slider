@@ -17,8 +17,8 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_error(
-    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_cast"
+    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_type"
   )
 })
 
