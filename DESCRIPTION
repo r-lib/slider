@@ -20,7 +20,7 @@ Depends:
 Imports: 
     glue,
     rlang (>= 0.4.5),
-    vctrs (>= 0.2.99.9010),
+    vctrs (>= 0.2.99.9011),
     warp
 Suggests: 
     covr,
@@ -31,7 +31,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2
 LinkingTo:
-    vctrs (>= 0.2.99.9010)
+    vctrs (>= 0.2.99.9011)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
