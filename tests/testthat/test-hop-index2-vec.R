@@ -35,6 +35,17 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   )
 })
 
+test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {
+  expect_identical(
+    hop_index2_vec(1:5, 1:5, 1:5, integer(), integer(), ~.x, .ptype = NULL),
+    NULL
+  )
+  expect_identical(
+    hop_index2_vec(1:5, 1:5, 1:5, integer(), integer(), ~.x, .ptype = double()),
+    double()
+  )
+})
+
 test_that("`hop_index2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 

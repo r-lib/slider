@@ -41,8 +41,8 @@ test_that("empty input returns a list, but after the index size check", {
   expect_error(hop_index(integer(), 1, integer(), integer(), ~.x), class = "slider_error_index_incompatible_size")
 })
 
-test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
-  expect_equal(hop_index(integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
+test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` ptype", {
+  expect_equal(hop_index(integer(), integer(), 1:2, 2:3, ~.x), list(integer(), integer()))
 })
 
 test_that("empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {

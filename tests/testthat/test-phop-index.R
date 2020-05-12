@@ -10,8 +10,13 @@ test_that("completely empty input returns a list", {
   expect_equal(phop_index(list(), integer(), integer(), integer(), ~.x), list())
 })
 
-test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
-  expect_equal(phop_index(list(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
+test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` ptype", {
+  expect_equal(phop_index(list(), integer(), 1:2, 2:3, ~2), list(2, 2))
+})
+
+test_that("can't access non-existant `.x` with empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops`", {
+  # Note: Error message seems platform dependent
+  expect_error(phop_index(list(), integer(), 1:2, 2:3, ~.x))
 })
 
 test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {

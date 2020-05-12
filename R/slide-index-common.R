@@ -21,12 +21,6 @@ slide_index_common <- function(x,
   check_index_cannot_be_na(i, ".i")
   check_index_must_be_ascending(i, ".i")
 
-  # Early exit if empty input
-  # (but after the index size check)
-  if (x_size == 0L) {
-    return(vec_init(ptype, 0L))
-  }
-
   check_before(before)
   check_after(after)
   complete <- check_complete(complete)

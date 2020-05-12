@@ -89,8 +89,6 @@ test_that("with `.complete = TRUE`, `.ptype` is used to pad", {
 })
 
 test_that("with `.complete = TRUE`, padding is size stable (#93)", {
-  skip("until #93 is fixed")
-
   expect_equal(
     slide_period2_vec(
       1:3, 1:3, new_date(1:3),
@@ -98,7 +96,13 @@ test_that("with `.complete = TRUE`, padding is size stable (#93)", {
     ),
     new_date(c(NA, 0, 0))
   )
-
+  expect_equal(
+    slide_period2_vec(
+      1:3, 1:3, new_date(1:3),
+      "day", ~new_date(0), .after = 1, .complete = TRUE, .ptype = new_date()
+    ),
+    new_date(c(0, 0, NA))
+  )
   expect_equal(
     slide_period2_vec(
       1:3, 1:3, new_date(1:3),

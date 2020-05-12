@@ -49,7 +49,7 @@ test_that("empty input returns a list, but after the index size check", {
 })
 
 test_that("empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
-  expect_equal(hop_index2(integer(), integer(), integer(), 1:2, 2:3, ~.x), list(NULL, NULL))
+  expect_equal(hop_index2(integer(), integer(), integer(), 1:2, 2:3, ~.x), list(integer(), integer()))
 })
 
 test_that("empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {

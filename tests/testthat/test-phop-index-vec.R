@@ -27,17 +27,20 @@ test_that("completely empty input returns ptype", {
   expect_equal(phop_index_vec(list(), integer(), integer(), integer(), ~.x, .ptype = int()), int())
 })
 
-test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
-  skip("until #93 is fixed")
+test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` ptype", {
+  expect_identical(
+    phop_index_vec(list(), integer(), 1:2, 2:3, ~2, .ptype = int()),
+    c(2L, 2L)
+  )
+  expect_identical(
+    phop_index_vec(list(), integer(), 1:2, 2:3, ~2, .ptype = NULL),
+    c(2, 2)
+  )
+})
 
-  expect_equal(
-    phop_index_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = int()),
-    c(NA_integer_, NA_integer_)
-  )
-  expect_equal(
-    phop_index_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = NULL),
-    c(NA, NA)
-  )
+test_that("can't access non-existant `.x` with empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops`", {
+  # Note: Error message seems platform dependent
+  expect_error(phop_index_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = int()))
 })
 
 # ------------------------------------------------------------------------------
@@ -51,6 +54,17 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_error(
     phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL),
     "In iteration 1, the result of `.f` had size 0, not 1."
+  )
+})
+
+test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {
+  expect_identical(
+    phop_index_vec(list(1:5), 1:5, integer(), integer(), ~.x, .ptype = NULL),
+    NULL
+  )
+  expect_identical(
+    phop_index_vec(list(1:5), 1:5, integer(), integer(), ~.x, .ptype = double()),
+    double()
   )
 })
 
