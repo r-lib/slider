@@ -7,9 +7,11 @@
 // -----------------------------------------------------------------------------
 // All defined below
 
-static void compute_window_sizes(int*, SEXP, int);
-static void compute_window_starts(int*, int*, int);
-static void compute_window_stops(int*, int*, int*, int);
+static void fill_window_info(int* window_sizes,
+                             int* window_starts,
+                             int* window_stops,
+                             SEXP window_indices,
+                             int size);
 
 static struct window_info new_window_info(int*, int*, int);
 static struct index_info new_index_info(SEXP);
@@ -56,9 +58,7 @@ SEXP slide_index_common_impl(SEXP x,
   int* window_starts = (int*) R_alloc(index.size, sizeof(int));
   int* window_stops = (int*) R_alloc(index.size, sizeof(int));
 
-  compute_window_sizes(window_sizes, indices, index.size);
-  compute_window_starts(window_starts, window_sizes, index.size);
-  compute_window_stops(window_stops, window_sizes, window_starts, index.size);
+  fill_window_info(window_sizes, window_starts, window_stops, indices, index.size);
 
   struct window_info window = new_window_info(window_starts, window_stops, index.size);
   PROTECT_WINDOW_INFO(&window, &n_prot);
@@ -169,9 +169,7 @@ SEXP hop_index_common_impl(SEXP x,
   int* window_starts = (int*) R_alloc(index.size, sizeof(int));
   int* window_stops = (int*) R_alloc(index.size, sizeof(int));
 
-  compute_window_sizes(window_sizes, window_indices, index.size);
-  compute_window_starts(window_starts, window_sizes, index.size);
-  compute_window_stops(window_stops, window_sizes, window_starts, index.size);
+  fill_window_info(window_sizes, window_starts, window_stops, window_indices, index.size);
 
   struct window_info window = new_window_info(window_starts, window_stops, index.size);
   PROTECT_WINDOW_INFO(&window, &n_prot);
@@ -358,33 +356,21 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
 
 // -----------------------------------------------------------------------------
 
-// map_int(x, vec_size)
-static void compute_window_sizes(int* window_sizes,
-                                 SEXP window_indices,
-                                 int size) {
-  for (int i = 0; i < size; ++i) {
-    window_sizes[i] = Rf_length(VECTOR_ELT(window_indices, i));
-  }
-}
+static void fill_window_info(int* window_sizes,
+                             int* window_starts,
+                             int* window_stops,
+                             SEXP window_indices,
+                             int size) {
+  R_len_t window_start = 0;
 
-static void compute_window_starts(int* window_starts,
-                                  int* window_sizes,
-                                  int size) {
-  int sum = 0;
-
-  // First start is always 0, then a cumsum() to get the rest of the starts
   for (int i = 0; i < size; ++i) {
-    window_starts[i] = sum;
-    sum += window_sizes[i];
-  }
-}
+    R_len_t window_size = Rf_length(VECTOR_ELT(window_indices, i));
 
-static void compute_window_stops(int* window_stops,
-                                 int* window_sizes,
-                                 int* window_starts,
-                                 int size) {
-  for (int i = 0; i < size; ++i) {
-    window_stops[i] = window_starts[i] + window_sizes[i] - 1;
+    window_sizes[i] = window_size;
+    window_starts[i] = window_start;
+    window_stops[i] = window_start + window_size - 1;
+
+    window_start += window_size;
   }
 }
 
