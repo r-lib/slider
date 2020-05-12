@@ -6,6 +6,10 @@ test_that("size of each `.f` result must be 1", {
     slide_index_vec(1:2, 1:2, ~c(.x, 1)),
     "In iteration 1, the result of `.f` had size 2, not 1"
   )
+  expect_error(
+    slide_index_dbl(1:2, 1:2, ~c(.x, 1)),
+    "In iteration 1, the result of `.f` had size 2, not 1"
+  )
 })
 
 test_that("inner type is allowed to be different", {
@@ -18,6 +22,13 @@ test_that("inner type is allowed to be different", {
 test_that("inner type can be restricted with list_of", {
   expect_error(
     slide_index_vec(1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_type"
+  )
+})
+
+test_that("type of suffixed versions can be restricted", {
+  expect_error(
+    slide_index_dbl(1:2, 1:2, ~if (.x == 1L) {1} else {"hi"}),
     class = "vctrs_error_incompatible_type"
   )
 })
@@ -73,6 +84,16 @@ test_that("can return a matrix and rowwise bind the results together", {
     slide_index_vec(1:5, 1:5, ~mat, .ptype = mat),
     rbind(mat, mat, mat, mat, mat)
   )
+})
+
+test_that("`slide_index_vec()` falls back to `c()` method as required", {
+  local_c_foobar()
+
+  expect_identical(slide_index_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar()), foobar(1:3))
+  expect_condition(slide_index_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+
+  expect_identical(slide_index_vec(1:3, 1:3, ~foobar(.x)), foobar(1:3))
+  expect_condition(slide_index_vec(1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
 })
 
 # ------------------------------------------------------------------------------

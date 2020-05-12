@@ -179,21 +179,30 @@ slide_index_vec <- function(.x,
                             .after = 0L,
                             .complete = FALSE,
                             .ptype = NULL) {
+  out <- slide_index_impl(
+    .x,
+    .i,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-  if (is.null(.ptype)) {
-    out <- slide_index_simplify(
-      .x,
-      .i,
-      .f,
-      ...,
-      .before = .before,
-      .after = .after,
-      .complete = .complete
-    )
+  vec_simplify(out, .ptype)
+}
 
-    return(out)
-  }
-
+slide_index_vec_direct <- function(.x,
+                                   .i,
+                                   .f,
+                                   ...,
+                                   .before,
+                                   .after,
+                                   .complete,
+                                   .ptype) {
   slide_index_impl(
     .x,
     .i,
@@ -208,29 +217,6 @@ slide_index_vec <- function(.x,
   )
 }
 
-slide_index_simplify <- function(.x,
-                                 .i,
-                                 .f,
-                                 ...,
-                                 .before,
-                                 .after,
-                                 .complete) {
-  out <- slide_index_impl(
-    .x,
-    .i,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = TRUE
-  )
-
-  vec_simplify(out)
-}
-
 #' @rdname slide_index
 #' @export
 slide_index_dbl <- function(.x,
@@ -240,7 +226,7 @@ slide_index_dbl <- function(.x,
                             .before = 0L,
                             .after = 0L,
                             .complete = FALSE) {
-  slide_index_vec(
+  slide_index_vec_direct(
     .x,
     .i,
     .f,
@@ -261,7 +247,7 @@ slide_index_int <- function(.x,
                             .before = 0L,
                             .after = 0L,
                             .complete = FALSE) {
-  slide_index_vec(
+  slide_index_vec_direct(
     .x,
     .i,
     .f,
@@ -282,7 +268,7 @@ slide_index_lgl <- function(.x,
                             .before = 0L,
                             .after = 0L,
                             .complete = FALSE) {
-  slide_index_vec(
+  slide_index_vec_direct(
     .x,
     .i,
     .f,
@@ -303,7 +289,7 @@ slide_index_chr <- function(.x,
                             .before = 0L,
                             .after = 0L,
                             .complete = FALSE) {
-  slide_index_vec(
+  slide_index_vec_direct(
     .x,
     .i,
     .f,
