@@ -138,24 +138,36 @@ slide_period_vec <- function(.x,
                              .after = 0L,
                              .complete = FALSE,
                              .ptype = NULL) {
+  out <- slide_period_impl(
+    .x,
+    .i,
+    .period,
+    .f,
+    ...,
+    .every = .every,
+    .origin = .origin,
+    .before = .before,
+    .after = .after,
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-  if (is.null(.ptype)) {
-    out <- slide_period_simplify(
-      .x,
-      .i,
-      .period,
-      .f,
-      ...,
-      .every = .every,
-      .origin = .origin,
-      .before = .before,
-      .after = .after,
-      .complete = .complete
-    )
+  vec_simplify(out, .ptype)
+}
 
-    return(out)
-  }
-
+slide_period_vec_direct <- function(.x,
+                                    .i,
+                                    .period,
+                                    .f,
+                                    ...,
+                                    .every,
+                                    .origin,
+                                    .before,
+                                    .after,
+                                    .complete,
+                                    .ptype) {
   slide_period_impl(
     .x,
     .i,
@@ -173,35 +185,6 @@ slide_period_vec <- function(.x,
   )
 }
 
-slide_period_simplify <- function(.x,
-                                  .i,
-                                  .period,
-                                  .f,
-                                  ...,
-                                  .every,
-                                  .origin,
-                                  .before,
-                                  .after,
-                                  .complete) {
-  out <- slide_period_impl(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = TRUE
-  )
-
-  vec_simplify(out)
-}
-
 #' @rdname slide_period
 #' @export
 slide_period_dbl <- function(.x,
@@ -214,7 +197,7 @@ slide_period_dbl <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  slide_period_vec(
+  slide_period_vec_direct(
     .x,
     .i,
     .period,
@@ -241,7 +224,7 @@ slide_period_int <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  slide_period_vec(
+  slide_period_vec_direct(
     .x,
     .i,
     .period,
@@ -268,7 +251,7 @@ slide_period_lgl <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  slide_period_vec(
+  slide_period_vec_direct(
     .x,
     .i,
     .period,
@@ -295,7 +278,7 @@ slide_period_chr <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  slide_period_vec(
+  slide_period_vec_direct(
     .x,
     .i,
     .period,
