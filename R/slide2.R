@@ -253,7 +253,7 @@ slide2_dfr <- function(.x,
                        .after = 0L,
                        .step = 1L,
                        .complete = FALSE,
-                       .names_to = NULL,
+                       .names_to = rlang::zap(),
                        .name_repair = c("unique", "universal", "check_unique")) {
   out <- slide2(
     .x,

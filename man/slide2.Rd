@@ -95,7 +95,7 @@ slide2_dfr(
   .after = 0L,
   .step = 1L,
   .complete = FALSE,
-  .names_to = NULL,
+  .names_to = rlang::zap(),
   .name_repair = c("unique", "universal", "check_unique")
 )
 
@@ -173,7 +173,7 @@ pslide_dfr(
   .after = 0L,
   .step = 1L,
   .complete = FALSE,
-  .names_to = NULL,
+  .names_to = rlang::zap(),
   .name_repair = c("unique", "universal", "check_unique")
 )
 
@@ -240,10 +240,16 @@ and the final output will have that type.
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
 
-\item{.names_to}{Optionally, the name of a column where the names
-of \code{...} arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and \code{...} is not named,
-an integer column is used to identify the rows.}
+\item{.names_to}{\itemize{
+\item By default, input names are \link[rlang:zap]{zapped}.
+\itemize{
+\item If a string, specifies a column where the input names will be
+copied. These names are often useful to identify rows with
+their original input. If a column name is supplied and \code{...} is
+not named, an integer column is used instead.
+\item If \code{NULL}, the input names are used as row names.
+}
+}}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
 \code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these

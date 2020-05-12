@@ -164,7 +164,7 @@ pslide_dfr <- function(.l,
                        .after = 0L,
                        .step = 1L,
                        .complete = FALSE,
-                       .names_to = NULL,
+                       .names_to = rlang::zap(),
                        .name_repair = c("unique", "universal", "check_unique")) {
   out <- pslide(
     .l,

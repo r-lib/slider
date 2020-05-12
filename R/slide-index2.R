@@ -240,7 +240,7 @@ slide_index2_dfr <- function(.x,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE,
-                             .names_to = NULL,
+                             .names_to = rlang::zap(),
                              .name_repair = c("unique", "universal", "check_unique")) {
   out <- slide_index2(
     .x,

@@ -1,5 +1,9 @@
 # slider (development version)
 
+* The default for the `.names_to` argument of `*_dfr()` variants has been
+  updated to `rlang::zap()` to match the default of the function it is passed
+  on to, `vctrs::vec_rbind()`.
+
 * All `*_vec()` variants now maintain size stability when auto-simplifying
   (i.e. when `.ptype = NULL`) (#78).
 
