@@ -370,19 +370,12 @@ static void compute_window_sizes(int* window_sizes,
 static void compute_window_starts(int* window_starts,
                                   int* window_sizes,
                                   int size) {
-  if (size == 0) {
-    return;
-  }
-
-  // First start is always 0
-  window_starts[0] = 0;
-
   int sum = 0;
 
-  // Then we do a cumsum() to get the rest of the starts
-  for (int i = 1; i < size; ++i) {
-    sum += window_sizes[i - 1];
+  // First start is always 0, then a cumsum() to get the rest of the starts
+  for (int i = 0; i < size; ++i) {
     window_starts[i] = sum;
+    sum += window_sizes[i];
   }
 }
 
