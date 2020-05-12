@@ -235,7 +235,7 @@ place to look.</p>
   <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
   <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span>(),
   <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
 )
 
@@ -345,10 +345,15 @@ supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
-      <td><p>Optionally, the name of a column where the names
-of <code>...</code> arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and <code>...</code> is not named,
-an integer column is used to identify the rows.</p></td>
+      <td><ul>
+<li><p>By default, input names are <a href='https://rlang.r-lib.org/reference/zap.html'>zapped</a>.</p><ul>
+<li><p>If a string, specifies a column where the input names will be
+copied. These names are often useful to identify rows with
+their original input. If a column name is supplied and <code>...</code> is
+not named, an integer column is used instead.</p></li>
+<li><p>If <code>NULL</code>, the input names are used as row names.</p></li>
+</ul></li>
+</ul></td>
     </tr>
     <tr>
       <th>.name_repair</th>
