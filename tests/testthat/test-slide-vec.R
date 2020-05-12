@@ -8,6 +8,13 @@ test_that("size of each `.f` result must be 1", {
   )
 })
 
+test_that("size of each `.f` result must be 1", {
+  expect_error(
+    slide_dbl(1:2, ~c(.x, 1)),
+    "In iteration 1, the result of `.f` had size 2, not 1"
+  )
+})
+
 test_that("inner type is allowed to be different", {
   expect_equal(
     slide_vec(1:2, ~if (.x == 1L) {list(1)} else {list("hi")}, .ptype = list()),
@@ -18,6 +25,13 @@ test_that("inner type is allowed to be different", {
 test_that("inner type can be restricted with list_of", {
   expect_error(
     slide_vec(1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+    class = "vctrs_error_incompatible_type"
+  )
+})
+
+test_that("inner type can be restricted", {
+  expect_error(
+    slide_dbl(1:2, ~if (.x == 1L) {1} else {"x"}),
     class = "vctrs_error_incompatible_type"
   )
 })
@@ -102,13 +116,18 @@ test_that("names can be placed on atomics", {
   expect_equal(names(slide_vec(x, ~.x)), names)
   expect_equal(names(slide_vec(x, ~.x, .ptype = int())), names)
   expect_equal(names(slide_vec(x, ~.x, .ptype = dbl())), names)
+  expect_equal(names(slide_int(x, ~.x)), names)
+  expect_equal(names(slide_dbl(x, ~.x)), names)
 })
 
-test_that("when simplifying, names from `.x` are kept, and new names from `.f` results are dropped", {
+test_that("names from `.x` are kept, and new names from `.f` results are dropped", {
   x <- set_names(1, "x")
 
   expect_identical(slide_vec(x, ~c(y = 2), .ptype = NULL), c(x = 2))
   expect_identical(slide_vec(1, ~c(y = 2), .ptype = NULL), 2)
+
+  expect_identical(slide_dbl(x, ~c(y = 2)), c(x = 2))
+  expect_identical(slide_dbl(1, ~c(y = 2)), 2)
 })
 
 test_that("names can be placed on data frames", {
