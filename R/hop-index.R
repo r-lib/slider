@@ -120,39 +120,6 @@ hop_index_vec <- function(.x,
                           .f,
                           ...,
                           .ptype = NULL) {
-
-  if (is.null(.ptype)) {
-    out <- hop_index_vec_simplify(
-      .x,
-      .i,
-      .starts,
-      .stops,
-      .f,
-      ...
-    )
-
-    return(out)
-  }
-
-  hop_index_impl(
-    .x,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = .ptype,
-    .constrain = TRUE,
-    .atomic = TRUE
-  )
-}
-
-hop_index_vec_simplify <- function(.x,
-                                   .i,
-                                   .starts,
-                                   .stops,
-                                   .f,
-                                   ...) {
   out <- hop_index_impl(
     .x,
     .i,
@@ -165,7 +132,7 @@ hop_index_vec_simplify <- function(.x,
     .atomic = TRUE
   )
 
-  vec_simplify(out)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------

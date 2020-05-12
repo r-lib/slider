@@ -222,21 +222,30 @@ slide_vec <- function(.x,
                       .step = 1L,
                       .complete = FALSE,
                       .ptype = NULL) {
+  out <- slide_impl(
+    .x,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .step = .step,
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-  if (is.null(.ptype)) {
-    out <- slide_vec_simplify(
-      .x,
-      .f,
-      ...,
-      .before = .before,
-      .after = .after,
-      .step = .step,
-      .complete = .complete
-    )
+  vec_simplify(out, .ptype)
+}
 
-    return(out)
-  }
-
+slide_vec_direct <- function(.x,
+                             .f,
+                             ...,
+                             .before,
+                             .after,
+                             .step,
+                             .complete,
+                             .ptype) {
   slide_impl(
     .x,
     .f,
@@ -251,29 +260,6 @@ slide_vec <- function(.x,
   )
 }
 
-slide_vec_simplify <- function(.x,
-                               .f,
-                               ...,
-                               .before,
-                               .after,
-                               .step,
-                               .complete) {
-  out <- slide_impl(
-    .x,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .step = .step,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = TRUE
-  )
-
-  vec_simplify(out)
-}
-
 #' @rdname slide
 #' @export
 slide_dbl <- function(.x,
@@ -283,7 +269,7 @@ slide_dbl <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .complete = FALSE) {
-  slide_vec(
+  slide_vec_direct(
     .x,
     .f,
     ...,
@@ -304,7 +290,7 @@ slide_int <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .complete = FALSE) {
-  slide_vec(
+  slide_vec_direct(
     .x,
     .f,
     ...,
@@ -325,7 +311,7 @@ slide_lgl <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .complete = FALSE) {
-  slide_vec(
+  slide_vec_direct(
     .x,
     .f,
     ...,
@@ -346,7 +332,7 @@ slide_chr <- function(.x,
                       .after = 0L,
                       .step = 1L,
                       .complete = FALSE) {
-  slide_vec(
+  slide_vec_direct(
     .x,
     .f,
     ...,

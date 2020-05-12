@@ -32,21 +32,30 @@ pslide_index_vec <- function(.l,
                              .after = 0L,
                              .complete = FALSE,
                              .ptype = NULL) {
+  out <- pslide_index_impl(
+    .l,
+    .i,
+    .f,
+    ...,
+    .before = .before,
+    .after = .after,
+    .complete = .complete,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-  if (is.null(.ptype)) {
-    out <- pslide_index_simplify(
-      .l,
-      .i,
-      .f,
-      ...,
-      .before = .before,
-      .after = .after,
-      .complete = .complete
-    )
+  vec_simplify(out, .ptype)
+}
 
-    return(out)
-  }
-
+pslide_index_vec_direct <- function(.l,
+                                    .i,
+                                    .f,
+                                    ...,
+                                    .before,
+                                    .after,
+                                    .complete,
+                                    .ptype) {
   pslide_index_impl(
     .l,
     .i,
@@ -61,29 +70,6 @@ pslide_index_vec <- function(.l,
   )
 }
 
-pslide_index_simplify <- function(.l,
-                                  .i,
-                                  .f,
-                                  ...,
-                                  .before,
-                                  .after,
-                                  .complete) {
-  out <- pslide_index_impl(
-    .l,
-    .i,
-    .f,
-    ...,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = TRUE
-  )
-
-  vec_simplify(out)
-}
-
 #' @rdname slide_index2
 #' @export
 pslide_index_dbl <- function(.l,
@@ -93,7 +79,7 @@ pslide_index_dbl <- function(.l,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  pslide_index_vec(
+  pslide_index_vec_direct(
     .l,
     .i,
     .f,
@@ -114,7 +100,7 @@ pslide_index_int <- function(.l,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  pslide_index_vec(
+  pslide_index_vec_direct(
     .l,
     .i,
     .f,
@@ -135,7 +121,7 @@ pslide_index_lgl <- function(.l,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  pslide_index_vec(
+  pslide_index_vec_direct(
     .l,
     .i,
     .f,
@@ -156,7 +142,7 @@ pslide_index_chr <- function(.l,
                              .before = 0L,
                              .after = 0L,
                              .complete = FALSE) {
-  pslide_index_vec(
+  pslide_index_vec_direct(
     .l,
     .i,
     .f,

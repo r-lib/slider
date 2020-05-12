@@ -1,12 +1,14 @@
 # ------------------------------------------------------------------------------
-# slide2_vec
+# slide2_*()
 
-test_that("slide2_vec() works", {
+test_that("slide2_*() works", {
   expect_equivalent(slide2_vec(1L, 1L, ~.x + .y), 2L)
+  expect_equivalent(slide2_int(1L, 1L, ~.x + .y), 2L)
 })
 
-test_that("slide2_vec() retains names of x", {
+test_that("slide2_*() retains names of x", {
   expect_equivalent(slide2_vec(c(x = 1L), c(y = 1L), ~.x + .y), c(x = 2L))
+  expect_equivalent(slide2_int(c(x = 1L), c(y = 1L), ~.x + .y), c(x = 2L))
 })
 
 test_that("slide2_vec() can simplify automatically", {
@@ -17,6 +19,14 @@ test_that("slide2_vec() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
   expect_error(
     slide2_vec(1:2, 1:2, fn, .ptype = NULL),
+    class = "vctrs_error_incompatible_type"
+  )
+})
+
+test_that("slide2_*() errors if it can't cast", {
+  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  expect_error(
+    slide2_int(1:2, 1:2, fn),
     class = "vctrs_error_incompatible_type"
   )
 })
@@ -97,4 +107,14 @@ test_that("slide2_dfc() works", {
 test_that("`.ptype = NULL` is size stable (#78)", {
   expect_length(slide2_vec(1:4, 1:4, ~.x, .step = 2), 4)
   expect_length(slide2_vec(1:4, 1:4, ~1, .before = 1, .complete = TRUE), 4)
+})
+
+test_that("`slide2_vec()` falls back to `c()` method as required", {
+  local_c_foobar()
+
+  expect_identical(slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar()), foobar(1:3))
+  expect_condition(slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+
+  expect_identical(slide2_vec(1:3, 1:3, ~foobar(.x)), foobar(1:3))
+  expect_condition(slide2_vec(1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
 })

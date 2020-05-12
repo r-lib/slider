@@ -26,36 +26,6 @@ phop_vec <- function(.l,
                      .f,
                      ...,
                      .ptype = NULL) {
-
-  if (is.null(.ptype)) {
-    out <- phop_simplify(
-      .l,
-      .starts,
-      .stops,
-      .f,
-      ...
-    )
-
-    return(out)
-  }
-
-  phop_impl(
-    .l,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = .ptype,
-    .constrain = TRUE,
-    .atomic = TRUE
-  )
-}
-
-phop_simplify <- function(.l,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...) {
   out <- phop_impl(
     .l,
     .starts,
@@ -67,7 +37,7 @@ phop_simplify <- function(.l,
     .atomic = TRUE
   )
 
-  vec_simplify(out)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------

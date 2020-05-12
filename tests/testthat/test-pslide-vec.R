@@ -1,12 +1,14 @@
 # ------------------------------------------------------------------------------
-# pslide_vec
+# pslide_*()
 
-test_that("pslide_vec() works", {
+test_that("pslide_*() works", {
   expect_equivalent(pslide_vec(list(1L, 1L), ~.x + .y), 2L)
+  expect_equivalent(pslide_int(list(1L, 1L), ~.x + .y), 2L)
 })
 
-test_that("pslide_vec() retains names of first input", {
+test_that("pslide_*() retains names of first input", {
   expect_equivalent(pslide_vec(list(c(x = 1L), c(y = 1L)), ~.x + .y), c(x = 2L))
+  expect_equivalent(pslide_int(list(c(x = 1L), c(y = 1L)), ~.x + .y), c(x = 2L))
 })
 
 test_that("pslide_vec() can simplify automatically", {
@@ -17,6 +19,14 @@ test_that("pslide_vec() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
   expect_error(
     pslide_vec(list(1:2, 1:2), fn, .ptype = NULL),
+    class = "vctrs_error_incompatible_type"
+  )
+})
+
+test_that("pslide_*() errors if it can't cast", {
+  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  expect_error(
+    pslide_int(list(1:2, 1:2), fn),
     class = "vctrs_error_incompatible_type"
   )
 })
@@ -96,4 +106,14 @@ test_that("pslide_dfc() works", {
 test_that("`.ptype = NULL` is size stable (#78)", {
   expect_length(pslide_vec(list(1:4, 1:4), ~.x, .step = 2), 4)
   expect_length(pslide_vec(list(1:4, 1:4), ~1, .before = 1, .complete = TRUE), 4)
+})
+
+test_that("`pslide_vec()` falls back to `c()` method as required", {
+  local_c_foobar()
+
+  expect_identical(pslide_vec(list(1:3, 1:3), ~foobar(.x), .ptype = foobar()), foobar(1:3))
+  expect_condition(pslide_vec(list(1:3, 1:3), ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+
+  expect_identical(pslide_vec(list(1:3, 1:3), ~foobar(.x)), foobar(1:3))
+  expect_condition(pslide_vec(list(1:3, 1:3), ~foobar(.x)), class = "slider_c_foobar")
 })
