@@ -29,39 +29,6 @@ phop_index_vec <- function(.l,
                            .f,
                            ...,
                            .ptype = NULL) {
-
-  if (is.null(.ptype)) {
-    out <- phop_index_simplify(
-      .l,
-      .i,
-      .starts,
-      .stops,
-      .f,
-      ...
-    )
-
-    return(out)
-  }
-
-  phop_index_impl(
-    .l,
-    .i,
-    .starts,
-    .stops,
-    .f,
-    ...,
-    .ptype = .ptype,
-    .constrain = TRUE,
-    .atomic = TRUE
-  )
-}
-
-phop_index_simplify <- function(.l,
-                                .i,
-                                .starts,
-                                .stops,
-                                .f,
-                                ...) {
   out <- phop_index_impl(
     .l,
     .i,
@@ -74,7 +41,7 @@ phop_index_simplify <- function(.l,
     .atomic = TRUE
   )
 
-  vec_simplify(out)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------
