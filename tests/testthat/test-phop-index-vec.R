@@ -39,10 +39,8 @@ test_that("empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops` returns 
 })
 
 test_that("can't access non-existant `.x` with empty `.l` and `.i`, but size `n > 0` `.starts` and `.stops`", {
-  expect_error(
-    phop_index_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = int()),
-    "list contains fewer than 1 element"
-  )
+  # Note: Error message seems platform dependent
+  expect_error(phop_index_vec(list(), integer(), 1:2, 2:3, ~.x, .ptype = int()))
 })
 
 # ------------------------------------------------------------------------------
