@@ -1,5 +1,7 @@
 # slider (development version)
 
+* A few edge cases with size zero input in the index functions have been fixed.
+
 * The default for the `.names_to` argument of `*_dfr()` variants has been
   updated to `rlang::zap()` to match the default of the function it is passed
   on to, `vctrs::vec_rbind()`.

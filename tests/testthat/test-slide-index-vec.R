@@ -63,8 +63,9 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   )
 })
 
-test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {
-  expect_equal(slide_index_vec(integer(), integer(), ~.x, .ptype = NULL), NULL)
+test_that("size 0 `.x` returns .ptype", {
+  expect_identical(slide_index_vec(integer(), integer(), ~.x, .ptype = NULL), NULL)
+  expect_identical(slide_index_vec(integer(), integer(), ~.x, .ptype = double()), double())
 })
 
 test_that("`.ptype = NULL` is size stable (#78)", {

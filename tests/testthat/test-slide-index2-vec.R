@@ -98,6 +98,11 @@ test_that("`.ptype = NULL` is size stable (#78)", {
   expect_length(slide_index2_vec(1:4, 1:4, 1:4, ~1, .before = 1, .complete = TRUE), 4)
 })
 
+test_that("size 0 inputs returns .ptype", {
+  expect_identical(slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = NULL), NULL)
+  expect_identical(slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = double()), double())
+})
+
 test_that("`slide_index2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 

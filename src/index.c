@@ -370,6 +370,10 @@ static void compute_window_sizes(int* window_sizes,
 static void compute_window_starts(int* window_starts,
                                   int* window_sizes,
                                   int size) {
+  if (size == 0) {
+    return;
+  }
+
   // First start is always 0
   window_starts[0] = 0;
 

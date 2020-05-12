@@ -56,10 +56,14 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   )
 })
 
-test_that("`.ptype = NULL` returns `NULL` with size 0 `.starts` / `.stops`", {
-  expect_equal(
-    hop_index_vec(integer(), integer(), integer(), integer(), ~.x, .ptype = NULL),
+test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {
+  expect_identical(
+    hop_index_vec(1:5, 1:5, integer(), integer(), ~.x, .ptype = NULL),
     NULL
+  )
+  expect_identical(
+    hop_index_vec(1:5, 1:5, integer(), integer(), ~.x, .ptype = double()),
+    double()
   )
 })
 
