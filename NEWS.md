@@ -5,7 +5,7 @@
   on to, `vctrs::vec_rbind()`.
 
 * All `*_vec()` variants now maintain size stability when auto-simplifying
-  (i.e. when `.ptype = NULL`) (#78).
+  (i.e. when `.ptype = NULL`) (#78, #93).
 
 * `hop()` and its variants no longer place the names of `.x` on the output.
   Because there is no _size_ guarantee on the output, the size of `.x` can
