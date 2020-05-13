@@ -379,24 +379,22 @@ static void fill_window_info(int* window_sizes,
 // update the current start/stop position
 
 static int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
+  // Pin to the start
   if (range.start_unbounded) {
     return 0;
   }
 
-  // We are already past the end, return `last_pos + 1`
+  // Past the end? Signal OOB with `last_pos + 1`.
+  // This also handles size zero `.i` with `.starts` / `.stops` that have size.
+  // Current pos will be 0, but `last_pos` will be -1.
   if (index->current_start_pos > index->last_pos) {
     return index->last_pos + 1;
-  }
-
-  // Start is before the first index value. Pin to `0`.
-  if (index->compare_lt(range.starts, pos, index->data, 0)) {
-    return 0;
   }
 
   while (index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
     ++index->current_start_pos;
 
-    // Are we out of values?
+    // Past the end? Signal OOB with `last_pos + 1`.
     if (index->current_start_pos > index->last_pos) {
       return index->last_pos + 1;
     }
@@ -406,24 +404,22 @@ static int locate_window_starts_pos(struct index_info* index, struct range_info 
 }
 
 static int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
+  // Pin to the end
   if (range.stop_unbounded) {
     return index->last_pos;
   }
 
-  // We are already past the end, return `last_pos`
+  // Past the end? Pin to end.
+  // This also handles size zero `.i` with `.starts` / `.stops` that have size.
+  // Current pos will be 0, but `last_pos` will be -1.
   if (index->current_stop_pos > index->last_pos) {
     return index->last_pos;
-  }
-
-  // Stop is before first index value. Pin to `0 - 1`.
-  if (index->compare_lt(range.stops, pos, index->data, 0)) {
-    return -1;
   }
 
   while (index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
     ++index->current_stop_pos;
 
-    // Are we out of values?
+    // Past the end? Pin to end.
     if (index->current_stop_pos > index->last_pos) {
       return index->last_pos;
     }
