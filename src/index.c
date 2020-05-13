@@ -379,46 +379,50 @@ static void fill_window_info(int* window_sizes,
 // update the current start/stop position
 
 static int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
-  if (range.start_unbounded || index->compare_lt(range.starts, pos, index->data, 0)) {
-    if (range.stop_unbounded) {
-      return 0;
-    }
-
-    if (index->compare_lt(range.stops, pos, index->data, 0)) {
-      return -1;
-    }
-
+  // Pin to the start
+  if (range.start_unbounded) {
     return 0;
   }
 
-  while(index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
-    if (index->current_start_pos == index->last_pos) {
-      return index->current_start_pos;
-    }
+  // Past the end? Signal OOB with `last_pos + 1`.
+  // This also handles size zero `.i` with `.starts` / `.stops` that have size.
+  // Current pos will be 0, but `last_pos` will be -1.
+  if (index->current_start_pos > index->last_pos) {
+    return index->last_pos + 1;
+  }
+
+  while (index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
     ++index->current_start_pos;
+
+    // Past the end? Signal OOB with `last_pos + 1`.
+    if (index->current_start_pos > index->last_pos) {
+      return index->last_pos + 1;
+    }
   }
 
   return index->current_start_pos;
 }
 
 static int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
-  if (range.stop_unbounded || index->compare_gt(range.stops, pos, index->data, index->last_pos)) {
-    if (range.start_unbounded) {
-      return index->last_pos;
-    }
-
-    if (index->compare_gt(range.starts, pos, index->data, index->last_pos)) {
-      return -1;
-    }
-
+  // Pin to the end
+  if (range.stop_unbounded) {
     return index->last_pos;
   }
 
-  while(index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
-    if (index->current_stop_pos == index->last_pos) {
-      return index->current_stop_pos;
-    }
+  // Past the end? Pin to end.
+  // This also handles size zero `.i` with `.starts` / `.stops` that have size.
+  // Current pos will be 0, but `last_pos` will be -1.
+  if (index->current_stop_pos > index->last_pos) {
+    return index->last_pos;
+  }
+
+  while (index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
     ++index->current_stop_pos;
+
+    // Past the end? Pin to end.
+    if (index->current_stop_pos > index->last_pos) {
+      return index->last_pos;
+    }
   }
 
   return index->current_stop_pos - 1;
@@ -433,16 +437,6 @@ static void increment_window(struct window_info window,
   int starts_pos = locate_window_starts_pos(index, range, pos);
   int stops_pos = locate_window_stops_pos(index, range, pos);
 
-  // This is our signal that we are outside the range of `i`. For example,
-  // i = 1:2, but we are trying to index [start = 3, stop = 4]. In these cases
-  // there is "no data" in that range, so we pass a size 0 slice of `x` to `f`
-  if (starts_pos == -1 || stops_pos == -1) {
-    init_compact_seq(window.p_seq_val, 0, 0, true);
-    return;
-  }
-
-  // This can happen with an irregular index, and is a sign of the full window
-  // being between two index points and means we select nothing
   if (stops_pos < starts_pos) {
     init_compact_seq(window.p_seq_val, 0, 0, true);
     return;
