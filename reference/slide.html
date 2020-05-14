@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="Slide — slide" />
 <meta property="og:description" content="slide() iterates through .x using a sliding window, applying .f to each
 sub-window of .x." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ sub-window of .x." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +73,7 @@ sub-window of .x." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -106,7 +109,7 @@ sub-window of .x." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DavisVaughan/slider">
+  <a href="https://github.com/DavisVaughan/slider/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -195,7 +198,7 @@ sub-window of <code>.x</code>.</p>
   <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
   <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span>(),
   <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
 )
 
@@ -269,15 +272,20 @@ supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
-      <td><p>Optionally, the name of a column where the names
-of <code>...</code> arguments are copied. These names are useful to identify
-which row comes from which input. If supplied and <code>...</code> is not named,
-an integer column is used to identify the rows.</p></td>
+      <td><ul>
+<li><p>By default, input names are <a href='https://rlang.r-lib.org/reference/zap.html'>zapped</a>.</p><ul>
+<li><p>If a string, specifies a column where the input names will be
+copied. These names are often useful to identify rows with
+their original input. If a column name is supplied and <code>...</code> is
+not named, an integer column is used instead.</p></li>
+<li><p>If <code>NULL</code>, the input names are used as row names.</p></li>
+</ul></li>
+</ul></td>
     </tr>
     <tr>
       <th>.name_repair</th>
       <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
-<code>"check_unique"</code>. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
+<code>"check_unique"</code>. See <code><a href='https://vctrs.r-lib.org/reference/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
 options.</p>
 <p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
 separately. This is because <code>vec_rbind()</code> needs to align their
@@ -320,19 +328,16 @@ of length 1 will be recycled appropriately.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Unlike <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls like</p><pre>.f(.x[[i]], ...)
-</pre>
+    <p>Unlike <code><a href='https://rdrr.io/r/base/lapply.html'>lapply()</a></code> or <code><a href='https://purrr.tidyverse.org/reference/map.html'>purrr::map()</a></code>, which construct calls like</p><pre><span class='fu'>.f</span>(<span class='no'>.x</span><span class='kw'>[[</span><span class='no'>i</span>]], <span class='no'>...</span>)</pre>
 
-<p>the equivalent with <code>slide()</code> looks like</p><pre>.f(vctrs::vec_slice(.x, i), ...)
-</pre>
+<p>the equivalent with <code>slide()</code> looks like</p><pre><span class='fu'>.f</span>(<span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://vctrs.r-lib.org/reference/vec_slice.html'>vec_slice</a></span>(<span class='no'>.x</span>, <span class='no'>i</span>), <span class='no'>...</span>)</pre>
 
-<p>which is approximately</p><pre>.f(.x[i], ...)
-</pre>
+<p>which is approximately</p><pre><span class='fu'>.f</span>(<span class='no'>.x</span>[<span class='no'>i</span>], <span class='no'>...</span>)</pre>
 
 <p>except in the case of data frames or arrays, which are iterated
 over row-wise.</p>
 <p>If <code>.x</code> has names, then the output will preserve those names.</p>
-<p>Using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
+<p>Using <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>, the output of <code>.f</code> will be automatically cast
 to the type required by the variant of <code>slide_*()</code> being used.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -492,37 +497,50 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 
 <span class='co'># Data frames are iterated over rowwise</span>
 <span class='no'>mtcars_rowwise</span> <span class='kw'>&lt;-</span> <span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>)
-<span class='no'>mtcars_rowwise</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; [[1]]
+<span class='no'>mtcars_rowwise</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; $`Mazda RX4`
 #&gt;           mpg cyl disp  hp drat   wt  qsec vs am gear carb
 #&gt; Mazda RX4  21   6  160 110  3.9 2.62 16.46  0  1    4    4
 #&gt; 
-#&gt; [[2]]
+#&gt; $`Mazda RX4 Wag`
 #&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
 #&gt; 
-#&gt; [[3]]
+#&gt; $`Datsun 710`
 #&gt;             mpg cyl disp hp drat   wt  qsec vs am gear carb
 #&gt; Datsun 710 22.8   4  108 93 3.85 2.32 18.61  1  1    4    1
 #&gt; </div><div class='input'>
 <span class='co'># This means that any column name is easily accessible</span>
-<span class='fu'>slide_dbl</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>$<span class='no'>mpg</span> + <span class='no'>.x</span>$<span class='no'>cyl</span>)</div><div class='output co'>#&gt;  [1] 27.0 27.0 26.8 27.4 26.7 24.1 22.3 28.4 26.8 25.2 23.8 24.4 25.3 23.2 18.4
-#&gt; [16] 18.4 22.7 36.4 34.4 37.9 25.5 23.5 23.2 21.3 27.2 31.3 30.0 34.4 23.8 25.7
-#&gt; [31] 23.0 25.4</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>$<span class='no'>mpg</span> + <span class='no'>.x</span>$<span class='no'>cyl</span>)</div><div class='output co'>#&gt;           Mazda RX4       Mazda RX4 Wag          Datsun 710      Hornet 4 Drive 
+#&gt;                27.0                27.0                26.8                27.4 
+#&gt;   Hornet Sportabout             Valiant          Duster 360           Merc 240D 
+#&gt;                26.7                24.1                22.3                28.4 
+#&gt;            Merc 230            Merc 280           Merc 280C          Merc 450SE 
+#&gt;                26.8                25.2                23.8                24.4 
+#&gt;          Merc 450SL         Merc 450SLC  Cadillac Fleetwood Lincoln Continental 
+#&gt;                25.3                23.2                18.4                18.4 
+#&gt;   Chrysler Imperial            Fiat 128         Honda Civic      Toyota Corolla 
+#&gt;                22.7                36.4                34.4                37.9 
+#&gt;       Toyota Corona    Dodge Challenger         AMC Javelin          Camaro Z28 
+#&gt;                25.5                23.5                23.2                21.3 
+#&gt;    Pontiac Firebird           Fiat X1-9       Porsche 914-2        Lotus Europa 
+#&gt;                27.2                31.3                30.0                34.4 
+#&gt;      Ford Pantera L        Ferrari Dino       Maserati Bora          Volvo 142E 
+#&gt;                23.8                25.7                23.0                25.4 </div><div class='input'>
 <span class='co'># More advanced rowwise iteration is available as well by using the</span>
 <span class='co'># other arguments</span>
 <span class='no'>mtcars_rowwise_window</span> <span class='kw'>&lt;-</span> <span class='fu'>slide</span>(<span class='no'>mtcars</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>mtcars_rowwise_window</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; [[1]]
+<span class='no'>mtcars_rowwise_window</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]</div><div class='output co'>#&gt; $`Mazda RX4`
 #&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4      21   6  160 110  3.9 2.620 16.46  0  1    4    4
 #&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
 #&gt; 
-#&gt; [[2]]
+#&gt; $`Mazda RX4 Wag`
 #&gt;                mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
 #&gt; Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
 #&gt; Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
 #&gt; 
-#&gt; [[3]]
+#&gt; $`Datsun 710`
 #&gt;                 mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4 Wag  21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
 #&gt; Datsun 710     22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
@@ -633,15 +651,9 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -652,7 +664,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
