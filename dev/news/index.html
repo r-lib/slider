@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.2.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -133,7 +133,13 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#slider-development-version" class="anchor"></a>slider (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="slider-013" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.3">
+<a href="#slider-013" class="anchor"></a>slider 0.1.3<small> Unreleased </small>
+</h1>
 <ul>
+<li><p>Updated to stay compatible with vctrs 0.3.0.</p></li>
 <li><p>A few edge cases with size zero input in the index functions have been fixed.</p></li>
 <li><p>The default for the <code>.names_to</code> argument of <code>*_dfr()</code> variants has been updated to <code><a href="https://rlang.r-lib.org/reference/zap.html">rlang::zap()</a></code> to match the default of the function it is passed on to, <code><a href="https://vctrs.r-lib.org/reference/vec_bind.html">vctrs::vec_rbind()</a></code>.</p></li>
 <li><p>All <code>*_vec()</code> variants now maintain size stability when auto-simplifying (i.e. when <code>.ptype = NULL</code>) (<a href='https://github.com/DavisVaughan/slider/issues/78'>#78</a>, <a href='https://github.com/DavisVaughan/slider/issues/93'>#93</a>).</p></li>
