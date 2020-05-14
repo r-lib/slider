@@ -7,6 +7,10 @@
 
 0 errors | 0 warnings | 0 notes
 
+## 0.1.3 Submission
+
+Fixes a few bugs, and maintains compatibility with vctrs.
+
 ## 0.1.2 Submission
 
 Updates to be compatible with vctrs 0.2.4.
