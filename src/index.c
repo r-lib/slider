@@ -3,6 +3,7 @@
 #include "slider-vctrs.h"
 #include "utils.h"
 #include "compare.h"
+#include "assign.h"
 
 // -----------------------------------------------------------------------------
 // All defined below
@@ -27,6 +28,50 @@ static void increment_window(struct window_info window,
 
 // -----------------------------------------------------------------------------
 
+#define SLIDE_INDEX_LOOP(ASSIGN_LOCS) do {                     \
+  for (int i = min_iteration; i < max_iteration; ++i) {        \
+    if (i % 1024 == 0) {                                       \
+      R_CheckUserInterrupt();                                  \
+    }                                                          \
+                                                               \
+    increment_window(window, &index, range, i);                \
+    slice_and_update_env(x, window.seq, env, type, container); \
+                                                               \
+    SEXP elt = PROTECT(r_force_eval(f_call, env, force));      \
+                                                               \
+    if (atomic && vec_size(elt) != 1) {                        \
+      stop_not_all_size_one(i + 1, vec_size(elt));             \
+    }                                                          \
+                                                               \
+    SEXP locations = VECTOR_ELT(indices, i);                   \
+                                                               \
+    ASSIGN_LOCS(p_out, locations, elt, ptype);                 \
+                                                               \
+    UNPROTECT(1);                                              \
+  }                                                            \
+} while (0)
+
+#define SLIDE_INDEX_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_LOCS) do { \
+  CTYPE* p_out = DEREF(out);                                    \
+  SLIDE_INDEX_LOOP(ASSIGN_LOCS);                                \
+} while (0)
+
+#define SLIDE_INDEX_LOOP_BARRIER(ASSIGN_LOCS) do {             \
+  SEXP p_out = out;                                            \
+                                                               \
+  /* Initialize with `NA`, not `NULL` */                       \
+  /* for size stability when auto-simplifying */               \
+  if (atomic && !constrain) {                                  \
+    for (R_len_t i = 0; i < size; ++i) {                       \
+      SET_VECTOR_ELT(p_out, i, slider_shared_na_lgl);          \
+    }                                                          \
+  }                                                            \
+                                                               \
+  SLIDE_INDEX_LOOP(ASSIGN_LOCS);                               \
+} while (0)
+
+// -----------------------------------------------------------------------------
+
 // [[ register() ]]
 SEXP slide_index_common_impl(SEXP x,
                              SEXP i,
@@ -43,13 +88,12 @@ SEXP slide_index_common_impl(SEXP x,
                              SEXP complete_) {
   int n_prot = 0;
 
-  int type = r_scalar_int_get(type_);
-  bool constrain = r_scalar_lgl_get(constrain_);
-  bool atomic = r_scalar_lgl_get(atomic_);
-  int size = r_scalar_int_get(size_);
-  bool complete = r_scalar_lgl_get(complete_);
-
-  int force = compute_force(type);
+  const int type = r_scalar_int_get(type_);
+  const int force = compute_force(type);
+  const bool constrain = r_scalar_lgl_get(constrain_);
+  const bool atomic = r_scalar_lgl_get(atomic_);
+  const int size = r_scalar_int_get(size_);
+  const bool complete = r_scalar_lgl_get(complete_);
 
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
@@ -66,79 +110,34 @@ SEXP slide_index_common_impl(SEXP x,
   struct range_info range = new_range_info(starts, stops, index.size);
   PROTECT_RANGE_INFO(&range, &n_prot);
 
-  int min_iteration = compute_min_iteration(index, range, complete);
-  int max_iteration = compute_max_iteration(index, range, complete);
+  const int min_iteration = compute_min_iteration(index, range, complete);
+  const int max_iteration = compute_max_iteration(index, range, complete);
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_proxy(ptype);
-  PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_init(out, size);
-  REPROTECT(out, out_prot_idx);
-  ++n_prot;
+  SEXPTYPE out_type = TYPEOF(ptype);
+  SEXP out = PROTECT_N(Rf_allocVector(out_type, size), &n_prot);
 
-  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
-  if (atomic && !constrain) {
-    for (R_len_t i = 0; i < size; ++i) {
-      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
-    }
+  switch (out_type) {
+  case INTSXP:  SLIDE_INDEX_LOOP_ATOMIC(int, INTEGER, assign_locs_int); break;
+  case REALSXP: SLIDE_INDEX_LOOP_ATOMIC(double, REAL, assign_locs_dbl); break;
+  case LGLSXP:  SLIDE_INDEX_LOOP_ATOMIC(int, LOGICAL, assign_locs_lgl); break;
+  case STRSXP:  SLIDE_INDEX_LOOP_ATOMIC(SEXP, STRING_PTR, assign_locs_chr); break;
+  case VECSXP:  SLIDE_INDEX_LOOP_BARRIER(assign_locs_lst); break;
   }
 
-  for (int i = min_iteration; i < max_iteration; ++i) {
-    if (i % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
-
-    increment_window(window, &index, range, i);
-    slice_and_update_env(x, window.seq, env, type, container);
-
-#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
-    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));
-#else
-    SEXP elt = PROTECT(Rf_eval(f_call, env));
-#endif
-
-    SEXP out_index = VECTOR_ELT(indices, i);
-    int out_index_size = vec_size(out_index);
-
-    if (atomic && vec_size(elt) != 1) {
-      stop_not_all_size_one(i + 1, vec_size(elt));
-    }
-
-    if (constrain) {
-      elt = PROTECT(vec_cast(elt, ptype));
-
-      // Must always PROTECT() to avoid rchk note, see #58
-      if (out_index_size != 1) {
-        elt = vec_recycle(elt, out_index_size);
-      }
-      PROTECT(elt);
-
-      out = vec_proxy_assign(out, out_index, elt);
-      REPROTECT(out, out_prot_idx);
-
-      UNPROTECT(2);
-    } else {
-      int* p_out_index = INTEGER(out_index);
-
-      for (int j = 0; j < out_index_size; ++j) {
-        SET_VECTOR_ELT(out, p_out_index[j] - 1, elt);
-      }
-    }
-
-    UNPROTECT(1);
-  }
-
-  out = vec_restore(out, ptype);
-  REPROTECT(out, out_prot_idx);
-
-  out = copy_names(out, x, type);
-  REPROTECT(out, out_prot_idx);
+  SEXP names = slider_names(x, type);
+  Rf_setAttrib(out, R_NamesSymbol, names);
 
   UNPROTECT(n_prot);
   return out;
 }
+
+#undef SLIDE_INDEX_LOOP
+#undef SLIDE_INDEX_LOOP_ATOMIC
+#undef SLIDE_INDEX_LOOP_BARRIER
+
+// -----------------------------------------------------------------------------
 
 // [[ register() ]]
 SEXP hop_index_common_impl(SEXP x,
@@ -210,11 +209,7 @@ SEXP hop_index_common_impl(SEXP x,
     increment_window(window, &index, range, i);
     slice_and_update_env(x, window.seq, env, type, container);
 
-#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
-    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));
-#else
-    SEXP elt = PROTECT(Rf_eval(f_call, env));
-#endif
+    SEXP elt = PROTECT(r_force_eval(f_call, env, force));
 
     if (atomic && vec_size(elt) != 1) {
       stop_not_all_size_one(i + 1, vec_size(elt));
