@@ -29,14 +29,14 @@
                                                                                \
     slice_and_update_env(x, window, env, type, container);                     \
                                                                                \
-    elt = r_force_eval(f_call, env, force);                                    \
-    REPROTECT(elt, elt_prot_idx);                                              \
+    SEXP elt = PROTECT(r_force_eval(f_call, env, force));                      \
                                                                                \
     if (atomic && vec_size(elt) != 1) {                                        \
       stop_not_all_size_one(i + 1, vec_size(elt));                             \
     }                                                                          \
                                                                                \
     ASSIGN_ONE(p_out, i, elt, ptype);                                          \
+    UNPROTECT(1);                                                              \
   }                                                                            \
 } while(0)
 
@@ -132,11 +132,6 @@ SEXP slide_common_impl(SEXP x,
   SEXP window = PROTECT(compact_seq(0, 0, true));
   int* p_window = INTEGER(window);
 
-  // The result of each function call
-  PROTECT_INDEX elt_prot_idx;
-  SEXP elt = R_NilValue;
-  PROTECT_WITH_INDEX(elt, &elt_prot_idx);
-
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
 
@@ -155,7 +150,7 @@ SEXP slide_common_impl(SEXP x,
   SEXP names = slider_names(x, type);
   Rf_setAttrib(out, R_NamesSymbol, names);
 
-  UNPROTECT(4);
+  UNPROTECT(3);
   return out;
 }
 

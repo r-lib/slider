@@ -46,7 +46,6 @@ static void increment_window(struct window_info window,
     SEXP locations = VECTOR_ELT(indices, i);                   \
                                                                \
     ASSIGN_LOCS(p_out, locations, elt, ptype);                 \
-                                                               \
     UNPROTECT(1);                                              \
   }                                                            \
 } while (0)
@@ -156,7 +155,6 @@ SEXP slide_index_common_impl(SEXP x,
     }                                                          \
                                                                \
     ASSIGN_ONE(p_out, i, elt, ptype);                          \
-                                                               \
     UNPROTECT(1);                                              \
   }                                                            \
 } while (0)
