@@ -149,6 +149,7 @@ SEXP slide_common_impl(SEXP x,
   case LGLSXP:  SLIDE_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
   case STRSXP:  SLIDE_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
   case VECSXP:  SLIDE_LOOP_BARRIER(assign_one_lst); break;
+  default:      never_reached("slide_common_impl");
   }
 
   SEXP names = slider_names(x, type);

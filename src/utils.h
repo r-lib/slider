@@ -39,6 +39,10 @@ static inline const char* r_scalar_chr_get(SEXP x) {
   return CHAR(STRING_ELT(x, 0));
 }
 
+__attribute__((noreturn)) static inline void never_reached(const char* fn) {
+  Rf_errorcall(R_NilValue, "Internal error: Reached the unreachable in `%s()`.", fn);
+}
+
 extern SEXP strings_dot_before;
 extern SEXP strings_dot_after;
 extern SEXP strings_dot_step;

@@ -124,6 +124,7 @@ SEXP slide_index_common_impl(SEXP x,
   case LGLSXP:  SLIDE_INDEX_LOOP_ATOMIC(int, LOGICAL, assign_locs_lgl); break;
   case STRSXP:  SLIDE_INDEX_LOOP_ATOMIC(SEXP, STRING_PTR, assign_locs_chr); break;
   case VECSXP:  SLIDE_INDEX_LOOP_BARRIER(assign_locs_lst); break;
+  default:      never_reached("slide_index_common_impl");
   }
 
   SEXP names = slider_names(x, type);
@@ -228,6 +229,7 @@ SEXP hop_index_common_impl(SEXP x,
   case LGLSXP:  HOP_INDEX_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
   case STRSXP:  HOP_INDEX_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
   case VECSXP:  HOP_INDEX_LOOP_BARRIER(assign_one_lst); break;
+  default:      never_reached("hop_index_common_impl");
   }
 
   UNPROTECT(n_prot);
