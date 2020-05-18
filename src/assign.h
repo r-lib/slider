@@ -6,25 +6,25 @@
 
 // -----------------------------------------------------------------------------
 
+#define ASSIGN_ONE(CONST_DEREF) do {  \
+  elt = vec_cast(elt, ptype);         \
+  p_out[i] = CONST_DEREF(elt)[0];     \
+} while (0)
+
 static inline void assign_one_dbl(double* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = REAL_RO(elt)[0];
+  ASSIGN_ONE(REAL_RO);
 }
-
 static inline void assign_one_int(int* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = INTEGER_RO(elt)[0];
+  ASSIGN_ONE(INTEGER_RO);
 }
-
 static inline void assign_one_lgl(int* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = LOGICAL_RO(elt)[0];
+  ASSIGN_ONE(LOGICAL_RO);
+}
+static inline void assign_one_chr(SEXP* p_out, R_len_t i, SEXP elt, SEXP ptype) {
+  ASSIGN_ONE(STRING_PTR_RO);
 }
 
-static inline void assign_one_chr(SEXP* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = STRING_PTR_RO(elt)[0];
-}
+#undef ASSIGN_ONE
 
 static inline void assign_one_lst(SEXP out, R_len_t i, SEXP elt, SEXP ptype) {
   SET_VECTOR_ELT(out, i, elt);
