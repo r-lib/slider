@@ -72,11 +72,6 @@ SEXP slide_common_impl(SEXP x,
   const int force = compute_force(type);
   const int size = compute_size(x, type);
 
-  // Bail early if inputs are size 0
-  if (size == 0) {
-    return Rf_allocVector(TYPEOF(ptype), 0);
-  }
-
   bool before_unbounded = false;
   bool after_unbounded = false;
 
