@@ -139,6 +139,48 @@ SEXP slide_index_common_impl(SEXP x,
 
 // -----------------------------------------------------------------------------
 
+#define HOP_INDEX_LOOP(ASSIGN_ONE) do {                        \
+  for (int i = 0; i < range.size; ++i) {                       \
+    if (i % 1024 == 0) {                                       \
+      R_CheckUserInterrupt();                                  \
+    }                                                          \
+                                                               \
+    increment_window(window, &index, range, i);                \
+    slice_and_update_env(x, window.seq, env, type, container); \
+                                                               \
+    SEXP elt = PROTECT(r_force_eval(f_call, env, force));      \
+                                                               \
+    if (atomic && vec_size(elt) != 1) {                        \
+      stop_not_all_size_one(i + 1, vec_size(elt));             \
+    }                                                          \
+                                                               \
+    ASSIGN_ONE(p_out, i, elt, ptype);                          \
+                                                               \
+    UNPROTECT(1);                                              \
+  }                                                            \
+} while (0)
+
+#define HOP_INDEX_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_ONE) do {  \
+  CTYPE* p_out = DEREF(out);                                  \
+  HOP_INDEX_LOOP(ASSIGN_ONE);                                 \
+} while (0)
+
+#define HOP_INDEX_LOOP_BARRIER(ASSIGN_ONE) do {               \
+  SEXP p_out = out;                                           \
+                                                              \
+  /* Initialize with `NA`, not `NULL` */                      \
+  /* for size stability when auto-simplifying */              \
+  if (atomic && !constrain) {                                 \
+    for (R_len_t i = 0; i < size; ++i) {                      \
+      SET_VECTOR_ELT(p_out, i, slider_shared_na_lgl);         \
+    }                                                         \
+  }                                                           \
+                                                              \
+  HOP_INDEX_LOOP(ASSIGN_ONE);                                 \
+} while (0)
+
+// -----------------------------------------------------------------------------
+
 // [[ register() ]]
 SEXP hop_index_common_impl(SEXP x,
                            SEXP i,
@@ -154,12 +196,11 @@ SEXP hop_index_common_impl(SEXP x,
                            SEXP size_) {
   int n_prot = 0;
 
-  int type = r_scalar_int_get(type_);
-  bool constrain = r_scalar_lgl_get(constrain_);
-  bool atomic = r_scalar_lgl_get(atomic_);
-  int size = r_scalar_int_get(size_);
-
-  int force = compute_force(type);
+  const int type = r_scalar_int_get(type_);
+  const int force = compute_force(type);
+  const bool constrain = r_scalar_lgl_get(constrain_);
+  const bool atomic = r_scalar_lgl_get(atomic_);
+  const int size = r_scalar_int_get(size_);
 
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
@@ -178,65 +219,24 @@ SEXP hop_index_common_impl(SEXP x,
 
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
-  PROTECT_INDEX out_prot_idx;
-  SEXP out = vec_proxy(ptype);
-  PROTECT_WITH_INDEX(out, &out_prot_idx);
-  out = vec_init(out, size);
-  REPROTECT(out, out_prot_idx);
-  ++n_prot;
+  SEXPTYPE out_type = TYPEOF(ptype);
+  SEXP out = PROTECT_N(Rf_allocVector(out_type, size), &n_prot);
 
-  // Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
-  if (atomic && !constrain) {
-    for (R_len_t i = 0; i < size; ++i) {
-      SET_VECTOR_ELT(out, i, slider_shared_na_lgl);
-    }
+  switch (out_type) {
+  case INTSXP:  HOP_INDEX_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;
+  case REALSXP: HOP_INDEX_LOOP_ATOMIC(double, REAL, assign_one_dbl); break;
+  case LGLSXP:  HOP_INDEX_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
+  case STRSXP:  HOP_INDEX_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
+  case VECSXP:  HOP_INDEX_LOOP_BARRIER(assign_one_lst); break;
   }
-
-  // 1 based index for `vec_assign()`
-  SEXP out_index;
-  int* p_out_index;
-
-  if (constrain) {
-    out_index = PROTECT_N(r_int(0), &n_prot);
-    p_out_index = INTEGER(out_index);
-  }
-
-  for (int i = 0; i < range.size; ++i) {
-    if (i % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
-
-    increment_window(window, &index, range, i);
-    slice_and_update_env(x, window.seq, env, type, container);
-
-    SEXP elt = PROTECT(r_force_eval(f_call, env, force));
-
-    if (atomic && vec_size(elt) != 1) {
-      stop_not_all_size_one(i + 1, vec_size(elt));
-    }
-
-    if (constrain) {
-      *p_out_index = i + 1;
-
-      elt = PROTECT(vec_cast(elt, ptype));
-
-      out = vec_proxy_assign(out, out_index, elt);
-      REPROTECT(out, out_prot_idx);
-
-      UNPROTECT(1);
-    } else {
-      SET_VECTOR_ELT(out, i, elt);
-    }
-
-    UNPROTECT(1);
-  }
-
-  out = vec_restore(out, ptype);
-  REPROTECT(out, out_prot_idx);
 
   UNPROTECT(n_prot);
   return out;
 }
+
+#undef HOP_INDEX_LOOP
+#undef HOP_INDEX_LOOP_ATOMIC
+#undef HOP_INDEX_LOOP_BARRIER
 
 // -----------------------------------------------------------------------------
 
