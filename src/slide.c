@@ -74,7 +74,7 @@ SEXP slide_common_impl(SEXP x,
 
   // Bail early if inputs are size 0
   if (size == 0) {
-    return vec_init(ptype, 0);
+    return Rf_allocVector(TYPEOF(ptype), 0);
   }
 
   const int force = compute_force(type);
