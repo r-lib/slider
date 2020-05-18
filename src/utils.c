@@ -110,13 +110,6 @@ SEXP slider_names(SEXP x, int type) {
   }
 }
 
-SEXP copy_names(SEXP out, SEXP x, int type) {
-  SEXP names = PROTECT(slider_names(x, type));
-  out = vec_set_names(out, names);
-  UNPROTECT(1);
-  return out;
-}
-
 // -----------------------------------------------------------------------------
 
 // `slice_and_update_env()` works by repeatedly overwriting the

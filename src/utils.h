@@ -64,7 +64,6 @@ int compute_size(SEXP x, int type);
 int compute_force(int type);
 
 SEXP slider_names(SEXP x, int type);
-SEXP copy_names(SEXP out, SEXP x, int type);
 
 SEXP make_slice_container(int type);
 void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP container);
