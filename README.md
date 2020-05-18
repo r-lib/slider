@@ -8,7 +8,7 @@
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![R build
 status](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
 <!-- badges: end -->
@@ -180,7 +180,6 @@ This makes rolling regressions trivial\!
 
 ``` r
 library(tibble)
-#> Warning: package 'tibble' was built under R version 3.6.2
 set.seed(123)
 
 df <- tibble(
