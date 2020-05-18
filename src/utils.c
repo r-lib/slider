@@ -100,18 +100,21 @@ int compute_force(int type) {
 
 // -----------------------------------------------------------------------------
 
-SEXP copy_names(SEXP out, SEXP x, int type) {
-  SEXP names;
+SEXP slider_names(SEXP x, int type) {
   if (type == SLIDE) {
-    names = PROTECT(vec_names(x));
+    return vec_names(x);
   } else if (type == PSLIDE_EMPTY) {
-    names = PROTECT(R_NilValue);
+    return R_NilValue;
   } else {
-    names = PROTECT(vec_names(r_lst_get(x, 0)));
+    return vec_names(r_lst_get(x, 0));
   }
+}
 
+SEXP copy_names(SEXP out, SEXP x, int type) {
+  SEXP names = PROTECT(slider_names(x, type));
+  out = vec_set_names(out, names);
   UNPROTECT(1);
-  return vec_set_names(out, names);
+  return out;
 }
 
 // -----------------------------------------------------------------------------

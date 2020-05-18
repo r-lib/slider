@@ -2,78 +2,61 @@
 #include "slider-vctrs.h"
 #include "utils.h"
 #include "params.h"
+#include "assign.h"
 
 // -----------------------------------------------------------------------------
 
-static inline void assign_one_dbl(double* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = REAL_RO(elt)[0];
-}
-static inline void assign_one_int(int* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = INTEGER_RO(elt)[0];
-}
-static inline void assign_one_lgl(int* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = LOGICAL_RO(elt)[0];
-}
-static inline void assign_one_chr(SEXP* p_out, R_len_t i, SEXP elt, SEXP ptype) {
-  elt = vec_cast(elt, ptype);
-  p_out[i] = STRING_PTR_RO(elt)[0];
-}
-static inline void assign_one_lst(SEXP out, R_len_t i, SEXP elt, SEXP ptype) {
-  SET_VECTOR_ELT(out, i, elt);
-}
-
-#define SLIDE_LOOP(ASSIGN_ONE_FN) do {   \
-  for (int i = iteration_min;                                  \
-       i < iteration_max;                                      \
-       i += step, start += start_step, stop += stop_step) {    \
-    if (i % 1024 == 0) {                                       \
-      R_CheckUserInterrupt();                                  \
-    }                                                          \
-                                                               \
-    int window_start = max(start, 0);                          \
-    int window_stop = min(stop, size - 1);                     \
-    int window_size = window_stop - window_start + 1;          \
-                                                               \
-    /* Happens when the entire window is OOB, we take a 0-slice of `x`. */ \
-    if (window_stop < window_start) {                          \
-      window_start = 0;                                        \
-      window_size = 0;                                         \
-    }                                                          \
-                                                               \
-    init_compact_seq(p_window, window_start, window_size, true);\
-                                                               \
-    slice_and_update_env(x, window, env, type, container);     \
-                                                               \
-    elt = R_forceAndCall(f_call, force, env);                  \
-    REPROTECT(elt, elt_prot_idx);                              \
-                                                               \
-    if (atomic && vec_size(elt) != 1) {                        \
-      stop_not_all_size_one(i + 1, vec_size(elt));             \
-    }                                                          \
-                                                               \
-    ASSIGN_ONE_FN(p_out, i, elt, ptype);                            \
-  }                                                            \
+#define SLIDE_LOOP(ASSIGN_ONE) do {                                            \
+  for (int i = iteration_min;                                                  \
+       i < iteration_max;                                                      \
+       i += step, start += start_step, stop += stop_step) {                    \
+                                                                               \
+    if (i % 1024 == 0) {                                                       \
+      R_CheckUserInterrupt();                                                  \
+    }                                                                          \
+                                                                               \
+    int window_start = max(start, 0);                                          \
+    int window_stop = min(stop, size - 1);                                     \
+    int window_size = window_stop - window_start + 1;                          \
+                                                                               \
+    /* Happens when the entire window is OOB, we take a 0-slice of `x`. */     \
+    if (window_stop < window_start) {                                          \
+      window_start = 0;                                                        \
+      window_size = 0;                                                         \
+    }                                                                          \
+                                                                               \
+    init_compact_seq(p_window, window_start, window_size, true);               \
+                                                                               \
+    slice_and_update_env(x, window, env, type, container);                     \
+                                                                               \
+    elt = r_force_eval(f_call, env, force);                                    \
+    REPROTECT(elt, elt_prot_idx);                                              \
+                                                                               \
+    if (atomic && vec_size(elt) != 1) {                                        \
+      stop_not_all_size_one(i + 1, vec_size(elt));                             \
+    }                                                                          \
+                                                                               \
+    ASSIGN_ONE(p_out, i, elt, ptype);                                          \
+  }                                                                            \
 } while(0)
 
-#define SLIDE_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_ONE_FN) do { \
-  CTYPE* p_out = DEREF(out);                                   \
-  SLIDE_LOOP(ASSIGN_ONE_FN);                                        \
-} while (0)                                                    \
+#define SLIDE_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_ONE) do { \
+  CTYPE* p_out = DEREF(out);                             \
+  SLIDE_LOOP(ASSIGN_ONE);                                \
+} while (0)                                              \
 
-#define SLIDE_LOOP_BARRIER(ASSIGN_ONE_FN) do {                      \
+#define SLIDE_LOOP_BARRIER(ASSIGN_ONE) do {                    \
   SEXP p_out = out;                                            \
                                                                \
-  /* Initialize with `NA`, not `NULL`, for size stability when auto-simplifying */ \
-  if (atomic && !constrain) {                                                      \
-    for (R_len_t i = 0; i < size; ++i) {                                           \
-      SET_VECTOR_ELT(p_out, i, slider_shared_na_lgl);                              \
-    }                                                                              \
-  }                                                                                \
+  /* Initialize with `NA`, not `NULL` */                       \
+  /* for size stability when auto-simplifying */               \
+  if (atomic && !constrain) {                                  \
+    for (R_len_t i = 0; i < size; ++i) {                       \
+      SET_VECTOR_ELT(p_out, i, slider_shared_na_lgl);          \
+    }                                                          \
+  }                                                            \
                                                                \
-  SLIDE_LOOP(ASSIGN_ONE_FN);                                        \
+  SLIDE_LOOP(ASSIGN_ONE);                                      \
 } while (0)
 
 // -----------------------------------------------------------------------------
@@ -165,23 +148,25 @@ SEXP slide_common_impl(SEXP x,
   SEXP container = PROTECT(make_slice_container(type));
 
   SEXPTYPE out_type = TYPEOF(ptype);
-
   SEXP out = PROTECT(Rf_allocVector(out_type, size));
 
   switch (out_type) {
-  case INTSXP: SLIDE_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;
+  case INTSXP:  SLIDE_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;
   case REALSXP: SLIDE_LOOP_ATOMIC(double, REAL, assign_one_dbl); break;
-  case LGLSXP: SLIDE_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
-  case STRSXP: SLIDE_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
-  case VECSXP: SLIDE_LOOP_BARRIER(assign_one_lst); break;
+  case LGLSXP:  SLIDE_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
+  case STRSXP:  SLIDE_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
+  case VECSXP:  SLIDE_LOOP_BARRIER(assign_one_lst); break;
   }
 
-  out = vec_restore(out, ptype);
-  PROTECT(out);
+  SEXP names = slider_names(x, type);
+  Rf_setAttrib(out, R_NamesSymbol, names);
 
-  out = copy_names(out, x, type);
-  PROTECT(out);
-
-  UNPROTECT(6);
+  UNPROTECT(4);
   return out;
 }
+
+// -----------------------------------------------------------------------------
+
+#undef SLIDE_LOOP
+#undef SLIDE_LOOP_ATOMIC
+#undef SLIDE_LOOP_BARRIER

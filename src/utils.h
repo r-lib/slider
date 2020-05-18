@@ -15,6 +15,14 @@ static inline int max(int x, int y) {
   return x > y ? x : y;
 }
 
+static inline SEXP r_force_eval(SEXP call, SEXP env, const int n_force) {
+#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
+  return R_forceAndCall(call, n_force, env);
+#else
+  return Rf_eval(call, env);
+#endif
+}
+
 static inline SEXP r_lst_get(SEXP x, int i) {
   return VECTOR_ELT(x, i);
 }
@@ -55,6 +63,7 @@ void check_hop_starts_not_past_stops(SEXP starts, SEXP stops);
 int compute_size(SEXP x, int type);
 int compute_force(int type);
 
+SEXP slider_names(SEXP x, int type);
 SEXP copy_names(SEXP out, SEXP x, int type);
 
 SEXP make_slice_container(int type);
