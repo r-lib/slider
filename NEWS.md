@@ -1,5 +1,7 @@
 # slider (development version)
 
+* C code has been refactored to be less reliant on vctrs internals.
+
 # slider 0.1.3
 
 * Updated to stay compatible with vctrs 0.3.0.
