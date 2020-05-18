@@ -628,8 +628,8 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 <span class='co'># If you are looking for a way to remove the `NA` values from something like</span>
 <span class='co'># this, then it doesn't exist as a built in option.</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10</span>)
-<span class='fu'>slide_dbl</span>(<span class='no'>x</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1]  6.946493e-310  6.946493e-310  6.946493e-310   6.608461e-02  6.946493e-310
-#&gt;  [6]   3.060732e-01  6.946493e-310   2.098155e-01  6.946493e-310  -8.227466e-01</div><div class='input'>
+<span class='fu'>slide_dbl</span>(<span class='no'>x</span>, <span class='no'>mean</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1]  5.602069e-312  5.602069e-312  5.283770e-312   6.608461e-02  5.602069e-312
+#&gt;  [6]   3.060732e-01  1.304333e-321   2.098155e-01  5.856708e-312  -8.227466e-01</div><div class='input'>
 <span class='co'># Adding an option to `slide_dbl()` to remove the `NA` values would destroy</span>
 <span class='co'># its size stability. Instead, you can use a combination of `slide_dfr()`</span>
 <span class='co'># to get the start/stop indices with `hop_index_vec()`.</span>
