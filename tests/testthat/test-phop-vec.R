@@ -38,8 +38,8 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
 test_that("`phop_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar()), foobar(1:3))
-  expect_condition(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+  expect_identical(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
+  expect_condition(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
 
   expect_identical(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")

@@ -93,8 +93,8 @@ test_that("can return a matrix and rowwise bind the results together", {
 test_that("`slide_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(slide_vec(1:3, ~foobar(.x), .ptype = foobar()), foobar(1:3))
-  expect_condition(slide_vec(1:3, ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+  expect_identical(slide_vec(1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
+  expect_condition(slide_vec(1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
 
   expect_identical(slide_vec(1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(slide_vec(1:3, ~foobar(.x)), class = "slider_c_foobar")

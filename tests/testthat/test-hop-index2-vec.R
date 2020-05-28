@@ -49,8 +49,8 @@ test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {
 test_that("`hop_index2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar()), foobar(1:3))
-  expect_condition(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+  expect_identical(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
+  expect_condition(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
 
   expect_identical(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(hop_index2_vec(1:3, 1:3, 1:3, 1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")

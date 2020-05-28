@@ -123,8 +123,8 @@ test_that("can return a matrix and rowwise bind the results together", {
 test_that("`pslide_period_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x), .ptype = foobar()), foobar(1:3))
-  expect_condition(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x), .ptype = foobar()), class = "slider_c_foobar")
+  expect_identical(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
+  expect_condition(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
 
   expect_identical(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x)), foobar(1:3))
   expect_condition(pslide_period_vec(list(1:3, 1:3), new_date(1:3), "day", ~foobar(.x)), class = "slider_c_foobar")
