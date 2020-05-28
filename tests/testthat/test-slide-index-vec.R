@@ -98,6 +98,17 @@ test_that("`slide_index_vec()` falls back to `c()` method as required", {
 })
 
 # ------------------------------------------------------------------------------
+# .complete
+
+test_that(".complete produces typed `NA` values", {
+  expect_identical(slide_index_int(1:3, 1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
+  expect_identical(slide_index_dbl(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide_index_chr(1:3, 1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
+  expect_identical(slide_index_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide_index_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+})
+
+# ------------------------------------------------------------------------------
 # suffix tests
 
 test_that("slide_index_int() works", {

@@ -118,3 +118,25 @@ test_that("`slide2_vec()` falls back to `c()` method as required", {
   expect_identical(slide2_vec(1:3, 1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(slide2_vec(1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
 })
+
+# ------------------------------------------------------------------------------
+# .step
+
+test_that(".step produces typed `NA` values", {
+  expect_identical(slide2_int(1:3, 1:3, ~.x, .step = 2), c(1L, NA, 3L))
+  expect_identical(slide2_dbl(1:3, 1:3, ~.x, .step = 2), c(1, NA, 3))
+  expect_identical(slide2_chr(c("a", "b", "c"), 1:3, ~.x, .step = 2), c("a", NA, "c"))
+  expect_identical(slide2_vec(1:3, 1:3, ~.x, .step = 2), c(1L, NA, 3L))
+  expect_identical(slide2_vec(1:3, 1:3, ~.x, .step = 2, .ptype = integer()), c(1L, NA, 3L))
+})
+
+# ------------------------------------------------------------------------------
+# .complete
+
+test_that(".complete produces typed `NA` values", {
+  expect_identical(slide2_int(1:3, 1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
+  expect_identical(slide2_dbl(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide2_chr(1:3, 1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
+  expect_identical(slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+})

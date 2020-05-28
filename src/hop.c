@@ -90,7 +90,7 @@ SEXP hop_common_impl(SEXP x,
   const int* p_stops = INTEGER(stops);
 
   SEXPTYPE out_type = TYPEOF(ptype);
-  SEXP out = PROTECT(Rf_allocVector(out_type, size));
+  SEXP out = PROTECT(slider_init(out_type, size));
 
   switch (out_type) {
   case INTSXP:  HOP_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;

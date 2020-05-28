@@ -9,7 +9,7 @@ SEXP (*vec_set_names)(SEXP, SEXP) = NULL;
 SEXP (*compact_seq)(R_len_t, R_len_t, bool) = NULL;
 SEXP (*init_compact_seq)(int*, R_len_t, R_len_t, bool) = NULL;
 
-void slider_init_vctrs_private() {
+void slider_initialize_vctrs_private() {
   // Experimental non-public vctrs functions
   vec_cast = (SEXP (*)(SEXP, SEXP)) R_GetCCallable("vctrs", "exp_vec_cast");
   vec_chop = (SEXP (*)(SEXP, SEXP)) R_GetCCallable("vctrs", "exp_vec_chop");
