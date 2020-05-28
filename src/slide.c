@@ -136,7 +136,7 @@ SEXP slide_common_impl(SEXP x,
   SEXP container = PROTECT(make_slice_container(type));
 
   SEXPTYPE out_type = TYPEOF(ptype);
-  SEXP out = PROTECT(Rf_allocVector(out_type, size));
+  SEXP out = PROTECT(slider_init(out_type, size));
 
   switch (out_type) {
   case INTSXP:  SLIDE_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;

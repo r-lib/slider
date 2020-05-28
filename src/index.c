@@ -115,7 +115,7 @@ SEXP slide_index_common_impl(SEXP x,
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   SEXPTYPE out_type = TYPEOF(ptype);
-  SEXP out = PROTECT_N(Rf_allocVector(out_type, size), &n_prot);
+  SEXP out = PROTECT_N(slider_init(out_type, size), &n_prot);
 
   switch (out_type) {
   case INTSXP:  SLIDE_INDEX_LOOP_ATOMIC(int, INTEGER, assign_locs_int); break;
@@ -219,7 +219,7 @@ SEXP hop_index_common_impl(SEXP x,
   SEXP container = PROTECT_N(make_slice_container(type), &n_prot);
 
   SEXPTYPE out_type = TYPEOF(ptype);
-  SEXP out = PROTECT_N(Rf_allocVector(out_type, size), &n_prot);
+  SEXP out = PROTECT_N(slider_init(out_type, size), &n_prot);
 
   switch (out_type) {
   case INTSXP:  HOP_INDEX_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;

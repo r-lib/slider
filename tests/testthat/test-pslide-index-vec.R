@@ -119,3 +119,14 @@ test_that("`pslide_index_vec()` falls back to `c()` method as required", {
   expect_identical(pslide_index_vec(list(1:3, 1:3), 1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(pslide_index_vec(list(1:3, 1:3), 1:3, ~foobar(.x)), class = "slider_c_foobar")
 })
+
+# ------------------------------------------------------------------------------
+# .complete
+
+test_that(".complete produces typed `NA` values", {
+  expect_identical(pslide_index_int(list(1:3, 1:3), 1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
+  expect_identical(pslide_index_dbl(list(1:3, 1:3), 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(pslide_index_chr(list(1:3, 1:3), 1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
+  expect_identical(pslide_index_vec(list(1:3, 1:3), 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(pslide_index_vec(list(1:3, 1:3), 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+})

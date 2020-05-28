@@ -101,6 +101,28 @@ test_that("`slide_vec()` falls back to `c()` method as required", {
 })
 
 # ------------------------------------------------------------------------------
+# .step
+
+test_that(".step produces typed `NA` values", {
+  expect_identical(slide_int(1:3, identity, .step = 2), c(1L, NA, 3L))
+  expect_identical(slide_dbl(1:3, identity, .step = 2), c(1, NA, 3))
+  expect_identical(slide_chr(c("a", "b", "c"), identity, .step = 2), c("a", NA, "c"))
+  expect_identical(slide_vec(1:3, identity, .step = 2), c(1L, NA, 3L))
+  expect_identical(slide_vec(1:3, identity, .step = 2, .ptype = integer()), c(1L, NA, 3L))
+})
+
+# ------------------------------------------------------------------------------
+# .complete
+
+test_that(".complete produces typed `NA` values", {
+  expect_identical(slide_int(1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
+  expect_identical(slide_dbl(1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide_chr(1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
+  expect_identical(slide_vec(1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
+  expect_identical(slide_vec(1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+})
+
+# ------------------------------------------------------------------------------
 # input names
 
 test_that("names exist on inner sliced elements", {
