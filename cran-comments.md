@@ -7,6 +7,10 @@
 
 0 errors | 0 warnings | 0 notes
 
+## 0.1.4 Submission
+
+C code has been refactored to be less reliant on vctrs internals.
+
 ## 0.1.3 Submission
 
 Fixes a few bugs, and maintains compatibility with vctrs.
