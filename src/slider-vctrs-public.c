@@ -1,5 +1,5 @@
 #include <vctrs.c>
 
-void slider_init_vctrs_public() {
+void slider_initialize_vctrs_public() {
   vctrs_init_api();
 }

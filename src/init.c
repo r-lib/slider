@@ -15,7 +15,7 @@ extern SEXP slider_vec_set_names(SEXP, SEXP);
 extern SEXP slider_vec_names(SEXP);
 
 // Defined below
-SEXP slider_init(SEXP);
+SEXP slider_initialize(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"slide_common_impl",         (DL_FUNC) &slide_common_impl, 5},
@@ -27,7 +27,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_compute_to",         (DL_FUNC) &slider_compute_to, 4},
   {"slider_vec_set_names",      (DL_FUNC) &slider_vec_set_names, 2},
   {"slider_vec_names",          (DL_FUNC) &slider_vec_names, 1},
-  {"slider_init",               (DL_FUNC) &slider_init, 1},
+  {"slider_initialize",         (DL_FUNC) &slider_initialize, 1},
   {NULL, NULL, 0}
 };
 
@@ -38,17 +38,17 @@ void R_init_slider(DllInfo *dll)
 }
 
 // slider-vctrs-private.c
-void slider_init_vctrs_private();
+void slider_initialize_vctrs_private();
 
 // slider-vctrs-public.c
-void slider_init_vctrs_public();
+void slider_initialize_vctrs_public();
 
 // utils.c
-void slider_init_utils(SEXP);
+void slider_initialize_utils(SEXP);
 
-SEXP slider_init(SEXP ns) {
-  slider_init_vctrs_private();
-  slider_init_vctrs_public();
-  slider_init_utils(ns);
+SEXP slider_initialize(SEXP ns) {
+  slider_initialize_vctrs_private();
+  slider_initialize_vctrs_public();
+  slider_initialize_utils(ns);
   return R_NilValue;
 }

@@ -174,7 +174,7 @@ void slice_and_update_env(SEXP x, SEXP window, SEXP env, int type, SEXP containe
 // -----------------------------------------------------------------------------
 
 // [[register()]]
-void slider_init_utils(SEXP ns) {
+void slider_initialize_utils(SEXP ns) {
   slider_ns_env = ns;
 
   syms_dot_x = Rf_install(".x");
