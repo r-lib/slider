@@ -1,5 +1,8 @@
 # slider (development version)
 
+* As a followup to a change in slider 0.1.3, edge cases with size zero input
+  in `hop()` have also been fixed.
+  
 * C code has been refactored to be less reliant on vctrs internals.
 
 # slider 0.1.3
