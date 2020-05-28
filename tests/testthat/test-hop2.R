@@ -5,7 +5,7 @@ test_that("Recycling is carried out using tidyverse recycling rules", {
   x3 <- c(3L, 3L, 3L)
 
   expect_equal(hop2(x0, x0, integer(), integer(), ~.x), list())
-  expect_equal(hop2(x0, x1, 1, 1, ~.x), list(NULL))
+  expect_equal(hop2(x0, x1, 1, 1, ~.x), list(integer()))
   expect_equal(hop2(x0, x1, integer(), integer(), ~.x), list())
   expect_error(hop2(x0, x2, 1:2, 1:2, ~.x), class = "vctrs_error_incompatible_size")
   expect_equal(hop2(x1, x1, 1, 1, ~.x), list(x1))

@@ -10,9 +10,9 @@ test_that("Recycling is carried out using tidyverse recycling rules", {
   x3 <- c(3L, 3L, 3L)
 
   expect_equal(phop(list(x0, x0), integer(), integer(), ~.x), list())
-  expect_equal(phop(list(x0, x0), 1, 1, ~.x), list(NULL))
+  expect_equal(phop(list(x0, x0), 1, 1, ~.x), list(integer()))
   expect_equal(phop(list(x0, x1), integer(), integer(), ~.x), list())
-  expect_equal(phop(list(x0, x1), 1, 1, ~.x), list(NULL))
+  expect_equal(phop(list(x0, x1), 1, 1, ~.x), list(integer()))
   expect_error(phop(list(x0, x2), 1, 1, ~.x), class = "vctrs_error_incompatible_size")
   expect_equal(phop(list(x1, x1), 1, 1, ~.x), list(x1))
   expect_equal(phop(list(x1, x2), 1:2, 1:2, ~.x), list(x1, x1))

@@ -16,10 +16,6 @@ hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain, at
     return(vec_init(ptype, 0L))
   }
 
-  if (x_size == 0L) {
-    return(vec_init(ptype, size))
-  }
-
   starts <- args[[1L]]
   stops <- args[[2L]]
 
