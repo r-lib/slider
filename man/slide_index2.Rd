@@ -194,7 +194,7 @@ allows you to "look forward" from the current element if used as the
 \code{.before} value, or "look backwards" if used as \code{.after}.
 
 Any object that can be added or subtracted from \code{.i} with \code{+} and \code{-}
-can be used. For example, a lubridate period, such as \code{\link[lubridate:weeks]{lubridate::weeks()}}.
+can be used. For example, a lubridate period, such as \code{\link[lubridate:period]{lubridate::weeks()}}.
 
 The ranges that result from computing \code{.i - .before} and \code{.i + .after}
 have the same 3 restrictions as \code{.i} itself.}
@@ -217,15 +217,14 @@ and the final output will have that type.
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
 
-\item{.names_to}{\itemize{
-\item By default, input names are \link[rlang:zap]{zapped}.
+\item{.names_to}{This controls what to do with input names supplied in \code{...}.
 \itemize{
+\item By default, input names are \link[rlang:zap]{zapped}.
 \item If a string, specifies a column where the input names will be
 copied. These names are often useful to identify rows with
 their original input. If a column name is supplied and \code{...} is
 not named, an integer column is used instead.
 \item If \code{NULL}, the input names are used as row names.
-}
 }}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or

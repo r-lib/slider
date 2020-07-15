@@ -139,15 +139,14 @@ and the final output will have that type.
 If \code{getOption("vctrs.no_guessing")} is \code{TRUE}, the \code{.ptype} must be
 supplied. This is a way to make production code demand fixed types.}
 
-\item{.names_to}{\itemize{
-\item By default, input names are \link[rlang:zap]{zapped}.
+\item{.names_to}{This controls what to do with input names supplied in \code{...}.
 \itemize{
+\item By default, input names are \link[rlang:zap]{zapped}.
 \item If a string, specifies a column where the input names will be
 copied. These names are often useful to identify rows with
 their original input. If a column name is supplied and \code{...} is
 not named, an integer column is used instead.
 \item If \code{NULL}, the input names are used as row names.
-}
 }}
 
 \item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
