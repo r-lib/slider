@@ -1,11 +1,14 @@
 # slider (development version)
 
+* `slide_period()` and friends have slightly better handling of size zero
+  input when `.complete = TRUE` (#111).
+
 * Better error messages for `NA` input with `.before`, `.after`, `.step` and
   `.complete` have been added (#110).
 
-* Fixed a few instances of possibly unsafe C protection usage (#112).
+* A few instances of possibly unsafe C protection usage have been fixed (#112).
 
-* Updated tests to use only numeric values in the `vctrs::new_date()`
+* Tests have been updated to use only numeric values in the `vctrs::new_date()`
   constructor (#113).
 
 # slider 0.1.4

@@ -35,17 +35,24 @@ slide_period_common <- function(x,
   starts <- unique - before
   stops <- unique + after
 
-  if (complete) {
-    n <- length(unique)
-    first <- unique[[1]]
-    last <- unique[[n]]
+  size_unique <- length(unique)
 
-    from <- compute_from(starts, first, n, before_unbounded)
-    to <- compute_to(stops, last, n, after_unbounded)
+  size_front <- 0L
+  size_back <- 0L
+
+  if (complete && size_unique != 0L) {
+    first <- unique[[1]]
+    last <- unique[[size_unique]]
+
+    from <- compute_from(starts, first, size_unique, before_unbounded)
+    to <- compute_to(stops, last, size_unique, after_unbounded)
+
+    size_front <- from - 1L
+    size_back <- size_unique - to
 
     # Only slice if we have to
     # Important to use seq2()! Could have `from > to`
-    if (from != 1L || to != n) {
+    if (from != 1L || to != size_unique) {
       starts <- starts[seq2(from, to)]
       stops <- stops[seq2(from, to)]
     }
@@ -70,11 +77,11 @@ slide_period_common <- function(x,
 
   # Initialize with `NA`, not `NULL`, for size stability when auto-simplifying
   if (atomic && !constrain) {
-    front <- vec_init_unspecified_list(n = from - 1L)
-    back <- vec_init_unspecified_list(n = n - to)
+    front <- vec_init_unspecified_list(n = size_front)
+    back <- vec_init_unspecified_list(n = size_back)
   } else {
-    front <- vec_init(ptype, n = from - 1L)
-    back <- vec_init(ptype, n = n - to)
+    front <- vec_init(ptype, n = size_front)
+    back <- vec_init(ptype, n = size_back)
   }
 
   out <- vec_c(front, out, back)

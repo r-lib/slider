@@ -33,6 +33,10 @@ test_that("type can be restricted", {
   )
 })
 
+test_that("empty input works with `.complete = TRUE` (#111)", {
+  expect_equal(slide_period_dbl(integer(), new_date(), "year", ~.x, .complete = TRUE), double())
+})
+
 # ------------------------------------------------------------------------------
 # .ptype
 

@@ -22,6 +22,10 @@ test_that("empty input returns a list, but after the index size check", {
   expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size")
 })
 
+test_that("empty input works with `.complete = TRUE` (#111)", {
+  expect_equal(slide_period(integer(), new_date(), "year", ~.x, .complete = TRUE), list())
+})
+
 test_that(".i must not contain NA values", {
   expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na")
   expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na")

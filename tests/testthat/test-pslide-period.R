@@ -13,3 +13,7 @@ test_that("empty input returns a list, but after the index size check", {
 test_that("completely empty input returns a list", {
   expect_equal(pslide_period(list(), new_date(), "day", ~.x), list())
 })
+
+test_that("empty input works with `.complete = TRUE` (#111)", {
+  expect_equal(pslide_period(list(integer(), integer()), new_date(), "year", ~.x, .complete = TRUE), list())
+})
