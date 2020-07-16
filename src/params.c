@@ -79,8 +79,11 @@ int pull_before(SEXP params, bool* before_unbounded) {
   }
 
   before = PROTECT(check_int(before));
+
+  int out = r_scalar_int_get(before);
+
   UNPROTECT(1);
-  return r_scalar_int_get(before);
+  return out;
 }
 
 // [[ include("params.h") ]]
@@ -95,8 +98,10 @@ int pull_after(SEXP params, bool* after_unbounded) {
   }
 
   after = PROTECT(check_int(after));
+  int out = r_scalar_int_get(after);
+
   UNPROTECT(1);
-  return r_scalar_int_get(after);
+  return out;
 }
 
 // [[ include("params.h") ]]
@@ -118,8 +123,9 @@ int pull_step(SEXP params) {
 int pull_complete(SEXP params) {
   SEXP complete = r_lst_get(params, 6);
   complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
+  int out = r_scalar_lgl_get(complete);
   UNPROTECT(1);
-  return r_scalar_lgl_get(complete);
+  return out;
 }
 
 // -----------------------------------------------------------------------------

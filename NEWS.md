@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Fixed a few instances of possibly unsafe C protection usage (#112).
+
 # slider 0.1.4
 
 * As a followup to a change in slider 0.1.3, edge cases with size zero input
