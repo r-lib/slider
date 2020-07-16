@@ -219,7 +219,7 @@ supplied. This is a way to make production code demand fixed types.</p></td>
   <span class='no'>.starts</span>,
   <span class='no'>.stops</span>,
   <span class='kw'>function</span>(<span class='no'>start</span>, <span class='no'>stop</span>) {
-    <span class='no'>x_slice</span> <span class='kw'>&lt;-</span> <span class='fu'>vec_slice</span>(<span class='no'>.x</span>, <span class='no'>start</span>:<span class='no'>stop</span>)
+    <span class='no'>x_slice</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>vec_slice</span>(<span class='no'>.x</span>, <span class='no'>start</span>:<span class='no'>stop</span>)
     <span class='fu'>.f</span>(<span class='no'>x_slice</span>, <span class='no'>...</span>)
   }
 )</pre>
@@ -231,8 +231,8 @@ mainly exists for API completeness.</p>
 actually exist along <code>.x</code>. As an example, with <code>hop()</code> you can do the
 following, which would be an error with <code>vec_slice()</code> because <code>0L</code> is
 out of bounds.</p><pre><span class='fu'>hop</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>), <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fl'>1L</span>, ~<span class='no'>.x</span>)
-<span class='co'>#&gt; [[1]]</span>
-<span class='co'>#&gt; [1] "a"</span></pre>
+<span class='co'>#&amp;gt; [[1]]</span>
+<span class='co'>#&amp;gt; [1] "a"</span></pre>
 
 <p><code>hop()</code> allows these out of bounds values to be fully compatible with
 <code><a href='slide.html'>slide()</a></code>. It is always possible to construct a <code>hop()</code> call from a <code><a href='slide.html'>slide()</a></code>
@@ -240,11 +240,11 @@ call. For example, the following are equivalent:</p><pre><span class='fu'><a hre
 
 <span class='fu'>hop</span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), ~<span class='no'>.x</span>)
 
-<span class='co'>#&gt; [[1]]</span>
-<span class='co'>#&gt; [1] 1</span>
-<span class='co'>#&gt;</span>
-<span class='co'>#&gt; [[2]]</span>
-<span class='co'>#&gt; [1] 1 2</span></pre>
+<span class='co'>#&amp;gt; [[1]]</span>
+<span class='co'>#&amp;gt; [1] 1</span>
+<span class='co'>#&amp;gt;</span>
+<span class='co'>#&amp;gt; [[2]]</span>
+<span class='co'>#&amp;gt; [1] 1 2</span></pre>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -293,7 +293,7 @@ call. For example, the following are equivalent:</p><pre><span class='fu'><a hre
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

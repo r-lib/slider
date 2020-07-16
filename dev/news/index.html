@@ -133,10 +133,16 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#slider-development-version" class="anchor"></a>slider (development version)<small> Unreleased </small>
 </h1>
+<ul>
+<li><p><code><a href="../reference/slide_period.html">slide_period()</a></code> and friends have slightly better handling of size zero input when <code>.complete = TRUE</code> (<a href='https://github.com/DavisVaughan/slider/issues/111'>#111</a>).</p></li>
+<li><p>Better error messages for <code>NA</code> input with <code>.before</code>, <code>.after</code>, <code>.step</code> and <code>.complete</code> have been added (<a href='https://github.com/DavisVaughan/slider/issues/110'>#110</a>).</p></li>
+<li><p>A few instances of possibly unsafe C protection usage have been fixed (<a href='https://github.com/DavisVaughan/slider/issues/112'>#112</a>).</p></li>
+<li><p>Tests have been updated to use only numeric values in the <code><a href="https://vctrs.r-lib.org/reference/new_date.html">vctrs::new_date()</a></code> constructor (<a href='https://github.com/DavisVaughan/slider/issues/113'>#113</a>).</p></li>
+</ul>
 </div>
     <div id="slider-014" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.4">
-<a href="#slider-014" class="anchor"></a>slider 0.1.4<small> Unreleased </small>
+<a href="#slider-014" class="anchor"></a>slider 0.1.4<small> 2020-05-28 </small>
 </h1>
 <ul>
 <li><p>As a followup to a change in slider 0.1.3, edge cases with size zero input in <code><a href="../reference/hop.html">hop()</a></code> have also been fixed.</p></li>
@@ -197,7 +203,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
