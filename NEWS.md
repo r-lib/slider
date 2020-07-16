@@ -1,5 +1,8 @@
 # slider (development version)
 
+* Better error messages for `NA` input with `.before`, `.after`, `.step` and
+  `.complete` have been added (#110).
+
 * Fixed a few instances of possibly unsafe C protection usage (#112).
 
 * Updated tests to use only numeric values in the `vctrs::new_date()`

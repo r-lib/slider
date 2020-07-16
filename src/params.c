@@ -79,8 +79,11 @@ int pull_before(SEXP params, bool* before_unbounded) {
   }
 
   before = PROTECT(check_int(before));
-
   int out = r_scalar_int_get(before);
+
+  if (out == NA_INTEGER) {
+    Rf_errorcall(R_NilValue, "`.before` can't be missing.");
+  }
 
   UNPROTECT(1);
   return out;
@@ -100,6 +103,10 @@ int pull_after(SEXP params, bool* after_unbounded) {
   after = PROTECT(check_int(after));
   int out = r_scalar_int_get(after);
 
+  if (out == NA_INTEGER) {
+    Rf_errorcall(R_NilValue, "`.after` can't be missing.");
+  }
+
   UNPROTECT(1);
   return out;
 }
@@ -110,6 +117,10 @@ int pull_step(SEXP params) {
   step_ = PROTECT(check_scalar_int(step_, strings_dot_step));
 
   int step = r_scalar_int_get(step_);
+
+  if (step == NA_INTEGER) {
+    Rf_errorcall(R_NilValue, "`.step` can't be missing.");
+  }
 
   if (step < 1) {
     Rf_errorcall(R_NilValue, "`.step` must be at least 1, not %i.", step);
@@ -124,6 +135,11 @@ int pull_complete(SEXP params) {
   SEXP complete = r_lst_get(params, 6);
   complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
   int out = r_scalar_lgl_get(complete);
+
+  if (out == NA_LOGICAL) {
+    Rf_errorcall(R_NilValue, "`.complete` can't be missing.");
+  }
+
   UNPROTECT(1);
   return out;
 }

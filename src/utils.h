@@ -31,7 +31,7 @@ static inline int r_scalar_int_get(SEXP x) {
   return INTEGER(x)[0];
 }
 
-static inline bool r_scalar_lgl_get(SEXP x) {
+static inline int r_scalar_lgl_get(SEXP x) {
   return LOGICAL(x)[0];
 }
 
