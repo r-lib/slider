@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1.9000
-pkgdown_sha: af8262bd26e7029886e0f260470061353ad08d94
+pkgdown: 1.5.1
+pkgdown_sha: ~
 articles:
   rowwise: rowwise.html
   slider: slider.html
-last_built: 2020-05-28T17:39Z
+last_built: 2020-07-23T19:11Z
 

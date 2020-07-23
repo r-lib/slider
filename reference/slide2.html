@@ -75,7 +75,7 @@ functions work similarly to map2() and pmap() from purrr." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -369,14 +369,13 @@ supplied. This is a way to make production code demand fixed types.</p></td>
     </tr>
     <tr>
       <th>.names_to</th>
-      <td><ul>
-<li><p>By default, input names are <a href='https://rlang.r-lib.org/reference/zap.html'>zapped</a>.</p><ul>
+      <td><p>This controls what to do with input names supplied in <code>...</code>.</p><ul>
+<li><p>By default, input names are <a href='https://rlang.r-lib.org/reference/zap.html'>zapped</a>.</p></li>
 <li><p>If a string, specifies a column where the input names will be
 copied. These names are often useful to identify rows with
 their original input. If a column name is supplied and <code>...</code> is
 not named, an integer column is used instead.</p></li>
 <li><p>If <code>NULL</code>, the input names are used as row names.</p></li>
-</ul></li>
 </ul></td>
     </tr>
     <tr>
@@ -594,7 +593,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="rowwise_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Row-wise iteration with slider</h1>
@@ -260,8 +260,8 @@
 <p>For these examples, we will consider a <code>company</code> data set containing the <code>day</code> a sale was made, the number of calls, <code>n_calls</code>, that were placed on that day, and the number of <code>sales</code> that resulted from those calls.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">company</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(
   <span class="kw">day</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>), <span class="kw">each</span> <span class="kw">=</span> <span class="fl">5</span>),
-  <span class="kw">sales</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="fl">100</span>, <span class="fl">10</span>),
-  <span class="kw">n_calls</span> <span class="kw">=</span> <span class="no">sales</span> + <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="fl">1000</span>, <span class="fl">10</span>)
+  <span class="kw">sales</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">100</span>, <span class="fl">10</span>),
+  <span class="kw">n_calls</span> <span class="kw">=</span> <span class="no">sales</span> + <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1000</span>, <span class="fl">10</span>)
 )
 
 <span class="no">company</span>
@@ -350,7 +350,9 @@
       <span class="kw">.complete</span> <span class="kw">=</span> <span class="fl">TRUE</span>
     )
   )
-<span class="co">#&gt; Error in model.frame.default(formula = sales ~ log_n_calls, data = .x, : variable lengths differ (found for 'log_n_calls')</span></pre></body></html></div>
+<span class="co">#&gt; Error: Problem with `mutate()` input `regressions`.</span>
+<span class="co">#&gt; ✖ variable lengths differ (found for 'log_n_calls')</span>
+<span class="co">#&gt; ℹ Input `regressions` is `slide(...)`.</span></pre></body></html></div>
 <p>To show this a bit simpler, let’s just try and access that <code>log_n_calls</code> column inside our slide function. We immediately get a slew of warnings because it doesn’t exist.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">company</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(
@@ -404,7 +406,11 @@
       <span class="kw">.complete</span> <span class="kw">=</span> <span class="fl">TRUE</span>
     )
   )
-<span class="co">#&gt; Error: Column `regressions` must be length 5 (the group size) or one, not 10</span></pre></body></html></div>
+<span class="co">#&gt; Error: Problem with `mutate()` input `regressions`.</span>
+<span class="co">#&gt; ✖ Input `regressions` can't be recycled to size 5.</span>
+<span class="co">#&gt; ℹ Input `regressions` is `slide(.x = ., .f = ~lm(sales ~ n_calls, .x), .before = 2, .complete = TRUE)`.</span>
+<span class="co">#&gt; ℹ Input `regressions` must be size 5 or 1, not 10.</span>
+<span class="co">#&gt; ℹ The error occured in group 1: day = 1.</span></pre></body></html></div>
 </div>
 <div id="solution-sort-of" class="section level3">
 <h3 class="hasAnchor">
@@ -519,7 +525,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
