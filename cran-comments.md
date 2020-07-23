@@ -9,10 +9,14 @@
 
 ## revdepcheck results
 
-We checked 2 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 0.1.5 Submission
+
+Minor release that fixes a few edge case bugs, includes slightly better error messages, and updates tests to be compatible with a vctrs change.
 
 ## 0.1.4 Submission
 
