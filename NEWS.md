@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.1.5
 
 * `slide_period()` and friends have slightly better handling of size zero
