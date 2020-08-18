@@ -1,5 +1,9 @@
 # slider (development version)
 
+* `vignette("rowwise")` has been updated to use `cur_data()` from dplyr 1.0.0,
+  which makes it significantly easier to do rolling operations on data frames
+  (like rolling regressions) using slider in a dplyr pipeline.
+
 # slider 0.1.5
 
 * `slide_period()` and friends have slightly better handling of size zero
