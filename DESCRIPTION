@@ -24,7 +24,7 @@ Imports:
     warp
 Suggests: 
     covr,
-    dplyr (>= 0.8.3),
+    dplyr (>= 1.0.0),
     knitr,
     lubridate,
     rmarkdown,
