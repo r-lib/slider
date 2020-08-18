@@ -88,6 +88,14 @@ slide(parameters, ~runif(.x$n, .x$min, .x$max))
 
 This can also be done with `purrr::pmap()`, but you either have to name the `parameters` tibble with the same column names as the function you are calling, or you have to access each column positionally as `..1`, `..3`, etc.
 
+A third alternative that works nicely here is to use `rowwise()` before calling `mutate()`. Just remember to wrap the result of `runif()` in a `list()`!
+
+```{r}
+parameters %>%
+  rowwise() %>%
+  mutate(random = list(runif(n, min, max)))
+```
+
 ## Sliding inside a mutate()
 
 For these examples, we will consider a `company` data set containing the `day` a sale was made, the number of calls, `n_calls`, that were placed on that day, and the number of `sales` that resulted from those calls.
