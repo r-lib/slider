@@ -373,7 +373,7 @@ I’ve found the following references very useful to understand more about
 window functions:
 
   - [Postgres SQL
-    documentation](https://www.postgresql.org/docs/9.1/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
+    documentation](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
 
   - [dbplyr window function
     vignette](https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions)
