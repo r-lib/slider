@@ -14,6 +14,7 @@ extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_vec_set_names(SEXP, SEXP);
 extern SEXP slider_vec_names(SEXP);
 extern SEXP slider_sum(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_mean(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
 SEXP slider_initialize(SEXP);
@@ -29,6 +30,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_vec_set_names",      (DL_FUNC) &slider_vec_set_names, 2},
   {"slider_vec_names",          (DL_FUNC) &slider_vec_names, 1},
   {"slider_sum",                (DL_FUNC) &slider_sum, 6},
+  {"slider_mean",               (DL_FUNC) &slider_mean, 6},
   {"slider_initialize",         (DL_FUNC) &slider_initialize, 1},
   {NULL, NULL, 0}
 };
