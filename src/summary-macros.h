@@ -109,15 +109,29 @@
 // -----------------------------------------------------------------------------
 // Min
 
-#define MIN_IMPL_NA_KEEP                                           \
-  double val = R_PosInf;                                           \
-                                                                   \
-  for (R_xlen_t j = window_start; j < window_stop; ++j) {          \
-    const double elt = p_x[j];                                     \
-                                                                   \
-    if (elt < val) {                                               \
-      val = elt;                                                   \
-    }                                                              \
+/*
+ * `elt < val` may compare `elt < NaN` or `elt < NA` but this will always
+ * return `false`. R makes the same assumption at:
+ * https://github.com/wch/r-source/blob/bf4cf8912596162a3ae5a2b7da1a74220105b172/src/main/summary.c#L229
+ */
+
+#define MIN_IMPL_NA_KEEP                                       \
+  double val = R_PosInf;                                       \
+                                                               \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {      \
+    const double elt = p_x[j];                                 \
+                                                               \
+    if (isnan(elt)) {                                          \
+      /* Match R - any `NA` trumps `NaN` */                    \
+      if (ISNA(elt)) {                                         \
+        val = NA_REAL;                                         \
+        break;                                                 \
+      } else {                                                 \
+        val = R_NaN;                                           \
+      }                                                        \
+    } else if (elt < val) {                                    \
+      val = elt;                                               \
+    }                                                          \
   }
 
 
@@ -127,7 +141,7 @@
   for (R_xlen_t j = window_start; j < window_stop; ++j) {          \
     const double elt = p_x[j];                                     \
                                                                    \
-    if (!isnan(elt) && elt < val) {                                \
+    if (elt < val) {                                               \
       val = elt;                                                   \
     }                                                              \
   }
