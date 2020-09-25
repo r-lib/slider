@@ -69,10 +69,10 @@ SEXP hop_common_impl(SEXP x,
                      SEXP env,
                      SEXP params) {
 
-  const int type = pull_type(params);
+  const int type = validate_type(r_lst_get(params, 0));
   const int force = compute_force(type);
-  const bool constrain = pull_constrain(params);
-  const bool atomic = pull_atomic(params);
+  const bool constrain = validate_constrain(r_lst_get(params, 1));
+  const bool atomic = validate_atomic(r_lst_get(params, 2));
 
   check_hop_starts_not_past_stops(starts, stops);
 

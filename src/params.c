@@ -53,33 +53,31 @@ static bool is_unbounded(SEXP x) {
 // -----------------------------------------------------------------------------
 
 // [[ include("params.h") ]]
-int pull_type(SEXP params) {
-  return r_scalar_int_get(r_lst_get(params, 0));
+int validate_type(SEXP x) {
+  return r_scalar_int_get(x);
 }
 
 // [[ include("params.h") ]]
-bool pull_constrain(SEXP params) {
-  return r_scalar_lgl_get(r_lst_get(params, 1));
+bool validate_constrain(SEXP x) {
+  return r_scalar_lgl_get(x);
 }
 
 // [[ include("params.h") ]]
-bool pull_atomic(SEXP params) {
-  return r_scalar_lgl_get(r_lst_get(params, 2));
+bool validate_atomic(SEXP x) {
+  return r_scalar_lgl_get(x);
 }
 
 // [[ include("params.h") ]]
-int pull_before(SEXP params, bool* before_unbounded) {
-  SEXP before = r_lst_get(params, 3);
+int validate_before(SEXP x, bool* before_unbounded) {
+  check_scalar(x, strings_dot_before);
 
-  check_scalar(before, strings_dot_before);
-
-  if (is_unbounded(before)) {
+  if (is_unbounded(x)) {
     *before_unbounded = true;
     return 0;
   }
 
-  before = PROTECT(check_int(before));
-  int out = r_scalar_int_get(before);
+  x = PROTECT(check_int(x));
+  int out = r_scalar_int_get(x);
 
   if (out == NA_INTEGER) {
     Rf_errorcall(R_NilValue, "`.before` can't be missing.");
@@ -90,18 +88,16 @@ int pull_before(SEXP params, bool* before_unbounded) {
 }
 
 // [[ include("params.h") ]]
-int pull_after(SEXP params, bool* after_unbounded) {
-  SEXP after = r_lst_get(params, 4);
+int validate_after(SEXP x, bool* after_unbounded) {
+  check_scalar(x, strings_dot_after);
 
-  check_scalar(after, strings_dot_after);
-
-  if (is_unbounded(after)) {
+  if (is_unbounded(x)) {
     *after_unbounded = true;
     return 0;
   }
 
-  after = PROTECT(check_int(after));
-  int out = r_scalar_int_get(after);
+  x = PROTECT(check_int(x));
+  int out = r_scalar_int_get(x);
 
   if (out == NA_INTEGER) {
     Rf_errorcall(R_NilValue, "`.after` can't be missing.");
@@ -112,11 +108,10 @@ int pull_after(SEXP params, bool* after_unbounded) {
 }
 
 // [[ include("params.h") ]]
-int pull_step(SEXP params) {
-  SEXP step_ = r_lst_get(params, 5);
-  step_ = PROTECT(check_scalar_int(step_, strings_dot_step));
+int validate_step(SEXP x) {
+  x = PROTECT(check_scalar_int(x, strings_dot_step));
 
-  int step = r_scalar_int_get(step_);
+  int step = r_scalar_int_get(x);
 
   if (step == NA_INTEGER) {
     Rf_errorcall(R_NilValue, "`.step` can't be missing.");
@@ -131,10 +126,9 @@ int pull_step(SEXP params) {
 }
 
 // [[ include("params.h") ]]
-int pull_complete(SEXP params) {
-  SEXP complete = r_lst_get(params, 6);
-  complete = PROTECT(check_scalar_lgl(complete, strings_dot_complete));
-  int out = r_scalar_lgl_get(complete);
+int validate_complete(SEXP x) {
+  x = PROTECT(check_scalar_lgl(x, strings_dot_complete));
+  int out = r_scalar_lgl_get(x);
 
   if (out == NA_LOGICAL) {
     Rf_errorcall(R_NilValue, "`.complete` can't be missing.");
