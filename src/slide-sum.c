@@ -67,17 +67,6 @@ SEXP slide_sum(SEXP x, SEXP params) {
   SEXP out = PROTECT(slider_init(REALSXP, size));
   double* p_out = REAL(out);
 
-  // Assume before set and complete is true
-  int n_pos_infs = 0;
-  int n_neg_infs = 0;
-  int n_na = 0;
-  int n_nan = 0;
-
-  long double val = 0;
-
-  int last_window_start = 0;
-  int last_window_stop = 0;
-
   for (int i = iteration_min;
        i < iteration_max;
        i += step, start += start_step, stop += stop_step) {
@@ -89,66 +78,13 @@ SEXP slide_sum(SEXP x, SEXP params) {
     int window_start = max(start, 0);
     int window_stop = min(stop + 1, size);
 
-    if (window_start > last_window_start) {
-      for (int j = last_window_start; j < window_start; ++j) {
-        double elt = p_x[j];
+    double val = 0.0;
 
-        if (R_FINITE(elt)) {
-          val -= elt;
-        } else if (elt == R_PosInf) {
-          --n_pos_infs;
-        } else if (elt == R_NegInf) {
-          --n_neg_infs;
-        } else if (R_IsNA(elt)) {
-          --n_na;
-        } else {
-          --n_nan;
-        }
-      }
+    for (int j = window_start; j < window_stop; ++j) {
+      val += p_x[j];
     }
 
-    if (window_stop > last_window_stop) {
-      for (int j = last_window_stop; j < window_stop; ++j) {
-        double elt = p_x[j];
-
-        if (R_FINITE(elt)) {
-          val += elt;
-        } else if (elt == R_PosInf) {
-          ++n_pos_infs;
-        } else if (elt == R_NegInf) {
-          ++n_neg_infs;
-        } else if (R_IsNA(elt)) {
-          ++n_na;
-        } else {
-          ++n_nan;
-        }
-      }
-    }
-
-    if (n_pos_infs || n_neg_infs || n_na || n_nan) {
-      if (n_na) {
-        p_out[i] = NA_REAL;
-      } else if (n_nan) {
-        p_out[i] = R_NaN;
-      } else if (n_pos_infs) {
-        if (n_neg_infs) {
-          p_out[i] = R_NaN;
-        } else {
-          p_out[i] = R_PosInf;
-        }
-      } else {
-        if (n_pos_infs) {
-          p_out[i] = R_NaN;
-        } else {
-          p_out[i] = R_NegInf;
-        }
-      }
-    } else {
-      p_out[i] = (double) val;
-    }
-
-    last_window_start = window_start;
-    last_window_stop = window_stop;
+    p_out[i] = val;
   }
 
   UNPROTECT(2);
