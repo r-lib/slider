@@ -1,92 +1,86 @@
 #include "slider.h"
 #include "slider-vctrs.h"
+#include "opts-slide.h"
 #include "utils.h"
-#include "params.h"
 
-SEXP slide_sum(SEXP x, SEXP params) {
+// -----------------------------------------------------------------------------
+
+static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm);
+
+// [[ register() ]]
+SEXP slider_sum(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  struct slide_opts opts = new_slide_opts(before, after, step, complete);
+  bool c_na_rm = validate_na_rm(na_rm);
+  return slide_sum(x, opts, c_na_rm);
+}
+
+static inline void slide_sum_na_keep(const double* p_x, struct iter_opts opts, double* p_out);
+static inline void slide_sum_na_rm(const double* p_x, struct iter_opts opts, double* p_out);
+
+static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
   x = PROTECT(vec_cast(x, slider_shared_empty_dbl));
   const double* p_x = REAL(x);
 
   const R_xlen_t size = Rf_xlength(x);
-
-  bool before_unbounded = false;
-  bool after_unbounded = false;
-
-  const int before = INTEGER(r_lst_get(params, 0))[0];
-  const int after = INTEGER(r_lst_get(params, 1))[0];
-  const int step = INTEGER(r_lst_get(params, 2))[0];
-  const bool complete = (bool) LOGICAL(r_lst_get(params, 3))[0];
-  const bool na_rm = (bool) LOGICAL(r_lst_get(params, 4))[0];
-
-  const bool before_positive = before >= 0;
-  const bool after_positive = after >= 0;
-
-  check_double_negativeness(before, after, before_positive, after_positive);
-  check_before_negativeness(before, after, before_positive, after_unbounded);
-  check_after_negativeness(after, before, after_positive, before_unbounded);
-
-  int iteration_min = 0;
-  int iteration_max = size;
-
-  // Iteration adjustment
-  if (complete) {
-    if (before_positive) {
-      iteration_min += before;
-    }
-    if (after_positive) {
-      iteration_max -= after;
-    }
-  }
-
-  // Forward adjustment to match the number of iterations
-  int offset = 0;
-  if (complete && before_positive) {
-    offset = before;
-  }
-
-  int start;
-  int start_step;
-  if (before_unbounded) {
-    start = 0;
-    start_step = 0;
-  } else {
-    start = offset - before;
-    start_step = step;
-  }
-
-  int stop;
-  int stop_step;
-  if (after_unbounded) {
-    stop = size - 1;
-    stop_step = 0;
-  } else {
-    stop = offset + after;
-    stop_step = step;
-  }
+  struct iter_opts iopts = new_iter_opts(opts, size);
 
   SEXP out = PROTECT(slider_init(REALSXP, size));
   double* p_out = REAL(out);
 
-  for (int i = iteration_min;
-       i < iteration_max;
-       i += step, start += start_step, stop += stop_step) {
+  if (na_rm) {
+    slide_sum_na_rm(p_x, iopts, p_out);
+  } else {
+    slide_sum_na_keep(p_x, iopts, p_out);
+  }
 
+  UNPROTECT(2);
+  return out;
+}
+
+static inline void slide_sum_na_keep(const double* p_x, struct iter_opts opts, double* p_out) {
+  for (R_xlen_t i = opts.iter_min; i < opts.iter_max; i += opts.iter_step) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
     }
 
-    int window_start = max(start, 0);
-    int window_stop = min(stop + 1, size);
+    R_xlen_t window_start = max(opts.start, 0);
+    R_xlen_t window_stop = min(opts.stop + 1, opts.size);
+
+    opts.start += opts.start_step;
+    opts.stop += opts.stop_step;
 
     double val = 0.0;
 
-    for (int j = window_start; j < window_stop; ++j) {
+    for (R_xlen_t j = window_start; j < window_stop; ++j) {
       val += p_x[j];
     }
 
     p_out[i] = val;
   }
+}
 
-  UNPROTECT(2);
-  return out;
+static inline void slide_sum_na_rm(const double* p_x, struct iter_opts opts, double* p_out) {
+  for (R_xlen_t i = opts.iter_min; i < opts.iter_max; i += opts.iter_step) {
+    if (i % 1024 == 0) {
+      R_CheckUserInterrupt();
+    }
+
+    R_xlen_t window_start = max(opts.start, 0);
+    R_xlen_t window_stop = min(opts.stop + 1, opts.size);
+
+    opts.start += opts.start_step;
+    opts.stop += opts.stop_step;
+
+    double val = 0.0;
+
+    for (R_xlen_t j = window_start; j < window_stop; ++j) {
+      const double elt = p_x[j];
+
+      if (!isnan(elt)) {
+        val += elt;
+      }
+    }
+
+    p_out[i] = val;
+  }
 }

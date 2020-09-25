@@ -61,6 +61,7 @@ Collate:
     'slide-index.R'
     'slide-period-common.R'
     'slide-period.R'
+    'slide-sum.R'
     'slide.R'
     'slider-package.R'
     'utils.R'
