@@ -19,6 +19,9 @@ static inline void slide_sum_na_keep(const double* p_x, struct iter_opts opts, d
 static inline void slide_sum_na_rm(const double* p_x, struct iter_opts opts, double* p_out);
 
 static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
+  // Before `vec_cast()`, which may drop names
+  SEXP names = PROTECT(slider_names(x, SLIDE));
+
   x = PROTECT(vec_cast(x, slider_shared_empty_dbl));
   const double* p_x = REAL(x);
 
@@ -27,6 +30,7 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
 
   SEXP out = PROTECT(slider_init(REALSXP, size));
   double* p_out = REAL(out);
+  Rf_setAttrib(out, R_NamesSymbol, names);
 
   if (na_rm) {
     slide_sum_na_rm(p_x, iopts, p_out);
@@ -34,57 +38,54 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
     slide_sum_na_keep(p_x, iopts, p_out);
   }
 
-  UNPROTECT(2);
+  UNPROTECT(3);
   return out;
 }
 
+#define SLIDE_SUM_LOOP(IMPL) do {                                            \
+  for (R_xlen_t i = opts.iter_min; i < opts.iter_max; i += opts.iter_step) { \
+    if (i % 1024 == 0) {                                                     \
+      R_CheckUserInterrupt();                                                \
+    }                                                                        \
+                                                                             \
+    R_xlen_t window_start = max(opts.start, 0);                              \
+    R_xlen_t window_stop = min(opts.stop + 1, opts.size);                    \
+                                                                             \
+    opts.start += opts.start_step;                                           \
+    opts.stop += opts.stop_step;                                             \
+                                                                             \
+    double val = 0.0;                                                        \
+                                                                             \
+    for (R_xlen_t j = window_start; j < window_stop; ++j) {                  \
+      IMPL;                                                                  \
+    }                                                                        \
+                                                                             \
+    p_out[i] = val;                                                          \
+  }                                                                          \
+} while (0)
+
+#define SLIDE_SUM_IMPL_NA_KEEP {                               \
+  val += p_x[j];                                               \
+}
+
+#define SLIDE_SUM_IMPL_NA_RM {                                 \
+  const double elt = p_x[j];                                   \
+                                                               \
+  if (!isnan(elt)) {                                           \
+    val += elt;                                                \
+  }                                                            \
+}
+
 static inline void slide_sum_na_keep(const double* p_x, struct iter_opts opts, double* p_out) {
-  for (R_xlen_t i = opts.iter_min; i < opts.iter_max; i += opts.iter_step) {
-    if (i % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
-
-    R_xlen_t window_start = max(opts.start, 0);
-    R_xlen_t window_stop = min(opts.stop + 1, opts.size);
-
-    opts.start += opts.start_step;
-    opts.stop += opts.stop_step;
-
-    double val = 0.0;
-
-    for (R_xlen_t j = window_start; j < window_stop; ++j) {
-      val += p_x[j];
-    }
-
-    p_out[i] = val;
-  }
+  SLIDE_SUM_LOOP(SLIDE_SUM_IMPL_NA_KEEP);
 }
-
 static inline void slide_sum_na_rm(const double* p_x, struct iter_opts opts, double* p_out) {
-  for (R_xlen_t i = opts.iter_min; i < opts.iter_max; i += opts.iter_step) {
-    if (i % 1024 == 0) {
-      R_CheckUserInterrupt();
-    }
-
-    R_xlen_t window_start = max(opts.start, 0);
-    R_xlen_t window_stop = min(opts.stop + 1, opts.size);
-
-    opts.start += opts.start_step;
-    opts.stop += opts.stop_step;
-
-    double val = 0.0;
-
-    for (R_xlen_t j = window_start; j < window_stop; ++j) {
-      const double elt = p_x[j];
-
-      if (!isnan(elt)) {
-        val += elt;
-      }
-    }
-
-    p_out[i] = val;
-  }
+  SLIDE_SUM_LOOP(SLIDE_SUM_IMPL_NA_RM);
 }
+
+#undef SLIDE_SUM_LOOP
+#undef SLIDE_SUM_IMPL_NA_KEEP
+#undef SLIDE_SUM_IMPL_NA_RM
 
 // -----------------------------------------------------------------------------
 
@@ -102,6 +103,9 @@ static inline void slide_mean_na_keep(const double* p_x, struct iter_opts opts, 
 static inline void slide_mean_na_rm(const double* p_x, struct iter_opts opts, double* p_out);
 
 static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
+  // Before `vec_cast()`, which may drop names
+  SEXP names = PROTECT(slider_names(x, SLIDE));
+
   x = PROTECT(vec_cast(x, slider_shared_empty_dbl));
   const double* p_x = REAL(x);
 
@@ -110,6 +114,7 @@ static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
 
   SEXP out = PROTECT(slider_init(REALSXP, size));
   double* p_out = REAL(out);
+  Rf_setAttrib(out, R_NamesSymbol, names);
 
   if (na_rm) {
     slide_mean_na_rm(p_x, iopts, p_out);
@@ -117,7 +122,7 @@ static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
     slide_mean_na_keep(p_x, iopts, p_out);
   }
 
-  UNPROTECT(2);
+  UNPROTECT(3);
   return out;
 }
 
