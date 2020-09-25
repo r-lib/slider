@@ -85,4 +85,26 @@
   val += adjustment;
 
 // -----------------------------------------------------------------------------
+// Prod
+
+#define PROD_IMPL_NA_KEEP                                        \
+  double val = 1.0;                                              \
+                                                                 \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {        \
+    val *= p_x[j];                                               \
+  }
+
+
+#define PROD_IMPL_NA_RM                                          \
+  double val = 1.0;                                              \
+                                                                 \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {        \
+    const double elt = p_x[j];                                   \
+                                                                 \
+    if (!isnan(elt)) {                                           \
+      val *= elt;                                                \
+    }                                                            \
+}
+
+// -----------------------------------------------------------------------------
 #endif
