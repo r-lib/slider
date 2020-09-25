@@ -141,9 +141,9 @@ when you either need to hand craft boundary locations, or want to compute a
 result with a size that is different from <code>.x</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hop</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>hop</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.starts</span>, <span class='va'>.stops</span>, <span class='va'>.f</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>hop_vec</span>(<span class='no'>.x</span>, <span class='no'>.starts</span>, <span class='no'>.stops</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>hop_vec</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.starts</span>, <span class='va'>.stops</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .ptype <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,7 +194,7 @@ supplied. This is a way to make production code demand fixed types.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector fulfilling the following invariants:</p>
-<h3><code>hop()</code></h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>hop()</code></h3>
 
 <ul>
 <li><p><code>vec_size(hop(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
@@ -203,7 +203,7 @@ supplied. This is a way to make production code demand fixed types.</p></td>
 
 
 
-<h3><code>hop_vec()</code></h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>hop_vec()</code></h3>
 
 <ul>
 <li><p><code>vec_size(hop_vec(.x, .starts, .stops)) == vec_size_common(.starts, .stops)</code></p></li>
@@ -215,14 +215,15 @@ supplied. This is a way to make production code demand fixed types.</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>hop()</code> is very close to being a faster version of:</p><pre><span class='fu'>map2</span>(
-  <span class='no'>.starts</span>,
-  <span class='no'>.stops</span>,
-  <span class='kw'>function</span>(<span class='no'>start</span>, <span class='no'>stop</span>) {
-    <span class='no'>x_slice</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>vec_slice</span>(<span class='no'>.x</span>, <span class='no'>start</span>:<span class='no'>stop</span>)
-    <span class='fu'>.f</span>(<span class='no'>x_slice</span>, <span class='no'>...</span>)
-  }
-)</pre>
+    <p><code>hop()</code> is very close to being a faster version of:</p><pre><span class='fu'>map2</span><span class='op'>(</span>
+  <span class='va'>.starts</span>,
+  <span class='va'>.stops</span>,
+  <span class='kw'>function</span><span class='op'>(</span><span class='va'>start</span>, <span class='va'>stop</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>x_slice</span> <span class='op'>&lt;-</span> <span class='fu'>vec_slice</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>start</span><span class='op'>:</span><span class='va'>stop</span><span class='op'>)</span>
+    <span class='fu'>.f</span><span class='op'>(</span><span class='va'>x_slice</span>, <span class='va'>...</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
+</pre>
 
 <p>Because of this, <code><a href='hop_index.html'>hop_index()</a></code> is often the more useful function. <code>hop()</code>
 mainly exists for API completeness.</p>
@@ -230,21 +231,23 @@ mainly exists for API completeness.</p>
 <em>possible</em> locations along <code>.x</code>, and it is not enforced that these locations
 actually exist along <code>.x</code>. As an example, with <code>hop()</code> you can do the
 following, which would be an error with <code>vec_slice()</code> because <code>0L</code> is
-out of bounds.</p><pre><span class='fu'>hop</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>), <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fl'>1L</span>, ~<span class='no'>.x</span>)
-<span class='co'>#&amp;gt; [[1]]</span>
-<span class='co'>#&amp;gt; [1] "a"</span></pre>
+out of bounds.</p><pre><span class='fu'>hop</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, .starts <span class='op'>=</span> <span class='fl'>0L</span>, .stops <span class='op'>=</span> <span class='fl'>1L</span>, <span class='op'>~</span><span class='va'>.x</span><span class='op'>)</span>
+<span class='co'>#&gt; [[1]]</span>
+<span class='co'>#&gt; [1] "a"</span>
+</pre>
 
 <p><code>hop()</code> allows these out of bounds values to be fully compatible with
 <code><a href='slide.html'>slide()</a></code>. It is always possible to construct a <code>hop()</code> call from a <code><a href='slide.html'>slide()</a></code>
-call. For example, the following are equivalent:</p><pre><span class='fu'><a href='slide.html'>slide</a></span>(<span class='fl'>1</span>:<span class='fl'>2</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+call. For example, the following are equivalent:</p><pre><span class='fu'><a href='slide.html'>slide</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='op'>~</span><span class='va'>.x</span>, .before <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
-<span class='fu'>hop</span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>), <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>), ~<span class='no'>.x</span>)
+<span class='fu'>hop</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, .starts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, .stops <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='op'>~</span><span class='va'>.x</span><span class='op'>)</span>
 
-<span class='co'>#&amp;gt; [[1]]</span>
-<span class='co'>#&amp;gt; [1] 1</span>
-<span class='co'>#&amp;gt;</span>
-<span class='co'>#&amp;gt; [[2]]</span>
-<span class='co'>#&amp;gt; [1] 1 2</span></pre>
+<span class='co'>#&gt; [[1]]</span>
+<span class='co'>#&gt; [1] 1</span>
+<span class='co'>#&gt;</span>
+<span class='co'>#&gt; [[2]]</span>
+<span class='co'>#&gt; [1] 1 2</span>
+</pre>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -252,7 +255,8 @@ call. For example, the following are equivalent:</p><pre><span class='fu'><a hre
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># `hop()` let's you manually specify locations to apply `.f` at.</span>
-<span class='fu'>hop</span>(<span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>), <span class='kw'>.stops</span> <span class='kw'>=</span> <span class='fl'>3</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>hop</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, .starts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>, .stops <span class='op'>=</span> <span class='fl'>3</span>, <span class='op'>~</span><span class='va'>.x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1 2 3
 #&gt; 
 #&gt; [[2]]
@@ -260,12 +264,13 @@ call. For example, the following are equivalent:</p><pre><span class='fu'><a hre
 #&gt; </div><div class='input'>
 <span class='co'># `hop()`'s start/stop locations are allowed to be out of bounds relative</span>
 <span class='co'># to the size of `.x`.</span>
-<span class='fu'>hop</span>(
-  <span class='no'>mtcars</span>,
-  <span class='kw'>.starts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fl'>3</span>),
-  <span class='kw'>.stops</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>6</span>),
-  ~<span class='no'>.x</span>
-)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>hop</span><span class='op'>(</span>
+  <span class='va'>mtcars</span>,
+  .starts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>3</span><span class='op'>)</span>,
+  .stops  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span><span class='op'>)</span>,
+  <span class='op'>~</span><span class='va'>.x</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt;               mpg cyl disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4      21   6  160 110  3.9 2.620 16.46  0  1    4    4
 #&gt; Mazda RX4 Wag  21   6  160 110  3.9 2.875 17.02  0  1    4    4
@@ -293,7 +298,7 @@ call. For example, the following are equivalent:</p><pre><span class='fu'><a hre
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
