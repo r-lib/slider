@@ -14,6 +14,7 @@ SEXP syms_dot_l = NULL;
 
 SEXP slider_shared_empty_lgl = NULL;
 SEXP slider_shared_empty_int = NULL;
+SEXP slider_shared_empty_dbl = NULL;
 
 SEXP slider_shared_na_lgl = NULL;
 
@@ -237,6 +238,10 @@ void slider_initialize_utils(SEXP ns) {
   slider_shared_empty_int = Rf_allocVector(INTSXP, 0);
   R_PreserveObject(slider_shared_empty_int);
   MARK_NOT_MUTABLE(slider_shared_empty_int);
+
+  slider_shared_empty_dbl = Rf_allocVector(REALSXP, 0);
+  R_PreserveObject(slider_shared_empty_dbl);
+  MARK_NOT_MUTABLE(slider_shared_empty_dbl);
 
   slider_shared_na_lgl = Rf_allocVector(LGLSXP, 1);
   R_PreserveObject(slider_shared_na_lgl);

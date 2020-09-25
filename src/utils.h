@@ -54,6 +54,7 @@ extern SEXP syms_dot_l;
 
 extern SEXP slider_shared_empty_lgl;
 extern SEXP slider_shared_empty_int;
+extern SEXP slider_shared_empty_dbl;
 
 extern SEXP slider_shared_na_lgl;
 
