@@ -7,6 +7,7 @@ SEXP strings_dot_before = NULL;
 SEXP strings_dot_after = NULL;
 SEXP strings_dot_step = NULL;
 SEXP strings_dot_complete = NULL;
+SEXP strings_na_rm = NULL;
 
 SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
@@ -230,6 +231,10 @@ void slider_initialize_utils(SEXP ns) {
   strings_dot_complete = Rf_allocVector(STRSXP, 1);
   R_PreserveObject(strings_dot_complete);
   SET_STRING_ELT(strings_dot_complete, 0, Rf_mkChar(".complete"));
+
+  strings_na_rm = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_na_rm);
+  SET_STRING_ELT(strings_na_rm, 0, Rf_mkChar("na_rm"));
 
   slider_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
   R_PreserveObject(slider_shared_empty_lgl);

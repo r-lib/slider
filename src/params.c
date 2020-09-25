@@ -138,6 +138,19 @@ int validate_complete(SEXP x) {
   return out;
 }
 
+// [[ include("params.h") ]]
+int validate_na_rm(SEXP x) {
+  x = PROTECT(check_scalar_lgl(x, strings_na_rm));
+  int out = r_scalar_lgl_get(x);
+
+  if (out == NA_LOGICAL) {
+    Rf_errorcall(R_NilValue, "`na_rm` can't be missing.");
+  }
+
+  UNPROTECT(1);
+  return out;
+}
+
 // -----------------------------------------------------------------------------
 
 // [[ include("params.h") ]]

@@ -10,6 +10,7 @@ int validate_before(SEXP x, bool* before_unbounded);
 int validate_after(SEXP x, bool* after_unbounded);
 int validate_step(SEXP x);
 int validate_complete(SEXP x);
+int validate_na_rm(SEXP x);
 
 void check_double_negativeness(int before, int after, bool before_positive, bool after_positive);
 void check_after_negativeness(int after, int before, bool after_positive, bool before_unbounded);
