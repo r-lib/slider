@@ -6,27 +6,6 @@
 #include "assign.h"
 
 // -----------------------------------------------------------------------------
-// All defined below
-
-static void fill_window_info(int* window_sizes,
-                             int* window_starts,
-                             int* window_stops,
-                             SEXP window_indices,
-                             int size);
-
-static struct window_info new_window_info(int*, int*, int);
-static struct index_info new_index_info(SEXP);
-static struct range_info new_range_info(SEXP, SEXP, int);
-
-static int compute_min_iteration(struct index_info index, struct range_info range, bool complete);
-static int compute_max_iteration(struct index_info index, struct range_info range, bool complete);
-
-static void increment_window(struct window_info window,
-                             struct index_info* index,
-                             struct range_info range,
-                             int pos);
-
-// -----------------------------------------------------------------------------
 
 #define SLIDE_INDEX_LOOP(ASSIGN_LOCS) do {                     \
   for (int i = min_iteration; i < max_iteration; ++i) {        \
@@ -240,7 +219,8 @@ SEXP hop_index_common_impl(SEXP x,
 
 // -----------------------------------------------------------------------------
 
-static struct window_info new_window_info(int* window_starts, int* window_stops, int size) {
+// [[ include("index.h") ]]
+struct window_info new_window_info(int* window_starts, int* window_stops, int size) {
   struct window_info window;
 
   window.starts = window_starts;
@@ -255,7 +235,8 @@ static struct window_info new_window_info(int* window_starts, int* window_stops,
 
 // -----------------------------------------------------------------------------
 
-static struct index_info new_index_info(SEXP i) {
+// [[ include("index.h") ]]
+struct index_info new_index_info(SEXP i) {
   struct index_info index;
 
   index.data = i;
@@ -274,7 +255,8 @@ static struct index_info new_index_info(SEXP i) {
 
 // -----------------------------------------------------------------------------
 
-static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
+// [[ include("index.h") ]]
+struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   struct range_info range;
 
   range.starts = starts;
@@ -297,7 +279,8 @@ static struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
 static int iteration_min_adjustment(struct index_info index, SEXP range, int size);
 static int iteration_max_adjustment(struct index_info index, SEXP range, int size);
 
-static int compute_min_iteration(struct index_info index, struct range_info range, bool complete) {
+// [[ include("index.h") ]]
+int compute_min_iteration(struct index_info index, struct range_info range, bool complete) {
   int out = 0;
 
   if (!complete || range.start_unbounded) {
@@ -309,7 +292,8 @@ static int compute_min_iteration(struct index_info index, struct range_info rang
   return out;
 }
 
-static int compute_max_iteration(struct index_info index, struct range_info range, bool complete) {
+// [[ include("index.h") ]]
+int compute_max_iteration(struct index_info index, struct range_info range, bool complete) {
   int out = range.size;
 
   if (!complete || range.stop_unbounded) {
@@ -351,11 +335,12 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
 
 // -----------------------------------------------------------------------------
 
-static void fill_window_info(int* window_sizes,
-                             int* window_starts,
-                             int* window_stops,
-                             SEXP window_indices,
-                             int size) {
+// [[ include("index.h") ]]
+void fill_window_info(int* window_sizes,
+                      int* window_starts,
+                      int* window_stops,
+                      SEXP window_indices,
+                      int size) {
   R_len_t window_start = 0;
 
   for (int i = 0; i < size; ++i) {
@@ -373,7 +358,8 @@ static void fill_window_info(int* window_sizes,
 // `index` is passed by pointer so we can permanently
 // update the current start/stop position
 
-static int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
+// [[ include("index.h") ]]
+int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
   // Pin to the start
   if (range.start_unbounded) {
     return 0;
@@ -398,7 +384,8 @@ static int locate_window_starts_pos(struct index_info* index, struct range_info 
   return index->current_start_pos;
 }
 
-static int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
+// [[ include("index.h") ]]
+int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
   // Pin to the end
   if (range.stop_unbounded) {
     return index->last_pos;
@@ -425,10 +412,11 @@ static int locate_window_stops_pos(struct index_info* index, struct range_info r
 
 // -----------------------------------------------------------------------------
 
-static void increment_window(struct window_info window,
-                             struct index_info* index,
-                             struct range_info range,
-                             int pos) {
+// [[ include("index.h") ]]
+void increment_window(struct window_info window,
+                      struct index_info* index,
+                      struct range_info range,
+                      int pos) {
   int starts_pos = locate_window_starts_pos(index, range, pos);
   int stops_pos = locate_window_stops_pos(index, range, pos);
 

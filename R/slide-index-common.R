@@ -9,7 +9,7 @@ slide_index_common <- function(x,
                                atomic,
                                env,
                                type) {
-  vec_assert(i)
+  info <- slide_index_info(i, before, after)
 
   x_size <- compute_size(x, type)
   i_size <- vec_size(i)
@@ -18,24 +18,12 @@ slide_index_common <- function(x,
     stop_index_incompatible_size(i_size, x_size, ".i")
   }
 
-  check_index_cannot_be_na(i, ".i")
-  check_index_must_be_ascending(i, ".i")
-
-  check_before(before)
-  check_after(after)
   complete <- check_complete(complete)
 
-  # Compute unique values of `i` to avoid repeated evaluations of `.f`
-  split <- vec_group_loc(i)
-  i <- split$key
-
-  # `indices` helps us map back to `.x`
-  indices <- split$loc
-
-  range <- compute_ranges(i, before, after)
-  i <- range$i
-  starts <- range$starts
-  stops <- range$stops
+  i <- info$i
+  starts <- info$starts
+  stops <- info$stops
+  indices <- info$indices
 
   .Call(
     slide_index_common_impl,
@@ -56,6 +44,29 @@ slide_index_common <- function(x,
 }
 
 # ------------------------------------------------------------------------------
+
+slide_index_info <- function(i, before, after) {
+  vec_assert(i)
+
+  check_index_cannot_be_na(i, ".i")
+  check_index_must_be_ascending(i, ".i")
+
+  check_before(before)
+  check_after(after)
+
+  # Compute unique values of `i` to avoid repeated evaluations of `.f`
+  split <- vec_group_loc(i)
+  i <- split$key
+
+  ranges <- compute_ranges(i, before, after)
+
+  list(
+    i = ranges$i,
+    starts = ranges$starts,
+    stops = ranges$stops,
+    indices = split$loc
+  )
+}
 
 compute_ranges <- function(i, before, after) {
   start_unbounded <- is_unbounded(before)

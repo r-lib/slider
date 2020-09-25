@@ -63,6 +63,7 @@ Collate:
     'slide-period.R'
     'slide.R'
     'slider-package.R'
+    'summary-index.R'
     'summary-slide.R'
     'utils.R'
     'zzz.R'
