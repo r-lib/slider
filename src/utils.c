@@ -3,11 +3,16 @@
 #include "compare.h"
 #include "slider-vctrs.h"
 
+SEXP strings_before = NULL;
+SEXP strings_after = NULL;
+SEXP strings_step = NULL;
+SEXP strings_complete = NULL;
+SEXP strings_na_rm = NULL;
 SEXP strings_dot_before = NULL;
 SEXP strings_dot_after = NULL;
 SEXP strings_dot_step = NULL;
 SEXP strings_dot_complete = NULL;
-SEXP strings_na_rm = NULL;
+SEXP strings_dot_na_rm = NULL;
 
 SEXP syms_dot_x = NULL;
 SEXP syms_dot_y = NULL;
@@ -216,6 +221,26 @@ void slider_initialize_utils(SEXP ns) {
   syms_dot_y = Rf_install(".y");
   syms_dot_l = Rf_install(".l");
 
+  strings_before = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_before);
+  SET_STRING_ELT(strings_before, 0, Rf_mkChar("before"));
+
+  strings_after = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_after);
+  SET_STRING_ELT(strings_after, 0, Rf_mkChar("after"));
+
+  strings_step = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_step);
+  SET_STRING_ELT(strings_step, 0, Rf_mkChar("step"));
+
+  strings_complete = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_complete);
+  SET_STRING_ELT(strings_complete, 0, Rf_mkChar("complete"));
+
+  strings_na_rm = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_na_rm);
+  SET_STRING_ELT(strings_na_rm, 0, Rf_mkChar("na_rm"));
+
   strings_dot_before = Rf_allocVector(STRSXP, 1);
   R_PreserveObject(strings_dot_before);
   SET_STRING_ELT(strings_dot_before, 0, Rf_mkChar(".before"));
@@ -232,9 +257,9 @@ void slider_initialize_utils(SEXP ns) {
   R_PreserveObject(strings_dot_complete);
   SET_STRING_ELT(strings_dot_complete, 0, Rf_mkChar(".complete"));
 
-  strings_na_rm = Rf_allocVector(STRSXP, 1);
-  R_PreserveObject(strings_na_rm);
-  SET_STRING_ELT(strings_na_rm, 0, Rf_mkChar("na_rm"));
+  strings_dot_na_rm = Rf_allocVector(STRSXP, 1);
+  R_PreserveObject(strings_dot_na_rm);
+  SET_STRING_ELT(strings_dot_na_rm, 0, Rf_mkChar(".na_rm"));
 
   slider_shared_empty_lgl = Rf_allocVector(LGLSXP, 0);
   R_PreserveObject(slider_shared_empty_lgl);

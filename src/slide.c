@@ -75,12 +75,14 @@ SEXP slide_common_impl(SEXP x,
   bool before_unbounded = false;
   bool after_unbounded = false;
 
+  const bool dot = true;
+
   const bool constrain = validate_constrain(r_lst_get(params, 1));
   const bool atomic = validate_atomic(r_lst_get(params, 2));
-  const int before = validate_before(r_lst_get(params, 3), &before_unbounded);
-  const int after = validate_after(r_lst_get(params, 4), &after_unbounded);
-  const int step = validate_step(r_lst_get(params, 5));
-  const bool complete = validate_complete(r_lst_get(params, 6));
+  const int before = validate_before(r_lst_get(params, 3), &before_unbounded, dot);
+  const int after = validate_after(r_lst_get(params, 4), &after_unbounded, dot);
+  const int step = validate_step(r_lst_get(params, 5), dot);
+  const bool complete = validate_complete(r_lst_get(params, 6), dot);
 
   const bool before_positive = before >= 0;
   const bool after_positive = after >= 0;

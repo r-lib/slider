@@ -19,22 +19,22 @@ struct slide_opts {
   bool complete;
 };
 
-static inline struct slide_opts new_slide_opts(SEXP before, SEXP after, SEXP step, SEXP complete) {
+static inline struct slide_opts new_slide_opts(SEXP before, SEXP after, SEXP step, SEXP complete, bool dot) {
   bool c_before_unbounded = false;
   bool c_after_unbounded = false;
 
-  int c_before = validate_before(before, &c_before_unbounded);
+  int c_before = validate_before(before, &c_before_unbounded, dot);
   bool c_before_positive = c_before >= 0;
 
-  int c_after = validate_after(after, &c_after_unbounded);
+  int c_after = validate_after(after, &c_after_unbounded, dot);
   bool c_after_positive = c_after >= 0;
 
   check_double_negativeness(c_before, c_after, c_before_positive, c_after_positive);
   check_before_negativeness(c_before, c_after, c_before_positive, c_after_unbounded);
   check_after_negativeness(c_after, c_before, c_after_positive, c_before_unbounded);
 
-  int c_step = validate_step(step);
-  bool c_complete = validate_complete(complete);
+  int c_step = validate_step(step, dot);
+  bool c_complete = validate_complete(complete, dot);
 
   return (struct slide_opts) {
     .before = c_before,

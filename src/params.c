@@ -68,8 +68,8 @@ bool validate_atomic(SEXP x) {
 }
 
 // [[ include("params.h") ]]
-int validate_before(SEXP x, bool* before_unbounded) {
-  check_scalar(x, strings_dot_before);
+int validate_before(SEXP x, bool* before_unbounded, bool dot) {
+  check_scalar(x, dot ? strings_dot_before : strings_before);
 
   if (is_unbounded(x)) {
     *before_unbounded = true;
@@ -80,7 +80,11 @@ int validate_before(SEXP x, bool* before_unbounded) {
   int out = r_scalar_int_get(x);
 
   if (out == NA_INTEGER) {
-    Rf_errorcall(R_NilValue, "`.before` can't be missing.");
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.before` can't be missing.");
+    } else {
+      Rf_errorcall(R_NilValue, "`before` can't be missing.");
+    }
   }
 
   UNPROTECT(1);
@@ -88,8 +92,8 @@ int validate_before(SEXP x, bool* before_unbounded) {
 }
 
 // [[ include("params.h") ]]
-int validate_after(SEXP x, bool* after_unbounded) {
-  check_scalar(x, strings_dot_after);
+int validate_after(SEXP x, bool* after_unbounded, bool dot) {
+  check_scalar(x, dot ? strings_dot_after : strings_after);
 
   if (is_unbounded(x)) {
     *after_unbounded = true;
@@ -100,7 +104,11 @@ int validate_after(SEXP x, bool* after_unbounded) {
   int out = r_scalar_int_get(x);
 
   if (out == NA_INTEGER) {
-    Rf_errorcall(R_NilValue, "`.after` can't be missing.");
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.after` can't be missing.");
+    } else {
+      Rf_errorcall(R_NilValue, "`after` can't be missing.");
+    }
   }
 
   UNPROTECT(1);
@@ -108,17 +116,25 @@ int validate_after(SEXP x, bool* after_unbounded) {
 }
 
 // [[ include("params.h") ]]
-int validate_step(SEXP x) {
-  x = PROTECT(check_scalar_int(x, strings_dot_step));
+int validate_step(SEXP x, bool dot) {
+  x = PROTECT(check_scalar_int(x, dot ? strings_dot_step : strings_step));
 
   int step = r_scalar_int_get(x);
 
   if (step == NA_INTEGER) {
-    Rf_errorcall(R_NilValue, "`.step` can't be missing.");
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.step` can't be missing.");
+    } else {
+      Rf_errorcall(R_NilValue, "`step` can't be missing.");
+    }
   }
 
   if (step < 1) {
-    Rf_errorcall(R_NilValue, "`.step` must be at least 1, not %i.", step);
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.step` must be at least 1, not %i.", step);
+    } else {
+      Rf_errorcall(R_NilValue, "`step` must be at least 1, not %i.", step);
+    }
   }
 
   UNPROTECT(1);
@@ -126,12 +142,16 @@ int validate_step(SEXP x) {
 }
 
 // [[ include("params.h") ]]
-int validate_complete(SEXP x) {
-  x = PROTECT(check_scalar_lgl(x, strings_dot_complete));
+int validate_complete(SEXP x, bool dot) {
+  x = PROTECT(check_scalar_lgl(x, dot ? strings_dot_complete : strings_complete));
   int out = r_scalar_lgl_get(x);
 
   if (out == NA_LOGICAL) {
-    Rf_errorcall(R_NilValue, "`.complete` can't be missing.");
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.complete` can't be missing.");
+    } else {
+      Rf_errorcall(R_NilValue, "`complete` can't be missing.");
+    }
   }
 
   UNPROTECT(1);
@@ -139,12 +159,16 @@ int validate_complete(SEXP x) {
 }
 
 // [[ include("params.h") ]]
-int validate_na_rm(SEXP x) {
-  x = PROTECT(check_scalar_lgl(x, strings_na_rm));
+int validate_na_rm(SEXP x, bool dot) {
+  x = PROTECT(check_scalar_lgl(x, dot ? strings_dot_na_rm : strings_na_rm));
   int out = r_scalar_lgl_get(x);
 
   if (out == NA_LOGICAL) {
-    Rf_errorcall(R_NilValue, "`na_rm` can't be missing.");
+    if (dot) {
+      Rf_errorcall(R_NilValue, "`.na_rm` can't be missing.");
+    } else {
+      Rf_errorcall(R_NilValue, "`na_rm` can't be missing.");
+    }
   }
 
   UNPROTECT(1);

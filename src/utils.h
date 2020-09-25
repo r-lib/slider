@@ -43,11 +43,16 @@ __attribute__((noreturn)) static inline void never_reached(const char* fn) {
   Rf_errorcall(R_NilValue, "Internal error: Reached the unreachable in `%s()`.", fn);
 }
 
+extern SEXP strings_before;
+extern SEXP strings_after;
+extern SEXP strings_step;
+extern SEXP strings_complete;
+extern SEXP strings_na_rm;
 extern SEXP strings_dot_before;
 extern SEXP strings_dot_after;
 extern SEXP strings_dot_step;
 extern SEXP strings_dot_complete;
-extern SEXP strings_na_rm;
+extern SEXP strings_dot_na_rm;
 
 extern SEXP syms_dot_x;
 extern SEXP syms_dot_y;

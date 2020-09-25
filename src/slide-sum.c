@@ -9,8 +9,9 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm);
 
 // [[ register() ]]
 SEXP slider_sum(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  struct slide_opts opts = new_slide_opts(before, after, step, complete);
-  bool c_na_rm = validate_na_rm(na_rm);
+  bool dot = false;
+  struct slide_opts opts = new_slide_opts(before, after, step, complete, dot);
+  bool c_na_rm = validate_na_rm(na_rm, dot);
   return slide_sum(x, opts, c_na_rm);
 }
 
