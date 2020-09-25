@@ -62,7 +62,9 @@ static SEXP slide_summary(SEXP x,
     opts.start += opts.start_step;                                           \
     opts.stop += opts.stop_step;                                             \
                                                                              \
-    IMPL;                                                                    \
+    IMPL                                                                     \
+                                                                             \
+    p_out[i] = (double) val;                                                 \
   }                                                                          \
 } while (0)
 
@@ -82,17 +84,15 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
   return slide_summary(x, opts, na_rm, slide_sum_na_keep, slide_sum_na_rm);
 }
 
-#define SUM_IMPL_NA_KEEP {                                     \
+#define SUM_IMPL_NA_KEEP                                       \
   double val = 0.0;                                            \
                                                                \
   for (R_xlen_t j = window_start; j < window_stop; ++j) {      \
     val += p_x[j];                                             \
   }                                                            \
-                                                               \
-  p_out[i] = val;                                              \
-}
 
-#define SUM_IMPL_NA_RM {                                       \
+
+#define SUM_IMPL_NA_RM                                         \
   double val = 0.0;                                            \
                                                                \
   for (R_xlen_t j = window_start; j < window_stop; ++j) {      \
@@ -102,9 +102,7 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
       val += elt;                                              \
     }                                                          \
   }                                                            \
-                                                               \
-  p_out[i] = val;                                              \
-}
+
 
 static inline void slide_sum_na_keep(const double* p_x, struct iter_opts opts, double* p_out) {
   SLIDE_SUMMARY_LOOP(SUM_IMPL_NA_KEEP);
@@ -132,7 +130,7 @@ static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
   return slide_summary(x, opts, na_rm, slide_mean_na_keep, slide_mean_na_rm);
 }
 
-#define MEAN_IMPL_NA_KEEP {                                    \
+#define MEAN_IMPL_NA_KEEP                                      \
   long double val = 0.0;                                       \
   R_xlen_t window_size = window_stop - window_start;           \
                                                                \
@@ -155,11 +153,9 @@ static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
   adjustment /= window_size;                                   \
                                                                \
   val += adjustment;                                           \
-                                                               \
-  p_out[i] = (double) val;                                     \
-}
 
-#define MEAN_IMPL_NA_RM {                                        \
+
+#define MEAN_IMPL_NA_RM                                          \
   long double val = 0.0;                                         \
   R_xlen_t window_size = 0;                                      \
                                                                  \
@@ -191,9 +187,7 @@ static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
   adjustment /= window_size;                                     \
                                                                  \
   val += adjustment;                                             \
-                                                                 \
-  p_out[i] = (double) val;                                       \
-}
+
 
 static inline void slide_mean_na_keep(const double* p_x, struct iter_opts opts, double* p_out) {
   SLIDE_SUMMARY_LOOP(MEAN_IMPL_NA_KEEP);
