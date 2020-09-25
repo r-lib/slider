@@ -147,4 +147,38 @@
   }
 
 // -----------------------------------------------------------------------------
+// Max
+
+#define MAX_IMPL_NA_KEEP                                       \
+  double val = R_NegInf;                                       \
+                                                               \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {      \
+    const double elt = p_x[j];                                 \
+                                                               \
+    if (isnan(elt)) {                                          \
+      /* Match R - any `NA` trumps `NaN` */                    \
+      if (ISNA(elt)) {                                         \
+        val = NA_REAL;                                         \
+        break;                                                 \
+      } else {                                                 \
+        val = R_NaN;                                           \
+      }                                                        \
+    } else if (elt > val) {                                    \
+      val = elt;                                               \
+    }                                                          \
+  }
+
+
+#define MAX_IMPL_NA_RM                                         \
+  double val = R_NegInf;                                       \
+                                                               \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {      \
+    const double elt = p_x[j];                                 \
+                                                               \
+    if (elt > val) {                                           \
+      val = elt;                                               \
+    }                                                          \
+  }
+
+// -----------------------------------------------------------------------------
 #endif

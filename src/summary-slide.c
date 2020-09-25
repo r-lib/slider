@@ -163,4 +163,27 @@ static inline void slide_min_na_rm(const double* p_x, struct iter_opts opts, dou
 
 // -----------------------------------------------------------------------------
 
+static SEXP slide_max(SEXP x, struct slide_opts opts, bool na_rm);
+
+// [[ register() ]]
+SEXP slider_max(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_max);
+}
+
+static inline void slide_max_na_keep(const double* p_x, struct iter_opts opts, double* p_out);
+static inline void slide_max_na_rm(const double* p_x, struct iter_opts opts, double* p_out);
+
+static SEXP slide_max(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_max_na_keep, slide_max_na_rm);
+}
+
+static inline void slide_max_na_keep(const double* p_x, struct iter_opts opts, double* p_out) {
+  SLIDE_SUMMARY_LOOP(MAX_IMPL_NA_KEEP);
+}
+static inline void slide_max_na_rm(const double* p_x, struct iter_opts opts, double* p_out) {
+  SLIDE_SUMMARY_LOOP(MAX_IMPL_NA_RM);
+}
+
+// -----------------------------------------------------------------------------
+
 #undef SLIDE_SUMMARY_LOOP

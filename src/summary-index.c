@@ -354,4 +354,65 @@ static void slide_index_min_impl_na_rm(const double* p_x,
 
 // -----------------------------------------------------------------------------
 
+static SEXP slide_index_max_impl(SEXP x, SEXP i, SEXP starts, SEXP stops, SEXP indices, bool complete, bool na_rm);
+
+// [[ register() ]]
+SEXP slider_index_max_impl(SEXP x, SEXP i, SEXP starts, SEXP stops, SEXP indices, SEXP complete, SEXP na_rm) {
+  return slider_index_summary(x, i, starts, stops, indices, complete, na_rm, slide_index_max_impl);
+}
+
+static void slide_index_max_impl_na_keep(const double* p_x,
+                                         int iter_min,
+                                         int iter_max,
+                                         const struct range_info range,
+                                         const int* window_sizes,
+                                         const int* window_starts,
+                                         const int* window_stops,
+                                         SEXP indices,
+                                         struct index_info* p_index,
+                                         double* p_out);
+
+static void slide_index_max_impl_na_rm(const double* p_x,
+                                       int iter_min,
+                                       int iter_max,
+                                       const struct range_info range,
+                                       const int* window_sizes,
+                                       const int* window_starts,
+                                       const int* window_stops,
+                                       SEXP indices,
+                                       struct index_info* p_index,
+                                       double* p_out);
+
+static SEXP slide_index_max_impl(SEXP x, SEXP i, SEXP starts, SEXP stops, SEXP indices, bool complete, bool na_rm) {
+  return slide_index_summary(x, i, starts, stops, indices, complete, na_rm, slide_index_max_impl_na_keep, slide_index_max_impl_na_rm);
+}
+
+static void slide_index_max_impl_na_keep(const double* p_x,
+                                         int iter_min,
+                                         int iter_max,
+                                         const struct range_info range,
+                                         const int* window_sizes,
+                                         const int* window_starts,
+                                         const int* window_stops,
+                                         SEXP indices,
+                                         struct index_info* p_index,
+                                         double* p_out) {
+  SLIDE_INDEX_SUMMARY_LOOP(MAX_IMPL_NA_KEEP);
+}
+
+static void slide_index_max_impl_na_rm(const double* p_x,
+                                       int iter_min,
+                                       int iter_max,
+                                       const struct range_info range,
+                                       const int* window_sizes,
+                                       const int* window_starts,
+                                       const int* window_stops,
+                                       SEXP indices,
+                                       struct index_info* p_index,
+                                       double* p_out) {
+  SLIDE_INDEX_SUMMARY_LOOP(MAX_IMPL_NA_RM);
+}
+
+// -----------------------------------------------------------------------------
+
 #undef SLIDE_INDEX_SUMMARY_LOOP

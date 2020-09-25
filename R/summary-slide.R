@@ -33,3 +33,12 @@ slide_min <- function(x,
                       na_rm = FALSE) {
   .Call(slider_min, x, before, after, step, complete, na_rm)
 }
+
+slide_max <- function(x,
+                      before = 0L,
+                      after = 0L,
+                      step = 1L,
+                      complete = FALSE,
+                      na_rm = FALSE) {
+  .Call(slider_max, x, before, after, step, complete, na_rm)
+}
