@@ -104,7 +104,33 @@
     if (!isnan(elt)) {                                           \
       val *= elt;                                                \
     }                                                            \
-}
+  }
+
+// -----------------------------------------------------------------------------
+// Min
+
+#define MIN_IMPL_NA_KEEP                                           \
+  double val = R_PosInf;                                           \
+                                                                   \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {          \
+    const double elt = p_x[j];                                     \
+                                                                   \
+    if (elt < val) {                                               \
+      val = elt;                                                   \
+    }                                                              \
+  }
+
+
+#define MIN_IMPL_NA_RM                                             \
+  double val = R_PosInf;                                           \
+                                                                   \
+  for (R_xlen_t j = window_start; j < window_stop; ++j) {          \
+    const double elt = p_x[j];                                     \
+                                                                   \
+    if (!isnan(elt) && elt < val) {                                \
+      val = elt;                                                   \
+    }                                                              \
+  }
 
 // -----------------------------------------------------------------------------
 #endif

@@ -25,3 +25,11 @@ slide_prod <- function(x,
   .Call(slider_prod, x, before, after, step, complete, na_rm)
 }
 
+slide_min <- function(x,
+                      before = 0L,
+                      after = 0L,
+                      step = 1L,
+                      complete = FALSE,
+                      na_rm = FALSE) {
+  .Call(slider_min, x, before, after, step, complete, na_rm)
+}
