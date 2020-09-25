@@ -13,6 +13,21 @@ slide_index_sum_impl <- function(x, i, starts, stops, indices, complete, na_rm) 
 
 # ------------------------------------------------------------------------------
 
+slide_index_mean <- function(x,
+                             i,
+                             before = 0L,
+                             after = 0L,
+                             complete = FALSE,
+                             na_rm = FALSE) {
+  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_mean_impl)
+}
+
+slide_index_mean_impl <- function(x, i, starts, stops, indices, complete, na_rm) {
+  .Call(slider_index_mean_impl, x, i, starts, stops, indices, complete, na_rm)
+}
+
+# ------------------------------------------------------------------------------
+
 slide_index_summary <- function(x,
                                 i,
                                 before,
