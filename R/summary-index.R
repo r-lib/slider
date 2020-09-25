@@ -34,5 +34,5 @@ slide_index_summary <- function(x,
   stops <- info$stops
   indices <- info$indices
 
-  impl(x, i, starts, stops, indices, complete, na_rm)
+  fn_impl(x, i, starts, stops, indices, complete, na_rm)
 }
