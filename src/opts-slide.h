@@ -64,7 +64,7 @@ struct iter_opts {
   R_xlen_t size;
 };
 
-struct iter_opts new_iter_opts(struct slide_opts opts, R_xlen_t size) {
+static inline struct iter_opts new_iter_opts(struct slide_opts opts, R_xlen_t size) {
   R_xlen_t iter_min = 0;
   R_xlen_t iter_max = size;
   R_xlen_t iter_step = opts.step;
