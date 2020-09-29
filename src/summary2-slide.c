@@ -76,24 +76,24 @@ static inline void summary_slide_loop(const struct segment_tree* p_tree,
 // -----------------------------------------------------------------------------
 
 static inline void sum_state_reset(void* p_state) {
-  double* p_state_ = (double*) p_state;
+  long double* p_state_ = (long double*) p_state;
   *p_state_ = 0;
 }
 
 static inline void sum_state_finalize(void* p_state, void* p_result) {
   double* p_result_ = (double*) p_result;
-  double* p_state_ = (double*) p_state;
-  *p_result_ = *p_state_;
+  long double* p_state_ = (long double*) p_state;
+  *p_result_ = (double) *p_state_;
   return;
 }
 
 static inline void* sum_nodes_increment(void* p_nodes) {
-  return (void*) (((double*) p_nodes) + 1);
+  return (void*) (((long double*) p_nodes) + 1);
 }
 
 static inline SEXP sum_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(Rf_allocVector(REALSXP, n));
-  double* p_nodes = REAL(nodes);
+  SEXP nodes = PROTECT(Rf_allocVector(RAWSXP, n * sizeof(long double)));
+  long double* p_nodes = (long double*) RAW(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = 0;
@@ -105,21 +105,25 @@ static inline SEXP sum_nodes_initialize(uint64_t n) {
 
 static inline void sum_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
   const double* p_source_ = (const double*) p_source;
-  double* p_dest_ = (double*) p_dest;
+  long double* p_dest_ = (long double*) p_dest;
 
   for (uint64_t i = begin; i < end; ++i) {
     *p_dest_ += p_source_[i];
   }
 }
 
-// For sum, nodes are the same type as the leaves
 static inline void sum_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
-  sum_na_keep_aggregate_from_leaves(p_source, begin, end, p_dest);
+  const long double* p_source_ = (const long double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    *p_dest_ += p_source_[i];
+  }
 }
 
 static inline void sum_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
   const double* p_source_ = (const double*) p_source;
-  double* p_dest_ = (double*) p_dest;
+  long double* p_dest_ = (long double*) p_dest;
 
   for (uint64_t i = begin; i < end; ++i) {
     const double elt = p_source_[i];
@@ -131,7 +135,16 @@ static inline void sum_na_rm_aggregate_from_leaves(const void* p_source, uint64_
 }
 
 static inline void sum_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
-  sum_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
+  const long double* p_source_ = (const long double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const long double elt = p_source_[i];
+
+    if (!isnan(elt)) {
+      *p_dest_ += elt;
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -152,7 +165,7 @@ static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
 static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
   int n_prot = 0;
 
-  double state = 0;
+  long double state = 0;
 
   struct segment_tree tree = new_segment_tree(
     size,
