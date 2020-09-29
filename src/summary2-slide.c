@@ -187,6 +187,126 @@ static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct
 
 // -----------------------------------------------------------------------------
 
+static inline void prod_state_reset(void* p_state) {
+  long double* p_state_ = (long double*) p_state;
+  *p_state_ = 1;
+}
+
+static inline void prod_state_finalize(void* p_state, void* p_result) {
+  double* p_result_ = (double*) p_result;
+  long double state = *((long double*) p_state);
+
+  if (state > DBL_MAX) {
+    *p_result_ = R_PosInf;
+  } else if (state < -DBL_MAX) {
+    *p_result_ = R_NegInf;
+  } else {
+    *p_result_ = (double) state;
+  }
+
+  return;
+}
+
+static inline void* prod_nodes_increment(void* p_nodes) {
+  return (void*) (((long double*) p_nodes) + 1);
+}
+
+static inline SEXP prod_nodes_initialize(uint64_t n) {
+  SEXP nodes = PROTECT(Rf_allocVector(RAWSXP, n * sizeof(long double)));
+  long double* p_nodes = (long double*) RAW(nodes);
+
+  for (uint64_t i = 0; i < n; ++i) {
+    p_nodes[i] = 1;
+  }
+
+  UNPROTECT(1);
+  return nodes;
+}
+
+static inline void prod_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const double* p_source_ = (const double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    *p_dest_ *= p_source_[i];
+  }
+}
+
+static inline void prod_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const long double* p_source_ = (const long double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    *p_dest_ *= p_source_[i];
+  }
+}
+
+static inline void prod_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const double* p_source_ = (const double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const double elt = p_source_[i];
+
+    if (!isnan(elt)) {
+      *p_dest_ *= elt;
+    }
+  }
+}
+
+static inline void prod_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const long double* p_source_ = (const long double*) p_source;
+  long double* p_dest_ = (long double*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const long double elt = p_source_[i];
+
+    if (!isnan(elt)) {
+      *p_dest_ *= elt;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+static SEXP slide_prod(SEXP x, struct slide_opts opts, bool na_rm);
+
+// [[ register() ]]
+SEXP slider_prod2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_prod);
+}
+
+static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+
+static SEXP slide_prod(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_prod_impl);
+}
+
+static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+  int n_prot = 0;
+
+  long double state = 1;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    prod_state_reset,
+    prod_state_finalize,
+    prod_nodes_increment,
+    prod_nodes_initialize,
+    na_rm ? prod_na_rm_aggregate_from_leaves : prod_na_keep_aggregate_from_leaves,
+    na_rm ? prod_na_rm_aggregate_from_nodes : prod_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  summary_slide_loop(&tree, p_opts, p_out);
+
+  UNPROTECT(n_prot);
+}
+
+// -----------------------------------------------------------------------------
+
 struct mean_state_t {
   long double sum;
   uint64_t count;
