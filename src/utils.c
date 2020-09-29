@@ -32,6 +32,7 @@ const void* r_const_deref(SEXP x, SEXPTYPE type) {
   switch (type) {
   case INTSXP: return INTEGER_RO(x);
   case REALSXP: return REAL_RO(x);
+  case RAWSXP: return RAW_RO(x);
   default: Rf_errorcall(R_NilValue, "Internal error in `r_const_deref()`: Can't deref `type`.");
   }
 }
@@ -40,6 +41,7 @@ void* r_deref(SEXP x, SEXPTYPE type) {
   switch (type) {
   case INTSXP: return INTEGER(x);
   case REALSXP: return REAL(x);
+  case RAWSXP: return RAW(x);
   default: Rf_errorcall(R_NilValue, "Internal error in `r_deref()`: Can't deref `type`.");
   }
 }
