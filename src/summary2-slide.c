@@ -82,8 +82,16 @@ static inline void sum_state_reset(void* p_state) {
 
 static inline void sum_state_finalize(void* p_state, void* p_result) {
   double* p_result_ = (double*) p_result;
-  long double* p_state_ = (long double*) p_state;
-  *p_result_ = (double) *p_state_;
+  long double state = *((long double*) p_state);
+
+  if (state > DBL_MAX) {
+    *p_result_ = R_PosInf;
+  } else if (state < -DBL_MAX) {
+    *p_result_ = R_NegInf;
+  } else {
+    *p_result_ = (double) state;
+  }
+
   return;
 }
 
