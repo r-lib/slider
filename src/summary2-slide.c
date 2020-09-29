@@ -461,25 +461,21 @@ static inline void min_na_keep_aggregate_from_leaves(const void* p_source, uint6
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
-  double val = *p_dest_;
-
   for (uint64_t i = begin; i < end; ++i) {
     const double elt = p_source_[i];
 
     if (isnan(elt)) {
       /* Match R - any `NA` trumps `NaN` */
       if (ISNA(elt)) {
-        val = NA_REAL;
+        *p_dest_ = NA_REAL;
         break;
       } else {
-        val = R_NaN;
+        *p_dest_ = R_NaN;
       }
-    } else if (elt < val) {
-      val = elt;
+    } else if (elt < *p_dest_) {
+      *p_dest_ = elt;
     }
   }
-
-  *p_dest_ = val;
 }
 
 static inline void min_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
@@ -490,17 +486,13 @@ static inline void min_na_rm_aggregate_from_leaves(const void* p_source, uint64_
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
-  double val = *p_dest_;
-
   for (uint64_t i = begin; i < end; ++i) {
     const double elt = p_source_[i];
 
-    if (elt < val) {
-      val = elt;
+    if (elt < *p_dest_) {
+      *p_dest_ = elt;
     }
   }
-
-  *p_dest_ = val;
 }
 
 static inline void min_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
@@ -579,25 +571,21 @@ static inline void max_na_keep_aggregate_from_leaves(const void* p_source, uint6
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
-  double val = *p_dest_;
-
   for (uint64_t i = begin; i < end; ++i) {
     const double elt = p_source_[i];
 
     if (isnan(elt)) {
       /* Match R - any `NA` trumps `NaN` */
       if (ISNA(elt)) {
-        val = NA_REAL;
+        *p_dest_ = NA_REAL;
         break;
       } else {
-        val = R_NaN;
+        *p_dest_ = R_NaN;
       }
-    } else if (elt > val) {
-      val = elt;
+    } else if (elt > *p_dest_) {
+      *p_dest_ = elt;
     }
   }
-
-  *p_dest_ = val;
 }
 
 static inline void max_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
@@ -608,17 +596,13 @@ static inline void max_na_rm_aggregate_from_leaves(const void* p_source, uint64_
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
-  double val = *p_dest_;
-
   for (uint64_t i = begin; i < end; ++i) {
     const double elt = p_source_[i];
 
-    if (elt > val) {
-      val = elt;
+    if (elt > *p_dest_) {
+      *p_dest_ = elt;
     }
   }
-
-  *p_dest_ = val;
 }
 
 static inline void max_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
