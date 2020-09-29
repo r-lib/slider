@@ -286,4 +286,120 @@ static inline void slide_mean_impl(const double* p_x, R_xlen_t size, const struc
   UNPROTECT(n_prot);
 }
 
+// -----------------------------------------------------------------------------
 
+static inline void min_state_reset(void* p_state) {
+  double* p_state_ = (double*) p_state;
+  *p_state_ = R_PosInf;
+}
+
+static inline void min_state_finalize(void* p_state, void* p_result) {
+  double* p_state_ = (double*) p_state;
+  double* p_result_ = (double*) p_result;
+  *p_result_ = *p_state_;
+  return;
+}
+
+static inline void* min_nodes_increment(void* p_nodes) {
+  return (void*) (((double*) p_nodes) + 1);
+}
+
+static inline SEXP min_nodes_initialize(uint64_t n) {
+  SEXP nodes = PROTECT(Rf_allocVector(REALSXP, n));
+  double* p_nodes = REAL(nodes);
+
+  for (uint64_t i = 0; i < n; ++i) {
+    p_nodes[i] = R_PosInf;
+  }
+
+  UNPROTECT(1);
+  return nodes;
+}
+
+static inline void min_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const double* p_source_ = (const double*) p_source;
+  double* p_dest_ = (double*) p_dest;
+
+  double val = *p_dest_;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const double elt = p_source_[i];
+
+    if (isnan(elt)) {
+      /* Match R - any `NA` trumps `NaN` */
+      if (ISNA(elt)) {
+        val = NA_REAL;
+        break;
+      } else {
+        val = R_NaN;
+      }
+    } else if (elt < val) {
+      val = elt;
+    }
+  }
+
+  *p_dest_ = val;
+}
+
+static inline void min_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  min_na_keep_aggregate_from_leaves(p_source, begin, end, p_dest);
+}
+
+static inline void min_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  const double* p_source_ = (const double*) p_source;
+  double* p_dest_ = (double*) p_dest;
+
+  double val = *p_dest_;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const double elt = p_source_[i];
+
+    if (elt < val) {
+      val = elt;
+    }
+  }
+
+  *p_dest_ = val;
+}
+
+static inline void min_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+  min_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
+}
+
+// -----------------------------------------------------------------------------
+
+static SEXP slide_min(SEXP x, struct slide_opts opts, bool na_rm);
+
+// [[ register() ]]
+SEXP slider_min2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_min);
+}
+
+static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+
+static SEXP slide_min(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_min_impl);
+}
+
+static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+  int n_prot = 0;
+
+  double state = R_PosInf;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    min_state_reset,
+    min_state_finalize,
+    min_nodes_increment,
+    min_nodes_initialize,
+    na_rm ? min_na_rm_aggregate_from_leaves : min_na_keep_aggregate_from_leaves,
+    na_rm ? min_na_rm_aggregate_from_nodes : min_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  summary_slide_loop(&tree, p_opts, p_out);
+
+  UNPROTECT(n_prot);
+}
