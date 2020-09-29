@@ -6,6 +6,7 @@ static void segment_tree_initialize_levels(struct segment_tree* p_tree);
 // [[ include("segment-tree.h") ]]
 struct segment_tree new_segment_tree(uint64_t n_leaves,
                                      const void* p_leaves,
+                                     void* p_state,
                                      void (*state_reset)(void* p_state),
                                      void (*state_finalize)(void* p_state, void* p_result),
                                      void* (*nodes_increment)(void* p_nodes),
@@ -26,6 +27,7 @@ struct segment_tree new_segment_tree(uint64_t n_leaves,
   }
 
   tree.p_leaves = p_leaves;
+  tree.p_state = p_state;
 
   tree.p_level = PROTECT(Rf_allocVector(RAWSXP, tree.n_levels * sizeof(void*)));
   tree.p_p_level = (void**) RAW(tree.p_level);
@@ -109,9 +111,10 @@ static void segment_tree_aggregate_level(const void* p_source,
 void segment_tree_aggregate(const struct segment_tree* p_tree,
                             uint64_t begin,
                             uint64_t end,
-                            void* p_state,
                             void* p_result) {
   bool done = false;
+
+  void* p_state = p_tree->p_state;
 
   p_tree->state_reset(p_state);
 

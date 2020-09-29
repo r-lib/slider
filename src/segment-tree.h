@@ -15,6 +15,8 @@ struct segment_tree {
   SEXP nodes;
   void* p_nodes;
 
+  void* p_state;
+
   uint64_t n_leaves;
   uint64_t n_levels;
   uint64_t n_nodes;
@@ -37,6 +39,7 @@ struct segment_tree {
 
 struct segment_tree new_segment_tree(uint64_t n_leaves,
                                      const void* p_leaves,
+                                     void* p_state,
                                      void (*state_reset)(void* p_state),
                                      void (*state_finalize)(void* p_state, void* p_result),
                                      void* (*nodes_increment)(void* p_nodes),
@@ -47,7 +50,6 @@ struct segment_tree new_segment_tree(uint64_t n_leaves,
 void segment_tree_aggregate(const struct segment_tree* p_tree,
                             uint64_t begin,
                             uint64_t end,
-                            void* p_state,
                             void* p_result);
 
 #endif
