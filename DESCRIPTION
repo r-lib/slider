@@ -65,5 +65,6 @@ Collate:
     'slider-package.R'
     'summary-index.R'
     'summary-slide.R'
+    'summary2-slide.R'
     'utils.R'
     'zzz.R'

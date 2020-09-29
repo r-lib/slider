@@ -28,6 +28,24 @@ SEXP slider_ns_env = NULL;
 
 // -----------------------------------------------------------------------------
 
+const void* r_const_deref(SEXP x, SEXPTYPE type) {
+  switch (type) {
+  case INTSXP: return INTEGER_RO(x);
+  case REALSXP: return REAL_RO(x);
+  default: Rf_errorcall(R_NilValue, "Internal error in `r_const_deref()`: Can't deref `type`.");
+  }
+}
+
+void* r_deref(SEXP x, SEXPTYPE type) {
+  switch (type) {
+  case INTSXP: return INTEGER(x);
+  case REALSXP: return REAL(x);
+  default: Rf_errorcall(R_NilValue, "Internal error in `r_deref()`: Can't deref `type`.");
+  }
+}
+
+// -----------------------------------------------------------------------------
+
 #define SLIDER_INIT_ATOMIC(CTYPE, DEREF, NA_VALUE) do {        \
   SEXP out = PROTECT(Rf_allocVector(type, size));              \
   CTYPE* p_out = DEREF(out);                                   \
