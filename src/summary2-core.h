@@ -42,7 +42,10 @@ static inline SEXP sum_nodes_initialize(uint64_t n) {
   return nodes;
 }
 
-static inline void sum_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void sum_na_keep_aggregate_from_leaves(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -51,7 +54,10 @@ static inline void sum_na_keep_aggregate_from_leaves(const void* p_source, uint6
   }
 }
 
-static inline void sum_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void sum_na_keep_aggregate_from_nodes(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
   const long double* p_source_ = (const long double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -60,7 +66,10 @@ static inline void sum_na_keep_aggregate_from_nodes(const void* p_source, uint64
   }
 }
 
-static inline void sum_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void sum_na_rm_aggregate_from_leaves(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -73,7 +82,10 @@ static inline void sum_na_rm_aggregate_from_leaves(const void* p_source, uint64_
   }
 }
 
-static inline void sum_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void sum_na_rm_aggregate_from_nodes(const void* p_source,
+                                                  uint64_t begin,
+                                                  uint64_t end,
+                                                  void* p_dest) {
   const long double* p_source_ = (const long double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -125,7 +137,10 @@ static inline SEXP prod_nodes_initialize(uint64_t n) {
   return nodes;
 }
 
-static inline void prod_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void prod_na_keep_aggregate_from_leaves(const void* p_source,
+                                                      uint64_t begin,
+                                                      uint64_t end,
+                                                      void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -134,7 +149,10 @@ static inline void prod_na_keep_aggregate_from_leaves(const void* p_source, uint
   }
 }
 
-static inline void prod_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void prod_na_keep_aggregate_from_nodes(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
   const long double* p_source_ = (const long double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -143,7 +161,10 @@ static inline void prod_na_keep_aggregate_from_nodes(const void* p_source, uint6
   }
 }
 
-static inline void prod_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void prod_na_rm_aggregate_from_leaves(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -156,7 +177,10 @@ static inline void prod_na_rm_aggregate_from_leaves(const void* p_source, uint64
   }
 }
 
-static inline void prod_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void prod_na_rm_aggregate_from_nodes(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
   const long double* p_source_ = (const long double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
@@ -207,7 +231,10 @@ static inline SEXP mean_nodes_initialize(uint64_t n) {
   return nodes;
 }
 
-static inline void mean_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void mean_na_keep_aggregate_from_leaves(const void* p_source,
+                                                      uint64_t begin,
+                                                      uint64_t end,
+                                                      void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
@@ -217,7 +244,10 @@ static inline void mean_na_keep_aggregate_from_leaves(const void* p_source, uint
   }
 }
 
-static inline void mean_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void mean_na_keep_aggregate_from_nodes(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
   const struct mean_state_t* p_source_ = (const struct mean_state_t*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
@@ -228,7 +258,10 @@ static inline void mean_na_keep_aggregate_from_nodes(const void* p_source, uint6
   }
 }
 
-static inline void mean_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void mean_na_rm_aggregate_from_leaves(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
@@ -242,7 +275,10 @@ static inline void mean_na_rm_aggregate_from_leaves(const void* p_source, uint64
   }
 }
 
-static inline void mean_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void mean_na_rm_aggregate_from_nodes(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
   mean_na_keep_aggregate_from_nodes(p_source, begin, end, p_dest);
 }
 
@@ -277,7 +313,10 @@ static inline SEXP min_nodes_initialize(uint64_t n) {
   return nodes;
 }
 
-static inline void min_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void min_na_keep_aggregate_from_leaves(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
@@ -298,11 +337,17 @@ static inline void min_na_keep_aggregate_from_leaves(const void* p_source, uint6
   }
 }
 
-static inline void min_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void min_na_keep_aggregate_from_nodes(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
   min_na_keep_aggregate_from_leaves(p_source, begin, end, p_dest);
 }
 
-static inline void min_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void min_na_rm_aggregate_from_leaves(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
@@ -315,7 +360,10 @@ static inline void min_na_rm_aggregate_from_leaves(const void* p_source, uint64_
   }
 }
 
-static inline void min_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void min_na_rm_aggregate_from_nodes(const void* p_source,
+                                                  uint64_t begin,
+                                                  uint64_t end,
+                                                  void* p_dest) {
   min_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
 }
 
@@ -350,7 +398,10 @@ static inline SEXP max_nodes_initialize(uint64_t n) {
   return nodes;
 }
 
-static inline void max_na_keep_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void max_na_keep_aggregate_from_leaves(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
@@ -371,11 +422,17 @@ static inline void max_na_keep_aggregate_from_leaves(const void* p_source, uint6
   }
 }
 
-static inline void max_na_keep_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void max_na_keep_aggregate_from_nodes(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
   max_na_keep_aggregate_from_leaves(p_source, begin, end, p_dest);
 }
 
-static inline void max_na_rm_aggregate_from_leaves(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void max_na_rm_aggregate_from_leaves(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
   const double* p_source_ = (const double*) p_source;
   double* p_dest_ = (double*) p_dest;
 
@@ -388,7 +445,10 @@ static inline void max_na_rm_aggregate_from_leaves(const void* p_source, uint64_
   }
 }
 
-static inline void max_na_rm_aggregate_from_nodes(const void* p_source, uint64_t begin, uint64_t end, void* p_dest) {
+static inline void max_na_rm_aggregate_from_nodes(const void* p_source,
+                                                  uint64_t begin,
+                                                  uint64_t end,
+                                                  void* p_dest) {
   max_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
 }
 
