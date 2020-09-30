@@ -7,13 +7,21 @@
 
 // -----------------------------------------------------------------------------
 
+typedef SEXP (*summary_fn)(SEXP x, struct slide_opts opts, bool na_rm);
+
+typedef void (*summary_impl_fn)(const double* p_x,
+                                R_xlen_t size,
+                                const struct iter_opts* p_opts,
+                                bool na_rm,
+                                double* p_out);
+
 static SEXP slider_summary(SEXP x,
                            SEXP before,
                            SEXP after,
                            SEXP step,
                            SEXP complete,
                            SEXP na_rm,
-                           SEXP (*fn)(SEXP x, struct slide_opts opts, bool na_rm)) {
+                           summary_fn fn) {
   bool dot = false;
   struct slide_opts opts = new_slide_opts(before, after, step, complete, dot);
   bool c_na_rm = validate_na_rm(na_rm, dot);
@@ -23,7 +31,7 @@ static SEXP slider_summary(SEXP x,
 static SEXP slide_summary(SEXP x,
                           struct slide_opts opts,
                           bool na_rm,
-                          void (*fn)(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out)) {
+                          summary_impl_fn fn) {
   // Before `vec_cast()`, which may drop names
   SEXP names = PROTECT(slider_names(x, SLIDE));
 
@@ -74,20 +82,11 @@ static inline void slide_summary_loop(const struct segment_tree* p_tree,
 
 // -----------------------------------------------------------------------------
 
-static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm);
-
-// [[ register() ]]
-SEXP slider_sum2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  return slider_summary(x, before, after, step, complete, na_rm, slide_sum);
-}
-
-static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
-
-static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
-  return slide_summary(x, opts, na_rm, slide_sum_impl);
-}
-
-static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+static inline void slide_sum_impl(const double* p_x,
+                                  R_xlen_t size,
+                                  const struct iter_opts* p_opts,
+                                  bool na_rm,
+                                  double* p_out) {
   int n_prot = 0;
 
   long double state = 0;
@@ -110,22 +109,22 @@ static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct
   UNPROTECT(n_prot);
 }
 
-// -----------------------------------------------------------------------------
-
-static SEXP slide_prod(SEXP x, struct slide_opts opts, bool na_rm);
+static SEXP slide_sum(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_sum_impl);
+}
 
 // [[ register() ]]
-SEXP slider_prod2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  return slider_summary(x, before, after, step, complete, na_rm, slide_prod);
+SEXP slider_sum2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_sum);
 }
 
-static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+// -----------------------------------------------------------------------------
 
-static SEXP slide_prod(SEXP x, struct slide_opts opts, bool na_rm) {
-  return slide_summary(x, opts, na_rm, slide_prod_impl);
-}
-
-static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+static inline void slide_prod_impl(const double* p_x,
+                                   R_xlen_t size,
+                                   const struct iter_opts* p_opts,
+                                   bool na_rm,
+                                   double* p_out) {
   int n_prot = 0;
 
   long double state = 1;
@@ -148,22 +147,22 @@ static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struc
   UNPROTECT(n_prot);
 }
 
-// -----------------------------------------------------------------------------
-
-static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm);
+static SEXP slide_prod(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_prod_impl);
+}
 
 // [[ register() ]]
-SEXP slider_mean2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  return slider_summary(x, before, after, step, complete, na_rm, slide_mean);
+SEXP slider_prod2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_prod);
 }
 
-static inline void slide_mean_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+// -----------------------------------------------------------------------------
 
-static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
-  return slide_summary(x, opts, na_rm, slide_mean_impl);
-}
-
-static inline void slide_mean_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+static inline void slide_mean_impl(const double* p_x,
+                                   R_xlen_t size,
+                                   const struct iter_opts* p_opts,
+                                   bool na_rm,
+                                   double* p_out) {
   int n_prot = 0;
 
   struct mean_state_t state = { .sum = 0, .count = 0 };
@@ -186,22 +185,22 @@ static inline void slide_mean_impl(const double* p_x, R_xlen_t size, const struc
   UNPROTECT(n_prot);
 }
 
-// -----------------------------------------------------------------------------
-
-static SEXP slide_min(SEXP x, struct slide_opts opts, bool na_rm);
+static SEXP slide_mean(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_mean_impl);
+}
 
 // [[ register() ]]
-SEXP slider_min2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  return slider_summary(x, before, after, step, complete, na_rm, slide_min);
+SEXP slider_mean2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_mean);
 }
 
-static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+// -----------------------------------------------------------------------------
 
-static SEXP slide_min(SEXP x, struct slide_opts opts, bool na_rm) {
-  return slide_summary(x, opts, na_rm, slide_min_impl);
-}
-
-static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+static inline void slide_min_impl(const double* p_x,
+                                  R_xlen_t size,
+                                  const struct iter_opts* p_opts,
+                                  bool na_rm,
+                                  double* p_out) {
   int n_prot = 0;
 
   double state = R_PosInf;
@@ -224,22 +223,22 @@ static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct
   UNPROTECT(n_prot);
 }
 
-// -----------------------------------------------------------------------------
-
-static SEXP slide_max(SEXP x, struct slide_opts opts, bool na_rm);
+static SEXP slide_min(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_min_impl);
+}
 
 // [[ register() ]]
-SEXP slider_max2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
-  return slider_summary(x, before, after, step, complete, na_rm, slide_max);
+SEXP slider_min2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_min);
 }
 
-static inline void slide_max_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out);
+// -----------------------------------------------------------------------------
 
-static SEXP slide_max(SEXP x, struct slide_opts opts, bool na_rm) {
-  return slide_summary(x, opts, na_rm, slide_max_impl);
-}
-
-static inline void slide_max_impl(const double* p_x, R_xlen_t size, const struct iter_opts* p_opts, bool na_rm, double* p_out) {
+static inline void slide_max_impl(const double* p_x,
+                                  R_xlen_t size,
+                                  const struct iter_opts* p_opts,
+                                  bool na_rm,
+                                  double* p_out) {
   int n_prot = 0;
 
   double state = R_NegInf;
@@ -260,4 +259,13 @@ static inline void slide_max_impl(const double* p_x, R_xlen_t size, const struct
   slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
+}
+
+static SEXP slide_max(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary(x, opts, na_rm, slide_max_impl);
+}
+
+// [[ register() ]]
+SEXP slider_max2(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_max);
 }
