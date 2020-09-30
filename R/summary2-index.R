@@ -28,6 +28,51 @@ slide_index_prod_core <- function(x, i, starts, stops, indices, complete, na_rm)
 
 # ------------------------------------------------------------------------------
 
+slide_index_mean2 <- function(x,
+                              i,
+                              before = 0L,
+                              after = 0L,
+                              complete = FALSE,
+                              na_rm = FALSE) {
+  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_mean_core)
+}
+
+slide_index_mean_core <- function(x, i, starts, stops, indices, complete, na_rm) {
+  .Call(slider_index_mean_core, x, i, starts, stops, indices, complete, na_rm)
+}
+
+# ------------------------------------------------------------------------------
+
+slide_index_min2 <- function(x,
+                             i,
+                             before = 0L,
+                             after = 0L,
+                             complete = FALSE,
+                             na_rm = FALSE) {
+  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_min_core)
+}
+
+slide_index_min_core <- function(x, i, starts, stops, indices, complete, na_rm) {
+  .Call(slider_index_min_core, x, i, starts, stops, indices, complete, na_rm)
+}
+
+# ------------------------------------------------------------------------------
+
+slide_index_max2 <- function(x,
+                             i,
+                             before = 0L,
+                             after = 0L,
+                             complete = FALSE,
+                             na_rm = FALSE) {
+  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_max_core)
+}
+
+slide_index_max_core <- function(x, i, starts, stops, indices, complete, na_rm) {
+  .Call(slider_index_max_core, x, i, starts, stops, indices, complete, na_rm)
+}
+
+# ------------------------------------------------------------------------------
+
 slide_index_summary <- function(x,
                                 i,
                                 before,

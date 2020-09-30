@@ -307,3 +307,260 @@ SEXP slider_index_prod_core(SEXP x,
   );
 }
 
+// -----------------------------------------------------------------------------
+
+static void slider_index_mean_core_impl(const double* p_x,
+                                        R_xlen_t size,
+                                        int iter_min,
+                                        int iter_max,
+                                        const struct range_info range,
+                                        const int* window_sizes,
+                                        const int* window_starts,
+                                        const int* window_stops,
+                                        SEXP indices,
+                                        bool na_rm,
+                                        struct index_info* p_index,
+                                        double* p_out) {
+  int n_prot = 0;
+
+  long double state = 1;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    mean_state_reset,
+    mean_state_finalize,
+    mean_nodes_increment,
+    mean_nodes_initialize,
+    na_rm ? mean_na_rm_aggregate_from_leaves : mean_na_keep_aggregate_from_leaves,
+    na_rm ? mean_na_rm_aggregate_from_nodes : mean_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_index_summary_loop(
+    &tree,
+    iter_min,
+    iter_max,
+    range,
+    window_sizes,
+    window_starts,
+    window_stops,
+    indices,
+    p_index,
+    p_out
+  );
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_index_mean_core(SEXP x,
+                                  SEXP i,
+                                  SEXP starts,
+                                  SEXP stops,
+                                  SEXP indices,
+                                  bool complete,
+                                  bool na_rm) {
+  return slide_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slider_index_mean_core_impl
+  );
+}
+
+// [[ register() ]]
+SEXP slider_index_mean_core(SEXP x,
+                            SEXP i,
+                            SEXP starts,
+                            SEXP stops,
+                            SEXP indices,
+                            SEXP complete,
+                            SEXP na_rm) {
+  return slider_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slide_index_mean_core
+  );
+}
+
+// -----------------------------------------------------------------------------
+
+static void slider_index_min_core_impl(const double* p_x,
+                                       R_xlen_t size,
+                                       int iter_min,
+                                       int iter_max,
+                                       const struct range_info range,
+                                       const int* window_sizes,
+                                       const int* window_starts,
+                                       const int* window_stops,
+                                       SEXP indices,
+                                       bool na_rm,
+                                       struct index_info* p_index,
+                                       double* p_out) {
+  int n_prot = 0;
+
+  long double state = 1;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    min_state_reset,
+    min_state_finalize,
+    min_nodes_increment,
+    min_nodes_initialize,
+    na_rm ? min_na_rm_aggregate_from_leaves : min_na_keep_aggregate_from_leaves,
+    na_rm ? min_na_rm_aggregate_from_nodes : min_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_index_summary_loop(
+    &tree,
+    iter_min,
+    iter_max,
+    range,
+    window_sizes,
+    window_starts,
+    window_stops,
+    indices,
+    p_index,
+    p_out
+  );
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_index_min_core(SEXP x,
+                                 SEXP i,
+                                 SEXP starts,
+                                 SEXP stops,
+                                 SEXP indices,
+                                 bool complete,
+                                 bool na_rm) {
+  return slide_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slider_index_min_core_impl
+  );
+}
+
+// [[ register() ]]
+SEXP slider_index_min_core(SEXP x,
+                           SEXP i,
+                           SEXP starts,
+                           SEXP stops,
+                           SEXP indices,
+                           SEXP complete,
+                           SEXP na_rm) {
+  return slider_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slide_index_min_core
+  );
+}
+
+// -----------------------------------------------------------------------------
+
+static void slider_index_max_core_impl(const double* p_x,
+                                       R_xlen_t size,
+                                       int iter_min,
+                                       int iter_max,
+                                       const struct range_info range,
+                                       const int* window_sizes,
+                                       const int* window_starts,
+                                       const int* window_stops,
+                                       SEXP indices,
+                                       bool na_rm,
+                                       struct index_info* p_index,
+                                       double* p_out) {
+  int n_prot = 0;
+
+  long double state = 1;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    max_state_reset,
+    max_state_finalize,
+    max_nodes_increment,
+    max_nodes_initialize,
+    na_rm ? max_na_rm_aggregate_from_leaves : max_na_keep_aggregate_from_leaves,
+    na_rm ? max_na_rm_aggregate_from_nodes : max_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_index_summary_loop(
+    &tree,
+    iter_min,
+    iter_max,
+    range,
+    window_sizes,
+    window_starts,
+    window_stops,
+    indices,
+    p_index,
+    p_out
+  );
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_index_max_core(SEXP x,
+                                 SEXP i,
+                                 SEXP starts,
+                                 SEXP stops,
+                                 SEXP indices,
+                                 bool complete,
+                                 bool na_rm) {
+  return slide_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slider_index_max_core_impl
+  );
+}
+
+// [[ register() ]]
+SEXP slider_index_max_core(SEXP x,
+                           SEXP i,
+                           SEXP starts,
+                           SEXP stops,
+                           SEXP indices,
+                           SEXP complete,
+                           SEXP na_rm) {
+  return slider_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slide_index_max_core
+  );
+}
