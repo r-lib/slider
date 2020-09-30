@@ -42,9 +42,7 @@ static SEXP slide_summary(SEXP x,
   return out;
 }
 
-// -----------------------------------------------------------------------------
-
-static inline void summary_slide_loop(const struct segment_tree* p_tree,
+static inline void slide_summary_loop(const struct segment_tree* p_tree,
                                       const struct iter_opts* p_opts,
                                       double* p_out) {
   double result = 0;
@@ -188,7 +186,7 @@ static inline void slide_sum_impl(const double* p_x, R_xlen_t size, const struct
   );
   PROTECT_SEGMENT_TREE(&tree, &n_prot);
 
-  summary_slide_loop(&tree, p_opts, p_out);
+  slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
 }
@@ -308,7 +306,7 @@ static inline void slide_prod_impl(const double* p_x, R_xlen_t size, const struc
   );
   PROTECT_SEGMENT_TREE(&tree, &n_prot);
 
-  summary_slide_loop(&tree, p_opts, p_out);
+  slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
 }
@@ -422,7 +420,7 @@ static inline void slide_mean_impl(const double* p_x, R_xlen_t size, const struc
   );
   PROTECT_SEGMENT_TREE(&tree, &n_prot);
 
-  summary_slide_loop(&tree, p_opts, p_out);
+  slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
 }
@@ -532,7 +530,7 @@ static inline void slide_min_impl(const double* p_x, R_xlen_t size, const struct
   );
   PROTECT_SEGMENT_TREE(&tree, &n_prot);
 
-  summary_slide_loop(&tree, p_opts, p_out);
+  slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
 }
@@ -642,7 +640,7 @@ static inline void slide_max_impl(const double* p_x, R_xlen_t size, const struct
   );
   PROTECT_SEGMENT_TREE(&tree, &n_prot);
 
-  summary_slide_loop(&tree, p_opts, p_out);
+  slide_summary_loop(&tree, p_opts, p_out);
 
   UNPROTECT(n_prot);
 }
