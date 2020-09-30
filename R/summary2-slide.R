@@ -1,3 +1,9 @@
+# Notes:
+# Long double arithmetic is quite slow, but is required to get good precision
+# and to match base R. It is especially slow when there are `NA`, `NaN`,
+# `Inf`, or `-Inf` values involved. In these cases it is often much faster
+# to set `na_rm = TRUE` to at least remove the missing values
+
 slide_sum2 <- function(x,
                       before = 0L,
                       after = 0L,
