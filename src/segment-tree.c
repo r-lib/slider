@@ -198,7 +198,3 @@ static void segment_tree_aggregate_level(const void* p_source,
   *p_begin = parent_begin;
   *p_end = parent_end;
 }
-
-
-
-
