@@ -170,8 +170,21 @@ static inline void prod_na_keep_aggregate_from_leaves(const void* p_source,
   const double* p_source_ = (const double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
+  // If already NaN or NA, nothing can change it
+  // Huge performance increase here b/c of slow arithmetic with nan long doubles
+  if (isnan(*p_dest_)) {
+    return;
+  }
+
   for (uint64_t i = begin; i < end; ++i) {
-    *p_dest_ *= p_source_[i];
+    const double elt = p_source_[i];
+
+    if (isnan(elt)) {
+      *p_dest_ = elt;
+      return;
+    }
+
+    *p_dest_ *= elt;
   }
 }
 
@@ -182,8 +195,21 @@ static inline void prod_na_keep_aggregate_from_nodes(const void* p_source,
   const long double* p_source_ = (const long double*) p_source;
   long double* p_dest_ = (long double*) p_dest;
 
+  // If already NaN or NA, nothing can change it
+  // Huge performance increase here b/c of slow arithmetic with nan long doubles
+  if (isnan(*p_dest_)) {
+    return;
+  }
+
   for (uint64_t i = begin; i < end; ++i) {
-    *p_dest_ *= p_source_[i];
+    const long double elt = p_source_[i];
+
+    if (isnan(elt)) {
+      *p_dest_ = elt;
+      return;
+    }
+
+    *p_dest_ *= elt;
   }
 }
 
