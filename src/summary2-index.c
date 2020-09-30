@@ -221,3 +221,89 @@ SEXP slider_index_sum_core(SEXP x,
   );
 }
 
+// -----------------------------------------------------------------------------
+
+static void slider_index_prod_core_impl(const double* p_x,
+                                        R_xlen_t size,
+                                        int iter_min,
+                                        int iter_max,
+                                        const struct range_info range,
+                                        const int* window_sizes,
+                                        const int* window_starts,
+                                        const int* window_stops,
+                                        SEXP indices,
+                                        bool na_rm,
+                                        struct index_info* p_index,
+                                        double* p_out) {
+  int n_prot = 0;
+
+  long double state = 1;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    prod_state_reset,
+    prod_state_finalize,
+    prod_nodes_increment,
+    prod_nodes_initialize,
+    na_rm ? prod_na_rm_aggregate_from_leaves : prod_na_keep_aggregate_from_leaves,
+    na_rm ? prod_na_rm_aggregate_from_nodes : prod_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_index_summary_loop(
+    &tree,
+    iter_min,
+    iter_max,
+    range,
+    window_sizes,
+    window_starts,
+    window_stops,
+    indices,
+    p_index,
+    p_out
+  );
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_index_prod_core(SEXP x,
+                                  SEXP i,
+                                  SEXP starts,
+                                  SEXP stops,
+                                  SEXP indices,
+                                  bool complete,
+                                  bool na_rm) {
+  return slide_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slider_index_prod_core_impl
+  );
+}
+
+// [[ register() ]]
+SEXP slider_index_prod_core(SEXP x,
+                            SEXP i,
+                            SEXP starts,
+                            SEXP stops,
+                            SEXP indices,
+                            SEXP complete,
+                            SEXP na_rm) {
+  return slider_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    indices,
+    complete,
+    na_rm,
+    slide_index_prod_core
+  );
+}
+
