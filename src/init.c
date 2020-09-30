@@ -14,24 +14,14 @@ extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_vec_set_names(SEXP, SEXP);
 extern SEXP slider_vec_names(SEXP);
 extern SEXP slider_sum(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_sum2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_mean(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_mean2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_prod(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_prod2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_min(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_min2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_max(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_max2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_index_sum_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_sum_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_index_mean_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_mean_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_index_prod_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_prod_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_index_min_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_min_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_index_max_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_max_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
@@ -48,24 +38,14 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_vec_set_names",      (DL_FUNC) &slider_vec_set_names, 2},
   {"slider_vec_names",          (DL_FUNC) &slider_vec_names, 1},
   {"slider_sum",                (DL_FUNC) &slider_sum, 6},
-  {"slider_sum2",               (DL_FUNC) &slider_sum2, 6},
   {"slider_mean",               (DL_FUNC) &slider_mean, 6},
-  {"slider_mean2",              (DL_FUNC) &slider_mean2, 6},
   {"slider_prod",               (DL_FUNC) &slider_prod, 6},
-  {"slider_prod2",              (DL_FUNC) &slider_prod2, 6},
   {"slider_min",                (DL_FUNC) &slider_min, 6},
-  {"slider_min2",               (DL_FUNC) &slider_min2, 6},
   {"slider_max",                (DL_FUNC) &slider_max, 6},
-  {"slider_max2",               (DL_FUNC) &slider_max2, 6},
-  {"slider_index_sum_impl",     (DL_FUNC) &slider_index_sum_impl, 7},
   {"slider_index_sum_core",     (DL_FUNC) &slider_index_sum_core, 7},
-  {"slider_index_mean_impl",    (DL_FUNC) &slider_index_mean_impl, 7},
   {"slider_index_mean_core",    (DL_FUNC) &slider_index_mean_core, 7},
-  {"slider_index_prod_impl",    (DL_FUNC) &slider_index_prod_impl, 7},
   {"slider_index_prod_core",    (DL_FUNC) &slider_index_prod_core, 7},
-  {"slider_index_min_impl",     (DL_FUNC) &slider_index_min_impl, 7},
   {"slider_index_min_core",     (DL_FUNC) &slider_index_min_core, 7},
-  {"slider_index_max_impl",     (DL_FUNC) &slider_index_max_impl, 7},
   {"slider_index_max_core",     (DL_FUNC) &slider_index_max_core, 7},
   {"slider_initialize",         (DL_FUNC) &slider_initialize, 1},
   {NULL, NULL, 0}
