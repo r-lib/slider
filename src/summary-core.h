@@ -290,8 +290,22 @@ static inline void mean_na_keep_aggregate_from_leaves(const void* p_source,
   const double* p_source_ = (const double*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
+  // If already NaN or NA, nothing can change it
+  // Huge performance increase here b/c of slow arithmetic with nan long doubles
+  if (isnan(p_dest_->sum)) {
+    return;
+  }
+
   for (uint64_t i = begin; i < end; ++i) {
-    p_dest_->sum += p_source_[i];
+    const double elt = p_source_[i];
+
+    if (isnan(elt)) {
+      // No need to worry about count
+      p_dest_->sum = elt;
+      return;
+    }
+
+    p_dest_->sum += elt;
     ++p_dest_->count;
   }
 }
@@ -303,9 +317,23 @@ static inline void mean_na_keep_aggregate_from_nodes(const void* p_source,
   const struct mean_state_t* p_source_ = (const struct mean_state_t*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
+  // If already NaN or NA, nothing can change it
+  // Huge performance increase here b/c of slow arithmetic with nan long doubles
+  if (isnan(p_dest_->sum)) {
+    return;
+  }
+
   for (uint64_t i = begin; i < end; ++i) {
     const struct mean_state_t source = p_source_[i];
-    p_dest_->sum += source.sum;
+    const long double sum = source.sum;
+
+    if (isnan(sum)) {
+      // No need to worry about count
+      p_dest_->sum = sum;
+      return;
+    }
+
+    p_dest_->sum += sum;
     p_dest_->count += source.count;
   }
 }
