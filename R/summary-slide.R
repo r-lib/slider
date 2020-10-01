@@ -1,9 +1,69 @@
-# Notes:
-# Long double arithmetic is quite slow, but is required to get good precision
-# and to match base R. It is especially slow when there are `NA`, `NaN`,
-# `Inf`, or `-Inf` values involved. In these cases it is often much faster
-# to set `na_rm = TRUE` to at least remove the missing values
-
+#' Specialized sliding functions
+#'
+#' @description
+#' These functions are specialized variants of the most common ways that
+#' [slide()] is generally used. Notably, [slide_sum()] can be used for
+#' rolling sums, and [slide_mean()] can be used for rolling averages.
+#'
+#' These specialized variants are _much_ faster than using an otherwise
+#' equivalent call constructed with [slide_dbl()], especially with a very
+#' wide window.
+#'
+#' @inheritParams slide
+#'
+#' @param x `[double]`
+#'
+#'   A vector to compute the sliding function on. If not already a double
+#'   vector, will be cast to one with [vctrs::vec_cast()].
+#'
+#' @param na_rm `[logical(1)]`
+#'
+#'   Should missing values be removed from the computation?
+#'
+#' @section Implementation:
+#'
+#' These variants are implemented using a data structure known as a
+#' _segment tree_, which allows for extremely fast repeated range queries
+#' without loss of precision.
+#'
+#' One alternative to segment trees is to naively recompute the summary function
+#' on each window. This is what is done by using, for example,
+#' `slide_dbl(x, sum)`. This is extremely slow with large window sizes and
+#' wastes a lot of effort recomputing nearly the same information on each
+#' window. It can be made slightly faster by moving the sum to C to avoid
+#' intermediate allocations, but it still fairly slow.
+#'
+#' A second alternative is to use an _online_ algorithm, which uses information
+#' from the previous window to compute the next window. These are extremely
+#' fast, only requiring a single pass through the data, but often suffer from
+#' numerical instability issues.
+#'
+#' Segment trees are an attempt to reconcile the performance issues of the
+#' naive approach with the numerical issues of the online approach. The
+#' performance of segment trees isn't quite as fast as online algorithms, but is
+#' close enough that it should be usable on most large data sets without any
+#' issues. Unlike online algorithms, segment trees don't suffer from any
+#' extra numerical instability issues.
+#'
+#' @references
+#' Leis, Kundhikanjana, Kemper, and Neumann (2015). "Efficient Processing of
+#' Window Functions in Analytical SQL Queries".
+#' https://dl.acm.org/doi/10.14778/2794367.2794375
+#'
+#' @export
+#' @name slide-fast
+#' @examples
+#' x <- c(1, 5, 3, 2, 6, 10)
+#'
+#' # The following are equivalent, but `slide_sum()` is much faster
+#' slide_sum(x, before = 2)
+#' slide_dbl(x, sum, .before = 2)
+#'
+#' # Only evaluate the sum on complete windows
+#' slide_sum(x, before = 2, after = 1, complete = TRUE)
+#'
+#' # Skip every other calculation
+#' slide_sum(x, before = 2, step = 2)
 slide_sum <- function(x,
                       before = 0L,
                       after = 0L,
@@ -13,6 +73,8 @@ slide_sum <- function(x,
   .Call(slider_sum, x, before, after, step, complete, na_rm)
 }
 
+#' @rdname slide-fast
+#' @export
 slide_prod <- function(x,
                        before = 0L,
                        after = 0L,
@@ -22,6 +84,8 @@ slide_prod <- function(x,
   .Call(slider_prod, x, before, after, step, complete, na_rm)
 }
 
+#' @rdname slide-fast
+#' @export
 slide_mean <- function(x,
                        before = 0L,
                        after = 0L,
@@ -31,6 +95,8 @@ slide_mean <- function(x,
   .Call(slider_mean, x, before, after, step, complete, na_rm)
 }
 
+#' @rdname slide-fast
+#' @export
 slide_min <- function(x,
                       before = 0L,
                       after = 0L,
@@ -40,6 +106,8 @@ slide_min <- function(x,
   .Call(slider_min, x, before, after, step, complete, na_rm)
 }
 
+#' @rdname slide-fast
+#' @export
 slide_max <- function(x,
                       before = 0L,
                       after = 0L,
