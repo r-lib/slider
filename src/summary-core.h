@@ -118,9 +118,9 @@ static inline void sum_na_rm_aggregate_from_nodes(const void* p_source,
   for (uint64_t i = begin; i < end; ++i) {
     const long double elt = p_source_[i];
 
-    if (!isnan(elt)) {
-      *p_dest_ += elt;
-    }
+    // Don't wrap with `if (!isnan(elt))`. Faster and more correct, this way
+    // we propagate node `NaN` values resulting from `Inf + -Inf`
+    *p_dest_ += elt;
   }
 }
 
@@ -239,9 +239,9 @@ static inline void prod_na_rm_aggregate_from_nodes(const void* p_source,
   for (uint64_t i = begin; i < end; ++i) {
     const long double elt = p_source_[i];
 
-    if (!isnan(elt)) {
-      *p_dest_ *= elt;
-    }
+    // Don't wrap with `if (!isnan(elt))`. Faster and more correct, this way
+    // we propagate node `NaN` values resulting from `Inf + -Inf`
+    *p_dest_ *= elt;
   }
 }
 
@@ -359,7 +359,17 @@ static inline void mean_na_rm_aggregate_from_nodes(const void* p_source,
                                                    uint64_t begin,
                                                    uint64_t end,
                                                    void* p_dest) {
-  mean_na_keep_aggregate_from_nodes(p_source, begin, end, p_dest);
+  const struct mean_state_t* p_source_ = (const struct mean_state_t*) p_source;
+  struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const struct mean_state_t source = p_source_[i];
+
+    // Don't wrap with `if (!isnan(source.sum))`. Faster and more correct,
+    // this way we propagate node `NaN` values resulting from `Inf + -Inf`
+    p_dest_->sum += source.sum;
+    p_dest_->count += source.count;
+  }
 }
 
 // -----------------------------------------------------------------------------
