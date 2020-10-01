@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #define SLIDE_LOOP(ASSIGN_ONE) do {                                            \
-  for (int i = iopts.iter_min; i < iopts.iter_max; i += iopts.iter_step) {     \
+  for (int i = iter_min; i < iter_max; i += iter_step) {                       \
     if (i % 1024 == 0) {                                                       \
       R_CheckUserInterrupt();                                                  \
     }                                                                          \
@@ -93,8 +93,13 @@ SEXP slide_common_impl(SEXP x,
 
   const struct iter_opts iopts = new_iter_opts(opts, size);
 
+  int iter_min = iopts.iter_min;
+  int iter_max = iopts.iter_max;
+  int iter_step = iopts.iter_step;
+
   int start = iopts.start;
   int stop = iopts.stop;
+
   int start_step = iopts.start_step;
   int stop_step = iopts.stop_step;
 

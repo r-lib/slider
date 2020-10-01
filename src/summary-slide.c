@@ -63,6 +63,9 @@ static inline void slide_summary_loop(const struct segment_tree* p_tree,
   R_xlen_t start = p_opts->start;
   R_xlen_t stop = p_opts->stop;
 
+  R_xlen_t start_stop = p_opts->start_step;
+  R_xlen_t stop_step = p_opts->stop_step;
+
   for (R_xlen_t i = iter_min; i < iter_max; i += iter_step) {
     if (i % 1024 == 0) {
       R_CheckUserInterrupt();
@@ -71,8 +74,8 @@ static inline void slide_summary_loop(const struct segment_tree* p_tree,
     R_xlen_t window_start = max(start, 0);
     R_xlen_t window_stop = min(stop + 1, p_opts->size);
 
-    start += p_opts->start_step;
-    stop += p_opts->stop_step;
+    start += start_stop;
+    stop += stop_step;
 
     segment_tree_aggregate(p_tree, window_start, window_stop, &result);
 
