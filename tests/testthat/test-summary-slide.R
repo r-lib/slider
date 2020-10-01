@@ -119,6 +119,11 @@ test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
 # ------------------------------------------------------------------------------
 # All
 
+test_that("names are kept (even on casting)", {
+  expect_named(slide_sum(c(x = 1, y = 2), before = 1), c("x", "y"))
+  expect_named(slide_sum(c(x = 1L, y = 2L), before = 1), c("x", "y"))
+})
+
 test_that("can cast integer and logical input", {
   expect_identical(slide_sum(1:5, 1), slide_sum(1:5 + 0, 1))
   expect_identical(slide_sum(c(TRUE, FALSE, TRUE), 1), slide_sum(c(1, 0, 1), 1))
