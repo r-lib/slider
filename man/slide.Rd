@@ -115,7 +115,7 @@ The number of values before or after the current element to
 include in the sliding window. Set to \code{Inf} to select all elements
 before or after the current element. Negative values are allowed, which
 allows you to "look forward" from the current element if used as the
-\code{.before} value, or "look backwards" if used as \code{.after}.}
+before value, or "look backwards" if used as the after value.}
 
 \item{.step}{\verb{[positive integer(1)]}
 
@@ -123,7 +123,7 @@ The number of elements to shift the window forward between function calls.}
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
+Should the function be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
 \item{.ptype}{\verb{[vector(0) / NULL]}

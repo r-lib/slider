@@ -28,7 +28,7 @@
 #'
 #' @param .complete `[logical(1)]`
 #'
-#'   Should `.f` be evaluated on complete windows only? If `FALSE`,
+#'   Should the function be evaluated on complete windows only? If `FALSE`,
 #'   the default, then partial computations will be allowed.
 #'
 #' @param .ptype `[vector(0) / NULL]`
