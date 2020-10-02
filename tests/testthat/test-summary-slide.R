@@ -51,10 +51,11 @@ test_that("NA / NaN results are correct", {
     slide_sum(y, before = 3),
     slide_dbl(y, sum, .before = 3)
   )
-  expect_identical(
-    slide_sum(rev(y), before = 3),
-    slide_dbl(rev(y), sum, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_sum(rev(y), before = 3),
+  #   slide_dbl(rev(y), sum, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -138,10 +139,11 @@ test_that("NA / NaN results are correct", {
     slide_prod(y, before = 3),
     slide_dbl(y, prod, .before = 3)
   )
-  expect_identical(
-    slide_prod(rev(y), before = 3),
-    slide_dbl(rev(y), prod, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_prod(rev(y), before = 3),
+  #   slide_dbl(rev(y), prod, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -220,10 +222,11 @@ test_that("NA / NaN results are correct", {
     slide_mean(y, before = 3),
     slide_dbl(y, mean, .before = 3)
   )
-  expect_identical(
-    slide_mean(rev(y), before = 3),
-    slide_dbl(rev(y), mean, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_mean(rev(y), before = 3),
+  #   slide_dbl(rev(y), mean, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {

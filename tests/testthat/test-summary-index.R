@@ -49,10 +49,11 @@ test_that("NA / NaN results are correct", {
     slide_index_sum(y, i, before = 3),
     slide_index_dbl(y, i, sum, .before = 3)
   )
-  expect_identical(
-    slide_index_sum(rev(y), i, before = 3),
-    slide_index_dbl(rev(y), i, sum, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_index_sum(rev(y), i, before = 3),
+  #   slide_index_dbl(rev(y), i, sum, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -120,10 +121,11 @@ test_that("NA / NaN results are correct", {
     slide_index_prod(y, i, before = 3),
     slide_index_dbl(y, i, prod, .before = 3)
   )
-  expect_identical(
-    slide_index_prod(rev(y), i, before = 3),
-    slide_index_dbl(rev(y), i, prod, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_index_prod(rev(y), i, before = 3),
+  #   slide_index_dbl(rev(y), i, prod, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -190,10 +192,11 @@ test_that("NA / NaN results are correct", {
     slide_index_mean(y, i, before = 3),
     slide_index_dbl(y, i, mean, .before = 3)
   )
-  expect_identical(
-    slide_index_mean(rev(y), i, before = 3),
-    slide_index_dbl(rev(y), i, mean, .before = 3)
-  )
+  # The NA / NaN ordering is platform dependent
+  # expect_identical(
+  #   slide_index_mean(rev(y), i, before = 3),
+  #   slide_index_dbl(rev(y), i, mean, .before = 3)
+  # )
 })
 
 test_that("`na_rm = TRUE` works", {
