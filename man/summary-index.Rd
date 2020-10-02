@@ -92,6 +92,10 @@ the default, then partial computations will be allowed.}
 
 Should missing values be removed from the computation?}
 }
+\value{
+A double vector the same size as \code{x} containing the result of applying the
+summary function over the sliding windows.
+}
 \description{
 These functions are specialized variants of the most common ways that
 \code{\link[=slide_index]{slide_index()}} is generally used. Notably, \code{\link[=slide_index_sum]{slide_index_sum()}} can be used

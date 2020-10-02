@@ -25,6 +25,10 @@
 #'
 #'   Should missing values be removed from the computation?
 #'
+#' @return
+#' A double vector the same size as `x` containing the result of applying the
+#' summary function over the sliding windows.
+#'
 #' @seealso [slide_sum()]
 #'
 #' @export
