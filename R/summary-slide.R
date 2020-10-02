@@ -9,6 +9,12 @@
 #' equivalent call constructed with [slide_dbl()], especially with a very
 #' wide window.
 #'
+#' @details
+#' Note that these functions are _not_ generic and do not respect method
+#' dispatch of the corresponding summary function (i.e. [base::sum()],
+#' [base::mean()]). Input will always be cast to a double vector and an internal
+#' method for computing the summary function will be used.
+#'
 #' @inheritParams slide
 #'
 #' @param x `[double]`

@@ -102,6 +102,10 @@ These specialized variants are \emph{much} faster than using an otherwise
 equivalent call constructed with \code{\link[=slide_index_dbl]{slide_index_dbl()}}, especially with a very
 wide window.
 }
+\details{
+For more details about the implementation, see the help page of
+\code{\link[=slide_sum]{slide_sum()}}.
+}
 \examples{
 x <- c(1, 5, 3, 2, 6, 10)
 i <- as.Date("2019-01-01") + c(0, 1, 3, 4, 6, 8)

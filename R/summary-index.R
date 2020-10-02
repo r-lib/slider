@@ -10,6 +10,10 @@
 #' equivalent call constructed with [slide_index_dbl()], especially with a very
 #' wide window.
 #'
+#' @details
+#' For more details about the implementation, see the help page of
+#' [slide_sum()].
+#'
 #' @inheritParams slide_index
 #'
 #' @param x `[double]`

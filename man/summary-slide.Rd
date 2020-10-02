@@ -98,6 +98,12 @@ These specialized variants are \emph{much} faster than using an otherwise
 equivalent call constructed with \code{\link[=slide_dbl]{slide_dbl()}}, especially with a very
 wide window.
 }
+\details{
+Note that these functions are \emph{not} generic and do not respect method
+dispatch of the corresponding summary function (i.e. \code{\link[base:sum]{base::sum()}},
+\code{\link[base:mean]{base::mean()}}). Input will always be cast to a double vector and an internal
+method for computing the summary function will be used.
+}
 \section{Implementation}{
 
 
