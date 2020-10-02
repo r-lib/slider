@@ -50,6 +50,8 @@
 #' Window Functions in Analytical SQL Queries".
 #' https://dl.acm.org/doi/10.14778/2794367.2794375
 #'
+#' @seealso [slide_index_sum()]
+#'
 #' @export
 #' @name summary-slide
 #' @examples

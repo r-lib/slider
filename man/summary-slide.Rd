@@ -147,3 +147,6 @@ Leis, Kundhikanjana, Kemper, and Neumann (2015). "Efficient Processing of
 Window Functions in Analytical SQL Queries".
 https://dl.acm.org/doi/10.14778/2794367.2794375
 }
+\seealso{
+\code{\link[=slide_index_sum]{slide_index_sum()}}
+}
