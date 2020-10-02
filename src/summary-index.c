@@ -323,7 +323,7 @@ static void slider_index_mean_core_impl(const double* p_x,
                                         double* p_out) {
   int n_prot = 0;
 
-  long double state = 1;
+  struct mean_state_t state = { .sum = 0, .count = 0 };
 
   struct segment_tree tree = new_segment_tree(
     size,
