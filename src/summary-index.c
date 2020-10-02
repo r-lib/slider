@@ -119,8 +119,17 @@ static inline void slide_index_summary_loop(const struct segment_tree* p_tree,
     int starts_pos = locate_window_starts_pos(p_index, range, i);
     int stops_pos = locate_window_stops_pos(p_index, range, i);
 
-    int window_start = window_starts[starts_pos];
-    int window_stop = window_stops[stops_pos] + 1;
+    int window_start;
+    int window_stop;
+
+    if (stops_pos < starts_pos) {
+      // Signal that the window selection was completely OOB
+      window_start = 0;
+      window_stop = 0;
+    } else {
+      window_start = window_starts[starts_pos];
+      window_stop = window_stops[stops_pos] + 1;
+    }
 
     segment_tree_aggregate(p_tree, window_start, window_stop, &result);
 
