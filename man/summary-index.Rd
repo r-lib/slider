@@ -102,9 +102,9 @@ These functions are specialized variants of the most common ways that
 for rolling sums relative to an index (like a Date column), and
 \code{\link[=slide_index_mean]{slide_index_mean()}} can be used for rolling averages.
 
-These specialized variants are \emph{much} faster than using an otherwise
-equivalent call constructed with \code{\link[=slide_index_dbl]{slide_index_dbl()}}, especially with a very
-wide window.
+These specialized variants are \emph{much} faster and more memory efficient than
+using an otherwise equivalent call constructed with \code{\link[=slide_index_dbl]{slide_index_dbl()}},
+especially with a very wide window.
 }
 \details{
 For more details about the implementation, see the help page of

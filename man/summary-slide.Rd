@@ -98,9 +98,9 @@ These functions are specialized variants of the most common ways that
 \code{\link[=slide]{slide()}} is generally used. Notably, \code{\link[=slide_sum]{slide_sum()}} can be used for
 rolling sums, and \code{\link[=slide_mean]{slide_mean()}} can be used for rolling averages.
 
-These specialized variants are \emph{much} faster than using an otherwise
-equivalent call constructed with \code{\link[=slide_dbl]{slide_dbl()}}, especially with a very
-wide window.
+These specialized variants are \emph{much} faster and more memory efficient
+than using an otherwise equivalent call constructed with \code{\link[=slide_dbl]{slide_dbl()}},
+especially with a very wide window.
 }
 \details{
 Note that these functions are \emph{not} generic and do not respect method
@@ -115,8 +115,8 @@ These variants are implemented using a data structure known as a
 \emph{segment tree}, which allows for extremely fast repeated range queries
 without loss of precision.
 
-One alternative to segment trees is to naively recompute the summary function
-on each window. This is what is done by using, for example,
+One alternative to segment trees is to directly recompute the summary
+function on each full window. This is what is done by using, for example,
 \code{slide_dbl(x, sum)}. This is extremely slow with large window sizes and
 wastes a lot of effort recomputing nearly the same information on each
 window. It can be made slightly faster by moving the sum to C to avoid
@@ -128,7 +128,7 @@ fast, only requiring a single pass through the data, but often suffer from
 numerical instability issues.
 
 Segment trees are an attempt to reconcile the performance issues of the
-naive approach with the numerical issues of the online approach. The
+direct approach with the numerical issues of the online approach. The
 performance of segment trees isn't quite as fast as online algorithms, but is
 close enough that it should be usable on most large data sets without any
 issues. Unlike online algorithms, segment trees don't suffer from any

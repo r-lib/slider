@@ -6,9 +6,9 @@
 #' for rolling sums relative to an index (like a Date column), and
 #' [slide_index_mean()] can be used for rolling averages.
 #'
-#' These specialized variants are _much_ faster than using an otherwise
-#' equivalent call constructed with [slide_index_dbl()], especially with a very
-#' wide window.
+#' These specialized variants are _much_ faster and more memory efficient than
+#' using an otherwise equivalent call constructed with [slide_index_dbl()],
+#' especially with a very wide window.
 #'
 #' @details
 #' For more details about the implementation, see the help page of
