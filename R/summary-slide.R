@@ -51,13 +51,17 @@
 #' https://dl.acm.org/doi/10.14778/2794367.2794375
 #'
 #' @export
-#' @name slide-fast
+#' @name summary-slide
 #' @examples
 #' x <- c(1, 5, 3, 2, 6, 10)
 #'
-#' # The following are equivalent, but `slide_sum()` is much faster
+#' # `slide_sum()` can be used for rolling sums.
+#' # The following are equivalent, but `slide_sum()` is much faster.
 #' slide_sum(x, before = 2)
 #' slide_dbl(x, sum, .before = 2)
+#'
+#' # `slide_mean()` can be used for rolling averages
+#' slide_mean(x, before = 2)
 #'
 #' # Only evaluate the sum on complete windows
 #' slide_sum(x, before = 2, after = 1, complete = TRUE)
@@ -73,7 +77,7 @@ slide_sum <- function(x,
   .Call(slider_sum, x, before, after, step, complete, na_rm)
 }
 
-#' @rdname slide-fast
+#' @rdname summary-slide
 #' @export
 slide_prod <- function(x,
                        before = 0L,
@@ -84,7 +88,7 @@ slide_prod <- function(x,
   .Call(slider_prod, x, before, after, step, complete, na_rm)
 }
 
-#' @rdname slide-fast
+#' @rdname summary-slide
 #' @export
 slide_mean <- function(x,
                        before = 0L,
@@ -95,7 +99,7 @@ slide_mean <- function(x,
   .Call(slider_mean, x, before, after, step, complete, na_rm)
 }
 
-#' @rdname slide-fast
+#' @rdname summary-slide
 #' @export
 slide_min <- function(x,
                       before = 0L,
@@ -106,7 +110,7 @@ slide_min <- function(x,
   .Call(slider_min, x, before, after, step, complete, na_rm)
 }
 
-#' @rdname slide-fast
+#' @rdname summary-slide
 #' @export
 slide_max <- function(x,
                       before = 0L,
