@@ -357,6 +357,10 @@ test_that("works with size 0 input", {
   expect_identical(slide_index_sum(integer(), integer(), before = 5, after = 1), double())
 })
 
+test_that("x and i must be the same size", {
+  expect_error(slide_index_sum(1, 1:3), class = "slider_error_index_incompatible_size")
+})
+
 test_that("names are kept (even on casting)", {
   expect_named(slide_index_sum(c(x = 1, y = 2), 1:2, before = 1), c("x", "y"))
   expect_named(slide_index_sum(c(x = 1L, y = 2L), 1:2, before = 1), c("x", "y"))
