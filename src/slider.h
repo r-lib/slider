@@ -7,6 +7,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <stdbool.h>
+#include <stdint.h> // uint64_t
 
 // Definitions --------------------------------------------------
 
