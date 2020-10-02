@@ -429,6 +429,6 @@ test_that("arrays of dimensionality >1 are not supported", {
 test_that("works when the window is completely OOB", {
   expect_identical(
     slide_sum(1:3, before = 4, after = -4),
-    c(NA_real_, NA_real_, NA_real_)
+    c(0, 0, 0)
   )
 })
