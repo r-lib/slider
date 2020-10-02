@@ -71,8 +71,8 @@ static inline void slide_summary_loop(const struct segment_tree* p_tree,
       R_CheckUserInterrupt();
     }
 
-    R_xlen_t window_start = max(start, 0);
-    R_xlen_t window_stop = min(stop + 1, p_opts->size);
+    R_xlen_t window_start = max_size(start, 0);
+    R_xlen_t window_stop = min_size(stop + 1, p_opts->size);
 
     // Happens when the entire window is OOB, essentially take a 0-slice
     if (window_stop < window_start) {

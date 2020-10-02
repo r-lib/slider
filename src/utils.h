@@ -10,8 +10,14 @@
 static inline int min(int x, int y) {
   return x < y ? x : y;
 }
-
 static inline int max(int x, int y) {
+  return x > y ? x : y;
+}
+
+static inline R_xlen_t min_size(R_xlen_t x, R_xlen_t y) {
+  return x < y ? x : y;
+}
+static inline R_xlen_t max_size(R_xlen_t x, R_xlen_t y) {
   return x > y ? x : y;
 }
 
