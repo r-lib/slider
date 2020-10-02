@@ -88,6 +88,75 @@ test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
 # ------------------------------------------------------------------------------
 # slide_prod()
 
+test_that("integer before works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_prod(x, before = 1), c(1, 2, 6, 12))
+  expect_identical(slide_prod(x, before = 2), c(1, 2, 6, 24))
+})
+
+test_that("integer after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_prod(x, after = 1), c(2, 6, 12, 4))
+  expect_identical(slide_prod(x, after = 2), c(6, 24, 12, 4))
+})
+
+test_that("negative before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_prod(x, before = -1, after = 2), c(6, 12, 4, 1))
+  expect_identical(slide_prod(x, before = 2, after = -1), c(1, 1, 2, 6))
+
+  expect_identical(slide_prod(x, before = -1, after = 2, complete = TRUE), c(6, 12, NA, NA))
+  expect_identical(slide_prod(x, before = 2, after = -1, complete = TRUE), c(NA, NA, 2, 6))
+})
+
+test_that("`Inf` before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_prod(x, before = Inf), cumprod(x))
+  expect_identical(slide_prod(x, after = Inf), rev(cumprod(rev(x))))
+})
+
+test_that("step / complete works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_prod(x, before = 1, step = 2), c(1, NA, 6, NA))
+  expect_identical(slide_prod(x, before = 1, step = 2, complete = TRUE), c(NA, 2, NA, 12))
+})
+
+test_that("NA / NaN results are correct", {
+  x <- c(rep(1, 10), rep(NA, 10), 1:4)
+  y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
+
+  expect_identical(
+    slide_prod(x, before = 3),
+    slide_dbl(x, prod, .before = 3)
+  )
+  expect_identical(
+    slide_prod(y, before = 3),
+    slide_dbl(y, prod, .before = 3)
+  )
+  expect_identical(
+    slide_prod(rev(y), before = 3),
+    slide_dbl(rev(y), prod, .before = 3)
+  )
+})
+
+test_that("`na_rm = TRUE` works", {
+  x <- NA
+  y <- c(1, NA, 2, 3)
+
+  expect_identical(slide_prod(x, na_rm = TRUE), 1)
+  expect_identical(slide_prod(y, na_rm = TRUE, before = 1), c(1, 1, 2, 6))
+})
+
+test_that("Inf and -Inf results are correct", {
+  x <- c(1, Inf, -Inf, 0)
+  expect_identical(slide_prod(x, before = 1), c(1, Inf, -Inf, NaN))
+})
+
 test_that("Inf * 0 = NaN propagates with `na_rm = TRUE`", {
   x <- c(Inf, 0, rep(1, SEGMENT_TREE_FANOUT - 2L))
   before <- SEGMENT_TREE_FANOUT - 1L
