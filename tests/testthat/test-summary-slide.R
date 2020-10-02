@@ -401,6 +401,12 @@ test_that("Inf and -Inf results are correct", {
 # ------------------------------------------------------------------------------
 # All
 
+test_that("works with size 0 input", {
+  expect_identical(slide_sum(integer()), double())
+  expect_identical(slide_sum(integer(), before = 5, after = 1), double())
+  expect_identical(slide_sum(integer(), step = 2, na_rm = TRUE), double())
+})
+
 test_that("names are kept (even on casting)", {
   expect_named(slide_sum(c(x = 1, y = 2), before = 1), c("x", "y"))
   expect_named(slide_sum(c(x = 1L, y = 2L), before = 1), c("x", "y"))
