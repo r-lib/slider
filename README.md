@@ -43,6 +43,11 @@ expect from having previously used purrr.
 To learn more about these three functions, read the [introduction
 vignette](https://davisvaughan.github.io/slider/articles/slider.html).
 
+There are also a set of extremely fast specialized variants of
+`slide_dbl()` for the most common use cases. These include `slide_sum()`
+for rolling sums and `slide_mean()` for rolling averages. There are
+index variants of each of these as well, like `slide_index_sum()`.
+
 ## Installation
 
 Install the released version from [CRAN](https://CRAN.R-project.org)
