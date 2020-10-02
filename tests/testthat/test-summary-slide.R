@@ -423,7 +423,7 @@ test_that("arrays of dimensionality 1 are supported", {
 })
 
 test_that("arrays of dimensionality >1 are not supported", {
-  expect_error(slide_sum(array(1:3, dim = c(2, 2)), 1), class = "vctrs_error_incompatible_type")
+  expect_error(slide_sum(array(1:4, dim = c(2, 2)), 1), class = "vctrs_error_incompatible_type")
 })
 
 test_that("works when the window is completely OOB", {
