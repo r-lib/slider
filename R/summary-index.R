@@ -142,14 +142,16 @@ slide_index_summary <- function(x,
                                 complete,
                                 na_rm,
                                 fn_core) {
-  info <- slide_index_info(i, before, after)
+  info <- slide_index_info(i, before, after, "i", "before", "after")
 
   x_size <- compute_size(x, -1L)
   i_size <- vec_size(i)
 
   if (i_size != x_size) {
-    stop_index_incompatible_size(i_size, x_size, ".i")
+    stop_index_incompatible_size(i_size, x_size, "i")
   }
+
+  complete <- check_complete(complete, "complete")
 
   i <- info$i
   starts <- info$starts
