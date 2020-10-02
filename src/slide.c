@@ -17,14 +17,14 @@
     int window_stop = min(stop, size - 1);                                     \
     int window_size = window_stop - window_start + 1;                          \
                                                                                \
-    start += start_step;                                                       \
-    stop += stop_step;                                                         \
-                                                                               \
     /* Happens when the entire window is OOB, we take a 0-slice of `x`. */     \
     if (window_stop < window_start) {                                          \
       window_start = 0;                                                        \
       window_size = 0;                                                         \
     }                                                                          \
+                                                                               \
+    start += start_step;                                                       \
+    stop += stop_step;                                                         \
                                                                                \
     init_compact_seq(p_window, window_start, window_size, true);               \
                                                                                \
