@@ -170,6 +170,75 @@ test_that("Inf * 0 = NaN propagates with `na_rm = TRUE`", {
 # ------------------------------------------------------------------------------
 # slide_mean()
 
+test_that("integer before works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_mean(x, before = 1), slide_dbl(x, mean, .before = 1))
+  expect_identical(slide_mean(x, before = 2), slide_dbl(x, mean, .before = 2))
+})
+
+test_that("integer after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_mean(x, after = 1), slide_dbl(x, mean, .after = 1))
+  expect_identical(slide_mean(x, after = 2), slide_dbl(x, mean, .after = 2))
+})
+
+test_that("negative before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_mean(x, before = -1, after = 2), slide_dbl(x, mean, .before = -1, .after = 2))
+  expect_identical(slide_mean(x, before = 2, after = -1), slide_dbl(x, mean, .before = 2, .after = -1))
+
+  expect_identical(slide_mean(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, mean, .before = -1, .after = 2, .complete = TRUE))
+  expect_identical(slide_mean(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, mean, .before = 2, .after = -1, .complete = TRUE))
+})
+
+test_that("`Inf` before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_mean(x, before = Inf), slide_dbl(x, mean, .before = Inf))
+  expect_identical(slide_mean(x, after = Inf), slide_dbl(x, mean, .after = Inf))
+})
+
+test_that("step / complete works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_mean(x, before = 1, step = 2), slide_dbl(x, mean, .before = 1, .step = 2))
+  expect_identical(slide_mean(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, mean, .before = 1, .step = 2, .complete = TRUE))
+})
+
+test_that("NA / NaN results are correct", {
+  x <- c(rep(1, 10), rep(NA, 10), 1:4)
+  y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
+
+  expect_identical(
+    slide_mean(x, before = 3),
+    slide_dbl(x, mean, .before = 3)
+  )
+  expect_identical(
+    slide_mean(y, before = 3),
+    slide_dbl(y, mean, .before = 3)
+  )
+  expect_identical(
+    slide_mean(rev(y), before = 3),
+    slide_dbl(rev(y), mean, .before = 3)
+  )
+})
+
+test_that("`na_rm = TRUE` works", {
+  x <- NA
+  y <- c(1, NA, 2, 3)
+
+  expect_identical(slide_mean(x, na_rm = TRUE), NaN)
+  expect_identical(slide_mean(y, na_rm = TRUE, before = 1), c(1, 1, 2, 2.5))
+})
+
+test_that("Inf and -Inf results are correct", {
+  x <- c(1, Inf, -Inf, 1)
+  expect_identical(slide_mean(x, before = 1), c(1, Inf, NaN, -Inf))
+})
+
 test_that("precision matches base R (long doubles)", {
   x <- c(1/7, 1/7, 1/3)
   expect_identical(mean(x), slide_mean(x, Inf)[[length(x)]])
@@ -183,6 +252,150 @@ test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
     slide_mean(x, before = before, na_rm = T),
     slide_dbl(x, mean, .before = before, na_rm = T)
   )
+})
+
+# ------------------------------------------------------------------------------
+# slide_min()
+
+test_that("integer before works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_min(x, before = 1), slide_dbl(x, min, .before = 1))
+  expect_identical(slide_min(x, before = 2), slide_dbl(x, min, .before = 2))
+})
+
+test_that("integer after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_min(x, after = 1), slide_dbl(x, min, .after = 1))
+  expect_identical(slide_min(x, after = 2), slide_dbl(x, min, .after = 2))
+})
+
+test_that("negative before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_min(x, before = -1, after = 2), c(2, 3, 4, Inf))
+  expect_identical(slide_min(x, before = 2, after = -1), c(Inf, 1, 1, 2))
+
+  expect_identical(slide_min(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, min, .before = -1, .after = 2, .complete = TRUE))
+  expect_identical(slide_min(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, min, .before = 2, .after = -1, .complete = TRUE))
+})
+
+test_that("`Inf` before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_min(x, before = Inf), slide_dbl(x, min, .before = Inf))
+  expect_identical(slide_min(x, after = Inf), slide_dbl(x, min, .after = Inf))
+})
+
+test_that("step / complete works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_min(x, before = 1, step = 2), slide_dbl(x, min, .before = 1, .step = 2))
+  expect_identical(slide_min(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, min, .before = 1, .step = 2, .complete = TRUE))
+})
+
+test_that("NA / NaN results are correct", {
+  x <- c(rep(1, 10), rep(NA, 10), 1:4)
+  y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
+
+  expect_identical(
+    slide_min(x, before = 3),
+    slide_dbl(x, min, .before = 3)
+  )
+  expect_identical(
+    slide_min(y, before = 3),
+    slide_dbl(y, min, .before = 3)
+  )
+  expect_identical(
+    slide_min(rev(y), before = 3),
+    slide_dbl(rev(y), min, .before = 3)
+  )
+})
+
+test_that("`na_rm = TRUE` works", {
+  x <- NA
+  y <- c(1, NA, 2, 3)
+
+  expect_identical(slide_min(x, na_rm = TRUE), Inf)
+  expect_identical(slide_min(y, na_rm = TRUE, before = 1), c(1, 1, 2, 2))
+})
+
+test_that("Inf and -Inf results are correct", {
+  x <- c(1, Inf, -Inf, 1)
+  expect_identical(slide_min(x, before = 1), c(1, 1, -Inf, -Inf))
+})
+
+# ------------------------------------------------------------------------------
+# slide_max()
+
+test_that("integer before works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_max(x, before = 1), slide_dbl(x, max, .before = 1))
+  expect_identical(slide_max(x, before = 2), slide_dbl(x, max, .before = 2))
+})
+
+test_that("integer after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_max(x, after = 1), slide_dbl(x, max, .after = 1))
+  expect_identical(slide_max(x, after = 2), slide_dbl(x, max, .after = 2))
+})
+
+test_that("negative before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_max(x, before = -1, after = 2), c(3, 4, 4, -Inf))
+  expect_identical(slide_max(x, before = 2, after = -1), c(-Inf, 1, 2, 3))
+
+  expect_identical(slide_max(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, max, .before = -1, .after = 2, .complete = TRUE))
+  expect_identical(slide_max(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, max, .before = 2, .after = -1, .complete = TRUE))
+})
+
+test_that("`Inf` before/after works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_max(x, before = Inf), slide_dbl(x, max, .before = Inf))
+  expect_identical(slide_max(x, after = Inf), slide_dbl(x, max, .after = Inf))
+})
+
+test_that("step / complete works", {
+  x <- 1:4 + 0
+
+  expect_identical(slide_max(x, before = 1, step = 2), slide_dbl(x, max, .before = 1, .step = 2))
+  expect_identical(slide_max(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, max, .before = 1, .step = 2, .complete = TRUE))
+})
+
+test_that("NA / NaN results are correct", {
+  x <- c(rep(1, 10), rep(NA, 10), 1:4)
+  y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
+
+  expect_identical(
+    slide_max(x, before = 3),
+    slide_dbl(x, max, .before = 3)
+  )
+  expect_identical(
+    slide_max(y, before = 3),
+    slide_dbl(y, max, .before = 3)
+  )
+  expect_identical(
+    slide_max(rev(y), before = 3),
+    slide_dbl(rev(y), max, .before = 3)
+  )
+})
+
+test_that("`na_rm = TRUE` works", {
+  x <- NA
+  y <- c(1, NA, 2, 3)
+
+  expect_identical(slide_max(x, na_rm = TRUE), -Inf)
+  expect_identical(slide_max(y, na_rm = TRUE, before = 1), c(1, 1, 2, 3))
+})
+
+test_that("Inf and -Inf results are correct", {
+  x <- c(1, Inf, -Inf, 1)
+  expect_identical(slide_max(x, before = 1), c(1, Inf, Inf, 1))
 })
 
 # ------------------------------------------------------------------------------
