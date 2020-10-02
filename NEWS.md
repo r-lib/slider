@@ -1,5 +1,17 @@
 # slider (development version)
 
+* New family of very fast specialized sliding functions:
+
+  - `slide_sum()`, `slide_index_sum()`: for rolling sums
+  
+  - `slide_mean()`, `slide_index_mean()`: for rolling averages
+  
+  - `slide_prod()`, `slide_index_prod()`: for rolling products
+  
+  - `slide_min()`, `slide_index_min()`: for rolling minimums
+  
+  - `slide_max()`, `slide_index_max()`: for rolling maximums
+
 * `vignette("rowwise")` has been updated to use `cur_data()` from dplyr 1.0.0,
   which makes it significantly easier to do rolling operations on data frames
   (like rolling regressions) using slider in a dplyr pipeline.
