@@ -186,7 +186,7 @@ The number of values before or after the current element to
 include in the sliding window. Set to \code{Inf} to select all elements
 before or after the current element. Negative values are allowed, which
 allows you to "look forward" from the current element if used as the
-\code{.before} value, or "look backwards" if used as the \code{.after} value.}
+\code{.before} value, or "look backwards" if used as \code{.after}.}
 
 \item{.complete}{\verb{[logical(1)]}
 
