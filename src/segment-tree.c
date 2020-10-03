@@ -86,7 +86,7 @@ static void segment_tree_initialize_levels(struct segment_tree* p_tree) {
 
     for (uint64_t j = 0; j < n_nodes_source; j += SEGMENT_TREE_FANOUT) {
       uint64_t begin = j;
-      uint64_t end = min_u64(n_leaves, j + SEGMENT_TREE_FANOUT);
+      uint64_t end = min_u64(n_nodes_source, j + SEGMENT_TREE_FANOUT);
 
       p_tree->aggregate_from_nodes(p_source, begin, end, p_dest);
       p_dest = p_tree->nodes_increment(p_dest);
