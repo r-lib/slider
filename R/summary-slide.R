@@ -17,7 +17,7 @@
 #'
 #' @inheritParams slide
 #'
-#' @param x `[double]`
+#' @param x `[vector]`
 #'
 #'   A vector to compute the sliding function on. If not already a double
 #'   vector, will be cast to one with [vctrs::vec_cast()].

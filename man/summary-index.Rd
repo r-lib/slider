@@ -34,7 +34,7 @@ slide_index_min(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
 slide_index_max(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
 }
 \arguments{
-\item{x}{\verb{[double]}
+\item{x}{\verb{[vector]}
 
 A vector to compute the sliding function on. If not already a double
 vector, will be cast to one with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.}
