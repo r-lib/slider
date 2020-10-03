@@ -257,6 +257,13 @@ test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
   )
 })
 
+test_that("computes correctly with wider width", {
+  expect_identical(
+    slide_mean(1:1000, before = 100),
+    slide_dbl(1:1000, mean, .before = 100)
+  )
+})
+
 # ------------------------------------------------------------------------------
 # slide_min()
 

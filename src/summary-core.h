@@ -323,8 +323,8 @@ static inline void mean_na_keep_aggregate_from_nodes(const void* p_source,
     return;
   }
 
-  for (uint64_t i = begin; i < end; ++i, ++p_source_) {
-    const long double sum = p_source_->sum;
+  for (uint64_t i = begin; i < end; ++i) {
+    const long double sum = p_source_[i].sum;
 
     if (isnan(sum)) {
       // No need to worry about count
@@ -333,7 +333,7 @@ static inline void mean_na_keep_aggregate_from_nodes(const void* p_source,
     }
 
     p_dest_->sum += sum;
-    p_dest_->count += p_source_->count;
+    p_dest_->count += p_source_[i].count;
   }
 }
 
@@ -361,11 +361,11 @@ static inline void mean_na_rm_aggregate_from_nodes(const void* p_source,
   const struct mean_state_t* p_source_ = (const struct mean_state_t*) p_source;
   struct mean_state_t* p_dest_ = (struct mean_state_t*) p_dest;
 
-  for (uint64_t i = begin; i < end; ++i, ++p_source_) {
+  for (uint64_t i = begin; i < end; ++i) {
     // Don't wrap with `if (!isnan(source.sum))`. Faster and more correct,
     // this way we propagate node `NaN` values resulting from `Inf + -Inf`
-    p_dest_->sum += p_source_->sum;
-    p_dest_->count += p_source_->count;
+    p_dest_->sum += p_source_[i].sum;
+    p_dest_->count += p_source_[i].count;
   }
 }
 
