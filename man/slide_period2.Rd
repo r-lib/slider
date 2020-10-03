@@ -323,7 +323,7 @@ allows you to "look forward" from the current element if used as the
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
+Should the function be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
 \item{.ptype}{\verb{[vector(0) / NULL]}

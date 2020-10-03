@@ -3,14 +3,12 @@
 #include "utils.h"
 #include "params.h"
 #include "assign.h"
+#include "opts-slide.h"
 
 // -----------------------------------------------------------------------------
 
 #define SLIDE_LOOP(ASSIGN_ONE) do {                                            \
-  for (int i = iteration_min;                                                  \
-       i < iteration_max;                                                      \
-       i += step, start += start_step, stop += stop_step) {                    \
-                                                                               \
+  for (int i = iter_min; i < iter_max; i += iter_step) {                       \
     if (i % 1024 == 0) {                                                       \
       R_CheckUserInterrupt();                                                  \
     }                                                                          \
@@ -24,6 +22,9 @@
       window_start = 0;                                                        \
       window_size = 0;                                                         \
     }                                                                          \
+                                                                               \
+    start += start_step;                                                       \
+    stop += stop_step;                                                         \
                                                                                \
     init_compact_seq(p_window, window_start, window_size, true);               \
                                                                                \
@@ -69,64 +70,38 @@ SEXP slide_common_impl(SEXP x,
                        SEXP params) {
 
   const int type = validate_type(r_lst_get(params, 0));
+  const bool constrain = validate_constrain(r_lst_get(params, 1));
+  const bool atomic = validate_atomic(r_lst_get(params, 2));
+
   const int force = compute_force(type);
   const int size = compute_size(x, type);
 
-  bool before_unbounded = false;
-  bool after_unbounded = false;
+  SEXP before = r_lst_get(params, 3);
+  SEXP after = r_lst_get(params, 4);
+  SEXP step = r_lst_get(params, 5);
+  SEXP complete = r_lst_get(params, 6);
 
-  const bool constrain = validate_constrain(r_lst_get(params, 1));
-  const bool atomic = validate_atomic(r_lst_get(params, 2));
-  const int before = validate_before(r_lst_get(params, 3), &before_unbounded);
-  const int after = validate_after(r_lst_get(params, 4), &after_unbounded);
-  const int step = validate_step(r_lst_get(params, 5));
-  const bool complete = validate_complete(r_lst_get(params, 6));
+  const bool dot = true;
 
-  const bool before_positive = before >= 0;
-  const bool after_positive = after >= 0;
+  const struct slide_opts opts = new_slide_opts(
+    before,
+    after,
+    step,
+    complete,
+    dot
+  );
 
-  check_double_negativeness(before, after, before_positive, after_positive);
-  check_before_negativeness(before, after, before_positive, after_unbounded);
-  check_after_negativeness(after, before, after_positive, before_unbounded);
+  const struct iter_opts iopts = new_iter_opts(opts, size);
 
-  int iteration_min = 0;
-  int iteration_max = size;
+  int iter_min = iopts.iter_min;
+  int iter_max = iopts.iter_max;
+  int iter_step = iopts.iter_step;
 
-  // Iteration adjustment
-  if (complete) {
-    if (before_positive) {
-      iteration_min += before;
-    }
-    if (after_positive) {
-      iteration_max -= after;
-    }
-  }
+  int start = iopts.start;
+  int stop = iopts.stop;
 
-  // Forward adjustment to match the number of iterations
-  int offset = 0;
-  if (complete && before_positive) {
-    offset = before;
-  }
-
-  int start;
-  int start_step;
-  if (before_unbounded) {
-    start = 0;
-    start_step = 0;
-  } else {
-    start = offset - before;
-    start_step = step;
-  }
-
-  int stop;
-  int stop_step;
-  if (after_unbounded) {
-    stop = size - 1;
-    stop_step = 0;
-  } else {
-    stop = offset + after;
-    stop_step = step;
-  }
+  int start_step = iopts.start_step;
+  int stop_step = iopts.stop_step;
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));

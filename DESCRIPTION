@@ -37,7 +37,7 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9000
 Collate: 
     'block.R'
     'conditions.R'
@@ -56,6 +56,7 @@ Collate:
     'pslide-period.R'
     'slide2.R'
     'pslide.R'
+    'segment-tree.R'
     'slide-common.R'
     'slide-index-common.R'
     'slide-index.R'
@@ -63,5 +64,7 @@ Collate:
     'slide-period.R'
     'slide.R'
     'slider-package.R'
+    'summary-index.R'
+    'summary-slide.R'
     'utils.R'
     'zzz.R'

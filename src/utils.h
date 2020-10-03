@@ -10,9 +10,19 @@
 static inline int min(int x, int y) {
   return x < y ? x : y;
 }
-
 static inline int max(int x, int y) {
   return x > y ? x : y;
+}
+
+static inline R_xlen_t min_size(R_xlen_t x, R_xlen_t y) {
+  return x < y ? x : y;
+}
+static inline R_xlen_t max_size(R_xlen_t x, R_xlen_t y) {
+  return x > y ? x : y;
+}
+
+static inline uint64_t min_u64(uint64_t x, uint64_t y) {
+  return x < y ? x : y;
 }
 
 static inline SEXP r_force_eval(SEXP call, SEXP env, const int n_force) {
@@ -43,10 +53,16 @@ __attribute__((noreturn)) static inline void never_reached(const char* fn) {
   Rf_errorcall(R_NilValue, "Internal error: Reached the unreachable in `%s()`.", fn);
 }
 
+extern SEXP strings_before;
+extern SEXP strings_after;
+extern SEXP strings_step;
+extern SEXP strings_complete;
+extern SEXP strings_na_rm;
 extern SEXP strings_dot_before;
 extern SEXP strings_dot_after;
 extern SEXP strings_dot_step;
 extern SEXP strings_dot_complete;
+extern SEXP strings_dot_na_rm;
 
 extern SEXP syms_dot_x;
 extern SEXP syms_dot_y;
@@ -54,10 +70,14 @@ extern SEXP syms_dot_l;
 
 extern SEXP slider_shared_empty_lgl;
 extern SEXP slider_shared_empty_int;
+extern SEXP slider_shared_empty_dbl;
 
 extern SEXP slider_shared_na_lgl;
 
 extern SEXP slider_ns_env;
+
+const void* r_const_deref(SEXP x, SEXPTYPE type);
+void* r_deref(SEXP x, SEXPTYPE type);
 
 SEXP slider_init(SEXPTYPE type, R_xlen_t size);
 

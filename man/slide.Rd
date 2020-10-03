@@ -123,7 +123,7 @@ The number of elements to shift the window forward between function calls.}
 
 \item{.complete}{\verb{[logical(1)]}
 
-Should \code{.f} be evaluated on complete windows only? If \code{FALSE},
+Should the function be evaluated on complete windows only? If \code{FALSE},
 the default, then partial computations will be allowed.}
 
 \item{.ptype}{\verb{[vector(0) / NULL]}
