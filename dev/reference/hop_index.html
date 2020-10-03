@@ -368,11 +368,12 @@ supplied. This is a way to make production code demand fixed types.</p></td>
 #&gt; </span><span style='color: #555555;'> 33. </span><span>slider::slide_index(x, i, mean, .before = months(1))
 #&gt; </span><span style='color: #555555;'> 34. </span><span>slider:::slide_index_impl(...)
 #&gt; </span><span style='color: #555555;'> 35. </span><span>slider:::slide_index_common(...)
-#&gt; </span><span style='color: #555555;'> 36. </span><span>slider:::compute_ranges(i, before, after)
-#&gt; </span><span style='color: #555555;'> 37. </span><span>slider:::check_generated_endpoints_cannot_be_na(starts, ".before")
-#&gt; </span><span style='color: #555555;'> 38. </span><span>slider:::stop_generated_endpoints_cannot_be_na(...)
-#&gt; </span><span style='color: #555555;'> 39. </span><span>slider:::stop_endpoints(...)
-#&gt; </span><span style='color: #555555;'> 40. </span><span>slider:::stop_slider(...)</div><div class='input'>
+#&gt; </span><span style='color: #555555;'> 36. </span><span>slider:::slide_index_info(...)
+#&gt; </span><span style='color: #555555;'> 37. </span><span>slider:::compute_ranges(...)
+#&gt; </span><span style='color: #555555;'> 38. </span><span>slider:::check_generated_endpoints_cannot_be_na(starts, before_arg)
+#&gt; </span><span style='color: #555555;'> 39. </span><span>slider:::stop_generated_endpoints_cannot_be_na(...)
+#&gt; </span><span style='color: #555555;'> 40. </span><span>slider:::stop_endpoints(...)
+#&gt; </span><span style='color: #555555;'> 41. </span><span>slider:::stop_slider(...)</div><div class='input'>
 <span class='co'># This is because when you actually compute the `.i - .before` sequence,</span>
 <span class='co'># you hit non-existant dates. i.e. `"2019-03-29" - months(1)` doesn't exist.</span>
 <span class='va'>i</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>

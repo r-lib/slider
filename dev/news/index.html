@@ -135,7 +135,16 @@
 </h1>
 <ul>
 <li>
-<code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</li>
+<p>New family of very fast specialized sliding functions:</p>
+<ul>
+<li><p><code><a href="../reference/summary-slide.html">slide_sum()</a></code>, <code><a href="../reference/summary-index.html">slide_index_sum()</a></code>: for rolling sums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_mean()</a></code>, <code><a href="../reference/summary-index.html">slide_index_mean()</a></code>: for rolling averages</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_prod()</a></code>, <code><a href="../reference/summary-index.html">slide_index_prod()</a></code>: for rolling products</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_min()</a></code>, <code><a href="../reference/summary-index.html">slide_index_min()</a></code>: for rolling minimums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_max()</a></code>, <code><a href="../reference/summary-index.html">slide_index_max()</a></code>: for rolling maximums</p></li>
+</ul>
+</li>
+<li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
 </ul>
 </div>
     <div id="slider-015" class="section level1">
