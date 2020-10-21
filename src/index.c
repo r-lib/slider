@@ -22,9 +22,10 @@
       stop_not_all_size_one(i + 1, vec_size(elt));             \
     }                                                          \
                                                                \
-    SEXP locations = VECTOR_ELT(indices, i);                   \
+    int peer_start = window.p_peer_starts[i];                  \
+    int peer_size = window.p_peer_sizes[i];                    \
                                                                \
-    ASSIGN_LOCS(p_out, locations, elt, ptype);                 \
+    ASSIGN_LOCS(p_out, peer_start, peer_size, elt, ptype);     \
     UNPROTECT(1);                                              \
   }                                                            \
 } while (0)
@@ -58,7 +59,7 @@ SEXP slide_index_common_impl(SEXP x,
                              SEXP f_call,
                              SEXP ptype,
                              SEXP env,
-                             SEXP indices,
+                             SEXP peer_sizes,
                              SEXP type_,
                              SEXP constrain_,
                              SEXP atomic_,
@@ -76,13 +77,12 @@ SEXP slide_index_common_impl(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  int* window_sizes = (int*) R_alloc(index.size, sizeof(int));
-  int* window_starts = (int*) R_alloc(index.size, sizeof(int));
-  int* window_stops = (int*) R_alloc(index.size, sizeof(int));
+  const int* p_peer_sizes = INTEGER_RO(peer_sizes);
+  int* p_peer_starts = (int*) R_alloc(index.size, sizeof(int));
+  int* p_peer_stops = (int*) R_alloc(index.size, sizeof(int));
+  fill_peer_info(p_peer_sizes, index.size, p_peer_starts, p_peer_stops);
 
-  fill_window_info(window_sizes, window_starts, window_stops, indices, index.size);
-
-  struct window_info window = new_window_info(window_starts, window_stops, index.size);
+  struct window_info window = new_window_info(p_peer_sizes, p_peer_starts, p_peer_stops);
   PROTECT_WINDOW_INFO(&window, &n_prot);
 
   struct range_info range = new_range_info(starts, stops, index.size);
@@ -167,7 +167,7 @@ SEXP hop_index_common_impl(SEXP x,
                            SEXP f_call,
                            SEXP ptype,
                            SEXP env,
-                           SEXP window_indices,
+                           SEXP peer_sizes,
                            SEXP type_,
                            SEXP constrain_,
                            SEXP atomic_,
@@ -183,13 +183,12 @@ SEXP hop_index_common_impl(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  int* window_sizes = (int*) R_alloc(index.size, sizeof(int));
-  int* window_starts = (int*) R_alloc(index.size, sizeof(int));
-  int* window_stops = (int*) R_alloc(index.size, sizeof(int));
+  const int* p_peer_sizes = INTEGER_RO(peer_sizes);
+  int* p_peer_starts = (int*) R_alloc(index.size, sizeof(int));
+  int* p_peer_stops = (int*) R_alloc(index.size, sizeof(int));
+  fill_peer_info(p_peer_sizes, index.size, p_peer_starts, p_peer_stops);
 
-  fill_window_info(window_sizes, window_starts, window_stops, window_indices, index.size);
-
-  struct window_info window = new_window_info(window_starts, window_stops, index.size);
+  struct window_info window = new_window_info(p_peer_sizes, p_peer_starts, p_peer_stops);
   PROTECT_WINDOW_INFO(&window, &n_prot);
 
   struct range_info range = new_range_info(starts, stops, size);
@@ -220,11 +219,14 @@ SEXP hop_index_common_impl(SEXP x,
 // -----------------------------------------------------------------------------
 
 // [[ include("index.h") ]]
-struct window_info new_window_info(int* window_starts, int* window_stops, int size) {
+struct window_info new_window_info(const int* p_peer_sizes,
+                                   const int* p_peer_starts,
+                                   const int* p_peer_stops) {
   struct window_info window;
 
-  window.starts = window_starts;
-  window.stops = window_stops;
+  window.p_peer_sizes = p_peer_sizes;
+  window.p_peer_starts = p_peer_starts;
+  window.p_peer_stops = p_peer_stops;
 
   window.seq = PROTECT(compact_seq(0, 0, true));
   window.p_seq_val = INTEGER(window.seq);
@@ -336,21 +338,19 @@ static int iteration_max_adjustment(struct index_info index, SEXP range, int siz
 // -----------------------------------------------------------------------------
 
 // [[ include("index.h") ]]
-void fill_window_info(int* window_sizes,
-                      int* window_starts,
-                      int* window_stops,
-                      SEXP window_indices,
-                      int size) {
-  R_len_t window_start = 0;
+void fill_peer_info(const int* p_peer_sizes,
+                    int size,
+                    int* p_peer_starts,
+                    int* p_peer_stops) {
+  int peer_start = 0;
 
   for (int i = 0; i < size; ++i) {
-    R_len_t window_size = Rf_length(VECTOR_ELT(window_indices, i));
+    const int peer_size = p_peer_sizes[i];
 
-    window_sizes[i] = window_size;
-    window_starts[i] = window_start;
-    window_stops[i] = window_start + window_size - 1;
+    p_peer_starts[i] = peer_start;
+    p_peer_stops[i] = peer_start + peer_size - 1;
 
-    window_start += window_size;
+    peer_start += peer_size;
   }
 }
 
@@ -359,7 +359,7 @@ void fill_window_info(int* window_sizes,
 // update the current start/stop position
 
 // [[ include("index.h") ]]
-int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos) {
+int locate_peer_starts_pos(struct index_info* index, struct range_info range, int pos) {
   // Pin to the start
   if (range.start_unbounded) {
     return 0;
@@ -385,7 +385,7 @@ int locate_window_starts_pos(struct index_info* index, struct range_info range, 
 }
 
 // [[ include("index.h") ]]
-int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos) {
+int locate_peer_stops_pos(struct index_info* index, struct range_info range, int pos) {
   // Pin to the end
   if (range.stop_unbounded) {
     return index->last_pos;
@@ -417,17 +417,17 @@ void increment_window(struct window_info window,
                       struct index_info* index,
                       struct range_info range,
                       int pos) {
-  int starts_pos = locate_window_starts_pos(index, range, pos);
-  int stops_pos = locate_window_stops_pos(index, range, pos);
+  int peer_starts_pos = locate_peer_starts_pos(index, range, pos);
+  int peer_stops_pos = locate_peer_stops_pos(index, range, pos);
 
-  if (stops_pos < starts_pos) {
+  if (peer_stops_pos < peer_starts_pos) {
     init_compact_seq(window.p_seq_val, 0, 0, true);
     return;
   }
 
-  int start = window.starts[starts_pos];
-  int stop = window.stops[stops_pos];
-  int size = stop - start + 1;
+  int window_start = window.p_peer_starts[peer_starts_pos];
+  int window_stop = window.p_peer_stops[peer_stops_pos];
+  int window_size = window_stop - window_start + 1;
 
-  init_compact_seq(window.p_seq_val, start, size, true);
+  init_compact_seq(window.p_seq_val, window_start, window_size, true);
 }

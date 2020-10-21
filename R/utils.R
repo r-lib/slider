@@ -92,3 +92,10 @@ vec_simplify <- function(x, ptype) {
 
   vec_set_names(out, names)
 }
+
+# TODO: Remove me in favor of exported `vec_unrep()`
+vec_unrep <- function(x) {
+  ns <- getNamespace("vctrs")
+  fn <- get("vec_unrep", mode = "function", envir = ns, inherits = FALSE)
+  fn(x)
+}

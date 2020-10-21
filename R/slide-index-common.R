@@ -23,7 +23,7 @@ slide_index_common <- function(x,
   i <- info$i
   starts <- info$starts
   stops <- info$stops
-  indices <- info$indices
+  peer_sizes <- info$peer_sizes
 
   .Call(
     slide_index_common_impl,
@@ -34,7 +34,7 @@ slide_index_common <- function(x,
     f_call,
     ptype,
     env,
-    indices,
+    peer_sizes,
     type,
     constrain,
     atomic,
@@ -54,9 +54,10 @@ slide_index_info <- function(i, before, after, i_arg, before_arg, after_arg) {
   check_before(before, before_arg)
   check_after(after, after_arg)
 
-  # Compute unique values of `i` to avoid repeated evaluations of `.f`
-  split <- vec_group_loc(i)
-  i <- split$key
+  # `i` is known to be ascending,
+  # so we can detect uniques very quickly with `vec_unrep()`
+  unrep <- vec_unrep(i)
+  i <- unrep$key
 
   ranges <- compute_ranges(i, before, after, i_arg, before_arg, after_arg)
 
@@ -64,7 +65,7 @@ slide_index_info <- function(i, before, after, i_arg, before_arg, after_arg) {
     i = ranges$i,
     starts = ranges$starts,
     stops = ranges$stops,
-    indices = split$loc
+    peer_sizes = unrep$times
   )
 }
 

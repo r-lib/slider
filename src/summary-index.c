@@ -12,7 +12,7 @@ typedef SEXP (*summary_index_fn)(SEXP x,
                                  SEXP i,
                                  SEXP starts,
                                  SEXP stops,
-                                 SEXP indices,
+                                 SEXP peer_sizes,
                                  bool complete,
                                  bool na_rm);
 
@@ -21,10 +21,9 @@ typedef void (*summary_index_impl_fn)(const double* p_x,
                                       int iter_min,
                                       int iter_max,
                                       const struct range_info range,
-                                      const int* window_sizes,
-                                      const int* window_starts,
-                                      const int* window_stops,
-                                      SEXP indices,
+                                      const int* p_peer_sizes,
+                                      const int* p_peer_starts,
+                                      const int* p_peer_stops,
                                       bool na_rm,
                                       struct index_info* p_index,
                                       double* p_out);
@@ -33,21 +32,21 @@ static SEXP slider_index_summary(SEXP x,
                                  SEXP i,
                                  SEXP starts,
                                  SEXP stops,
-                                 SEXP indices,
+                                 SEXP peer_sizes,
                                  SEXP complete,
                                  SEXP na_rm,
                                  summary_index_fn fn) {
   bool dot = false;
   bool c_complete = validate_complete(complete, dot);
   bool c_na_rm = validate_na_rm(na_rm, dot);
-  return fn(x, i, starts, stops, indices, c_complete, c_na_rm);
+  return fn(x, i, starts, stops, peer_sizes, c_complete, c_na_rm);
 }
 
 static SEXP slide_index_summary(SEXP x,
                                 SEXP i,
                                 SEXP starts,
                                 SEXP stops,
-                                SEXP indices,
+                                SEXP peer_sizes,
                                 bool complete,
                                 bool na_rm,
                                 summary_index_impl_fn fn) {
@@ -68,11 +67,10 @@ static SEXP slide_index_summary(SEXP x,
   struct index_info index = new_index_info(i);
   PROTECT_INDEX_INFO(&index, &n_prot);
 
-  int* window_sizes = (int*) R_alloc(index.size, sizeof(int));
-  int* window_starts = (int*) R_alloc(index.size, sizeof(int));
-  int* window_stops = (int*) R_alloc(index.size, sizeof(int));
-
-  fill_window_info(window_sizes, window_starts, window_stops, indices, index.size);
+  const int* p_peer_sizes = INTEGER_RO(peer_sizes);
+  int* p_peer_starts = (int*) R_alloc(index.size, sizeof(int));
+  int* p_peer_stops = (int*) R_alloc(index.size, sizeof(int));
+  fill_peer_info(p_peer_sizes, index.size, p_peer_starts, p_peer_stops);
 
   struct range_info range = new_range_info(starts, stops, index.size);
   PROTECT_RANGE_INFO(&range, &n_prot);
@@ -86,10 +84,9 @@ static SEXP slide_index_summary(SEXP x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     na_rm,
     &index,
     p_out
@@ -103,10 +100,9 @@ static inline void slide_index_summary_loop(const struct segment_tree* p_tree,
                                             int iter_min,
                                             int iter_max,
                                             const struct range_info range,
-                                            const int* window_sizes,
-                                            const int* window_starts,
-                                            const int* window_stops,
-                                            SEXP indices,
+                                            const int* p_peer_sizes,
+                                            const int* p_peer_starts,
+                                            const int* p_peer_stops,
                                             struct index_info* p_index,
                                             double* p_out) {
   double result = 0;
@@ -116,30 +112,29 @@ static inline void slide_index_summary_loop(const struct segment_tree* p_tree,
       R_CheckUserInterrupt();
     }
 
-    int starts_pos = locate_window_starts_pos(p_index, range, i);
-    int stops_pos = locate_window_stops_pos(p_index, range, i);
+    int peer_starts_pos = locate_peer_starts_pos(p_index, range, i);
+    int peer_stops_pos = locate_peer_stops_pos(p_index, range, i);
 
     int window_start;
     int window_stop;
 
-    if (stops_pos < starts_pos) {
+    if (peer_stops_pos < peer_starts_pos) {
       // Signal that the window selection was completely OOB
       window_start = 0;
       window_stop = 0;
     } else {
-      window_start = window_starts[starts_pos];
-      window_stop = window_stops[stops_pos] + 1;
+      window_start = p_peer_starts[peer_starts_pos];
+      window_stop = p_peer_stops[peer_stops_pos] + 1;
     }
 
     segment_tree_aggregate(p_tree, window_start, window_stop, &result);
 
-    SEXP locations = VECTOR_ELT(indices, i);
-    const int* p_locations = INTEGER(locations);
-    const R_len_t size_locations = window_sizes[i];
+    int peer_start = p_peer_starts[i];
+    int peer_size = p_peer_sizes[i];
 
-    for (R_len_t j = 0; j < size_locations; ++j) {
-      R_len_t loc = p_locations[j] - 1;
-      p_out[loc] = result;
+    for (int j = 0; j < peer_size; ++j) {
+      p_out[peer_start] = result;
+      ++peer_start;
     }
   }
 }
@@ -151,10 +146,9 @@ static void slider_index_sum_core_impl(const double* p_x,
                                        int iter_min,
                                        int iter_max,
                                        const struct range_info range,
-                                       const int* window_sizes,
-                                       const int* window_starts,
-                                       const int* window_stops,
-                                       SEXP indices,
+                                       const int* p_peer_sizes,
+                                       const int* p_peer_starts,
+                                       const int* p_peer_stops,
                                        bool na_rm,
                                        struct index_info* p_index,
                                        double* p_out) {
@@ -180,10 +174,9 @@ static void slider_index_sum_core_impl(const double* p_x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     p_index,
     p_out
   );
@@ -195,7 +188,7 @@ static SEXP slide_index_sum_core(SEXP x,
                                  SEXP i,
                                  SEXP starts,
                                  SEXP stops,
-                                 SEXP indices,
+                                 SEXP peer_sizes,
                                  bool complete,
                                  bool na_rm) {
   return slide_index_summary(
@@ -203,7 +196,7 @@ static SEXP slide_index_sum_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slider_index_sum_core_impl
@@ -215,7 +208,7 @@ SEXP slider_index_sum_core(SEXP x,
                            SEXP i,
                            SEXP starts,
                            SEXP stops,
-                           SEXP indices,
+                           SEXP peer_sizes,
                            SEXP complete,
                            SEXP na_rm) {
   return slider_index_summary(
@@ -223,7 +216,7 @@ SEXP slider_index_sum_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slide_index_sum_core
@@ -237,10 +230,9 @@ static void slider_index_prod_core_impl(const double* p_x,
                                         int iter_min,
                                         int iter_max,
                                         const struct range_info range,
-                                        const int* window_sizes,
-                                        const int* window_starts,
-                                        const int* window_stops,
-                                        SEXP indices,
+                                        const int* p_peer_sizes,
+                                        const int* p_peer_starts,
+                                        const int* p_peer_stops,
                                         bool na_rm,
                                         struct index_info* p_index,
                                         double* p_out) {
@@ -266,10 +258,9 @@ static void slider_index_prod_core_impl(const double* p_x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     p_index,
     p_out
   );
@@ -281,7 +272,7 @@ static SEXP slide_index_prod_core(SEXP x,
                                   SEXP i,
                                   SEXP starts,
                                   SEXP stops,
-                                  SEXP indices,
+                                  SEXP peer_sizes,
                                   bool complete,
                                   bool na_rm) {
   return slide_index_summary(
@@ -289,7 +280,7 @@ static SEXP slide_index_prod_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slider_index_prod_core_impl
@@ -301,7 +292,7 @@ SEXP slider_index_prod_core(SEXP x,
                             SEXP i,
                             SEXP starts,
                             SEXP stops,
-                            SEXP indices,
+                            SEXP peer_sizes,
                             SEXP complete,
                             SEXP na_rm) {
   return slider_index_summary(
@@ -309,7 +300,7 @@ SEXP slider_index_prod_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slide_index_prod_core
@@ -323,10 +314,9 @@ static void slider_index_mean_core_impl(const double* p_x,
                                         int iter_min,
                                         int iter_max,
                                         const struct range_info range,
-                                        const int* window_sizes,
-                                        const int* window_starts,
-                                        const int* window_stops,
-                                        SEXP indices,
+                                        const int* p_peer_sizes,
+                                        const int* p_peer_starts,
+                                        const int* p_peer_stops,
                                         bool na_rm,
                                         struct index_info* p_index,
                                         double* p_out) {
@@ -352,10 +342,9 @@ static void slider_index_mean_core_impl(const double* p_x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     p_index,
     p_out
   );
@@ -367,7 +356,7 @@ static SEXP slide_index_mean_core(SEXP x,
                                   SEXP i,
                                   SEXP starts,
                                   SEXP stops,
-                                  SEXP indices,
+                                  SEXP peer_sizes,
                                   bool complete,
                                   bool na_rm) {
   return slide_index_summary(
@@ -375,7 +364,7 @@ static SEXP slide_index_mean_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slider_index_mean_core_impl
@@ -387,7 +376,7 @@ SEXP slider_index_mean_core(SEXP x,
                             SEXP i,
                             SEXP starts,
                             SEXP stops,
-                            SEXP indices,
+                            SEXP peer_sizes,
                             SEXP complete,
                             SEXP na_rm) {
   return slider_index_summary(
@@ -395,7 +384,7 @@ SEXP slider_index_mean_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slide_index_mean_core
@@ -409,10 +398,9 @@ static void slider_index_min_core_impl(const double* p_x,
                                        int iter_min,
                                        int iter_max,
                                        const struct range_info range,
-                                       const int* window_sizes,
-                                       const int* window_starts,
-                                       const int* window_stops,
-                                       SEXP indices,
+                                       const int* p_peer_sizes,
+                                       const int* p_peer_starts,
+                                       const int* p_peer_stops,
                                        bool na_rm,
                                        struct index_info* p_index,
                                        double* p_out) {
@@ -438,10 +426,9 @@ static void slider_index_min_core_impl(const double* p_x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     p_index,
     p_out
   );
@@ -453,7 +440,7 @@ static SEXP slide_index_min_core(SEXP x,
                                  SEXP i,
                                  SEXP starts,
                                  SEXP stops,
-                                 SEXP indices,
+                                 SEXP peer_sizes,
                                  bool complete,
                                  bool na_rm) {
   return slide_index_summary(
@@ -461,7 +448,7 @@ static SEXP slide_index_min_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slider_index_min_core_impl
@@ -473,7 +460,7 @@ SEXP slider_index_min_core(SEXP x,
                            SEXP i,
                            SEXP starts,
                            SEXP stops,
-                           SEXP indices,
+                           SEXP peer_sizes,
                            SEXP complete,
                            SEXP na_rm) {
   return slider_index_summary(
@@ -481,7 +468,7 @@ SEXP slider_index_min_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slide_index_min_core
@@ -495,10 +482,9 @@ static void slider_index_max_core_impl(const double* p_x,
                                        int iter_min,
                                        int iter_max,
                                        const struct range_info range,
-                                       const int* window_sizes,
-                                       const int* window_starts,
-                                       const int* window_stops,
-                                       SEXP indices,
+                                       const int* p_peer_sizes,
+                                       const int* p_peer_starts,
+                                       const int* p_peer_stops,
                                        bool na_rm,
                                        struct index_info* p_index,
                                        double* p_out) {
@@ -524,10 +510,9 @@ static void slider_index_max_core_impl(const double* p_x,
     iter_min,
     iter_max,
     range,
-    window_sizes,
-    window_starts,
-    window_stops,
-    indices,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
     p_index,
     p_out
   );
@@ -539,7 +524,7 @@ static SEXP slide_index_max_core(SEXP x,
                                  SEXP i,
                                  SEXP starts,
                                  SEXP stops,
-                                 SEXP indices,
+                                 SEXP peer_sizes,
                                  bool complete,
                                  bool na_rm) {
   return slide_index_summary(
@@ -547,7 +532,7 @@ static SEXP slide_index_max_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slider_index_max_core_impl
@@ -559,7 +544,7 @@ SEXP slider_index_max_core(SEXP x,
                            SEXP i,
                            SEXP starts,
                            SEXP stops,
-                           SEXP indices,
+                           SEXP peer_sizes,
                            SEXP complete,
                            SEXP na_rm) {
   return slider_index_summary(
@@ -567,7 +552,7 @@ SEXP slider_index_max_core(SEXP x,
     i,
     starts,
     stops,
-    indices,
+    peer_sizes,
     complete,
     na_rm,
     slide_index_max_core

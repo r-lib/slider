@@ -45,8 +45,9 @@ struct range_info new_range_info(SEXP, SEXP, int);
 // -----------------------------------------------------------------------------
 
 struct window_info {
-  int* starts;
-  int* stops;
+  const int* p_peer_sizes;
+  const int* p_peer_starts;
+  const int* p_peer_stops;
   SEXP seq;
   int* p_seq_val;
 };
@@ -56,16 +57,17 @@ struct window_info {
   *n += 1;                                   \
 } while (0)
 
-void fill_window_info(int* window_sizes,
-                      int* window_starts,
-                      int* window_stops,
-                      SEXP window_indices,
-                      int size);
+void fill_peer_info(const int* p_peer_sizes,
+                    int size,
+                    int* p_peer_starts,
+                    int* p_peer_stops);
 
-struct window_info new_window_info(int*, int*, int);
+struct window_info new_window_info(const int* p_peer_sizes,
+                                   const int* p_peer_starts,
+                                   const int* p_peer_stops);
 
-int locate_window_starts_pos(struct index_info* index, struct range_info range, int pos);
-int locate_window_stops_pos(struct index_info* index, struct range_info range, int pos);
+int locate_peer_starts_pos(struct index_info* index, struct range_info range, int pos);
+int locate_peer_stops_pos(struct index_info* index, struct range_info range, int pos);
 
 void increment_window(struct window_info window,
                       struct index_info* index,
