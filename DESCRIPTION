@@ -20,7 +20,7 @@ Depends:
 Imports: 
     glue,
     rlang (>= 0.4.5),
-    vctrs (>= 0.3.0),
+    vctrs (>= 0.3.4.9000),
     warp
 Suggests: 
     covr,
@@ -31,7 +31,7 @@ Suggests:
     testthat (>= 2.1.0),
     xml2
 LinkingTo:
-    vctrs (>= 0.3.0)
+    vctrs (>= 0.3.4.9000)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
@@ -68,3 +68,5 @@ Collate:
     'summary-slide.R'
     'utils.R'
     'zzz.R'
+Remotes:
+    r-lib/vctrs
