@@ -33,43 +33,36 @@ static inline void assign_one_lst(SEXP out, R_len_t i, SEXP elt, SEXP ptype) {
 // -----------------------------------------------------------------------------
 
 #define ASSIGN_LOCS(CTYPE, CONST_DEREF) do {                   \
-  const R_len_t size = Rf_length(locations);                   \
-  const int* p_locations = INTEGER_RO(locations);              \
-                                                               \
   elt = PROTECT(vec_cast(elt, ptype));                         \
   const CTYPE value = CONST_DEREF(elt)[0];                     \
                                                                \
   for (R_len_t i = 0; i < size; ++i) {                         \
-    /* `locations` are 1-based */                              \
-    R_len_t loc = p_locations[i] - 1;                          \
-    p_out[loc] = value;                                        \
+    p_out[start] = value;                                      \
+    ++start;                                                   \
   }                                                            \
                                                                \
   UNPROTECT(1);                                                \
 } while (0)
 
-static inline void assign_locs_dbl(double* p_out, SEXP locations, SEXP elt, SEXP ptype) {
+static inline void assign_locs_dbl(double* p_out, int start, int size, SEXP elt, SEXP ptype) {
   ASSIGN_LOCS(double, REAL_RO);
 }
-static inline void assign_locs_int(int* p_out, SEXP locations, SEXP elt, SEXP ptype) {
+static inline void assign_locs_int(int* p_out, int start, int size, SEXP elt, SEXP ptype) {
   ASSIGN_LOCS(int, INTEGER_RO);
 }
-static inline void assign_locs_lgl(int* p_out, SEXP locations, SEXP elt, SEXP ptype) {
+static inline void assign_locs_lgl(int* p_out, int start, int size, SEXP elt, SEXP ptype) {
   ASSIGN_LOCS(int, LOGICAL_RO);
 }
-static inline void assign_locs_chr(SEXP* p_out, SEXP locations, SEXP elt, SEXP ptype) {
+static inline void assign_locs_chr(SEXP* p_out, int start, int size, SEXP elt, SEXP ptype) {
   ASSIGN_LOCS(SEXP, STRING_PTR_RO);
 }
 
 #undef ASSIGN_LOCS
 
-static inline void assign_locs_lst(SEXP out, SEXP locations, SEXP elt, SEXP ptype) {
-  const R_len_t size = Rf_length(locations);
-  const int* p_locations = INTEGER_RO(locations);
-
+static inline void assign_locs_lst(SEXP out, int start, int size, SEXP elt, SEXP ptype) {
   for (R_len_t i = 0; i < size; ++i) {
-    R_len_t loc = p_locations[i] - 1;
-    SET_VECTOR_ELT(out, loc, elt);
+    SET_VECTOR_ELT(out, start, elt);
+    ++start;
   }
 }
 

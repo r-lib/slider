@@ -35,9 +35,11 @@ hop_index_common <- function(x,
   starts <- args[[2L]]
   stops <- args[[3L]]
 
-  split <- vec_group_loc(i)
-  i <- split$key
-  window_indices <- split$loc
+  # `i` is known to be ascending,
+  # so we can detect uniques very quickly with `vec_unrep()`
+  unrep <- vec_unrep(i)
+  i <- unrep$key
+  peer_sizes <- unrep$times
 
   .Call(
     hop_index_common_impl,
@@ -48,7 +50,7 @@ hop_index_common <- function(x,
     f_call,
     ptype,
     env,
-    window_indices,
+    peer_sizes,
     type,
     constrain,
     atomic,
