@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -108,7 +108,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slider/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -144,6 +144,7 @@
 <li><p><code><a href="../reference/summary-slide.html">slide_max()</a></code>, <code><a href="../reference/summary-index.html">slide_index_max()</a></code>: for rolling maximums</p></li>
 </ul>
 </li>
+<li><p><code>slide_index_*()</code> functions are now a bit faster from using <code><a href="https://vctrs.r-lib.org/reference/vec-rep.html">vctrs::vec_unrep()</a></code> to locate unique index values, rather than <code><a href="https://vctrs.r-lib.org/reference/vec_group.html">vctrs::vec_group_loc()</a></code>.</p></li>
 <li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
 </ul>
 </div>
