@@ -7,18 +7,7 @@ collapse_and_trim <- function(x) {
 }
 
 is_unbounded <- function(x) {
-  is_infinite <- is.infinite(x)
-
-  # Length checks are caught elsewhere
-  if (length(is_infinite) != 1) {
-    return(FALSE)
-  }
-
-  if (is_infinite) {
-    x == Inf
-  } else {
-    FALSE
-  }
+  identical(x, Inf)
 }
 
 check_is_list <- function(.l) {
