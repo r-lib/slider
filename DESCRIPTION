@@ -16,7 +16,7 @@ License: MIT + file LICENSE
 URL: https://github.com/DavisVaughan/slider
 BugReports: https://github.com/DavisVaughan/slider/issues
 Depends: 
-    R (>= 3.2)
+    R (>= 3.3.0)
 Imports: 
     glue,
     rlang (>= 0.4.5),
