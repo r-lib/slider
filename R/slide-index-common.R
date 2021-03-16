@@ -51,13 +51,16 @@ slide_index_info <- function(i, before, after, i_arg, before_arg, after_arg) {
   check_index_cannot_be_na(i, i_arg)
   check_index_must_be_ascending(i, i_arg)
 
-  before <- check_before(before, before_arg)
-  after <- check_after(after, after_arg)
-
-  # `i` is known to be ascending,
-  # so we can detect uniques very quickly with `vec_unrep()`
+  # `i` is ascending, so we can detect uniques quickly with `vec_unrep()`.
+  # We must unrep before applying `before`/`after`, as we expect that they are
+  # only applied on the unique values of `i`.
+  # Otherwise, the same value of `i` could have different start/stop values,
+  # like `c(1, 1) - c(2, 3)`).
   unrep <- vec_unrep(i)
   i <- unrep$key
+
+  before <- check_before(before, before_arg)
+  after <- check_after(after, after_arg)
 
   ranges <- compute_ranges(i, before, after, i_arg, before_arg, after_arg)
 
