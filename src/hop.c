@@ -74,10 +74,13 @@ SEXP hop_common_impl(SEXP x,
   const bool constrain = validate_constrain(r_lst_get(params, 1));
   const bool atomic = validate_atomic(r_lst_get(params, 2));
 
-  check_hop_starts_not_past_stops(starts, stops);
-
   const R_len_t x_size = compute_size(x, type);
   const R_len_t size = vec_size(starts);
+
+  const int* p_starts = INTEGER_RO(starts);
+  const int* p_stops = INTEGER_RO(stops);
+
+  check_hop_starts_not_past_stops(starts, stops, p_starts, p_stops, size);
 
   // The indices to slice x with
   SEXP window = PROTECT(compact_seq(0, 0, true));
@@ -85,9 +88,6 @@ SEXP hop_common_impl(SEXP x,
 
   // Mutable container for the results of slicing x
   SEXP container = PROTECT(make_slice_container(type));
-
-  const int* p_starts = INTEGER(starts);
-  const int* p_stops = INTEGER(stops);
 
   SEXPTYPE out_type = TYPEOF(ptype);
   SEXP out = PROTECT(slider_init(out_type, size));

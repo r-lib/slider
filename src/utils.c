@@ -1,6 +1,5 @@
 #include "slider.h"
 #include "utils.h"
-#include "compare.h"
 #include "slider-vctrs.h"
 
 SEXP strings_before = NULL;
@@ -122,14 +121,22 @@ static void stop_hop_start_past_stop(SEXP starts, SEXP stops) {
   Rf_error("Internal error: `stop_hop_start_past_stop()` should have jumped earlier");
 }
 
-void check_slide_starts_not_past_stops(SEXP starts, SEXP stops) {
-  if (vec_any_gt(starts, stops)) {
+void check_slide_starts_not_past_stops(SEXP starts,
+                                       SEXP stops,
+                                       const int* p_starts,
+                                       const int* p_stops,
+                                       R_xlen_t size) {
+  if (p_int_any_gt(p_starts, p_stops, size)) {
     stop_slide_start_past_stop(starts, stops);
   }
 }
 
-void check_hop_starts_not_past_stops(SEXP starts, SEXP stops) {
-  if (vec_any_gt(starts, stops)) {
+void check_hop_starts_not_past_stops(SEXP starts,
+                                     SEXP stops,
+                                     const int* p_starts,
+                                     const int* p_stops,
+                                     R_xlen_t size) {
+  if (p_int_any_gt(p_starts, p_stops, size)) {
     stop_hop_start_past_stop(starts, stops);
   }
 }

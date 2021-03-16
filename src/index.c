@@ -2,7 +2,6 @@
 #include "index.h"
 #include "slider-vctrs.h"
 #include "utils.h"
-#include "compare.h"
 #include "assign.h"
 
 // -----------------------------------------------------------------------------
@@ -242,15 +241,12 @@ struct index_info new_index_info(SEXP i) {
   struct index_info index;
 
   index.data = i;
+  index.p_data = INTEGER_RO(i);
   index.size = vec_size(i);
   index.last_pos = index.size - 1;
 
   index.current_start_pos = 0;
   index.current_stop_pos = 0;
-
-  index.compare_lt = get_compare_fn_lt(i);
-  index.compare_gt = get_compare_fn_gt(i);
-  index.compare_lte = get_compare_fn_lte(i);
 
   return index;
 }
@@ -267,19 +263,31 @@ struct range_info new_range_info(SEXP starts, SEXP stops, int size) {
   range.start_unbounded = (starts == R_NilValue);
   range.stop_unbounded = (stops == R_NilValue);
 
-  if (!range.start_unbounded && !range.stop_unbounded) {
-    check_slide_starts_not_past_stops(starts, stops);
-  }
-
   range.size = size;
+
+  if (!range.start_unbounded) {
+    range.p_starts = INTEGER_RO(starts);
+  }
+  if (!range.stop_unbounded) {
+    range.p_stops = INTEGER_RO(stops);
+  }
+  if (!range.start_unbounded && !range.stop_unbounded) {
+    check_slide_starts_not_past_stops(
+      range.starts,
+      range.stops,
+      range.p_starts,
+      range.p_stops,
+      range.size
+    );
+  }
 
   return range;
 }
 
 // -----------------------------------------------------------------------------
 
-static int iteration_min_adjustment(struct index_info index, SEXP range, int size);
-static int iteration_max_adjustment(struct index_info index, SEXP range, int size);
+static int iteration_min_adjustment(struct index_info index, const int* p_range, int size);
+static int iteration_max_adjustment(struct index_info index, const int* p_range, int size);
 
 // [[ include("index.h") ]]
 int compute_min_iteration(struct index_info index, struct range_info range, bool complete) {
@@ -289,7 +297,7 @@ int compute_min_iteration(struct index_info index, struct range_info range, bool
     return out;
   }
 
-  out += iteration_min_adjustment(index, range.starts, range.size);
+  out += iteration_min_adjustment(index, range.p_starts, range.size);
 
   return out;
 }
@@ -302,16 +310,22 @@ int compute_max_iteration(struct index_info index, struct range_info range, bool
     return out;
   }
 
-  out -= iteration_max_adjustment(index, range.stops, range.size);
+  out -= iteration_max_adjustment(index, range.p_stops, range.size);
 
   return out;
 }
 
-static int iteration_min_adjustment(struct index_info index, SEXP range, int size) {
+static int iteration_min_adjustment(struct index_info index, const int* p_range, int size) {
   int forward_adjustment = 0;
 
+  if (size == 0) {
+    return forward_adjustment;
+  }
+
+  const int first_index = index.p_data[0];
+
   for (int j = 0; j < size; ++j) {
-    if (index.compare_gt(index.data, 0, range, j)) {
+    if (first_index > p_range[j]) {
       ++forward_adjustment;
     } else {
       break;
@@ -321,11 +335,17 @@ static int iteration_min_adjustment(struct index_info index, SEXP range, int siz
   return forward_adjustment;
 }
 
-static int iteration_max_adjustment(struct index_info index, SEXP range, int size) {
+static int iteration_max_adjustment(struct index_info index, const int* p_range, int size) {
   int backward_adjustment = 0;
 
+  if (size == 0) {
+    return backward_adjustment;
+  }
+
+  const int last_index = index.p_data[index.last_pos];
+
   for (int j = size - 1; j >= 0; --j) {
-    if (index.compare_lt(index.data, index.last_pos, range, j)) {
+    if (last_index < p_range[j]) {
       ++backward_adjustment;
     } else {
       break;
@@ -372,7 +392,7 @@ int locate_peer_starts_pos(struct index_info* index, struct range_info range, in
     return index->last_pos + 1;
   }
 
-  while (index->compare_lt(index->data, index->current_start_pos, range.starts, pos)) {
+  while (index->p_data[index->current_start_pos] < range.p_starts[pos]) {
     ++index->current_start_pos;
 
     // Past the end? Signal OOB with `last_pos + 1`.
@@ -398,7 +418,7 @@ int locate_peer_stops_pos(struct index_info* index, struct range_info range, int
     return index->last_pos;
   }
 
-  while (index->compare_lte(index->data, index->current_stop_pos, range.stops, pos)) {
+  while (index->p_data[index->current_stop_pos] <= range.p_stops[pos]) {
     ++index->current_stop_pos;
 
     // Past the end? Pin to end.
