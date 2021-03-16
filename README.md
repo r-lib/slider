@@ -7,8 +7,6 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
-[![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![R-CMD-check](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
 <!-- badges: end -->
 
