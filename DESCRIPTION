@@ -28,8 +28,7 @@ Suggests:
     knitr,
     lubridate,
     rmarkdown,
-    testthat (>= 2.1.0),
-    xml2
+    testthat (>= 3.0.0)
 LinkingTo:
     vctrs (>= 0.3.6)
 VignetteBuilder: 
@@ -68,3 +67,4 @@ Collate:
     'summary-slide.R'
     'utils.R'
     'zzz.R'
+Config/testthat/edition: 3
