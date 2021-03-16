@@ -156,10 +156,8 @@ with a size that is different from <code>.x</code>.</p>
     <tr>
       <th>.i</th>
       <td><p><code>[vector]</code></p>
-<p>The index vector that determines the window sizes. The lower bound
-of the window range will be computed as <code>.i - .before</code>, and the upper
-bound as <code>.i + .after</code>. It is fairly common to supply a date vector
-as the index, but not required.</p>
+<p>The index vector that determines the window sizes. It is fairly common to
+supply a date vector as the index, but not required.</p>
 <p>There are 3 restrictions on the index:</p><ul>
 <li><p>The size of the index must match the size of <code>.x</code>, they will not be
 recycled to their common size.</p></li>

@@ -183,10 +183,8 @@ vector, will be cast to one with <code><a href='https://vctrs.r-lib.org/referenc
     <tr>
       <th>i</th>
       <td><p><code>[vector]</code></p>
-<p>The index vector that determines the window sizes. The lower bound
-of the window range will be computed as <code>.i - .before</code>, and the upper
-bound as <code>.i + .after</code>. It is fairly common to supply a date vector
-as the index, but not required.</p>
+<p>The index vector that determines the window sizes. It is fairly common to
+supply a date vector as the index, but not required.</p>
 <p>There are 3 restrictions on the index:</p><ul>
 <li><p>The size of the index must match the size of <code>.x</code>, they will not be
 recycled to their common size.</p></li>
@@ -197,29 +195,51 @@ are allowed.</p></li>
     </tr>
     <tr>
       <th>before</th>
-      <td><p><code>[vector(1) / Inf]</code></p>
-<p>The number of values before or after the current element of <code>.i</code> to
-include in the sliding window. Set to <code>Inf</code> to select all elements
-before or after the current element. Negative values are allowed, which
-allows you to "look forward" from the current element if used as the
-<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p>
-<p>Any object that can be added or subtracted from <code>.i</code> with <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>
-can be used. For example, a lubridate period, such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
-<p>The ranges that result from computing <code>.i - .before</code> and <code>.i + .after</code>
-have the same 3 restrictions as <code>.i</code> itself.</p></td>
+      <td><p><code>[vector(1) / function / Inf]</code></p><ul>
+<li><p>If a vector of size 1, these represent the number of values before or
+after the current element of <code>.i</code> to include in the sliding window.
+Negative values are allowed, which allows you to "look forward" from the
+current element if used as the <code>.before</code> value, or "look backwards" if used
+as <code>.after</code>. Boundaries are computed from these elements as <code>.i - .before</code>
+and <code>.i + .after</code>. Any object that can be added or subtracted from <code>.i</code>
+with <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> can be used. For example, a lubridate period, such as
+<code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></li>
+<li><p>If <code>Inf</code>, this selects all elements before or after the current element.</p></li>
+<li><p>If a function, or a one-sided formula which can be coerced to a function,
+it is applied to <code>.i</code> to compute the boundaries. Note that this function
+will only be applied to the <em>unique</em> values of <code>.i</code>, so it should not rely
+on the original length of <code>.i</code> in any way. This is useful for applying a
+complex arithmetic operation that can't be expressed with a single <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> or
+<code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operation. One example would be to use <code><a href='http://lubridate.tidyverse.org/reference/mplus.html'>lubridate::add_with_rollback()</a></code>
+to avoid invalid dates at the end of the month.</p></li>
+</ul>
+
+<p>The ranges that result from applying <code>.before</code> and <code>.after</code> have the same
+3 restrictions as <code>.i</code> itself.</p></td>
     </tr>
     <tr>
       <th>after</th>
-      <td><p><code>[vector(1) / Inf]</code></p>
-<p>The number of values before or after the current element of <code>.i</code> to
-include in the sliding window. Set to <code>Inf</code> to select all elements
-before or after the current element. Negative values are allowed, which
-allows you to "look forward" from the current element if used as the
-<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p>
-<p>Any object that can be added or subtracted from <code>.i</code> with <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>
-can be used. For example, a lubridate period, such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
-<p>The ranges that result from computing <code>.i - .before</code> and <code>.i + .after</code>
-have the same 3 restrictions as <code>.i</code> itself.</p></td>
+      <td><p><code>[vector(1) / function / Inf]</code></p><ul>
+<li><p>If a vector of size 1, these represent the number of values before or
+after the current element of <code>.i</code> to include in the sliding window.
+Negative values are allowed, which allows you to "look forward" from the
+current element if used as the <code>.before</code> value, or "look backwards" if used
+as <code>.after</code>. Boundaries are computed from these elements as <code>.i - .before</code>
+and <code>.i + .after</code>. Any object that can be added or subtracted from <code>.i</code>
+with <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> can be used. For example, a lubridate period, such as
+<code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></li>
+<li><p>If <code>Inf</code>, this selects all elements before or after the current element.</p></li>
+<li><p>If a function, or a one-sided formula which can be coerced to a function,
+it is applied to <code>.i</code> to compute the boundaries. Note that this function
+will only be applied to the <em>unique</em> values of <code>.i</code>, so it should not rely
+on the original length of <code>.i</code> in any way. This is useful for applying a
+complex arithmetic operation that can't be expressed with a single <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> or
+<code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operation. One example would be to use <code><a href='http://lubridate.tidyverse.org/reference/mplus.html'>lubridate::add_with_rollback()</a></code>
+to avoid invalid dates at the end of the month.</p></li>
+</ul>
+
+<p>The ranges that result from applying <code>.before</code> and <code>.after</code> have the same
+3 restrictions as <code>.i</code> itself.</p></td>
     </tr>
     <tr>
       <th>complete</th>
