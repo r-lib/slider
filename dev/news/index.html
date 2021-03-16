@@ -99,6 +99,9 @@
     <li>
       <a href="../articles/rowwise.html">Row-wise iteration with slider</a>
     </li>
+    <li>
+      <a href="../articles/tsibble.html">Converting from tsibble</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -147,6 +150,7 @@
 <li><p>The <code>slide_index_*()</code> family now allows <code>.before</code> and <code>.after</code> to be functions of 1 argument (the index) that compute the boundaries of the sliding window. This can be extremely useful when the default, which computes <code>.i - .before</code> and <code>.i + .after</code>, is not applicable or correct for your needs. One use case is to set <code>.before = ~.x %m-% months(1)</code> rather than <code>.before = months(1)</code> to perform a 1 month rolling window in a way that won’t generate <code>NA</code> values on invalid dates (like 1 month before 2019-03-31) (<a href='https://github.com/DavisVaughan/slider/issues/139'>#139</a>).</p></li>
 <li><p>The <code>slide_index_*()</code> family has undergone some internal changes to make it more compatible with custom vctrs classes that could be provided as the index (<code>.i</code>), such as the date-time classes in the clock package (<a href='https://github.com/DavisVaughan/slider/issues/133'>#133</a>, <a href='https://github.com/DavisVaughan/slider/issues/130'>#130</a>).</p></li>
 <li><p>For the <code>slide_index_*()</code> family, it is now required that <code>.i - .before</code> and <code>.i + .after</code> be castable to <code>.i</code> by <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html">vctrs::vec_cast()</a></code>. Similarly, for the <code>hop_index_*()</code> family, <code>.starts</code> and <code>.stops</code> must both be castable to <code>.i</code> (<a href='https://github.com/DavisVaughan/slider/issues/132'>#132</a>).</p></li>
+<li><p>New vignette, <code><a href="../articles/tsibble.html">vignette("tsibble")</a></code>, explaining how to transition from tsibble to slider (<a href='https://github.com/DavisVaughan/slider/issues/128'>#128</a>).</p></li>
 <li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
 </ul>
 </div>
