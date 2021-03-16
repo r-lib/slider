@@ -12,6 +12,14 @@
   
   - `slide_max()`, `slide_index_max()`: for rolling maximums
 
+* The `slide_index_*()` family now allows `.before` and `.after` to be
+  functions of 1 argument (the index) that compute the boundaries of the
+  sliding window. This can be extremely useful when the default, which computes
+  `.i - .before` and `.i + .after`, is not applicable or correct for your needs.
+  One use case is to set `.before = ~.x %m-% months(1)` rather than
+  `.before = months(1)` to perform a 1 month rolling window in a way that won't
+  generate `NA` values on invalid dates (like 1 month before 2019-03-31) (#139).
+
 * The `slide_index_*()` family has undergone some internal changes to make it
   more compatible with custom vctrs classes that could be provided as the
   index (`.i`), such as the date-time classes in the clock package (#133, #130).

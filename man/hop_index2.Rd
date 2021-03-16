@@ -22,10 +22,8 @@ Vectors to iterate over. Vectors of size 1 will be recycled.}
 
 \item{.i}{\verb{[vector]}
 
-The index vector that determines the window sizes. The lower bound
-of the window range will be computed as \code{.i - .before}, and the upper
-bound as \code{.i + .after}. It is fairly common to supply a date vector
-as the index, but not required.
+The index vector that determines the window sizes. It is fairly common to
+supply a date vector as the index, but not required.
 
 There are 3 restrictions on the index:
 \itemize{

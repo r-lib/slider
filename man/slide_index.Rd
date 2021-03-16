@@ -63,10 +63,8 @@ The vector to iterate over and apply \code{.f} to.}
 
 \item{.i}{\verb{[vector]}
 
-The index vector that determines the window sizes. The lower bound
-of the window range will be computed as \code{.i - .before}, and the upper
-bound as \code{.i + .after}. It is fairly common to supply a date vector
-as the index, but not required.
+The index vector that determines the window sizes. It is fairly common to
+supply a date vector as the index, but not required.
 
 There are 3 restrictions on the index:
 \itemize{
@@ -93,19 +91,28 @@ This syntax allows you to create very compact anonymous functions.}
 
 \item{...}{Additional arguments passed on to the mapped function.}
 
-\item{.before, .after}{\verb{[vector(1) / Inf]}
+\item{.before, .after}{\verb{[vector(1) / function / Inf]}
+\itemize{
+\item If a vector of size 1, these represent the number of values before or
+after the current element of \code{.i} to include in the sliding window.
+Negative values are allowed, which allows you to "look forward" from the
+current element if used as the \code{.before} value, or "look backwards" if used
+as \code{.after}. Boundaries are computed from these elements as \code{.i - .before}
+and \code{.i + .after}. Any object that can be added or subtracted from \code{.i}
+with \code{+} and \code{-} can be used. For example, a lubridate period, such as
+\code{\link[lubridate:period]{lubridate::weeks()}}.
+\item If \code{Inf}, this selects all elements before or after the current element.
+\item If a function, or a one-sided formula which can be coerced to a function,
+it is applied to \code{.i} to compute the boundaries. Note that this function
+will only be applied to the \emph{unique} values of \code{.i}, so it should not rely
+on the original length of \code{.i} in any way. This is useful for applying a
+complex arithmetic operation that can't be expressed with a single \code{-} or
+\code{+} operation. One example would be to use \code{\link[lubridate:mplus]{lubridate::add_with_rollback()}}
+to avoid invalid dates at the end of the month.
+}
 
-The number of values before or after the current element of \code{.i} to
-include in the sliding window. Set to \code{Inf} to select all elements
-before or after the current element. Negative values are allowed, which
-allows you to "look forward" from the current element if used as the
-\code{.before} value, or "look backwards" if used as \code{.after}.
-
-Any object that can be added or subtracted from \code{.i} with \code{+} and \code{-}
-can be used. For example, a lubridate period, such as \code{\link[lubridate:period]{lubridate::weeks()}}.
-
-The ranges that result from computing \code{.i - .before} and \code{.i + .after}
-have the same 3 restrictions as \code{.i} itself.}
+The ranges that result from applying \code{.before} and \code{.after} have the same
+3 restrictions as \code{.i} itself.}
 
 \item{.complete}{\verb{[logical(1)]}
 
@@ -183,6 +190,8 @@ is approximately but not equivalent to, 3 * 30 days. \code{slide_index()} allows
 for these irregular window sizes.
 }
 \examples{
+library(lubridate)
+
 x <- 1:5
 
 # In some cases, sliding over `x` with a strict window size of 2
@@ -204,6 +213,36 @@ slide_index(i, i, ~.x, .before = 1)
 # We could have equivalently used a lubridate period object for this as well,
 # since `i - lubridate::days(1)` is allowed
 slide_index(i, i, ~.x, .before = lubridate::days(1))
+
+# ---------------------------------------------------------------------------
+# Functions for `.before` and `.after`
+
+# In some cases, it might not be appropriate to compute
+# `.i - .before` or `.i + .after`, either because there isn't a `-` or `+`
+# method defined, or because there is an alternative way to perform the
+# arithmetic. For example, subtracting 1 month with `- months(1)` (using
+# lubridate) can sometimes land you on an invalid date that doesn't exist.
+i <- as.Date(c("2019-01-31", "2019-02-28", "2019-03-31"))
+
+# 2019-03-31 - months(1) = 2019-02-31, which doesn't exist
+i - months(1)
+
+# These NAs create problems with `slide_index()`, which doesn't allow
+# missing values in the computed endpoints
+try(slide_index(i, i, identity, .before = months(1)))
+
+# In these cases, it is more appropriate to use `\%m-\%`,
+# which will snap to the end of the month, at least giving you something
+# to work with.
+i \%m-\% months(1)
+
+# To use this as your `.before` or `.after`, supply an anonymous function of
+# 1 argument that performs the computation
+slide_index(i, i, identity, .before = ~.x \%m-\% months(1))
+
+# Notice that in the `.after` case, `2019-02-28 \%m+\% months(1)` doesn't
+# capture the end of March, so it isn't included in the 2nd result
+slide_index(i, i, identity, .after = ~.x \%m+\% months(1))
 
 # ---------------------------------------------------------------------------
 

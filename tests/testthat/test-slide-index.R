@@ -848,6 +848,122 @@ test_that("can use Durations/Periods to handle daylight savings differently", {
 })
 
 # ------------------------------------------------------------------------------
+# .before / .after - function
+
+test_that(".before/.after - can use a function", {
+  x <- 1:5
+
+  expect_identical(
+    slide_index(x, x, identity, .before = function(.x) .x - 2),
+    slide_index(x, x, identity, .before = 2)
+  )
+  expect_identical(
+    slide_index(x, x, identity, .before = ~.x - 2),
+    slide_index(x, x, identity, .before = 2)
+  )
+  expect_identical(
+    slide_index(x, x, identity, .after = function(.x) .x + 2),
+    slide_index(x, x, identity, .after = 2)
+  )
+  expect_identical(
+    slide_index(x, x, identity, .after = ~.x + 2),
+    slide_index(x, x, identity, .after = 2)
+  )
+})
+
+test_that(".before/.after - using a function can help with lubridate `+ months(1)` invalid date issues", {
+  x <- as.Date(c("2019-01-31", "2019-02-28", "2019-03-31"))
+
+  expect_identical(
+    slide_index(x, x, identity, .before = ~lubridate::add_with_rollback(.x, months(-1))),
+    list(x[1], x[1:2], x[2:3])
+  )
+  expect_identical(
+    slide_index(x, x, identity, .after = ~lubridate::add_with_rollback(.x, months(1))),
+    list(x[1:2], x[2], x[3])
+  )
+})
+
+test_that(".before/.after - generated endpoints must be in weakly ascending order", {
+  x <- c(1, 2)
+
+  expect_error(
+    slide_index(x, x, identity, .before = ~.x - c(2, 4)),
+    class = "slider_error_generated_endpoints_must_be_ascending"
+  )
+  expect_snapshot_error(
+    slide_index(x, x, identity, .before = ~.x - c(2, 4))
+  )
+  expect_error(
+    slide_index(x, x, identity, .after = ~.x + c(4, 2)),
+    class = "slider_error_generated_endpoints_must_be_ascending"
+  )
+  expect_snapshot_error(
+    slide_index(x, x, identity, .after = ~.x + c(4, 2))
+  )
+})
+
+test_that(".before/.after - generated endpoints must maintain .before <= .after ordering", {
+  expect_error(
+    slide_index(1:2, 1:2, identity, .before = ~.x + 1, .after = 0),
+    "start of the range is after the end of the range"
+  )
+  expect_snapshot_error(
+    slide_index(1:2, 1:2, identity, .before = ~.x + 1, .after = 0)
+  )
+  expect_error(
+    slide_index(1:2, 1:2, identity, .before = 0, .after = ~.x - 1),
+    "start of the range is after the end of the range"
+  )
+  expect_snapshot_error(
+    slide_index(1:2, 1:2, identity, .before = 0, .after = ~.x - 1)
+  )
+})
+
+test_that(".before/.after - generated endpoints can't be NA", {
+  expect_error(
+    slide_index(1:2, 1:2, identity, .before = ~rep(NA_integer_, length(.x)))
+  )
+  expect_snapshot_error(
+    slide_index(1:2, 1:2, identity, .before = ~rep(NA_integer_, length(.x)))
+  )
+  expect_error(
+    slide_index(1:2, 1:2, identity, .after = ~rep(NA_integer_, length(.x)))
+  )
+  expect_snapshot_error(
+    slide_index(1:2, 1:2, identity, .after = ~rep(NA_integer_, length(.x)))
+  )
+})
+
+test_that(".before/.after - generated endpoints shouldn't rely on original `.i` length", {
+  # Duplicates (peers) will be removed
+  x <- c(1, 1)
+  adjust <- c(2, 3)
+
+  expect_error(
+    slide_index(x, x, identity, .before = ~.x - adjust),
+    class = "slider_error_generated_endpoints_incompatible_size"
+  )
+  expect_snapshot_error(
+    slide_index(x, x, identity, .before = ~.x - adjust)
+  )
+  expect_error(
+    slide_index(x, x, identity, .after = ~.x + adjust),
+    class = "slider_error_generated_endpoints_incompatible_size"
+  )
+  expect_snapshot_error(
+    slide_index(x, x, identity, .after = ~.x + adjust)
+  )
+})
+
+test_that(".before/.after - function must have 1 argument", {
+  expect_error(slide_index(1, 1, identity, .before = function(x, y) x + y))
+  expect_error(slide_index(1, 1, identity, .before = ~.x + .y))
+  expect_error(slide_index(1, 1, identity, .after = function(x, y) x + y))
+  expect_error(slide_index(1, 1, identity, .after = ~.x + .y))
+})
+
+# ------------------------------------------------------------------------------
 # .complete
 
 test_that("can match slide() usage of .complete", {

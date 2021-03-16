@@ -13,10 +13,8 @@
 #'
 #' @param .i `[vector]`
 #'
-#'   The index vector that determines the window sizes. The lower bound
-#'   of the window range will be computed as `.i - .before`, and the upper
-#'   bound as `.i + .after`. It is fairly common to supply a date vector
-#'   as the index, but not required.
+#'   The index vector that determines the window sizes. It is fairly common to
+#'   supply a date vector as the index, but not required.
 #'
 #'   There are 3 restrictions on the index:
 #'
@@ -52,6 +50,8 @@
 #' }
 #'
 #' @examples
+#' library(lubridate)
+#'
 #' x <- 1:5
 #'
 #' # In some cases, sliding over `x` with a strict window size of 2
@@ -73,6 +73,36 @@
 #' # We could have equivalently used a lubridate period object for this as well,
 #' # since `i - lubridate::days(1)` is allowed
 #' slide_index(i, i, ~.x, .before = lubridate::days(1))
+#'
+#' # ---------------------------------------------------------------------------
+#' # Functions for `.before` and `.after`
+#'
+#' # In some cases, it might not be appropriate to compute
+#' # `.i - .before` or `.i + .after`, either because there isn't a `-` or `+`
+#' # method defined, or because there is an alternative way to perform the
+#' # arithmetic. For example, subtracting 1 month with `- months(1)` (using
+#' # lubridate) can sometimes land you on an invalid date that doesn't exist.
+#' i <- as.Date(c("2019-01-31", "2019-02-28", "2019-03-31"))
+#'
+#' # 2019-03-31 - months(1) = 2019-02-31, which doesn't exist
+#' i - months(1)
+#'
+#' # These NAs create problems with `slide_index()`, which doesn't allow
+#' # missing values in the computed endpoints
+#' try(slide_index(i, i, identity, .before = months(1)))
+#'
+#' # In these cases, it is more appropriate to use `%m-%`,
+#' # which will snap to the end of the month, at least giving you something
+#' # to work with.
+#' i %m-% months(1)
+#'
+#' # To use this as your `.before` or `.after`, supply an anonymous function of
+#' # 1 argument that performs the computation
+#' slide_index(i, i, identity, .before = ~.x %m-% months(1))
+#'
+#' # Notice that in the `.after` case, `2019-02-28 %m+% months(1)` doesn't
+#' # capture the end of March, so it isn't included in the 2nd result
+#' slide_index(i, i, identity, .after = ~.x %m+% months(1))
 #'
 #' # ---------------------------------------------------------------------------
 #'
