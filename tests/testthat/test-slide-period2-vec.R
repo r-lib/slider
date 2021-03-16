@@ -76,7 +76,7 @@ test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {
 })
 
 test_that(".ptypes with a vec_proxy() are restored to original type", {
-  expect_is(
+  expect_s3_class(
     slide_period2_vec(Sys.Date() + 1:5, 1:5, new_date(c(1, 2, 3, 4, 5)), "day", ~.x, .ptype = as.POSIXlt(Sys.Date())),
     "POSIXlt"
   )
