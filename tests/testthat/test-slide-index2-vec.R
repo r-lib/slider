@@ -2,17 +2,17 @@
 # slide_index2_*()
 
 test_that("slide_index2_*() works", {
-  expect_equivalent(slide_index2_vec(1L, 1L, 1, ~.x + .y), 2L)
-  expect_equivalent(slide_index2_int(1L, 1L, 1, ~.x + .y), 2L)
+  expect_identical(slide_index2_vec(1L, 1L, 1, ~.x + .y), 2L)
+  expect_identical(slide_index2_int(1L, 1L, 1, ~.x + .y), 2L)
 })
 
 test_that("slide_index2_*() retains names of x", {
-  expect_equivalent(slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
-  expect_equivalent(slide_index2_int(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
+  expect_identical(slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
+  expect_identical(slide_index2_int(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
 })
 
 test_that("slide_index2_vec() can simplify automatically", {
-  expect_equivalent(slide_index2_vec(1, 2, 1, ~.x + .y, .ptype = NULL), 3)
+  expect_identical(slide_index2_vec(1, 2, 1, ~.x + .y, .ptype = NULL), 3)
 })
 
 test_that("slide_index2_*() errors if it can't simplify", {
