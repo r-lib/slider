@@ -357,17 +357,19 @@ solve a much narrower problem, so the API here is more focused.
 
 ## Performance
 
-In terms of performance, be aware that any specialized package that
-shifts the function calls to C are going to be faster than slider. For
-example, `RcppRoll::roll_mean()` computes the rolling mean *at the C
-level*, which is bound to be faster. The purpose of slider is to be
-*general purpose*, while still being as fast as possible. This means
-that it can be used for more abstract things, like rolling regressions,
-or any other custom function that you want to use in a rolling fashion.
+Like `purrr::map()`, the core functions of slider, such as `slide()` and
+`slide_index()`, are optimized in C to be as fast as possible, but there
+is overhead involved in calling `.f` repeatedly. These functions are
+meant to be as *general purpose* as possible, at the cost of some
+performance. This means that slider can be used for more abstract
+computations, like rolling regressions, or any other custom function
+that you want to use in a rolling fashion.
 
-Otherwise, like `purrr::map()`, `slide()` is optimized in C to be as
-fast as possible, getting out of the way as quickly as it can so the
-main overhead are the `.f` calls.
+slider also provides *specialized* functions for some of the most common
+use cases, such as `slide_mean()`, or `slide_index_sum()`. These compute
+their corresponding metric at the C level, using a specialized
+algorithm, and are often much faster than their `slide_dbl(x, fn)`
+equivalent.
 
 ## References
 
