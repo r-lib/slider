@@ -34,6 +34,9 @@ jobs:
           key: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-${{ hashFiles('.github/r-depends.rds') }}
           restore-keys: ubuntu-18.04-${{ steps.install-r.outputs.installed-r-version }}-1-
 
+      - name: Force textshaping system dependencies
+        run: brew install harfbuzz fribidi
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
