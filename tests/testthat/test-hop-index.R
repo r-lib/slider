@@ -89,16 +89,14 @@ test_that("0 length .starts/.stops are allowed", {
   expect_equal(hop_index(1, 1, integer(), integer(), ~.x), list())
 })
 
-test_that("common type is found among .i/.starts/.stops", {
+test_that(".starts and .stops are cast to .i", {
   i <- new_date(c(0, 1))
-  start <- vec_cast(i[1], new_datetime(0))
-  stop <- i[2]
+  starts <- c("x", "y")
+  stops <- i
 
-  expect_equal(
-    hop_index(1:2, i, start, stop, ~.x),
-    list(
-      1:2
-    )
+  expect_error(
+    hop_index(1:2, i, starts, stops, ~.x),
+    class = "vctrs_error_incompatible_type"
   )
 })
 

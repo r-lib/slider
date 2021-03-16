@@ -31,10 +31,13 @@ hop_index_common <- function(x,
   i <- unrep$key
   peer_sizes <- unrep$times
 
+  starts <- vec_cast(starts, i, x_arg = ".starts", to_arg = ".i")
+  stops <- vec_cast(stops, i, x_arg = ".stops", to_arg = ".i")
+
   size <- vec_size_common(starts, stops)
   args <- vec_recycle_common(starts = starts, stops = stops, .size = size)
-  args <- vec_cast_common(i = i, !!!args)
-  args <- compute_combined_ranks(!!!args)
+
+  args <- compute_combined_ranks(i = i, !!!args)
 
   i <- args$i
   starts <- args$starts
