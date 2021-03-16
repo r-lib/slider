@@ -89,20 +89,14 @@ compute_ranges <- function(i, before, after, i_arg, before_arg, after_arg) {
     check_generated_endpoints_cannot_be_na(stops, after_arg)
   }
 
-  ptype <- vec_ptype_common(i, starts, stops)
-
+  ranks <- compute_combined_ranks(i = i, starts = starts, stops = stops)
+  i <- ranks$i
   if (!start_unbounded) {
-    starts <- vec_cast(starts, ptype)
-    starts <- vec_proxy_compare(starts)
+    starts <- ranks$starts
   }
-
   if (!stop_unbounded) {
-    stops <- vec_cast(stops, ptype)
-    stops <- vec_proxy_compare(stops)
+    stops <- ranks$stops
   }
-
-  i <- vec_cast(i, ptype, x_arg = i_arg)
-  i <- vec_proxy_compare(i)
 
   list(i = i, starts = starts, stops = stops)
 }

@@ -92,3 +92,37 @@ vec_simplify <- function(x, ptype) {
 
   vec_set_names(out, names)
 }
+
+compute_combined_ranks <- function(...) {
+  args <- list2(...)
+  combined <- vec_c(!!!args, .name_spec = zap())
+
+  ranks <- slider_dense_rank(combined)
+
+  n_args <- length(args)
+  sizes <- list_sizes(args)
+  indices <- vector("list", n_args)
+
+  current_start <- 1L
+  for(i in seq_len(n_args)) {
+    next_start <- current_start + sizes[[i]]
+    current_stop <- next_start - 1L
+    indices[[i]] <- seq2(current_start, current_stop)
+    current_start <- next_start
+  }
+
+  out <- vec_chop(ranks, indices)
+  names(out) <- names(args)
+
+  out
+}
+
+# TODO: Replace with `vec_rank(x, ties = "dense")`
+# https://github.com/r-lib/vctrs/issues/1251
+#
+# This impl is taken from `dplyr::dense_rank()`.
+# Expected that there are no missing values in `x`.
+slider_dense_rank <- function(x) {
+  vec_match(x, vec_sort(vec_unique(x)))
+}
+

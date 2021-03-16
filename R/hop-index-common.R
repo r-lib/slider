@@ -25,21 +25,20 @@ hop_index_common <- function(x,
   check_endpoints_cannot_be_na(stops, ".stops")
   check_endpoints_must_be_ascending(stops, ".stops")
 
-  size <- vec_size_common(starts, stops)
-
-  args <- vec_recycle_common(starts, stops, .size = size)
-  args <- vec_cast_common(i, !!!args)
-  args <- lapply(args, vec_proxy_compare)
-
-  i <- args[[1L]]
-  starts <- args[[2L]]
-  stops <- args[[3L]]
-
   # `i` is known to be ascending,
   # so we can detect uniques very quickly with `vec_unrep()`
   unrep <- vec_unrep(i)
   i <- unrep$key
   peer_sizes <- unrep$times
+
+  size <- vec_size_common(starts, stops)
+  args <- vec_recycle_common(starts = starts, stops = stops, .size = size)
+  args <- vec_cast_common(i = i, !!!args)
+  args <- compute_combined_ranks(!!!args)
+
+  i <- args$i
+  starts <- args$starts
+  stops <- args$stops
 
   .Call(
     hop_index_common_impl,

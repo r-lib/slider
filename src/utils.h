@@ -49,6 +49,15 @@ static inline const char* r_scalar_chr_get(SEXP x) {
   return CHAR(STRING_ELT(x, 0));
 }
 
+static inline bool p_int_any_gt(const int* p_x, const int* p_y, R_xlen_t size) {
+  for (R_xlen_t i = 0; i < size; ++i) {
+    if (p_x[i] > p_y[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 __attribute__((noreturn)) static inline void never_reached(const char* fn) {
   Rf_errorcall(R_NilValue, "Internal error: Reached the unreachable in `%s()`.", fn);
 }
@@ -83,8 +92,16 @@ SEXP slider_init(SEXPTYPE type, R_xlen_t size);
 
 void stop_not_all_size_one(int iteration, int size);
 
-void check_slide_starts_not_past_stops(SEXP starts, SEXP stops);
-void check_hop_starts_not_past_stops(SEXP starts, SEXP stops);
+void check_slide_starts_not_past_stops(SEXP starts,
+                                       SEXP stops,
+                                       const int* p_starts,
+                                       const int* p_stops,
+                                       R_xlen_t size);
+void check_hop_starts_not_past_stops(SEXP starts,
+                                     SEXP stops,
+                                     const int* p_starts,
+                                     const int* p_stops,
+                                     R_xlen_t size);
 
 int compute_size(SEXP x, int type);
 int compute_force(int type);
