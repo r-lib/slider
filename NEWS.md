@@ -15,6 +15,11 @@
 * The `slide_index_*()` family has undergone some internal changes to make it
   more compatible with custom vctrs classes that could be provided as the
   index (`.i`), such as the date-time classes in the clock package (#133, #130).
+  
+* For the `slide_index_*()` family, it is now required that `.i - .before` and
+  `.i + .after` be castable to `.i` by `vctrs::vec_cast()`. Similarly, for
+  the `hop_index_*()` family, `.starts` and `.stops` must both be castable to
+  `.i` (#132).
 
 * `vignette("rowwise")` has been updated to use `cur_data()` from dplyr 1.0.0,
   which makes it significantly easier to do rolling operations on data frames

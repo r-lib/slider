@@ -79,6 +79,7 @@ compute_ranges <- function(i, before, after, i_arg, before_arg, after_arg) {
     starts <- NULL
   } else {
     starts <- i - before
+    starts <- vec_cast(starts, i, to_arg = ".i")
     check_generated_endpoints_cannot_be_na(starts, before_arg)
   }
 
@@ -86,6 +87,7 @@ compute_ranges <- function(i, before, after, i_arg, before_arg, after_arg) {
     stops <- NULL
   } else {
     stops <- i + after
+    stops <- vec_cast(stops, i, to_arg = ".i")
     check_generated_endpoints_cannot_be_na(stops, after_arg)
   }
 

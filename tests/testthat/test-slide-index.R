@@ -216,8 +216,8 @@ test_that("can define ranges based on an irregular numeric index", {
 # ------------------------------------------------------------------------------
 # .before - lubridate - Durations
 
-test_that("can use hour Durations with Dates", {
-  i <- new_date(c(0, 1, 2, 3))
+test_that("can use hour Durations with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_equal(
@@ -232,27 +232,27 @@ test_that("can use hour Durations with Dates", {
 
   expect_equal(
     slide_index(x, i, identity, .before = lubridate::dhours(24)),
-    slide_index(x, i, identity, .before = 1L)
+    slide_index(x, i, identity, .before = 24 * 60 * 60)
   )
 })
 
-test_that("can use day Durations with Dates", {
-  i <- new_date(c(0, 1, 2, 3))
+test_that("can use day Durations with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_equal(
     slide_index(x, i, identity, .before = lubridate::ddays(1)),
-    slide_index(x, i, identity, .before = 1L)
+    slide_index(x, i, identity, .before = 24 * 60 * 60)
   )
 
   expect_equal(
     slide_index(x, i, identity, .before = lubridate::ddays(2)),
-    slide_index(x, i, identity, .before = 2L)
+    slide_index(x, i, identity, .before = 2 * 24 * 60 * 60)
   )
 })
 
-test_that("can use week Durations with Dates", {
-  i <- new_date(c(0, 6, 7, 8))
+test_that("can use week Durations with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 6, 7, 8)))
   x <- seq_along(i)
   before <- lubridate::dweeks(1)
 
@@ -268,8 +268,8 @@ test_that("can use week Durations with Dates", {
   )
 })
 
-test_that("can use year Durations with Dates", {
-  i <- new_date(c(0, 365, 365 * 2))
+test_that("can use year Durations with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 365, 365 * 2)))
   x <- seq_along(i)
   before <- lubridate::dyears(1)
 
@@ -283,8 +283,8 @@ test_that("can use year Durations with Dates", {
   )
 })
 
-test_that("can use negative Durations with Dates", {
-  i <- new_date(c(0, 1, 2, 3))
+test_that("can use negative Durations with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_equal(
@@ -309,7 +309,7 @@ test_that("can use negative Durations with Dates", {
 })
 
 test_that("errors if negative .before Duration is further than .after", {
-  i <- new_date(c(0, 1, 2, 3))
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_error(
@@ -348,26 +348,11 @@ test_that("can use second Durations with POSIXct", {
   )
 })
 
-test_that("can use day Durations with POSIXct", {
-  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
-  x <- seq_along(i)
-
-  expect_equal(
-    slide_index(x, i, identity, .before = lubridate::ddays(1)),
-    list(
-      1L,
-      1:2,
-      2:3,
-      3:4
-    )
-  )
-})
-
 # ------------------------------------------------------------------------------
 # .before - lubridate - Periods
 
-test_that("can use hour Periods with Dates", {
-  i <- new_date(c(0, 1, 2, 3))
+test_that("can use hour Periods with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_equal(
@@ -382,7 +367,12 @@ test_that("can use hour Periods with Dates", {
 
   expect_equal(
     slide_index(x, i, identity, .before = lubridate::hours(24)),
-    slide_index(x, i, identity, .before = 1L)
+    list(
+      1L,
+      1:2,
+      2:3,
+      3:4
+    )
   )
 })
 
@@ -420,6 +410,7 @@ test_that("can use week Periods with Dates", {
 
   # If you want to avoid that 1 week prior data point, bump it back
   # to 1 week - 1 second
+  i <- lubridate::as_datetime(i)
   before <- lubridate::weeks(1) - lubridate::seconds(1)
 
   expect_equal(
@@ -464,7 +455,7 @@ test_that("can generally use (tricky!) month Periods with Dates", {
 
 test_that("can use year Durations/Periods with Dates and leap years", {
   # 2008 = leap year
-  i <- as.Date(c("2008-01-01", "2009-01-01", "2010-01-01"))
+  i <- as.POSIXct(c("2008-01-01", "2009-01-01", "2010-01-01"), "UTC")
   x <- seq_along(i)
   before <- lubridate::dyears(1)
 
@@ -721,8 +712,8 @@ test_that("can define ranges based on an irregular numeric index", {
 # ------------------------------------------------------------------------------
 # .after - lubridate - Periods
 
-test_that("can use hour Periods with Dates", {
-  i <- new_date(c(0, 1, 2, 3))
+test_that("can use hour Periods with POSIXct", {
+  i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
   expect_equal(
@@ -737,7 +728,12 @@ test_that("can use hour Periods with Dates", {
 
   expect_equal(
     slide_index(x, i, identity, .after = lubridate::hours(24)),
-    slide_index(x, i, identity, .after = 1L)
+    list(
+      1:2,
+      2:3,
+      3:4,
+      4L
+    )
   )
 })
 
@@ -775,6 +771,7 @@ test_that("can use week Periods with Dates", {
 
   # If you want to avoid that 1 week prior data point, bump it back
   # to 1 week - 1 second
+  i <- lubridate::as_datetime(i)
   after <- lubridate::weeks(1) - lubridate::seconds(1)
 
   expect_equal(
@@ -1098,17 +1095,6 @@ test_that("names are retained on inner sliced object", {
 # ------------------------------------------------------------------------------
 # .i types
 
-test_that("can technically use a logical index", {
-  expect_equal(
-    slide_index(1:3, c(FALSE, FALSE, TRUE), ~.x, .before = 1L),
-    list(
-      1:2,
-      1:2,
-      1:3
-    )
-  )
-})
-
 test_that("can use a data frame index", {
   expect_equal(
     slide_index(1:5, data.frame(x = c(1, 1, 2, 3, 4)), ~.x),
@@ -1119,6 +1105,24 @@ test_that("can use a data frame index", {
       4L,
       5L
     )
+  )
+})
+
+test_that("`.i - .before` must be castable to `.i`", {
+  i <- 1L
+
+  expect_error(
+    slide_index(1, i, identity, .before = 1.5),
+    class = "vctrs_error_cast_lossy"
+  )
+})
+
+test_that("`.i + .after` must be castable to `.i`", {
+  i <- 1L
+
+  expect_error(
+    slide_index(1, i, identity, .after = 1.5),
+    class = "vctrs_error_cast_lossy"
   )
 })
 
