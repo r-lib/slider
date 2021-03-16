@@ -144,7 +144,8 @@
 <li><p><code><a href="../reference/summary-slide.html">slide_max()</a></code>, <code><a href="../reference/summary-index.html">slide_index_max()</a></code>: for rolling maximums</p></li>
 </ul>
 </li>
-<li><p><code>slide_index_*()</code> functions are now a bit faster from using <code><a href="https://vctrs.r-lib.org/reference/vec-rep.html">vctrs::vec_unrep()</a></code> to locate unique index values, rather than <code><a href="https://vctrs.r-lib.org/reference/vec_group.html">vctrs::vec_group_loc()</a></code>.</p></li>
+<li><p>The <code>slide_index_*()</code> family has undergone some internal changes to make it more compatible with custom vctrs classes that could be provided as the index (<code>.i</code>), such as the date-time classes in the clock package (<a href='https://github.com/DavisVaughan/slider/issues/133'>#133</a>, <a href='https://github.com/DavisVaughan/slider/issues/130'>#130</a>).</p></li>
+<li><p>For the <code>slide_index_*()</code> family, it is now required that <code>.i - .before</code> and <code>.i + .after</code> be castable to <code>.i</code> by <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html">vctrs::vec_cast()</a></code>. Similarly, for the <code>hop_index_*()</code> family, <code>.starts</code> and <code>.stops</code> must both be castable to <code>.i</code> (<a href='https://github.com/DavisVaughan/slider/issues/132'>#132</a>).</p></li>
 <li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
 </ul>
 </div>
