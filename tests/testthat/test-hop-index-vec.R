@@ -87,7 +87,7 @@ test_that("`.ptype = NULL` errors with non recyclable starts/stops", {
 })
 
 test_that(".ptypes with a vec_proxy() are restored to original type", {
-  expect_is(
+  expect_s3_class(
     hop_index_vec(Sys.Date() + 1:5, 1:5, 1:5, 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),
     "POSIXlt"
   )

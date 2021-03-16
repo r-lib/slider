@@ -76,7 +76,7 @@ test_that("`.ptype = NULL` is size stable (#78)", {
 })
 
 test_that(".ptypes with a vec_proxy() are restored to original type", {
-  expect_is(
+  expect_s3_class(
     slide_vec(Sys.Date() + 1:5, ~.x, .ptype = as.POSIXlt(Sys.Date())),
     "POSIXlt"
   )
@@ -217,27 +217,34 @@ test_that("slide_lgl() can coerce", {
 # data frame suffix tests
 
 test_that("slide_dfr() works", {
-  expect_equal(
-    slide_dfr(1:2, ~.x, .before = 1),
-    data.frame(...1 = c(1, 1), ...2 = c(NA, 2))
-  )
-
-  x <- 1:2
-  expect_equal(
-    slide_dfr(x, ~data.frame(x = .x), .before = 1),
-    data.frame(x = c(1, 1, 2))
+  expect_identical(
+    slide_dfr(
+      1:2,
+      ~new_data_frame(list(x = list(.x))),
+      .before = 1
+    ),
+    data_frame(
+      x = list(1L, 1:2)
+    )
   )
 })
 
 test_that("slide_dfc() works", {
-  expect_equal(
-    slide_dfc(1:2, ~.x, .before = 1),
-    data.frame(...1 = c(1, 1), ...2 = c(1, 2))
-  )
-
   x <- 1:2
-  expect_equal(
-    slide_dfc(x, ~data.frame(x = .x), .before = 1),
-    data.frame(x...1 = c(1, 1), x...2 = c(1, 2))
+
+  fn <- function(x) {
+    if (length(x) == 1) {
+      data.frame(x1 = x)
+    } else {
+      data.frame(x2 = x)
+    }
+  }
+
+  expect_identical(
+    slide_dfc(1:2, fn, .before = 1),
+    data.frame(
+      x1 = c(1L, 1L),
+      x2 = 1:2
+    )
   )
 })

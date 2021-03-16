@@ -16,7 +16,7 @@ License: MIT + file LICENSE
 URL: https://github.com/DavisVaughan/slider
 BugReports: https://github.com/DavisVaughan/slider/issues
 Depends: 
-    R (>= 3.2)
+    R (>= 3.3.0)
 Imports: 
     glue,
     rlang (>= 0.4.5),
@@ -28,8 +28,7 @@ Suggests:
     knitr,
     lubridate,
     rmarkdown,
-    testthat (>= 2.1.0),
-    xml2
+    testthat (>= 3.0.0)
 LinkingTo:
     vctrs (>= 0.3.6)
 VignetteBuilder: 
@@ -37,7 +36,7 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1
 Collate: 
     'block.R'
     'conditions.R'
@@ -68,3 +67,4 @@ Collate:
     'summary-slide.R'
     'utils.R'
     'zzz.R'
+Config/testthat/edition: 3

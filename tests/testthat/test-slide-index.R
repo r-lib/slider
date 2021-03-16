@@ -411,7 +411,7 @@ test_that("can use week Periods with Dates", {
   # If you want to avoid that 1 week prior data point, bump it back
   # to 1 week - 1 second
   i <- lubridate::as_datetime(i)
-  before <- lubridate::weeks(1) - lubridate::seconds(1)
+  before <- lubridate::seconds(604799)
 
   expect_equal(
     slide_index(x, i, identity, .before = before),
@@ -772,7 +772,7 @@ test_that("can use week Periods with Dates", {
   # If you want to avoid that 1 week prior data point, bump it back
   # to 1 week - 1 second
   i <- lubridate::as_datetime(i)
-  after <- lubridate::weeks(1) - lubridate::seconds(1)
+  after <- lubridate::seconds(604799)
 
   expect_equal(
     slide_index(x, i, identity, .after = after),

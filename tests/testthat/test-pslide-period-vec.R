@@ -76,7 +76,7 @@ test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {
 })
 
 test_that(".ptypes with a vec_proxy() are restored to original type", {
-  expect_is(
+  expect_s3_class(
     pslide_period_vec(list(Sys.Date() + 1:5, 1:5), new_date(c(1, 2, 3, 4, 5)), "day", ~.x, .ptype = as.POSIXlt(Sys.Date())),
     "POSIXlt"
   )
@@ -173,27 +173,42 @@ test_that("pslide_period_lgl() can coerce", {
 # data frame suffix tests
 
 test_that("pslide_period_dfr() works", {
-  expect_equal(
-    pslide_period_dfr(list(1:2, 1:2), new_date(c(1, 2)), "day", ~.x, .before = 1),
-    slide_dfr(1:2, ~.x, .before = 1)
-  )
-
-  x <- 1:2
-  expect_equal(
-    pslide_period_dfr(list(x, x), new_date(c(1, 2)), "day", ~data.frame(x = .x), .before = 1),
-    slide_dfr(x, ~data.frame(x = .x), .before = 1)
+  expect_identical(
+    pslide_period_dfr(
+      list(1:2, 1:2),
+      new_date(c(1, 2)),
+      "day",
+      ~new_data_frame(list(x = list(.x))),
+      .before = 1
+    ),
+    slide_dfr(1:2, ~new_data_frame(list(x = list(.x))), .before = 1)
   )
 })
 
 test_that("pslide_period_dfc() works", {
-  expect_equal(
-    pslide_period_dfc(list(1:2, 1:2), new_date(c(1, 2)), "day", ~.x, .before = 1),
-    slide_dfc(1:2, ~.x, .before = 1)
-  )
-
   x <- 1:2
-  expect_equal(
-    pslide_period_dfc(list(x, x), new_date(c(1, 2)), "day", ~data.frame(x = .x), .before = 1),
-    slide_dfc(x, ~data.frame(x = .x), .before = 1)
+
+  fn <- function(x, y) {
+    if (length(x) == 1) {
+      data.frame(x1 = x, y1 = y)
+    } else {
+      data.frame(x2 = x, y2 = y)
+    }
+  }
+
+  expect_identical(
+    pslide_period_dfc(
+      list(x, x),
+      new_date(c(1, 2)),
+      "day",
+      fn,
+      .before = 1
+    ),
+    data.frame(
+      x1 = c(1L, 1L),
+      y1 = c(1L, 1L),
+      x2 = 1:2,
+      y2 = 1:2
+    )
   )
 })

@@ -2,15 +2,15 @@
 # hop_index2_vec
 
 test_that("hop_index2_vec() works", {
-  expect_equivalent(hop_index2_vec(1L, 1L, 1, 1, 1, ~.x + .y), 2L)
+  expect_identical(hop_index2_vec(1L, 1L, 1, 1, 1, ~.x + .y), 2L)
 })
 
-test_that("hop_index2_vec() retains names of x", {
-  expect_equivalent(hop_index2_vec(c(x = 1L), c(y = 1L), 1,  1, 1, ~.x + .y), c(x = 2L))
+test_that("hop_index2_vec() doesn't retains names of x (#75)", {
+  expect_named(hop_index2_vec(c(x = 1L), c(y = 1L), 1,  1, 1, ~.x + .y), NULL)
 })
 
 test_that("hop_index2_vec() can simplify automatically", {
-  expect_equivalent(hop_index2_vec(1, 2, 1,  1, 1, ~.x + .y, .ptype = NULL), 3)
+  expect_identical(hop_index2_vec(1, 2, 1,  1, 1, ~.x + .y, .ptype = NULL), 3)
 })
 
 test_that("hop_index2_vec() errors if it can't simplify", {
