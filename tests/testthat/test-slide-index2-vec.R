@@ -66,28 +66,46 @@ test_that("slide_index2_lgl() can coerce", {
 # data frame suffix tests
 
 test_that("slide_index2_dfr() works", {
-  expect_equal(
-    slide_index2_dfr(1:2, 1:2, 1:2, ~.x, .before = 1),
-    slide_dfr(1:2, ~.x, .before = 1)
-  )
-
-  x <- 1:2
-  expect_equal(
-    slide_index2_dfr(x, x, 1:2, ~data.frame(x = .x), .before = 1),
-    slide_dfr(x, ~data.frame(x = .x), .before = 1)
+  expect_identical(
+    slide_index2_dfr(
+      1:2,
+      1:2,
+      1:2,
+      ~new_data_frame(list(x = list(.x), y = list(.y))),
+      .before = 1
+    ),
+    data_frame(
+      x = list(1L, 1:2),
+      y = list(1L, 1:2)
+    )
   )
 })
 
-test_that("slide_index2_dfc() works", {
-  expect_equal(
-    slide_index2_dfc(1:2, 1:2, 1:2, ~.x, .before = 1),
-    slide_dfc(1:2, ~.x, .before = 1)
-  )
-
+test_that("pslide_index_dfc() works", {
   x <- 1:2
-  expect_equal(
-    slide_index2_dfc(x, x, 1:2, ~data.frame(x = .x), .before = 1),
-    slide_dfc(x, ~data.frame(x = .x), .before = 1)
+
+  fn <- function(x, y) {
+    if (length(x) == 1) {
+      data.frame(x1 = x, y1 = y)
+    } else {
+      data.frame(x2 = x, y2 = y)
+    }
+  }
+
+  expect_identical(
+    slide_index2_dfc(
+      1:2,
+      1:2,
+      1:2,
+      fn,
+      .before = 1
+    ),
+    data.frame(
+      x1 = c(1L, 1L),
+      y1 = c(1L, 1L),
+      x2 = 1:2,
+      y2 = 1:2
+    )
   )
 })
 

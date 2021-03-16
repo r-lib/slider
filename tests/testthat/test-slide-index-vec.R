@@ -147,28 +147,41 @@ test_that("slide_index_lgl() can coerce", {
 # data frame suffix tests
 
 test_that("slide_index_dfr() works", {
-  expect_equal(
-    slide_index_dfr(1:2, 1:2, ~.x, .before = 1),
-    slide_dfr(1:2, ~.x, .before = 1)
-  )
-
-  x <- 1:2
-  expect_equal(
-    slide_index_dfr(x, x, ~data.frame(x = .x), .before = 1),
-    slide_dfr(x, ~data.frame(x = .x), .before = 1)
+  expect_identical(
+    slide_index_dfr(
+      1:2,
+      1:2,
+      ~new_data_frame(list(x = list(.x))),
+      .before = 1
+    ),
+    data_frame(
+      x = list(1L, 1:2)
+    )
   )
 })
 
 test_that("slide_index_dfc() works", {
-  expect_equal(
-    slide_index_dfc(1:2, 1:2, ~.x, .before = 1),
-    slide_dfc(1:2, ~.x, .before = 1)
-  )
-
   x <- 1:2
-  expect_equal(
-    slide_index_dfc(x, x, ~data.frame(x = .x), .before = 1),
-    slide_dfc(x, ~data.frame(x = .x), .before = 1)
+
+  fn <- function(x) {
+    if (length(x) == 1) {
+      data.frame(x1 = x)
+    } else {
+      data.frame(x2 = x)
+    }
+  }
+
+  expect_identical(
+    slide_index_dfc(
+      1:2,
+      1:2,
+      fn,
+      .before = 1
+    ),
+    data.frame(
+      x1 = c(1L, 1L),
+      x2 = 1:2
+    )
   )
 })
 

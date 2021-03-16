@@ -73,32 +73,49 @@ test_that("pslide_index_lgl() can coerce", {
 # data frame suffix tests
 
 test_that("pslide_index_dfr() works", {
-  expect_equal(
-    pslide_index_dfr(list(1:2, 1:2), 1:2, ~c(.x, .y), .before = 1),
-    data.frame(
-      ...1 = c(1, 1),
-      ...2 = c(1, 2),
-      ...3 = c(NA, 1),
-      ...4 = c(NA, 2)
+  expect_identical(
+    pslide_index_dfr(
+      list(1:2, 1:2),
+      1:2,
+      ~new_data_frame(list(x = list(.x), y = list(.y))),
+      .before = 1
+    ),
+    data_frame(
+      x = list(1L, 1:2),
+      y = list(1L, 1:2)
     )
   )
 
   x <- 1:2
-  expect_equal(
+  expect_identical(
     pslide_index_dfr(list(x, x), 1:2, ~data.frame(x = .x, y = .y), .before = 1),
-    data.frame(x = c(1, 1, 2), y = c(1, 1, 2))
+    data.frame(x = c(1L, 1L, 2L), y = c(1L, 1L, 2L))
   )
 })
 
 test_that("pslide_index_dfc() works", {
   x <- 1:2
-  expect_equal(
-    pslide_index_dfc(list(x, x), 1:2, ~data.frame(x = .x, y = .y), .before = 1),
+
+  fn <- function(x, y) {
+    if (length(x) == 1) {
+      data.frame(x1 = x, y1 = y)
+    } else {
+      data.frame(x2 = x, y2 = y)
+    }
+  }
+
+  expect_identical(
+    pslide_index_dfc(
+      list(x, x),
+      1:2,
+      fn,
+      .before = 1
+    ),
     data.frame(
-      x...1 = c(1, 1),
-      y...2 = c(1, 1),
-      x...3 = c(1, 2),
-      y...4 = c(1, 2)
+      x1 = c(1L, 1L),
+      y1 = c(1L, 1L),
+      x2 = 1:2,
+      y2 = 1:2
     )
   )
 })
