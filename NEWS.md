@@ -12,9 +12,9 @@
   
   - `slide_max()`, `slide_index_max()`: for rolling maximums
 
-* `slide_index_*()` functions are now a bit faster from using
-  `vctrs::vec_unrep()` to locate unique index values, rather than
-  `vctrs::vec_group_loc()`.
+* The `slide_index_*()` family has undergone some internal changes to make it
+  more compatible with custom vctrs classes that could be provided as the
+  index (`.i`), such as the date-time classes in the clock package (#133, #130).
 
 * `vignette("rowwise")` has been updated to use `cur_data()` from dplyr 1.0.0,
   which makes it significantly easier to do rolling operations on data frames
