@@ -1,0 +1,240 @@
+---
+title: "Converting from tsibble"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Converting from tsibble}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+# Turn off all evaluation!
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+The [tsibble](https://tsibble.tidyverts.org/) package is where the name `slide()` originated. It contained original implementations of `slide()` and friends, along with variations like `tile()` and `stretch()`, all of which have been superceded by slider. As of tsibble 1.0.0, those functions have been completely removed in favor of using slider. The goal of this vignette is to explain how to transition from tsibble to slider.
+
+## slide()
+
+tsibble's `.size` and `.align` arguments are roughly equivalent to using `.before` and `.after` in slider. In tsibble, you'd specify the full width of the window with `.size`, and then you'd specify how to construct that window by `.align`ing yourself to the left, right, or center. In slider, you always start at the "current" element, and then specify how many elements `.before` and `.after` the current element that you want in the window. The width of the window in slider terms could be computed as `.after - .before + 1`.
+
+```{r}
+x <- 1:3
+
+# The current element, and 1 before it
+slider::slide(x, identity, .before = 1, .complete = TRUE)
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 2 3
+```
+
+```{r}
+# Window size of 2, assume the current element is the right side of the window
+tsibble::slide(x, identity, .size = 2, .align = "right")
+#> [[1]]
+#> [1] NA
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 2 3
+```
+
+We also have to set the `.complete` argument of slider's `slide()` to `TRUE`, as by default slider allows partial windows, but tsibble's version does not. The equivalent argument to this in tsibble is `.partial` (note that they are interpreted inversely of each other).
+
+There is no `.fill` equivalent in slider. slider always uses the vctrs definition of a missing value (a typed `NA` for most vectors, a `NULL` for lists). This is why the slider result above has a `NULL`, while the tsibble result used an `NA` (the default `.fill` value in tsibble).
+
+Specifying windows using `.before` and `.after` might first feel a bit unnatural to a tsibble or zoo user, but it is generally more flexible. You can generate irregular windows that aren't possible with tsibble, like:
+
+```{r}
+# The current element, along with 1 before and 3 after (if they exist)
+slider::slide(1:6, identity, .before = 1, .after = 3)
+#> [[1]]
+#> [1] 1 2 3 4
+#> 
+#> [[2]]
+#> [1] 1 2 3 4 5
+#> 
+#> [[3]]
+#> [1] 2 3 4 5 6
+#> 
+#> [[4]]
+#> [1] 3 4 5 6
+#> 
+#> [[5]]
+#> [1] 4 5 6
+#> 
+#> [[6]]
+#> [1] 5 6
+```
+
+As you will see in the next section, expanding windows are easy to create by setting `.before` or `.after` to `Inf`.
+
+This syntax also translates naturally to `slide_index()`, where the bounds of the window are (by default) computed as `.i - .before` and `.i + .after`, which often cannot be expressed by a single window size value.
+
+## tile()
+
+Tiling uses non-overlapping windows. For example, this segments `x` into 4 non-overlapping buckets, where as many buckets as possible have a window size of 3.
+
+```{r}
+x <- 1:10
+
+tsibble::tile(x, identity, .size = 3)
+#> [[1]]
+#> [1] 1 2 3
+#> 
+#> [[2]]
+#> [1] 4 5 6
+#> 
+#> [[3]]
+#> [1] 7 8 9
+#> 
+#> [[4]]
+#> [1] 10
+```
+
+There is no direct equivalent to this in slider, but you can get close with `slide()`. `tile()` seems to left-align the index, so we need the current element plus two `.after` it. Since this is a non-overlapping window, we want to `.step` forward by the size of the window, three.
+
+```{r}
+result <- slider::slide(x, identity, .after = 2, .step = 3)
+result
+#> [[1]]
+#> [1] 1 2 3
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> NULL
+#> 
+#> [[4]]
+#> [1] 4 5 6
+#> 
+#> [[5]]
+#> NULL
+#> 
+#> [[6]]
+#> NULL
+#> 
+#> [[7]]
+#> [1] 7 8 9
+#> 
+#> [[8]]
+#> NULL
+#> 
+#> [[9]]
+#> NULL
+#> 
+#> [[10]]
+#> [1] 10
+```
+
+This isn't exactly the same, as `slide()` is guaranteed to be size-stable, returning an object with the same size as `.x`. However, if you `purrr::compact()` the result to drop the `NULL` values, then they are equivalent.
+
+```{r}
+purrr::compact(result)
+#> [[1]]
+#> [1] 1 2 3
+#> 
+#> [[2]]
+#> [1] 4 5 6
+#> 
+#> [[3]]
+#> [1] 7 8 9
+#> 
+#> [[4]]
+#> [1] 10
+```
+
+## stretch()
+
+To construct expanding windows with tsibble, you've probably used `stretch()`. This fixes an initial window size, and then expands to add more observations without dropping any.
+
+```{r}
+x <- 1:4
+
+tsibble::stretch(x, identity)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+```
+
+With slider, you can set `.before = Inf` to select the current element plus all elements before this one.
+
+```{r}
+slider::slide(x, identity, .before = Inf)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+```
+
+`stretch()` allows you to set `.init` to fix an initial minimum window size:
+
+```{r}
+tsibble::stretch(x, identity, .init = 3)
+#> [[1]]
+#> [1] NA
+#> 
+#> [[2]]
+#> [1] NA
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+```
+
+There isn't a direct equivalent of this in slider, but your function could return `NULL` if the current window size didn't hold enough elements:
+
+```{r}
+identity3 <- function(x) {
+  if (length(x) < 3) {
+    NULL
+  } else {
+    x
+  }
+}
+
+slider::slide(x, identity3, .before = Inf)
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+```

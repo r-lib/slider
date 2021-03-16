@@ -29,6 +29,9 @@
   the `hop_index_*()` family, `.starts` and `.stops` must both be castable to
   `.i` (#132).
 
+* New vignette, `vignette("tsibble")`, explaining how to transition from tsibble
+  to slider (#128).
+
 * `vignette("rowwise")` has been updated to use `cur_data()` from dplyr 1.0.0,
   which makes it significantly easier to do rolling operations on data frames
   (like rolling regressions) using slider in a dplyr pipeline.
