@@ -329,8 +329,8 @@
 <div id="performance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#performance" class="anchor"></a>Performance</h2>
-<p>In terms of performance, be aware that any specialized package that shifts the function calls to C are going to be faster than slider. For example, <code>RcppRoll::roll_mean()</code> computes the rolling mean <em>at the C level</em>, which is bound to be faster. The purpose of slider is to be <em>general purpose</em>, while still being as fast as possible. This means that it can be used for more abstract things, like rolling regressions, or any other custom function that you want to use in a rolling fashion.</p>
-<p>Otherwise, like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> is optimized in C to be as fast as possible, getting out of the way as quickly as it can so the main overhead are the <code>.f</code> calls.</p>
+<p>Like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, the core functions of slider, such as <code><a href="reference/slide.html">slide()</a></code> and <code><a href="reference/slide_index.html">slide_index()</a></code>, are optimized in C to be as fast as possible, but there is overhead involved in calling <code>.f</code> repeatedly. These functions are meant to be as <em>general purpose</em> as possible, at the cost of some performance. This means that slider can be used for more abstract computations, like rolling regressions, or any other custom function that you want to use in a rolling fashion.</p>
+<p>slider also provides <em>specialized</em> functions for some of the most common use cases, such as <code><a href="reference/summary-slide.html">slide_mean()</a></code>, or <code><a href="reference/summary-index.html">slide_index_sum()</a></code>. These compute their corresponding metric at the C level, using a specialized algorithm, and are often much faster than their <code><a href="reference/slide.html">slide_dbl(x, fn)</a></code> equivalent.</p>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
