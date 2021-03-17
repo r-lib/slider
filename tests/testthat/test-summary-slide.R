@@ -409,7 +409,90 @@ test_that("Inf and -Inf results are correct", {
 })
 
 # ------------------------------------------------------------------------------
-# All
+# slide_all()
+
+test_that("integer before works", {
+  x <- c(TRUE, FALSE, TRUE, TRUE)
+
+  expect_identical(slide_all(x, before = 1), slide_lgl(x, all, .before = 1))
+  expect_identical(slide_all(x, before = 2), slide_lgl(x, all, .before = 2))
+})
+
+test_that("integer after works", {
+  x <- c(TRUE, FALSE, TRUE, TRUE)
+
+  expect_identical(slide_all(x, after = 1), slide_lgl(x, all, .after = 1))
+  expect_identical(slide_all(x, after = 2), slide_lgl(x, all, .after = 2))
+})
+
+test_that("negative before/after works", {
+  x <- c(TRUE, FALSE, TRUE, TRUE)
+
+  expect_identical(slide_all(x, before = -1, after = 2), slide_lgl(x, all, .before = -1, .after = 2))
+  expect_identical(slide_all(x, before = 2, after = -1), slide_lgl(x, all, .before = 2, .after = -1))
+
+  expect_identical(slide_all(x, before = -1, after = 2, complete = TRUE), slide_lgl(x, all, .before = -1, .after = 2, .complete = TRUE))
+  expect_identical(slide_all(x, before = 2, after = -1, complete = TRUE), slide_lgl(x, all, .before = 2, .after = -1, .complete = TRUE))
+})
+
+test_that("`Inf` before/after works", {
+  x <- c(TRUE, FALSE, TRUE, TRUE)
+
+  expect_identical(slide_all(x, before = Inf), slide_lgl(x, all, .before = Inf))
+  expect_identical(slide_all(x, after = Inf), slide_lgl(x, all, .after = Inf))
+})
+
+test_that("step / complete works", {
+  x <- c(TRUE, FALSE, TRUE, TRUE)
+
+  expect_identical(slide_all(x, before = 1, step = 2), slide_lgl(x, all, .before = 1, .step = 2))
+  expect_identical(slide_all(x, before = 1, step = 2, complete = TRUE), slide_lgl(x, all, .before = 1, .step = 2, .complete = TRUE))
+})
+
+test_that("NA / NaN results are correct", {
+  x <- c(rep(TRUE, 10), rep(NA, 10), c(TRUE, TRUE, FALSE, TRUE))
+
+  expect_identical(
+    slide_all(x, before = 3),
+    slide_lgl(x, all, .before = 3)
+  )
+})
+
+test_that("FALSE dominates NAs, matching all()", {
+  x <- c(NA, FALSE, FALSE)
+  expect_identical(slide_all(x, before = 2), c(NA, FALSE, FALSE))
+  expect_identical(slide_all(x, before = 2), slide_lgl(x, all, .before = 2))
+
+  x <- c(FALSE, NA, FALSE)
+  expect_identical(slide_all(x, before = 2), c(FALSE, FALSE, FALSE))
+  expect_identical(slide_all(x, before = 2), slide_lgl(x, all, .before = 2))
+
+  x <- c(FALSE, FALSE, NA)
+  expect_identical(slide_all(x, before = 2), c(FALSE, FALSE, FALSE))
+  expect_identical(slide_all(x, before = 2), slide_lgl(x, all, .before = 2))
+})
+
+test_that("`na_rm = TRUE` works", {
+  x <- NA
+  y <- c(TRUE, NA, FALSE, NA, TRUE)
+
+  expect_identical(slide_all(x, na_rm = TRUE), TRUE)
+  expect_identical(slide_all(y, na_rm = TRUE, before = 1), slide_lgl(y, all, na.rm = TRUE, .before = 1))
+})
+
+test_that("works when the window is completely OOB", {
+  x <- c(TRUE, FALSE, NA)
+
+  expect_identical(slide_all(x, before = 4, after = -4), c(TRUE, TRUE, TRUE))
+  expect_identical(slide_all(x, before = 4, after = -4), slide_lgl(x, all, .before = 4, .after = -4))
+})
+
+test_that("input must be castable to logical", {
+  expect_error(slide_all(1:5), class = "vctrs_error_cast_lossy")
+})
+
+# ------------------------------------------------------------------------------
+# Misc
 
 test_that("works with size 0 input", {
   expect_identical(slide_sum(integer()), double())
