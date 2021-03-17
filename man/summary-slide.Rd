@@ -147,6 +147,12 @@ dispatch of the corresponding summary function (i.e. \code{\link[base:sum]{base:
 \code{\link[base:mean]{base::mean()}}). Input will always be cast to a double or logical vector
 using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, and an internal method for computing the summary
 function will be used.
+
+Due to the structure of segment trees, \code{slide_mean()} does not perform the
+same "two pass" mean that \code{mean()} does (the intention of the second pass is
+to perform a floating point error correction). Because of this, there may be
+small differences between \code{slide_mean(x)} and \code{slide_dbl(x, mean)} in some
+cases.
 }
 \section{Implementation}{
 
