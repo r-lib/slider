@@ -586,14 +586,14 @@ static inline void all_na_keep_aggregate_from_leaves(const void* p_source,
   for (uint64_t i = begin; i < end; ++i) {
     const int elt = p_source_[i];
 
-    if (elt == NA_LOGICAL) {
-      *p_dest_ = NA_LOGICAL;
-      continue;
-    }
-
     if (!elt) {
       *p_dest_ = 0;
       return;
+    }
+
+    if (elt == NA_LOGICAL) {
+      *p_dest_ = NA_LOGICAL;
+      continue;
     }
   }
 }
@@ -681,15 +681,17 @@ static inline void any_na_keep_aggregate_from_leaves(const void* p_source,
   for (uint64_t i = begin; i < end; ++i) {
     const int elt = p_source_[i];
 
+    if (!elt) {
+      continue;
+    }
+
     if (elt == NA_LOGICAL) {
       *p_dest_ = NA_LOGICAL;
       continue;
     }
 
-    if (elt) {
-      *p_dest_ = 1;
-      return;
-    }
+    *p_dest_ = 1;
+    return;
   }
 }
 
