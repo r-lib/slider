@@ -26,6 +26,7 @@ extern SEXP slider_index_prod_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_min_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_max_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_all_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_index_any_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
 SEXP slider_initialize(SEXP);
@@ -53,6 +54,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_index_min_core",     (DL_FUNC) &slider_index_min_core, 7},
   {"slider_index_max_core",     (DL_FUNC) &slider_index_max_core, 7},
   {"slider_index_all_core",     (DL_FUNC) &slider_index_all_core, 7},
+  {"slider_index_any_core",     (DL_FUNC) &slider_index_any_core, 7},
   {"slider_initialize",         (DL_FUNC) &slider_initialize, 1},
   {NULL, NULL, 0}
 };

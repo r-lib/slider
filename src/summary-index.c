@@ -694,3 +694,87 @@ SEXP slider_index_all_core(SEXP x,
     slide_index_all_core
   );
 }
+
+// -----------------------------------------------------------------------------
+
+static void slider_index_any_core_impl(const int* p_x,
+                                       R_xlen_t size,
+                                       int iter_min,
+                                       int iter_max,
+                                       const struct range_info range,
+                                       const int* p_peer_sizes,
+                                       const int* p_peer_starts,
+                                       const int* p_peer_stops,
+                                       bool na_rm,
+                                       struct index_info* p_index,
+                                       int* p_out) {
+  int n_prot = 0;
+
+  int state = 0;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    any_state_reset,
+    any_state_finalize,
+    any_nodes_increment,
+    any_nodes_initialize,
+    na_rm ? any_na_rm_aggregate_from_leaves : any_na_keep_aggregate_from_leaves,
+    na_rm ? any_na_rm_aggregate_from_nodes : any_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_index_summary_loop_lgl(
+    &tree,
+    iter_min,
+    iter_max,
+    range,
+    p_peer_sizes,
+    p_peer_starts,
+    p_peer_stops,
+    p_index,
+    p_out
+  );
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_index_any_core(SEXP x,
+                                 SEXP i,
+                                 SEXP starts,
+                                 SEXP stops,
+                                 SEXP peer_sizes,
+                                 bool complete,
+                                 bool na_rm) {
+  return slide_index_summary_lgl(
+    x,
+    i,
+    starts,
+    stops,
+    peer_sizes,
+    complete,
+    na_rm,
+    slider_index_any_core_impl
+  );
+}
+
+// [[ register() ]]
+SEXP slider_index_any_core(SEXP x,
+                           SEXP i,
+                           SEXP starts,
+                           SEXP stops,
+                           SEXP peer_sizes,
+                           SEXP complete,
+                           SEXP na_rm) {
+  return slider_index_summary(
+    x,
+    i,
+    starts,
+    stops,
+    peer_sizes,
+    complete,
+    na_rm,
+    slide_index_any_core
+  );
+}
