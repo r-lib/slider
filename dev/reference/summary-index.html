@@ -150,11 +150,20 @@ using an otherwise equivalent call constructed with <code><a href='slide_index.h
 or <code><a href='slide_index.html'>slide_index_lgl()</a></code>, especially with a very wide window.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slide_index_sum</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>slide_index_sum</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>i</span>,
+  <span class='va'>...</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
 <span class='fu'>slide_index_prod</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>i</span>,
+  <span class='va'>...</span>,
   before <span class='op'>=</span> <span class='fl'>0L</span>,
   after <span class='op'>=</span> <span class='fl'>0L</span>,
   complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -164,19 +173,52 @@ or <code><a href='slide_index.html'>slide_index_lgl()</a></code>, especially wit
 <span class='fu'>slide_index_mean</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>i</span>,
+  <span class='va'>...</span>,
   before <span class='op'>=</span> <span class='fl'>0L</span>,
   after <span class='op'>=</span> <span class='fl'>0L</span>,
   complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
   na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
-<span class='fu'>slide_index_min</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>slide_index_min</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>i</span>,
+  <span class='va'>...</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide_index_max</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>slide_index_max</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>i</span>,
+  <span class='va'>...</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide_index_all</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>slide_index_all</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>i</span>,
+  <span class='va'>...</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide_index_any</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+<span class='fu'>slide_index_any</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>i</span>,
+  <span class='va'>...</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,6 +245,10 @@ recycled to their common size.</p></li>
 are allowed.</p></li>
 <li><p>The index cannot have missing values.</p></li>
 </ul></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>These dots are for future extensions and must be empty.</p></td>
     </tr>
     <tr>
       <th>before</th>
