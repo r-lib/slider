@@ -38,6 +38,7 @@ const void* r_const_deref(SEXP x, SEXPTYPE type) {
 
 void* r_deref(SEXP x, SEXPTYPE type) {
   switch (type) {
+  case LGLSXP: return LOGICAL(x);
   case INTSXP: return INTEGER(x);
   case REALSXP: return REAL(x);
   case RAWSXP: return RAW(x);

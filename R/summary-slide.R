@@ -6,29 +6,40 @@
 #' rolling sums, and [slide_mean()] can be used for rolling averages.
 #'
 #' These specialized variants are _much_ faster and more memory efficient
-#' than using an otherwise equivalent call constructed with [slide_dbl()],
-#' especially with a very wide window.
+#' than using an otherwise equivalent call constructed with [slide_dbl()]
+#' or [slide_lgl()], especially with a very wide window.
 #'
 #' @details
 #' Note that these functions are _not_ generic and do not respect method
 #' dispatch of the corresponding summary function (i.e. [base::sum()],
-#' [base::mean()]). Input will always be cast to a double vector and an internal
-#' method for computing the summary function will be used.
+#' [base::mean()]). Input will always be cast to a double or logical vector
+#' using [vctrs::vec_cast()], and an internal method for computing the summary
+#' function will be used.
 #'
 #' @inheritParams slide
 #'
 #' @param x `[vector]`
 #'
-#'   A vector to compute the sliding function on. If not already a double
-#'   vector, will be cast to one with [vctrs::vec_cast()].
+#'   A vector to compute the sliding function on.
+#'
+#'   - For sliding sum, mean, prod, min, and max, `x` will be cast to a double
+#'   vector with [vctrs::vec_cast()].
+#'
+#'   - For sliding any and all, `x` will be cast to a logical vector with
+#'   [vctrs::vec_cast()].
 #'
 #' @param na_rm `[logical(1)]`
 #'
 #'   Should missing values be removed from the computation?
 #'
 #' @return
-#' A double vector the same size as `x` containing the result of applying the
+#' A vector the same size as `x` containing the result of applying the
 #' summary function over the sliding windows.
+#'
+#' - For sliding sum, mean, prod, min, and max, a double vector will be
+#' returned.
+#'
+#' - For sliding any and all, a logical vector will be returned.
 #'
 #' @section Implementation:
 #'
@@ -131,4 +142,26 @@ slide_max <- function(x,
                       complete = FALSE,
                       na_rm = FALSE) {
   .Call(slider_max, x, before, after, step, complete, na_rm)
+}
+
+#' @rdname summary-slide
+#' @export
+slide_all <- function(x,
+                      before = 0L,
+                      after = 0L,
+                      step = 1L,
+                      complete = FALSE,
+                      na_rm = FALSE) {
+  .Call(slider_all, x, before, after, step, complete, na_rm)
+}
+
+#' @rdname summary-slide
+#' @export
+slide_any <- function(x,
+                      before = 0L,
+                      after = 0L,
+                      step = 1L,
+                      complete = FALSE,
+                      na_rm = FALSE) {
+  .Call(slider_any, x, before, after, step, complete, na_rm)
 }

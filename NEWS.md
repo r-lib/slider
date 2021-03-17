@@ -11,6 +11,10 @@
   - `slide_min()`, `slide_index_min()`: for rolling minimums
   
   - `slide_max()`, `slide_index_max()`: for rolling maximums
+  
+  - `slide_any()`, `slide_index_any()`: for rolling any
+  
+  - `slide_all()`, `slide_index_all()`: for rolling all
 
 * The `slide_index_*()` family now allows `.before` and `.after` to be
   functions of 1 argument (the index) that compute the boundaries of the

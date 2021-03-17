@@ -18,11 +18,15 @@ extern SEXP slider_mean(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_prod(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_min(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_max(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_all(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_any(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_sum_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_mean_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_prod_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_min_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_index_max_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_index_all_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP slider_index_any_core(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 // Defined below
 SEXP slider_initialize(SEXP);
@@ -42,11 +46,15 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_prod",               (DL_FUNC) &slider_prod, 6},
   {"slider_min",                (DL_FUNC) &slider_min, 6},
   {"slider_max",                (DL_FUNC) &slider_max, 6},
+  {"slider_all",                (DL_FUNC) &slider_all, 6},
+  {"slider_any",                (DL_FUNC) &slider_any, 6},
   {"slider_index_sum_core",     (DL_FUNC) &slider_index_sum_core, 7},
   {"slider_index_mean_core",    (DL_FUNC) &slider_index_mean_core, 7},
   {"slider_index_prod_core",    (DL_FUNC) &slider_index_prod_core, 7},
   {"slider_index_min_core",     (DL_FUNC) &slider_index_min_core, 7},
   {"slider_index_max_core",     (DL_FUNC) &slider_index_max_core, 7},
+  {"slider_index_all_core",     (DL_FUNC) &slider_index_all_core, 7},
+  {"slider_index_any_core",     (DL_FUNC) &slider_index_any_core, 7},
   {"slider_initialize",         (DL_FUNC) &slider_initialize, 1},
   {NULL, NULL, 0}
 };
