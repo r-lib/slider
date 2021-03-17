@@ -7,6 +7,8 @@
 \alias{slide_mean}
 \alias{slide_min}
 \alias{slide_max}
+\alias{slide_all}
+\alias{slide_any}
 \title{Specialized sliding functions}
 \usage{
 slide_sum(
@@ -53,12 +55,35 @@ slide_max(
   complete = FALSE,
   na_rm = FALSE
 )
+
+slide_all(
+  x,
+  before = 0L,
+  after = 0L,
+  step = 1L,
+  complete = FALSE,
+  na_rm = FALSE
+)
+
+slide_any(
+  x,
+  before = 0L,
+  after = 0L,
+  step = 1L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 }
 \arguments{
 \item{x}{\verb{[vector]}
 
-A vector to compute the sliding function on. If not already a double
-vector, will be cast to one with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.}
+A vector to compute the sliding function on.
+\itemize{
+\item For sliding sum, mean, prod, min, and max, \code{x} will be cast to a double
+vector with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
+\item For sliding any and all, \code{x} will be cast to a logical vector with
+\code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
+}}
 
 \item{before}{\verb{[integer(1) / Inf]}
 
@@ -90,8 +115,13 @@ the default, then partial computations will be allowed.}
 Should missing values be removed from the computation?}
 }
 \value{
-A double vector the same size as \code{x} containing the result of applying the
+A vector the same size as \code{x} containing the result of applying the
 summary function over the sliding windows.
+\itemize{
+\item For sliding sum, mean, prod, min, and max, a double vector will be
+returned.
+\item For sliding any and all, a logical vector will be returned.
+}
 }
 \description{
 These functions are specialized variants of the most common ways that
@@ -99,14 +129,15 @@ These functions are specialized variants of the most common ways that
 rolling sums, and \code{\link[=slide_mean]{slide_mean()}} can be used for rolling averages.
 
 These specialized variants are \emph{much} faster and more memory efficient
-than using an otherwise equivalent call constructed with \code{\link[=slide_dbl]{slide_dbl()}},
-especially with a very wide window.
+than using an otherwise equivalent call constructed with \code{\link[=slide_dbl]{slide_dbl()}}
+or \code{\link[=slide_lgl]{slide_lgl()}}, especially with a very wide window.
 }
 \details{
 Note that these functions are \emph{not} generic and do not respect method
 dispatch of the corresponding summary function (i.e. \code{\link[base:sum]{base::sum()}},
-\code{\link[base:mean]{base::mean()}}). Input will always be cast to a double vector and an internal
-method for computing the summary function will be used.
+\code{\link[base:mean]{base::mean()}}). Input will always be cast to a double or logical vector
+using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}, and an internal method for computing the summary
+function will be used.
 }
 \section{Implementation}{
 
