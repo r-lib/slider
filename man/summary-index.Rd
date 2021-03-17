@@ -7,6 +7,8 @@
 \alias{slide_index_mean}
 \alias{slide_index_min}
 \alias{slide_index_max}
+\alias{slide_index_all}
+\alias{slide_index_any}
 \title{Specialized sliding functions relative to an index}
 \usage{
 slide_index_sum(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
@@ -32,12 +34,21 @@ slide_index_mean(
 slide_index_min(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
 
 slide_index_max(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+
+slide_index_all(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+
+slide_index_any(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
 }
 \arguments{
 \item{x}{\verb{[vector]}
 
-A vector to compute the sliding function on. If not already a double
-vector, will be cast to one with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.}
+A vector to compute the sliding function on.
+\itemize{
+\item For sliding sum, mean, prod, min, and max, \code{x} will be cast to a double
+vector with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
+\item For sliding any and all, \code{x} will be cast to a logical vector with
+\code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
+}}
 
 \item{i}{\verb{[vector]}
 
@@ -109,8 +120,13 @@ the default, then partial computations will be allowed.}
 Should missing values be removed from the computation?}
 }
 \value{
-A double vector the same size as \code{x} containing the result of applying the
+A vector the same size as \code{x} containing the result of applying the
 summary function over the sliding windows.
+\itemize{
+\item For sliding sum, mean, prod, min, and max, a double vector will be
+returned.
+\item For sliding any and all, a logical vector will be returned.
+}
 }
 \description{
 These functions are specialized variants of the most common ways that
@@ -119,8 +135,8 @@ for rolling sums relative to an index (like a Date column), and
 \code{\link[=slide_index_mean]{slide_index_mean()}} can be used for rolling averages.
 
 These specialized variants are \emph{much} faster and more memory efficient than
-using an otherwise equivalent call constructed with \code{\link[=slide_index_dbl]{slide_index_dbl()}},
-especially with a very wide window.
+using an otherwise equivalent call constructed with \code{\link[=slide_index_dbl]{slide_index_dbl()}}
+or \code{\link[=slide_index_lgl]{slide_index_lgl()}}, especially with a very wide window.
 }
 \details{
 For more details about the implementation, see the help page of

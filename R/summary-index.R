@@ -7,8 +7,8 @@
 #' [slide_index_mean()] can be used for rolling averages.
 #'
 #' These specialized variants are _much_ faster and more memory efficient than
-#' using an otherwise equivalent call constructed with [slide_index_dbl()],
-#' especially with a very wide window.
+#' using an otherwise equivalent call constructed with [slide_index_dbl()]
+#' or [slide_index_lgl()], especially with a very wide window.
 #'
 #' @details
 #' For more details about the implementation, see the help page of
@@ -18,16 +18,26 @@
 #'
 #' @param x `[vector]`
 #'
-#'   A vector to compute the sliding function on. If not already a double
-#'   vector, will be cast to one with [vctrs::vec_cast()].
+#'   A vector to compute the sliding function on.
+#'
+#'   - For sliding sum, mean, prod, min, and max, `x` will be cast to a double
+#'   vector with [vctrs::vec_cast()].
+#'
+#'   - For sliding any and all, `x` will be cast to a logical vector with
+#'   [vctrs::vec_cast()].
 #'
 #' @param na_rm `[logical(1)]`
 #'
 #'   Should missing values be removed from the computation?
 #'
 #' @return
-#' A double vector the same size as `x` containing the result of applying the
+#' A vector the same size as `x` containing the result of applying the
 #' summary function over the sliding windows.
+#'
+#' - For sliding sum, mean, prod, min, and max, a double vector will be
+#' returned.
+#'
+#' - For sliding any and all, a logical vector will be returned.
 #'
 #' @seealso [slide_sum()]
 #'
@@ -135,6 +145,8 @@ slide_index_max_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 # ------------------------------------------------------------------------------
 
+#' @rdname summary-index
+#' @export
 slide_index_all <- function(x,
                             i,
                             before = 0L,
@@ -150,6 +162,8 @@ slide_index_all_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 # ------------------------------------------------------------------------------
 
+#' @rdname summary-index
+#' @export
 slide_index_any <- function(x,
                             i,
                             before = 0L,
