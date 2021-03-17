@@ -11,11 +11,20 @@
 \alias{slide_index_any}
 \title{Specialized sliding functions relative to an index}
 \usage{
-slide_index_sum(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+slide_index_sum(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 
 slide_index_prod(
   x,
   i,
+  ...,
   before = 0L,
   after = 0L,
   complete = FALSE,
@@ -25,19 +34,52 @@ slide_index_prod(
 slide_index_mean(
   x,
   i,
+  ...,
   before = 0L,
   after = 0L,
   complete = FALSE,
   na_rm = FALSE
 )
 
-slide_index_min(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+slide_index_min(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 
-slide_index_max(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+slide_index_max(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 
-slide_index_all(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+slide_index_all(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 
-slide_index_any(x, i, before = 0L, after = 0L, complete = FALSE, na_rm = FALSE)
+slide_index_any(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+)
 }
 \arguments{
 \item{x}{\verb{[vector]}
@@ -63,6 +105,8 @@ recycled to their common size.
 are allowed.
 \item The index cannot have missing values.
 }}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{before}{\verb{[vector(1) / function / Inf]}
 \itemize{

@@ -542,8 +542,8 @@ test_that("names are kept (even on casting)", {
 })
 
 test_that("can cast integer and logical input", {
-  expect_identical(slide_index_sum(1:5, 1:5, 1), slide_index_sum(1:5 + 0, 1:5, 1))
-  expect_identical(slide_index_sum(c(TRUE, FALSE, TRUE), 1:3, 1), slide_index_sum(c(1, 0, 1), 1:3, 1))
+  expect_identical(slide_index_sum(1:5, 1:5, before = 1), slide_index_sum(1:5 + 0, 1:5, before = 1))
+  expect_identical(slide_index_sum(c(TRUE, FALSE, TRUE), 1:3, before = 1), slide_index_sum(c(1, 0, 1), 1:3, before = 1))
 })
 
 test_that("types that can't be cast to numeric are not supported", {
@@ -552,13 +552,13 @@ test_that("types that can't be cast to numeric are not supported", {
 
 test_that("arrays of dimensionality 1 are supported", {
   expect_identical(
-    slide_index_sum(array(1:5), 1:5, 1),
-    slide_index_sum(1:5, 1:5, 1)
+    slide_index_sum(array(1:5), 1:5, before = 1),
+    slide_index_sum(1:5, 1:5, before = 1)
   )
 })
 
 test_that("arrays of dimensionality >1 are not supported", {
-  expect_error(slide_index_sum(array(1:4, dim = c(2, 2)), 1:2, 1), class = "vctrs_error_incompatible_type")
+  expect_error(slide_index_sum(array(1:4, dim = c(2, 2)), 1:2, before = 1), class = "vctrs_error_incompatible_type")
 })
 
 test_that("works when the window is completely OOB", {

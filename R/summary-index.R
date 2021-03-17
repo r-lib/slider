@@ -14,6 +14,7 @@
 #' For more details about the implementation, see the help page of
 #' [slide_sum()].
 #'
+#' @inheritParams ellipsis::dots_empty
 #' @inheritParams slide_index
 #'
 #' @param x `[vector]`
@@ -64,10 +65,12 @@
 #' slide_index_sum(x, i, before = 2, after = 1, complete = TRUE)
 slide_index_sum <- function(x,
                             i,
+                            ...,
                             before = 0L,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_sum_core)
 }
 
@@ -81,10 +84,12 @@ slide_index_sum_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 #' @export
 slide_index_prod <- function(x,
                              i,
+                             ...,
                              before = 0L,
                              after = 0L,
                              complete = FALSE,
                              na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_prod_core)
 }
 
@@ -98,10 +103,12 @@ slide_index_prod_core <- function(x, i, starts, stops, peer_sizes, complete, na_
 #' @export
 slide_index_mean <- function(x,
                              i,
+                             ...,
                              before = 0L,
                              after = 0L,
                              complete = FALSE,
                              na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_mean_core)
 }
 
@@ -115,10 +122,12 @@ slide_index_mean_core <- function(x, i, starts, stops, peer_sizes, complete, na_
 #' @export
 slide_index_min <- function(x,
                             i,
+                            ...,
                             before = 0L,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_min_core)
 }
 
@@ -132,10 +141,12 @@ slide_index_min_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 #' @export
 slide_index_max <- function(x,
                             i,
+                            ...,
                             before = 0L,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_max_core)
 }
 
@@ -149,10 +160,12 @@ slide_index_max_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 #' @export
 slide_index_all <- function(x,
                             i,
+                            ...,
                             before = 0L,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_all_core)
 }
 
@@ -166,10 +179,12 @@ slide_index_all_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 #' @export
 slide_index_any <- function(x,
                             i,
+                            ...,
                             before = 0L,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
+  ellipsis::check_dots_empty()
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_any_core)
 }
 

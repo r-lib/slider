@@ -13,6 +13,7 @@
 \usage{
 slide_sum(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -22,6 +23,7 @@ slide_sum(
 
 slide_prod(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -31,6 +33,7 @@ slide_prod(
 
 slide_mean(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -40,6 +43,7 @@ slide_mean(
 
 slide_min(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -49,6 +53,7 @@ slide_min(
 
 slide_max(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -58,6 +63,7 @@ slide_max(
 
 slide_all(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -67,6 +73,7 @@ slide_all(
 
 slide_any(
   x,
+  ...,
   before = 0L,
   after = 0L,
   step = 1L,
@@ -84,6 +91,8 @@ vector with \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
 \item For sliding any and all, \code{x} will be cast to a logical vector with
 \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.
 }}
+
+\item{...}{These dots are for future extensions and must be empty.}
 
 \item{before}{\verb{[integer(1) / Inf]}
 

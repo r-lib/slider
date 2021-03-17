@@ -73,7 +73,7 @@ test_that("Inf and -Inf results are correct", {
 
 test_that("precision matches base R (long doubles)", {
   x <- rep(1/7, 10)
-  expect_identical(sum(x), slide_sum(x, Inf)[[length(x)]])
+  expect_identical(sum(x), slide_sum(x, before = Inf)[[length(x)]])
 })
 
 test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
@@ -244,7 +244,7 @@ test_that("Inf and -Inf results are correct", {
 
 test_that("precision matches base R (long doubles)", {
   x <- c(1/7, 1/7, 1/3)
-  expect_identical(mean(x), slide_mean(x, Inf)[[length(x)]])
+  expect_identical(mean(x), slide_mean(x, before = Inf)[[length(x)]])
 })
 
 test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
@@ -589,8 +589,8 @@ test_that("names are kept (even on casting)", {
 })
 
 test_that("can cast integer and logical input", {
-  expect_identical(slide_sum(1:5, 1), slide_sum(1:5 + 0, 1))
-  expect_identical(slide_sum(c(TRUE, FALSE, TRUE), 1), slide_sum(c(1, 0, 1), 1))
+  expect_identical(slide_sum(1:5, before = 1), slide_sum(1:5 + 0, before = 1))
+  expect_identical(slide_sum(c(TRUE, FALSE, TRUE), before = 1), slide_sum(c(1, 0, 1), before = 1))
 })
 
 test_that("types that can't be cast to numeric are not supported", {
@@ -599,13 +599,13 @@ test_that("types that can't be cast to numeric are not supported", {
 
 test_that("arrays of dimensionality 1 are supported", {
   expect_identical(
-    slide_sum(array(1:5), 1),
-    slide_sum(1:5, 1)
+    slide_sum(array(1:5), before = 1),
+    slide_sum(1:5, before = 1)
   )
 })
 
 test_that("arrays of dimensionality >1 are not supported", {
-  expect_error(slide_sum(array(1:4, dim = c(2, 2)), 1), class = "vctrs_error_incompatible_type")
+  expect_error(slide_sum(array(1:4, dim = c(2, 2)), before = 1), class = "vctrs_error_incompatible_type")
 })
 
 test_that("works when the window is completely OOB", {
