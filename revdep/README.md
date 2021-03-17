@@ -10,13 +10,13 @@
 |collate  |en_US.UTF-8                  |
 |ctype    |en_US.UTF-8                  |
 |tz       |America/New_York             |
-|date     |2020-07-20                   |
+|date     |2021-03-17                   |
 
 # Dependencies
 
 |package |old   |new        |Δ  |
 |:-------|:-----|:----------|:--|
-|slider  |0.1.4 |0.1.4.9000 |*  |
+|slider  |0.1.5 |0.1.5.9000 |*  |
 
 # Revdeps
 
