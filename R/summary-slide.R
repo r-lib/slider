@@ -141,3 +141,12 @@ slide_all <- function(x,
                       na_rm = FALSE) {
   .Call(slider_all, x, before, after, step, complete, na_rm)
 }
+
+slide_any <- function(x,
+                      before = 0L,
+                      after = 0L,
+                      step = 1L,
+                      complete = FALSE,
+                      na_rm = FALSE) {
+  .Call(slider_any, x, before, after, step, complete, na_rm)
+}

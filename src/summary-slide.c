@@ -359,3 +359,41 @@ static SEXP slide_all(SEXP x, struct slide_opts opts, bool na_rm) {
 SEXP slider_all(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
   return slider_summary(x, before, after, step, complete, na_rm, slide_all);
 }
+
+// -----------------------------------------------------------------------------
+
+static inline void slide_any_impl(const int* p_x,
+                                  R_xlen_t size,
+                                  const struct iter_opts* p_opts,
+                                  bool na_rm,
+                                  int* p_out) {
+  int n_prot = 0;
+
+  int state = 0;
+
+  struct segment_tree tree = new_segment_tree(
+    size,
+    p_x,
+    &state,
+    any_state_reset,
+    any_state_finalize,
+    any_nodes_increment,
+    any_nodes_initialize,
+    na_rm ? any_na_rm_aggregate_from_leaves : any_na_keep_aggregate_from_leaves,
+    na_rm ? any_na_rm_aggregate_from_nodes : any_na_keep_aggregate_from_nodes
+  );
+  PROTECT_SEGMENT_TREE(&tree, &n_prot);
+
+  slide_summary_loop_lgl(&tree, p_opts, p_out);
+
+  UNPROTECT(n_prot);
+}
+
+static SEXP slide_any(SEXP x, struct slide_opts opts, bool na_rm) {
+  return slide_summary_lgl(x, opts, na_rm, slide_any_impl);
+}
+
+// [[ register() ]]
+SEXP slider_any(SEXP x, SEXP before, SEXP after, SEXP step, SEXP complete, SEXP na_rm) {
+  return slider_summary(x, before, after, step, complete, na_rm, slide_any);
+}
