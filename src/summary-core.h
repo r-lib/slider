@@ -539,4 +539,100 @@ static inline void max_na_rm_aggregate_from_nodes(const void* p_source,
   max_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
 }
 
+// -----------------------------------------------------------------------------
+// All
+
+static inline void all_state_reset(void* p_state) {
+  int* p_state_ = (int*) p_state;
+  *p_state_ = 1;
+}
+
+static inline void all_state_finalize(void* p_state, void* p_result) {
+  int* p_result_ = (int*) p_result;
+  const int state = *((int*) p_state);
+  *p_result_ = state;
+  return;
+}
+
+static inline void* all_nodes_increment(void* p_nodes) {
+  return (void*) (((int*) p_nodes) + 1);
+}
+
+static inline SEXP all_nodes_initialize(uint64_t n) {
+  SEXP nodes = PROTECT(Rf_allocVector(LGLSXP, n));
+  int* p_nodes = LOGICAL(nodes);
+
+  for (uint64_t i = 0; i < n; ++i) {
+    p_nodes[i] = 1;
+  }
+
+  UNPROTECT(1);
+  return nodes;
+}
+
+static inline void all_na_keep_aggregate_from_leaves(const void* p_source,
+                                                     uint64_t begin,
+                                                     uint64_t end,
+                                                     void* p_dest) {
+  const int* p_source_ = (const int*) p_source;
+  int* p_dest_ = (int*) p_dest;
+
+  // If already FALSE, we are done.
+  // FALSE-ness overrides any potential NAs.
+  if (!*p_dest_) {
+    return;
+  }
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const int elt = p_source_[i];
+
+    if (elt == NA_LOGICAL) {
+      *p_dest_ = NA_LOGICAL;
+      continue;
+    }
+
+    if (!elt) {
+      *p_dest_ = 0;
+      return;
+    }
+  }
+}
+
+static inline void all_na_keep_aggregate_from_nodes(const void* p_source,
+                                                    uint64_t begin,
+                                                    uint64_t end,
+                                                    void* p_dest) {
+  all_na_keep_aggregate_from_leaves(p_source, begin, end, p_dest);
+}
+
+static inline void all_na_rm_aggregate_from_leaves(const void* p_source,
+                                                   uint64_t begin,
+                                                   uint64_t end,
+                                                   void* p_dest) {
+  const int* p_source_ = (const int*) p_source;
+  int* p_dest_ = (int*) p_dest;
+
+  // If already FALSE, we are done.
+  if (!*p_dest_) {
+    return;
+  }
+
+  for (uint64_t i = begin; i < end; ++i) {
+    const int elt = p_source_[i];
+
+    if (!elt) {
+      *p_dest_ = 0;
+      return;
+    }
+  }
+}
+
+static inline void all_na_rm_aggregate_from_nodes(const void* p_source,
+                                                  uint64_t begin,
+                                                  uint64_t end,
+                                                  void* p_dest) {
+  all_na_rm_aggregate_from_leaves(p_source, begin, end, p_dest);
+}
+
+// -----------------------------------------------------------------------------
 #endif
