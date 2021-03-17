@@ -135,6 +135,21 @@ slide_index_max_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 # ------------------------------------------------------------------------------
 
+slide_index_all <- function(x,
+                            i,
+                            before = 0L,
+                            after = 0L,
+                            complete = FALSE,
+                            na_rm = FALSE) {
+  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_all_core)
+}
+
+slide_index_all_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+  .Call(slider_index_all_core, x, i, starts, stops, peer_sizes, complete, na_rm)
+}
+
+# ------------------------------------------------------------------------------
+
 slide_index_summary <- function(x,
                                 i,
                                 before,
