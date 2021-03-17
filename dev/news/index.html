@@ -145,6 +145,8 @@
 <li><p><code><a href="../reference/summary-slide.html">slide_prod()</a></code>, <code><a href="../reference/summary-index.html">slide_index_prod()</a></code>: for rolling products</p></li>
 <li><p><code><a href="../reference/summary-slide.html">slide_min()</a></code>, <code><a href="../reference/summary-index.html">slide_index_min()</a></code>: for rolling minimums</p></li>
 <li><p><code><a href="../reference/summary-slide.html">slide_max()</a></code>, <code><a href="../reference/summary-index.html">slide_index_max()</a></code>: for rolling maximums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_any()</a></code>, <code><a href="../reference/summary-index.html">slide_index_any()</a></code>: for rolling any</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_all()</a></code>, <code><a href="../reference/summary-index.html">slide_index_all()</a></code>: for rolling all</p></li>
 </ul>
 </li>
 <li><p>The <code>slide_index_*()</code> family now allows <code>.before</code> and <code>.after</code> to be functions of 1 argument (the index) that compute the boundaries of the sliding window. This can be extremely useful when the default, which computes <code>.i - .before</code> and <code>.i + .after</code>, is not applicable or correct for your needs. One use case is to set <code>.before = ~.x %m-% months(1)</code> rather than <code>.before = months(1)</code> to perform a 1 month rolling window in a way that won’t generate <code>NA</code> values on invalid dates (like 1 month before 2019-03-31) (<a href='https://github.com/DavisVaughan/slider/issues/139'>#139</a>).</p></li>

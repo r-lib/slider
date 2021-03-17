@@ -45,8 +45,8 @@ slide_index() is generally used. Notably, slide_index_sum() can be used
 for rolling sums relative to an index (like a Date column), and
 slide_index_mean() can be used for rolling averages.
 These specialized variants are much faster and more memory efficient than
-using an otherwise equivalent call constructed with slide_index_dbl(),
-especially with a very wide window." />
+using an otherwise equivalent call constructed with slide_index_dbl()
+or slide_index_lgl(), especially with a very wide window." />
 
 
 <meta name="robots" content="noindex">
@@ -146,8 +146,8 @@ especially with a very wide window." />
 for rolling sums relative to an index (like a Date column), and
 <code>slide_index_mean()</code> can be used for rolling averages.</p>
 <p>These specialized variants are <em>much</em> faster and more memory efficient than
-using an otherwise equivalent call constructed with <code><a href='slide_index.html'>slide_index_dbl()</a></code>,
-especially with a very wide window.</p>
+using an otherwise equivalent call constructed with <code><a href='slide_index.html'>slide_index_dbl()</a></code>
+or <code><a href='slide_index.html'>slide_index_lgl()</a></code>, especially with a very wide window.</p>
     </div>
 
     <pre class="usage"><span class='fu'>slide_index_sum</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
@@ -172,7 +172,11 @@ especially with a very wide window.</p>
 
 <span class='fu'>slide_index_min</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_max</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+<span class='fu'>slide_index_max</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='fu'>slide_index_all</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='fu'>slide_index_any</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>i</span>, before <span class='op'>=</span> <span class='fl'>0L</span>, after <span class='op'>=</span> <span class='fl'>0L</span>, complete <span class='op'>=</span> <span class='cn'>FALSE</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,8 +184,12 @@ especially with a very wide window.</p>
     <tr>
       <th>x</th>
       <td><p><code>[vector]</code></p>
-<p>A vector to compute the sliding function on. If not already a double
-vector, will be cast to one with <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></td>
+<p>A vector to compute the sliding function on.</p><ul>
+<li><p>For sliding sum, mean, prod, min, and max, <code>x</code> will be cast to a double
+vector with <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></li>
+<li><p>For sliding any and all, <code>x</code> will be cast to a logical vector with
+<code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>i</th>
@@ -259,8 +267,13 @@ the default, then partial computations will be allowed.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A double vector the same size as <code>x</code> containing the result of applying the
-summary function over the sliding windows.</p>
+    <p>A vector the same size as <code>x</code> containing the result of applying the
+summary function over the sliding windows.</p><ul>
+<li><p>For sliding sum, mean, prod, min, and max, a double vector will be
+returned.</p></li>
+<li><p>For sliding any and all, a logical vector will be returned.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For more details about the implementation, see the help page of

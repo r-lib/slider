@@ -44,8 +44,8 @@
 slide() is generally used. Notably, slide_sum() can be used for
 rolling sums, and slide_mean() can be used for rolling averages.
 These specialized variants are much faster and more memory efficient
-than using an otherwise equivalent call constructed with slide_dbl(),
-especially with a very wide window." />
+than using an otherwise equivalent call constructed with slide_dbl()
+or slide_lgl(), especially with a very wide window." />
 
 
 <meta name="robots" content="noindex">
@@ -144,8 +144,8 @@ especially with a very wide window." />
 <code><a href='slide.html'>slide()</a></code> is generally used. Notably, <code>slide_sum()</code> can be used for
 rolling sums, and <code>slide_mean()</code> can be used for rolling averages.</p>
 <p>These specialized variants are <em>much</em> faster and more memory efficient
-than using an otherwise equivalent call constructed with <code><a href='slide.html'>slide_dbl()</a></code>,
-especially with a very wide window.</p>
+than using an otherwise equivalent call constructed with <code><a href='slide.html'>slide_dbl()</a></code>
+or <code><a href='slide.html'>slide_lgl()</a></code>, especially with a very wide window.</p>
     </div>
 
     <pre class="usage"><span class='fu'>slide_sum</span><span class='op'>(</span>
@@ -191,6 +191,24 @@ especially with a very wide window.</p>
   step <span class='op'>=</span> <span class='fl'>1L</span>,
   complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
   na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+
+<span class='fu'>slide_all</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  step <span class='op'>=</span> <span class='fl'>1L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+
+<span class='fu'>slide_any</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  before <span class='op'>=</span> <span class='fl'>0L</span>,
+  after <span class='op'>=</span> <span class='fl'>0L</span>,
+  step <span class='op'>=</span> <span class='fl'>1L</span>,
+  complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  na_rm <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -199,8 +217,12 @@ especially with a very wide window.</p>
     <tr>
       <th>x</th>
       <td><p><code>[vector]</code></p>
-<p>A vector to compute the sliding function on. If not already a double
-vector, will be cast to one with <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></td>
+<p>A vector to compute the sliding function on.</p><ul>
+<li><p>For sliding sum, mean, prod, min, and max, <code>x</code> will be cast to a double
+vector with <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></li>
+<li><p>For sliding any and all, <code>x</code> will be cast to a logical vector with
+<code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>.</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>before</th>
@@ -240,14 +262,20 @@ the default, then partial computations will be allowed.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A double vector the same size as <code>x</code> containing the result of applying the
-summary function over the sliding windows.</p>
+    <p>A vector the same size as <code>x</code> containing the result of applying the
+summary function over the sliding windows.</p><ul>
+<li><p>For sliding sum, mean, prod, min, and max, a double vector will be
+returned.</p></li>
+<li><p>For sliding any and all, a logical vector will be returned.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Note that these functions are <em>not</em> generic and do not respect method
 dispatch of the corresponding summary function (i.e. <code><a href='https://rdrr.io/r/base/sum.html'>base::sum()</a></code>,
-<code><a href='https://rdrr.io/r/base/mean.html'>base::mean()</a></code>). Input will always be cast to a double vector and an internal
-method for computing the summary function will be used.</p>
+<code><a href='https://rdrr.io/r/base/mean.html'>base::mean()</a></code>). Input will always be cast to a double or logical vector
+using <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>, and an internal method for computing the summary
+function will be used.</p>
     <h2 class="hasAnchor" id="implementation"><a class="anchor" href="#implementation"></a>Implementation</h2>
 
     
