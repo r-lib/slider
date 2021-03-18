@@ -16,6 +16,12 @@
 #' using [vctrs::vec_cast()], and an internal method for computing the summary
 #' function will be used.
 #'
+#' Due to the structure of segment trees, `slide_mean()` does not perform the
+#' same "two pass" mean that `mean()` does (the intention of the second pass is
+#' to perform a floating point error correction). Because of this, there may be
+#' small differences between `slide_mean(x)` and `slide_dbl(x, mean)` in some
+#' cases.
+#'
 #' @inheritParams ellipsis::dots_empty
 #' @inheritParams slide
 #'

@@ -1,18 +1,17 @@
-## Test environments
-* local R installation, R 3.6.0
-* ubuntu 16.04 (on travis-ci), devel, R 3.6.0
-* win-builder (devel)
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
 ## revdepcheck results
 
-We checked 3 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 5 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 0.2.0 Submission
+
+This release includes new specialized sliding variants, and better compatibility with vctrs classes.
 
 ## 0.1.5 Submission
 
