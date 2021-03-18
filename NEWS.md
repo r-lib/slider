@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.2.0
 
 * New family of very fast specialized sliding functions:
