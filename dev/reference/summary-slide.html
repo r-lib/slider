@@ -77,7 +77,7 @@ or slide_lgl(), especially with a very wide window." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.5.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -287,6 +287,11 @@ dispatch of the corresponding summary function (i.e. <code><a href='https://rdrr
 <code><a href='https://rdrr.io/r/base/mean.html'>base::mean()</a></code>). Input will always be cast to a double or logical vector
 using <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>, and an internal method for computing the summary
 function will be used.</p>
+<p>Due to the structure of segment trees, <code>slide_mean()</code> does not perform the
+same "two pass" mean that <code><a href='https://rdrr.io/r/base/mean.html'>mean()</a></code> does (the intention of the second pass is
+to perform a floating point error correction). Because of this, there may be
+small differences between <code>slide_mean(x)</code> and <code><a href='slide.html'>slide_dbl(x, mean)</a></code> in some
+cases.</p>
     <h2 class="hasAnchor" id="implementation"><a class="anchor" href="#implementation"></a>Implementation</h2>
 
     
