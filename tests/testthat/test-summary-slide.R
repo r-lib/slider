@@ -72,6 +72,7 @@ test_that("Inf and -Inf results are correct", {
 })
 
 test_that("precision matches base R (long doubles)", {
+  skip_if_no_long_double()
   x <- rep(1/7, 10)
   expect_identical(sum(x), slide_sum(x, before = Inf)[[length(x)]])
 })
@@ -243,6 +244,7 @@ test_that("Inf and -Inf results are correct", {
 })
 
 test_that("precision matches base R (long doubles)", {
+  skip_if_no_long_double()
   x <- c(1/7, 1/7, 1/3)
   expect_identical(mean(x), slide_mean(x, before = Inf)[[length(x)]])
 })
