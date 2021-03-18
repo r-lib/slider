@@ -2,7 +2,7 @@
 title: "Getting started with slider"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{slider}
+  %\VignetteIndexEntry{Getting started with slider}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Fixed an out of sync vignette entry (#148).
+
 # slider 0.2.0
 
 * New family of very fast specialized sliding functions:
