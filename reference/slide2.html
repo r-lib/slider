@@ -75,7 +75,7 @@ functions work similarly to map2() and pmap() from purrr." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ functions work similarly to map2() and pmap() from purrr." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,6 +103,9 @@ functions work similarly to map2() and pmap() from purrr." />
     <li>
       <a href="../articles/rowwise.html">Row-wise iteration with slider</a>
     </li>
+    <li>
+      <a href="../articles/tsibble.html">Converting from tsibble</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -112,7 +115,7 @@ functions work similarly to map2() and pmap() from purrr." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slider/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,175 +144,175 @@ parallel with the others, not in the sense of multicore computing. These
 functions work similarly to <code>map2()</code> and <code>pmap()</code> from purrr.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slide2</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+    <pre class="usage"><span class='fu'>slide2</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_vec</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
+<span class='fu'>slide2_vec</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .ptype <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_dbl</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>slide2_dbl</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_int</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>slide2_int</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_lgl</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>slide2_lgl</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_chr</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>slide2_chr</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_dfr</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span>(),
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
-)
+<span class='fu'>slide2_dfr</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .names_to <span class='op'>=</span> <span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span><span class='op'>(</span><span class='op'>)</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide2_dfc</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.y</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
-)
+<span class='fu'>slide2_dfc</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.y</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide</span>(<span class='no'>.l</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>pslide</span><span class='op'>(</span><span class='va'>.l</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .step <span class='op'>=</span> <span class='fl'>1L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>pslide_vec</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
+<span class='fu'>pslide_vec</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .ptype <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_dbl</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>pslide_dbl</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_int</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>pslide_int</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_lgl</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>pslide_lgl</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_chr</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>pslide_chr</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_dfr</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span>(),
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
-)
+<span class='fu'>pslide_dfr</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .names_to <span class='op'>=</span> <span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span><span class='op'>(</span><span class='op'>)</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>pslide_dfc</span>(
-  <span class='no'>.l</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.step</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
-)</pre>
+<span class='fu'>pslide_dfc</span><span class='op'>(</span>
+  <span class='va'>.l</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .step <span class='op'>=</span> <span class='fl'>1L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -353,7 +356,7 @@ allows you to "look forward" from the current element if used as the
     <tr>
       <th>.complete</th>
       <td><p><code>[logical(1)]</code></p>
-<p>Should <code>.f</code> be evaluated on complete windows only? If <code>FALSE</code>,
+<p>Should the function be evaluated on complete windows only? If <code>FALSE</code>,
 the default, then partial computations will be allowed.</p></td>
     </tr>
     <tr>
@@ -383,18 +386,18 @@ not named, an integer column is used instead.</p></li>
       <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
 <code>"check_unique"</code>. See <code><a href='https://vctrs.r-lib.org/reference/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
 options.</p>
-<p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
-separately. This is because <code>vec_rbind()</code> needs to align their
+<p>With <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_rbind()</a></code>, the repair function is applied to all inputs
+separately. This is because <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_rbind()</a></code> needs to align their
 columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, <code>vec_cbind()</code> applies the
+have unique names. On the other hand, <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> applies the
 repair function after all inputs have been concatenated together
-in a final data frame. Hence <code>vec_cbind()</code> allows the more
+in a final data frame. Hence <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> allows the more
 permissive minimal names repair.</p></td>
     </tr>
     <tr>
       <th>.size</th>
       <td><p>If, <code>NULL</code>, the default, will determine the number of
-rows in <code>vec_cbind()</code> output by using the standard recycling rules.</p>
+rows in <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> output by using the standard recycling rules.</p>
 <p>Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.</p></td>
     </tr>
@@ -411,7 +414,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector fulfilling the following invariants:</p>
-<h3><code>slide2()</code></h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>slide2()</code></h3>
 
 <ul>
 <li><p><code>vec_size(slide2(.x, .y)) == vec_size_common(.x, .y)</code></p></li>
@@ -420,7 +423,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 
 
 
-<h3><code>slide2_vec()</code> and <code>slide2_*()</code> variants</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>slide2_vec()</code> and <code>slide2_*()</code> variants</h3>
 
 <ul>
 <li><p><code>vec_size(slide2_vec(.x, .y)) == vec_size_common(.x, .y)</code></p></li>
@@ -430,7 +433,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 
 
 
-<h3><code>pslide()</code></h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>pslide()</code></h3>
 
 <ul>
 <li><p><code>vec_size(pslide(.l)) == vec_size_common(!!! .l)</code></p></li>
@@ -439,7 +442,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 
 
 
-<h3><code>pslide_vec()</code> and <code>pslide_*()</code> variants</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>pslide_vec()</code> and <code>pslide_*()</code> variants</h3>
 
 <ul>
 <li><p><code>vec_size(pslide_vec(.l)) == vec_size_common(!!! .l)</code></p></li>
@@ -455,7 +458,8 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Slide along two inputs at once</span>
-<span class='fu'>slide2</span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>5</span>:<span class='fl'>8</span>, ~<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>.x</span>, <span class='no'>.y</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide2</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>5</span><span class='op'>:</span><span class='fl'>8</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span><span class='op'>)</span>, .before <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [[1]][[1]]
 #&gt; [1] 1
 #&gt; 
@@ -488,7 +492,8 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 #&gt; 
 #&gt; </div><div class='input'>
 <span class='co'># Or, for more than two, use `pslide()`</span>
-<span class='fu'>pslide</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='fl'>5</span>:<span class='fl'>8</span>, <span class='fl'>9</span>:<span class='fl'>12</span>), ~<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>.x</span>, <span class='no'>.y</span>, <span class='no'>..3</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>pslide</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>5</span><span class='op'>:</span><span class='fl'>8</span>, <span class='fl'>9</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>)</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span>, <span class='va'>..3</span><span class='op'>)</span>, .before <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [[1]][[1]]
 #&gt; [1] 1
 #&gt; 
@@ -534,19 +539,20 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 #&gt; </div><div class='input'>
 <span class='co'># You can even slide along the rows of multiple data frames of</span>
 <span class='co'># equal size at once</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>16</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>), <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>5</span>))
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>c</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>6</span>:<span class='fl'>10</span>])
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>16</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>c <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, d <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>6</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span><span class='op'>)</span>
 
-<span class='no'>row_return</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>x_rows</span>, <span class='no'>y_rows</span>) {
-  <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>x_rows</span>$<span class='no'>a</span>) <span class='kw'>&lt;</span> <span class='fl'>0</span>) {
-    <span class='no'>x_rows</span>
-  } <span class='kw'>else</span> {
-    <span class='no'>y_rows</span>
-  }
-}
+<span class='va'>row_return</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x_rows</span>, <span class='va'>y_rows</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>x_rows</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&lt;</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>x_rows</span>
+  <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span>
+    <span class='va'>y_rows</span>
+  <span class='op'>}</span>
+<span class='op'>}</span>
 
-<span class='fu'>slide2</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>row_return</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide2</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>row_return</span>, .before <span class='op'>=</span> <span class='fl'>1</span>, .after <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt;   c d
 #&gt; 1 a f
 #&gt; 2 b g
@@ -593,7 +599,7 @@ they will be used as named arguments to <code>.f</code>. Elements of <code>.l</c
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

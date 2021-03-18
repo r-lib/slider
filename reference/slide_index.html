@@ -77,7 +77,7 @@ for these irregular window sizes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ for these irregular window sizes." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -105,6 +105,9 @@ for these irregular window sizes." />
     <li>
       <a href="../articles/rowwise.html">Row-wise iteration with slider</a>
     </li>
+    <li>
+      <a href="../articles/tsibble.html">Converting from tsibble</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -114,7 +117,7 @@ for these irregular window sizes." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slider/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -145,50 +148,50 @@ is approximately but not equivalent to, 3 * 30 days. <code>slide_index()</code> 
 for these irregular window sizes.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>slide_index</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.i</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_vec</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.i</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
+<span class='fu'>slide_index_vec</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.i</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .ptype <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide_index_dbl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>slide_index_dbl</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.i</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_int</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>slide_index_int</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.i</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_lgl</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>slide_index_lgl</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.i</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_chr</span>(<span class='no'>.x</span>, <span class='no'>.i</span>, <span class='no'>.f</span>, <span class='no'>...</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>slide_index_chr</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.i</span>, <span class='va'>.f</span>, <span class='va'>...</span>, .before <span class='op'>=</span> <span class='fl'>0L</span>, .after <span class='op'>=</span> <span class='fl'>0L</span>, .complete <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>slide_index_dfr</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.i</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.names_to</span> <span class='kw'>=</span> <span class='kw pkg'>rlang</span><span class='kw ns'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span>(),
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>)
-)
+<span class='fu'>slide_index_dfr</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.i</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .names_to <span class='op'>=</span> <span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/zap.html'>zap</a></span><span class='op'>(</span><span class='op'>)</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>slide_index_dfc</span>(
-  <span class='no'>.x</span>,
-  <span class='no'>.i</span>,
-  <span class='no'>.f</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>.name_repair</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span>)
-)</pre>
+<span class='fu'>slide_index_dfc</span><span class='op'>(</span>
+  <span class='va'>.x</span>,
+  <span class='va'>.i</span>,
+  <span class='va'>.f</span>,
+  <span class='va'>...</span>,
+  .before <span class='op'>=</span> <span class='fl'>0L</span>,
+  .after <span class='op'>=</span> <span class='fl'>0L</span>,
+  .complete <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  .size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .name_repair <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unique"</span>, <span class='st'>"universal"</span>, <span class='st'>"check_unique"</span>, <span class='st'>"minimal"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,10 +204,8 @@ for these irregular window sizes.</p>
     <tr>
       <th>.i</th>
       <td><p><code>[vector]</code></p>
-<p>The index vector that determines the window sizes. The lower bound
-of the window range will be computed as <code>.i - .before</code>, and the upper
-bound as <code>.i + .after</code>. It is fairly common to supply a date vector
-as the index, but not required.</p>
+<p>The index vector that determines the window sizes. It is fairly common to
+supply a date vector as the index, but not required.</p>
 <p>There are 3 restrictions on the index:</p><ul>
 <li><p>The size of the index must match the size of <code>.x</code>, they will not be
 recycled to their common size.</p></li>
@@ -232,21 +233,32 @@ are three ways to refer to the arguments:</p><ul>
     </tr>
     <tr>
       <th>.before, .after</th>
-      <td><p><code>[vector(1) / Inf]</code></p>
-<p>The number of values before or after the current element of <code>.i</code> to
-include in the sliding window. Set to <code>Inf</code> to select all elements
-before or after the current element. Negative values are allowed, which
-allows you to "look forward" from the current element if used as the
-<code>.before</code> value, or "look backwards" if used as <code>.after</code>.</p>
-<p>Any object that can be added or subtracted from <code>.i</code> with <code>+</code> and <code>-</code>
-can be used. For example, a lubridate period, such as <code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p>
-<p>The ranges that result from computing <code>.i - .before</code> and <code>.i + .after</code>
-have the same 3 restrictions as <code>.i</code> itself.</p></td>
+      <td><p><code>[vector(1) / function / Inf]</code></p><ul>
+<li><p>If a vector of size 1, these represent the number of values before or
+after the current element of <code>.i</code> to include in the sliding window.
+Negative values are allowed, which allows you to "look forward" from the
+current element if used as the <code>.before</code> value, or "look backwards" if used
+as <code>.after</code>. Boundaries are computed from these elements as <code>.i - .before</code>
+and <code>.i + .after</code>. Any object that can be added or subtracted from <code>.i</code>
+with <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> can be used. For example, a lubridate period, such as
+<code><a href='http://lubridate.tidyverse.org/reference/period.html'>lubridate::weeks()</a></code>.</p></li>
+<li><p>If <code>Inf</code>, this selects all elements before or after the current element.</p></li>
+<li><p>If a function, or a one-sided formula which can be coerced to a function,
+it is applied to <code>.i</code> to compute the boundaries. Note that this function
+will only be applied to the <em>unique</em> values of <code>.i</code>, so it should not rely
+on the original length of <code>.i</code> in any way. This is useful for applying a
+complex arithmetic operation that can't be expressed with a single <code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code> or
+<code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operation. One example would be to use <code><a href='http://lubridate.tidyverse.org/reference/mplus.html'>lubridate::add_with_rollback()</a></code>
+to avoid invalid dates at the end of the month.</p></li>
+</ul>
+
+<p>The ranges that result from applying <code>.before</code> and <code>.after</code> have the same
+3 restrictions as <code>.i</code> itself.</p></td>
     </tr>
     <tr>
       <th>.complete</th>
       <td><p><code>[logical(1)]</code></p>
-<p>Should <code>.f</code> be evaluated on complete windows only? If <code>FALSE</code>,
+<p>Should the function be evaluated on complete windows only? If <code>FALSE</code>,
 the default, then partial computations will be allowed.</p></td>
     </tr>
     <tr>
@@ -276,18 +288,18 @@ not named, an integer column is used instead.</p></li>
       <td><p>One of <code>"unique"</code>, <code>"universal"</code>, or
 <code>"check_unique"</code>. See <code><a href='https://vctrs.r-lib.org/reference/vec_as_names.html'>vec_as_names()</a></code> for the meaning of these
 options.</p>
-<p>With <code>vec_rbind()</code>, the repair function is applied to all inputs
-separately. This is because <code>vec_rbind()</code> needs to align their
+<p>With <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_rbind()</a></code>, the repair function is applied to all inputs
+separately. This is because <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_rbind()</a></code> needs to align their
 columns before binding the rows, and thus needs all inputs to
-have unique names. On the other hand, <code>vec_cbind()</code> applies the
+have unique names. On the other hand, <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> applies the
 repair function after all inputs have been concatenated together
-in a final data frame. Hence <code>vec_cbind()</code> allows the more
+in a final data frame. Hence <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> allows the more
 permissive minimal names repair.</p></td>
     </tr>
     <tr>
       <th>.size</th>
       <td><p>If, <code>NULL</code>, the default, will determine the number of
-rows in <code>vec_cbind()</code> output by using the standard recycling rules.</p>
+rows in <code><a href='https://vctrs.r-lib.org/reference/vec_bind.html'>vec_cbind()</a></code> output by using the standard recycling rules.</p>
 <p>Alternatively, specify the desired number of rows, and any inputs
 of length 1 will be recycled appropriately.</p></td>
     </tr>
@@ -296,7 +308,7 @@ of length 1 will be recycled appropriately.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector fulfilling the following invariants:</p>
-<h3><code>slide_index()</code></h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>slide_index()</code></h3>
 
 <ul>
 <li><p><code>vec_size(slide_index(.x)) == vec_size(.x)</code></p></li>
@@ -305,7 +317,7 @@ of length 1 will be recycled appropriately.</p></td>
 
 
 
-<h3><code>slide_index_vec()</code> and <code>slide_index_*()</code> variants</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a><code>slide_index_vec()</code> and <code>slide_index_*()</code> variants</h3>
 
 <ul>
 <li><p><code>vec_size(slide_index_vec(.x)) == vec_size(.x)</code></p></li>
@@ -320,11 +332,14 @@ of length 1 will be recycled appropriately.</p></td>
     <div class='dont-index'><p><code><a href='slide.html'>slide()</a></code>, <code><a href='hop_index.html'>hop_index()</a></code>, <code><a href='slide_index2.html'>slide_index2()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>:<span class='fl'>5</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lubridate.tidyverse.org'>lubridate</a></span><span class='op'>)</span>
+
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>
 
 <span class='co'># In some cases, sliding over `x` with a strict window size of 2</span>
 <span class='co'># will fit your use case.</span>
-<span class='fu'><a href='slide.html'>slide</a></span>(<span class='no'>x</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'><a href='slide.html'>slide</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='op'>~</span><span class='va'>.x</span>, .before <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 1
 #&gt; 
 #&gt; [[2]]
@@ -342,14 +357,15 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='co'># However, if this `i` is a date vector paired with `x`, when computing</span>
 <span class='co'># rolling calculations you might want to iterate over `x` while</span>
 <span class='co'># respecting the fact that `i` is an irregular sequence.</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-08-15"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span>)
+<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2019-08-15"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>6</span>, <span class='fl'>7</span><span class='op'>)</span>
 
 <span class='co'># For example, a "2 day" window should not pair `"2019-08-19"` and</span>
 <span class='co'># `"2019-08-21"` together, even though they are next to each other in `x`.</span>
 <span class='co'># `slide_index()` computes the lookback value from the current date in `.i`,</span>
 <span class='co'># meaning that if you are currently on `"2019-08-21"` and look back 1 day,</span>
 <span class='co'># it will correctly not include `"2019-08-19"`.</span>
-<span class='fu'>slide_index</span>(<span class='no'>i</span>, <span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='op'>~</span><span class='va'>.x</span>, .before <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2019-08-15"
 #&gt; 
 #&gt; [[2]]
@@ -366,7 +382,8 @@ of length 1 will be recycled appropriately.</p></td>
 #&gt; </div><div class='input'>
 <span class='co'># We could have equivalently used a lubridate period object for this as well,</span>
 <span class='co'># since `i - lubridate::days(1)` is allowed</span>
-<span class='fu'>slide_index</span>(<span class='no'>i</span>, <span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='kw pkg'>lubridate</span><span class='kw ns'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/period.html'>days</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [[1]]
+<span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='op'>~</span><span class='va'>.x</span>, .before <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/period.html'>days</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "2019-08-15"
 #&gt; 
 #&gt; [[2]]
@@ -382,10 +399,58 @@ of length 1 will be recycled appropriately.</p></td>
 #&gt; [1] "2019-08-21" "2019-08-22"
 #&gt; </div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
+<span class='co'># Functions for `.before` and `.after`</span>
+
+<span class='co'># In some cases, it might not be appropriate to compute</span>
+<span class='co'># `.i - .before` or `.i + .after`, either because there isn't a `-` or `+`</span>
+<span class='co'># method defined, or because there is an alternative way to perform the</span>
+<span class='co'># arithmetic. For example, subtracting 1 month with `- months(1)` (using</span>
+<span class='co'># lubridate) can sometimes land you on an invalid date that doesn't exist.</span>
+<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2019-01-31"</span>, <span class='st'>"2019-02-28"</span>, <span class='st'>"2019-03-31"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># 2019-03-31 - months(1) = 2019-02-31, which doesn't exist</span>
+<span class='va'>i</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "2018-12-31" "2019-01-28" NA          </div><div class='input'>
+<span class='co'># These NAs create problems with `slide_index()`, which doesn't allow</span>
+<span class='co'># missing values in the computed endpoints</span>
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='va'>identity</span>, .before <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Error : Endpoints generated by `.before` cannot be `NA`.
+#&gt; <span style='color: #0000BB;'>ℹ</span><span> They are `NA` at locations: 3.</div><div class='input'>
+<span class='co'># In these cases, it is more appropriate to use `%m-%`,</span>
+<span class='co'># which will snap to the end of the month, at least giving you something</span>
+<span class='co'># to work with.</span>
+<span class='va'>i</span> <span class='op'>%m-%</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "2018-12-31" "2019-01-28" "2019-02-28"</div><div class='input'>
+<span class='co'># To use this as your `.before` or `.after`, supply an anonymous function of</span>
+<span class='co'># 1 argument that performs the computation</span>
+<span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='va'>identity</span>, .before <span class='op'>=</span> <span class='op'>~</span><span class='va'>.x</span> <span class='op'>%m-%</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] "2019-01-31"
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] "2019-01-31" "2019-02-28"
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] "2019-02-28" "2019-03-31"
+#&gt; </div><div class='input'>
+<span class='co'># Notice that in the `.after` case, `2019-02-28 %m+% months(1)` doesn't</span>
+<span class='co'># capture the end of March, so it isn't included in the 2nd result</span>
+<span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='va'>identity</span>, .after <span class='op'>=</span> <span class='op'>~</span><span class='va'>.x</span> <span class='op'>%m+%</span> <span class='fu'><a href='https://rdrr.io/r/base/weekday.POSIXt.html'>months</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] "2019-01-31" "2019-02-28"
+#&gt; 
+#&gt; [[2]]
+#&gt; [1] "2019-02-28"
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] "2019-03-31"
+#&gt; </div><div class='input'>
+<span class='co'># ---------------------------------------------------------------------------</span>
 
 <span class='co'># When `.i` has repeated values, they are always grouped together.</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2017</span>, <span class='fl'>2017</span>, <span class='fl'>2018</span>, <span class='fl'>2019</span>, <span class='fl'>2020</span>, <span class='fl'>2020</span>)
-<span class='fu'>slide_index</span>(<span class='no'>i</span>, <span class='no'>i</span>, ~<span class='no'>.x</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2017</span>, <span class='fl'>2017</span>, <span class='fl'>2018</span>, <span class='fl'>2019</span>, <span class='fl'>2020</span>, <span class='fl'>2020</span><span class='op'>)</span>
+<span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='op'>~</span><span class='va'>.x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 2017 2017
 #&gt; 
 #&gt; [[2]]
@@ -402,7 +467,8 @@ of length 1 will be recycled appropriately.</p></td>
 #&gt; 
 #&gt; [[6]]
 #&gt; [1] 2020 2020
-#&gt; </div><div class='input'><span class='fu'>slide_index</span>(<span class='no'>i</span>, <span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; </div><div class='input'><span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>i</span>, <span class='op'>~</span><span class='va'>.x</span>, .after <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; [1] 2017 2017 2018
 #&gt; 
 #&gt; [[2]]
@@ -426,19 +492,20 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='co'># Rolling regressions are easy with `slide_index()` because:</span>
 <span class='co'># - Data frame `.x` values are iterated over rowwise</span>
 <span class='co'># - The index is respected by using `.i`</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
 
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>),
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>),
-  <span class='kw'>i</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2019-08-15"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>6</span>:<span class='fl'>102</span>) <span class='co'># &lt;- irregular</span>
-)
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+  y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>,
+  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>,
+  i <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2019-08-15"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>6</span><span class='op'>:</span><span class='fl'>102</span><span class='op'>)</span> <span class='co'># &lt;- irregular</span>
+<span class='op'>)</span>
 
 <span class='co'># 20 day rolling regression. Current day + 19 days back.</span>
 <span class='co'># Additionally, set `.complete = TRUE` to not compute partial results.</span>
-<span class='no'>regr</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_index</span>(<span class='no'>df</span>, <span class='no'>df</span>$<span class='no'>i</span>, ~<span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>y</span> ~ <span class='no'>x</span>, <span class='no'>.x</span>), <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>19</span>, <span class='kw'>.complete</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>regr</span> <span class='op'>&lt;-</span> <span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>i</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span>, <span class='va'>.x</span><span class='op'>)</span>, .before <span class='op'>=</span> <span class='fl'>19</span>, .complete <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='no'>regr</span>[<span class='fl'>16</span>:<span class='fl'>18</span>]</div><div class='output co'>#&gt; [[1]]
+<span class='va'>regr</span><span class='op'>[</span><span class='fl'>16</span><span class='op'>:</span><span class='fl'>18</span><span class='op'>]</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt; NULL
 #&gt; 
 #&gt; [[2]]
@@ -466,14 +533,16 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='co'># window. But on the 17th index position, `""2019-09-03"`, if we look</span>
 <span class='co'># back 19 days we get to `""2019-08-15"`, which is the same value as</span>
 <span class='co'># `i[1]` so a full window can be constructed.</span>
-<span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>16</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># FALSE</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>17</span>] - <span class='fl'>19</span> <span class='kw'>&gt;=</span> <span class='no'>df</span>$<span class='no'>i</span>[<span class='fl'>1</span>] <span class='co'># TRUE</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='va'>df</span><span class='op'>$</span><span class='va'>i</span><span class='op'>[</span><span class='fl'>16</span><span class='op'>]</span> <span class='op'>-</span> <span class='fl'>19</span> <span class='op'>&gt;=</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>i</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='co'># FALSE</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='va'>df</span><span class='op'>$</span><span class='va'>i</span><span class='op'>[</span><span class='fl'>17</span><span class='op'>]</span> <span class='op'>-</span> <span class='fl'>19</span> <span class='op'>&gt;=</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>i</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='co'># TRUE</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># ---------------------------------------------------------------------------</span>
 <span class='co'># Accessing the current index value</span>
 
 <span class='co'># A very simplistic version of `purrr::map2()`</span>
-<span class='no'>fake_map2</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>.x</span>, <span class='no'>.y</span>, <span class='no'>.f</span>, <span class='no'>...</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Map</a></span>(<span class='no'>.f</span>, <span class='no'>.x</span>, <span class='no'>.y</span>, <span class='no'>...</span>)
-}
+<span class='va'>fake_map2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span>, <span class='va'>.f</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/funprog.html'>Map</a></span><span class='op'>(</span><span class='va'>.f</span>, <span class='va'>.x</span>, <span class='va'>.y</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'># Occasionally you need to access the index value that you are currently on.</span>
 <span class='co'># This is generally not possible with a single call to `slide_index()`, but</span>
@@ -481,28 +550,29 @@ of length 1 will be recycled appropriately.</p></td>
 <span class='co'># `purrr::map2()`. In this example, we want to use the distance from the</span>
 <span class='co'># current index value (in days) as a multiplier on `x`. Values further</span>
 <span class='co'># away from the current date get a higher multiplier.</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
 
 <span class='co'># 25 random days past 2000-01-01</span>
-<span class='no'>i</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2000-01-01"</span>) + <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>100</span>, <span class='fl'>25</span>))
+<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='st'>"2000-01-01"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>i</span> <span class='kw'>=</span> <span class='no'>i</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>25</span>))
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>i <span class='op'>=</span> <span class='va'>i</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='no'>weight_by_distance</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>df</span>, <span class='no'>i</span>) {
-  <span class='no'>df</span>$<span class='no'>weight</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>df</span>$<span class='no'>i</span> - <span class='no'>i</span>))
-  <span class='no'>df</span>$<span class='no'>x_weighted</span> <span class='kw'>=</span> <span class='no'>df</span>$<span class='no'>x</span> * <span class='no'>df</span>$<span class='no'>weight</span>
-  <span class='no'>df</span>
-}
+<span class='va'>weight_by_distance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>i</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span><span class='op'>$</span><span class='va'>weight</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>i</span> <span class='op'>-</span> <span class='va'>i</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>df</span><span class='op'>$</span><span class='va'>x_weighted</span> <span class='op'>=</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>*</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>weight</span>
+  <span class='va'>df</span>
+<span class='op'>}</span>
 
 <span class='co'># Use `slide_index()` to just generate the rolling data.</span>
 <span class='co'># Here we take the current date + 5 days before + 5 days after.</span>
-<span class='no'>dfs</span> <span class='kw'>&lt;-</span> <span class='fu'>slide_index</span>(<span class='no'>df</span>, <span class='no'>df</span>$<span class='no'>i</span>, ~<span class='no'>.x</span>, <span class='kw'>.before</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>.after</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+<span class='va'>dfs</span> <span class='op'>&lt;-</span> <span class='fu'>slide_index</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>i</span>, <span class='op'>~</span><span class='va'>.x</span>, .before <span class='op'>=</span> <span class='fl'>5</span>, .after <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 
 <span class='co'># Follow up with a `map2()` with `i` as the second input.</span>
 <span class='co'># This allows you to track the current `i` value and weight accordingly.</span>
-<span class='no'>result</span> <span class='kw'>&lt;-</span> <span class='fu'>fake_map2</span>(<span class='no'>dfs</span>, <span class='no'>df</span>$<span class='no'>i</span>, <span class='no'>weight_by_distance</span>)
+<span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'>fake_map2</span><span class='op'>(</span><span class='va'>dfs</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>i</span>, <span class='va'>weight_by_distance</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>result</span>)</div><div class='output co'>#&gt; [[1]]
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [[1]]
 #&gt;            i          x weight x_weighted
 #&gt; 1 2000-01-08 -0.2179749      0   0.000000
 #&gt; 2 2000-01-10 -1.0260044      2  -2.052009
@@ -535,7 +605,7 @@ of length 1 will be recycled appropriately.</p></td>
 #&gt; 2 2000-01-27  0.8377870      0  0.0000000
 #&gt; 3 2000-02-01  0.1533731      5  0.7668656
 #&gt; </div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -551,7 +621,7 @@ of length 1 will be recycled appropriately.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

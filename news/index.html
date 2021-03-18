@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">slider</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,6 +99,9 @@
     <li>
       <a href="../articles/rowwise.html">Row-wise iteration with slider</a>
     </li>
+    <li>
+      <a href="../articles/tsibble.html">Converting from tsibble</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -108,7 +111,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/DavisVaughan/slider/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,6 +132,30 @@
       <small>Source: <a href='https://github.com/DavisVaughan/slider/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="slider-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#slider-020" class="anchor"></a>slider 0.2.0<small> 2021-03-18 </small>
+</h1>
+<ul>
+<li>
+<p>New family of very fast specialized sliding functions:</p>
+<ul>
+<li><p><code><a href="../reference/summary-slide.html">slide_sum()</a></code>, <code><a href="../reference/summary-index.html">slide_index_sum()</a></code>: for rolling sums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_mean()</a></code>, <code><a href="../reference/summary-index.html">slide_index_mean()</a></code>: for rolling averages</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_prod()</a></code>, <code><a href="../reference/summary-index.html">slide_index_prod()</a></code>: for rolling products</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_min()</a></code>, <code><a href="../reference/summary-index.html">slide_index_min()</a></code>: for rolling minimums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_max()</a></code>, <code><a href="../reference/summary-index.html">slide_index_max()</a></code>: for rolling maximums</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_any()</a></code>, <code><a href="../reference/summary-index.html">slide_index_any()</a></code>: for rolling any</p></li>
+<li><p><code><a href="../reference/summary-slide.html">slide_all()</a></code>, <code><a href="../reference/summary-index.html">slide_index_all()</a></code>: for rolling all</p></li>
+</ul>
+</li>
+<li><p>The <code>slide_index_*()</code> family now allows <code>.before</code> and <code>.after</code> to be functions of 1 argument (the index) that compute the boundaries of the sliding window. This can be extremely useful when the default, which computes <code>.i - .before</code> and <code>.i + .after</code>, is not applicable or correct for your needs. One use case is to set <code>.before = ~.x %m-% months(1)</code> rather than <code>.before = months(1)</code> to perform a 1 month rolling window in a way that won’t generate <code>NA</code> values on invalid dates (like 1 month before 2019-03-31) (<a href='https://github.com/DavisVaughan/slider/issues/139'>#139</a>).</p></li>
+<li><p>The <code>slide_index_*()</code> family has undergone some internal changes to make it more compatible with custom vctrs classes that could be provided as the index (<code>.i</code>), such as the date-time classes in the clock package (<a href='https://github.com/DavisVaughan/slider/issues/133'>#133</a>, <a href='https://github.com/DavisVaughan/slider/issues/130'>#130</a>).</p></li>
+<li><p>For the <code>slide_index_*()</code> family, it is now required that <code>.i - .before</code> and <code>.i + .after</code> be castable to <code>.i</code> by <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html">vctrs::vec_cast()</a></code>. Similarly, for the <code>hop_index_*()</code> family, <code>.starts</code> and <code>.stops</code> must both be castable to <code>.i</code> (<a href='https://github.com/DavisVaughan/slider/issues/132'>#132</a>).</p></li>
+<li><p>New vignette, <code><a href="../articles/tsibble.html">vignette("tsibble")</a></code>, explaining how to transition from tsibble to slider (<a href='https://github.com/DavisVaughan/slider/issues/128'>#128</a>).</p></li>
+<li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
+</ul>
+</div>
     <div id="slider-015" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.5">
 <a href="#slider-015" class="anchor"></a>slider 0.1.5<small> 2020-07-21 </small>
@@ -203,7 +230,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
