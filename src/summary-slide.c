@@ -151,6 +151,7 @@ static inline void slide_sum_impl(const double* p_x,
     sum_state_finalize,
     sum_nodes_increment,
     sum_nodes_initialize,
+    sum_nodes_void_deref,
     na_rm ? sum_na_rm_aggregate_from_leaves : sum_na_keep_aggregate_from_leaves,
     na_rm ? sum_na_rm_aggregate_from_nodes : sum_na_keep_aggregate_from_nodes
   );
@@ -189,6 +190,7 @@ static inline void slide_prod_impl(const double* p_x,
     prod_state_finalize,
     prod_nodes_increment,
     prod_nodes_initialize,
+    prod_nodes_void_deref,
     na_rm ? prod_na_rm_aggregate_from_leaves : prod_na_keep_aggregate_from_leaves,
     na_rm ? prod_na_rm_aggregate_from_nodes : prod_na_keep_aggregate_from_nodes
   );
@@ -227,6 +229,7 @@ static inline void slide_mean_impl(const double* p_x,
     mean_state_finalize,
     mean_nodes_increment,
     mean_nodes_initialize,
+    mean_nodes_void_deref,
     na_rm ? mean_na_rm_aggregate_from_leaves : mean_na_keep_aggregate_from_leaves,
     na_rm ? mean_na_rm_aggregate_from_nodes : mean_na_keep_aggregate_from_nodes
   );
@@ -265,6 +268,7 @@ static inline void slide_min_impl(const double* p_x,
     min_state_finalize,
     min_nodes_increment,
     min_nodes_initialize,
+    min_nodes_void_deref,
     na_rm ? min_na_rm_aggregate_from_leaves : min_na_keep_aggregate_from_leaves,
     na_rm ? min_na_rm_aggregate_from_nodes : min_na_keep_aggregate_from_nodes
   );
@@ -303,6 +307,7 @@ static inline void slide_max_impl(const double* p_x,
     max_state_finalize,
     max_nodes_increment,
     max_nodes_initialize,
+    max_nodes_void_deref,
     na_rm ? max_na_rm_aggregate_from_leaves : max_na_keep_aggregate_from_leaves,
     na_rm ? max_na_rm_aggregate_from_nodes : max_na_keep_aggregate_from_nodes
   );
@@ -341,6 +346,7 @@ static inline void slide_all_impl(const int* p_x,
     all_state_finalize,
     all_nodes_increment,
     all_nodes_initialize,
+    all_nodes_void_deref,
     na_rm ? all_na_rm_aggregate_from_leaves : all_na_keep_aggregate_from_leaves,
     na_rm ? all_na_rm_aggregate_from_nodes : all_na_keep_aggregate_from_nodes
   );
@@ -379,6 +385,7 @@ static inline void slide_any_impl(const int* p_x,
     any_state_finalize,
     any_nodes_increment,
     any_nodes_initialize,
+    any_nodes_void_deref,
     na_rm ? any_na_rm_aggregate_from_leaves : any_na_keep_aggregate_from_leaves,
     na_rm ? any_na_rm_aggregate_from_nodes : any_na_keep_aggregate_from_nodes
   );

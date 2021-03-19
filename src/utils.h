@@ -85,9 +85,6 @@ extern SEXP slider_shared_na_lgl;
 
 extern SEXP slider_ns_env;
 
-const void* r_const_deref(SEXP x, SEXPTYPE type);
-void* r_deref(SEXP x, SEXPTYPE type);
-
 SEXP slider_init(SEXPTYPE type, R_xlen_t size);
 
 void stop_not_all_size_one(int iteration, int size);

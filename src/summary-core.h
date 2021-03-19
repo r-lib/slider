@@ -2,6 +2,12 @@
 #define SLIDER_SUMMARY_CORE
 
 #include "slider.h"
+#include "summary-core-types.h"
+#include "align.h"
+
+// From `summary-core-align.hpp`
+size_t align_of_long_double();
+size_t align_of_mean_state_t();
 
 // -----------------------------------------------------------------------------
 // Sum
@@ -30,9 +36,16 @@ static inline void* sum_nodes_increment(void* p_nodes) {
   return (void*) (((long double*) p_nodes) + 1);
 }
 
+static inline void* sum_nodes_void_deref(SEXP nodes) {
+  return aligned_void_deref(nodes, align_of_long_double());
+}
+static inline long double* sum_nodes_deref(SEXP nodes) {
+  return (long double*) sum_nodes_void_deref(nodes);
+}
+
 static inline SEXP sum_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(Rf_allocVector(RAWSXP, n * sizeof(long double)));
-  long double* p_nodes = (long double*) RAW(nodes);
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), align_of_long_double()));
+  long double* p_nodes = sum_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = 0;
@@ -151,9 +164,16 @@ static inline void* prod_nodes_increment(void* p_nodes) {
   return (void*) (((long double*) p_nodes) + 1);
 }
 
+static inline void* prod_nodes_void_deref(SEXP nodes) {
+  return aligned_void_deref(nodes, align_of_long_double());
+}
+static inline long double* prod_nodes_deref(SEXP nodes) {
+  return (long double*) prod_nodes_void_deref(nodes);
+}
+
 static inline SEXP prod_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(Rf_allocVector(RAWSXP, n * sizeof(long double)));
-  long double* p_nodes = (long double*) RAW(nodes);
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), align_of_long_double()));
+  long double* p_nodes = prod_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = 1;
@@ -248,11 +268,6 @@ static inline void prod_na_rm_aggregate_from_nodes(const void* p_source,
 // -----------------------------------------------------------------------------
 // Mean
 
-struct mean_state_t {
-  long double sum;
-  uint64_t count;
-};
-
 static inline void mean_state_reset(void* p_state) {
   struct mean_state_t* p_state_ = (struct mean_state_t*) p_state;
   p_state_->sum = 0;
@@ -270,9 +285,16 @@ static inline void* mean_nodes_increment(void* p_nodes) {
   return (void*) (((struct mean_state_t*) p_nodes) + 1);
 }
 
+static inline void* mean_nodes_void_deref(SEXP nodes) {
+  return aligned_void_deref(nodes, align_of_mean_state_t());
+}
+static inline struct mean_state_t* mean_nodes_deref(SEXP nodes) {
+  return (struct mean_state_t*) mean_nodes_void_deref(nodes);
+}
+
 static inline SEXP mean_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(Rf_allocVector(RAWSXP, n * sizeof(struct mean_state_t)));
-  struct mean_state_t* p_nodes = (struct mean_state_t*) RAW(nodes);
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(struct mean_state_t), align_of_mean_state_t()));
+  struct mean_state_t* p_nodes = mean_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i].sum = 0;
@@ -388,9 +410,16 @@ static inline void* min_nodes_increment(void* p_nodes) {
   return (void*) (((double*) p_nodes) + 1);
 }
 
+static inline double* min_nodes_deref(SEXP nodes) {
+  return REAL(nodes);
+}
+static inline void* min_nodes_void_deref(SEXP nodes) {
+  return (void*) min_nodes_deref(nodes);
+}
+
 static inline SEXP min_nodes_initialize(uint64_t n) {
   SEXP nodes = PROTECT(Rf_allocVector(REALSXP, n));
-  double* p_nodes = REAL(nodes);
+  double* p_nodes = min_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = R_PosInf;
@@ -473,9 +502,16 @@ static inline void* max_nodes_increment(void* p_nodes) {
   return (void*) (((double*) p_nodes) + 1);
 }
 
+static inline double* max_nodes_deref(SEXP nodes) {
+  return REAL(nodes);
+}
+static inline void* max_nodes_void_deref(SEXP nodes) {
+  return (void*) max_nodes_deref(nodes);
+}
+
 static inline SEXP max_nodes_initialize(uint64_t n) {
   SEXP nodes = PROTECT(Rf_allocVector(REALSXP, n));
-  double* p_nodes = REAL(nodes);
+  double* p_nodes = max_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = R_NegInf;
@@ -558,9 +594,16 @@ static inline void* all_nodes_increment(void* p_nodes) {
   return (void*) (((int*) p_nodes) + 1);
 }
 
+static inline int* all_nodes_deref(SEXP nodes) {
+  return LOGICAL(nodes);
+}
+static inline void* all_nodes_void_deref(SEXP nodes) {
+  return (void*) all_nodes_deref(nodes);
+}
+
 static inline SEXP all_nodes_initialize(uint64_t n) {
   SEXP nodes = PROTECT(Rf_allocVector(LGLSXP, n));
-  int* p_nodes = LOGICAL(nodes);
+  int* p_nodes = all_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = 1;
@@ -653,9 +696,16 @@ static inline void* any_nodes_increment(void* p_nodes) {
   return (void*) (((int*) p_nodes) + 1);
 }
 
+static inline int* any_nodes_deref(SEXP nodes) {
+  return LOGICAL(nodes);
+}
+static inline void* any_nodes_void_deref(SEXP nodes) {
+  return (void*) any_nodes_deref(nodes);
+}
+
 static inline SEXP any_nodes_initialize(uint64_t n) {
   SEXP nodes = PROTECT(Rf_allocVector(LGLSXP, n));
-  int* p_nodes = LOGICAL(nodes);
+  int* p_nodes = any_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
     p_nodes[i] = 0;

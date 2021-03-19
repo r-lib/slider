@@ -11,6 +11,7 @@ struct segment_tree new_segment_tree(uint64_t n_leaves,
                                      void (*state_finalize)(void* p_state, void* p_result),
                                      void* (*nodes_increment)(void* p_nodes),
                                      SEXP (*nodes_initialize)(uint64_t n),
+                                     void* (*nodes_void_deref)(SEXP nodes),
                                      void (*aggregate_from_leaves)(const void* p_source, uint64_t begin, uint64_t end, void* p_dest),
                                      void (*aggregate_from_nodes)(const void* p_source, uint64_t begin, uint64_t end, void* p_dest)) {
   struct segment_tree tree;
@@ -33,7 +34,7 @@ struct segment_tree new_segment_tree(uint64_t n_leaves,
   tree.p_p_level = (void**) RAW(tree.p_level);
 
   tree.nodes = PROTECT(nodes_initialize(tree.n_nodes));
-  tree.p_nodes = r_deref(tree.nodes, TYPEOF(tree.nodes));
+  tree.p_nodes = nodes_void_deref(tree.nodes);
 
   tree.state_reset = state_reset;
   tree.state_finalize = state_finalize;
