@@ -1,5 +1,8 @@
 # slider (development version)
 
+* Fixed a C alignment issue detected by CRAN's USBAN machine related to
+  allocating vectors of `long double`.
+
 * Fixed a test that relied too strongly on the size of the C type,
   `long double`, which can vary across platforms (#147).
 
