@@ -13,13 +13,6 @@
 #include "slider.h"
 #include <stdint.h> // uintptr_t
 
-/*
- * This include requires C11. It contains `alignof()`, which isn't directly
- * used by this file, but is used by any consumers of this file to provide
- * the `element_align` parameters.
- */
-#include <stdalign.h>
-
 static
 inline
 SEXP

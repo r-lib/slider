@@ -2,7 +2,12 @@
 #define SLIDER_SUMMARY_CORE
 
 #include "slider.h"
+#include "summary-core-types.h"
 #include "align.h"
+
+// From `summary-core-align.hpp`
+size_t align_of_long_double();
+size_t align_of_mean_state_t();
 
 // -----------------------------------------------------------------------------
 // Sum
@@ -32,14 +37,14 @@ static inline void* sum_nodes_increment(void* p_nodes) {
 }
 
 static inline void* sum_nodes_void_deref(SEXP nodes) {
-  return aligned_void_deref(nodes, alignof(long double));
+  return aligned_void_deref(nodes, align_of_long_double());
 }
 static inline long double* sum_nodes_deref(SEXP nodes) {
   return (long double*) sum_nodes_void_deref(nodes);
 }
 
 static inline SEXP sum_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), alignof(long double)));
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), align_of_long_double()));
   long double* p_nodes = sum_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
@@ -160,14 +165,14 @@ static inline void* prod_nodes_increment(void* p_nodes) {
 }
 
 static inline void* prod_nodes_void_deref(SEXP nodes) {
-  return aligned_void_deref(nodes, alignof(long double));
+  return aligned_void_deref(nodes, align_of_long_double());
 }
 static inline long double* prod_nodes_deref(SEXP nodes) {
   return (long double*) prod_nodes_void_deref(nodes);
 }
 
 static inline SEXP prod_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), alignof(long double)));
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(long double), align_of_long_double()));
   long double* p_nodes = prod_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
@@ -263,11 +268,6 @@ static inline void prod_na_rm_aggregate_from_nodes(const void* p_source,
 // -----------------------------------------------------------------------------
 // Mean
 
-struct mean_state_t {
-  long double sum;
-  uint64_t count;
-};
-
 static inline void mean_state_reset(void* p_state) {
   struct mean_state_t* p_state_ = (struct mean_state_t*) p_state;
   p_state_->sum = 0;
@@ -286,14 +286,14 @@ static inline void* mean_nodes_increment(void* p_nodes) {
 }
 
 static inline void* mean_nodes_void_deref(SEXP nodes) {
-  return aligned_void_deref(nodes, alignof(struct mean_state_t));
+  return aligned_void_deref(nodes, align_of_mean_state_t());
 }
 static inline struct mean_state_t* mean_nodes_deref(SEXP nodes) {
   return (struct mean_state_t*) mean_nodes_void_deref(nodes);
 }
 
 static inline SEXP mean_nodes_initialize(uint64_t n) {
-  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(struct mean_state_t), alignof(struct mean_state_t)));
+  SEXP nodes = PROTECT(aligned_allocate(n, sizeof(struct mean_state_t), align_of_mean_state_t()));
   struct mean_state_t* p_nodes = mean_nodes_deref(nodes);
 
   for (uint64_t i = 0; i < n; ++i) {
