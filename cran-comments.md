@@ -9,6 +9,17 @@ We checked 5 reverse dependencies, comparing R CMD check results across CRAN and
  * We saw 0 new problems
  * We failed to check 0 packages
 
+## 0.2.1 Submission
+
+This is a patch release to fix:
+
+- Tests that were too strict with `long double`s, detected by CRAN's M1mac
+  and noLD machines.
+  
+- A C alignment issue when allocating vectors of `long double` and
+  `struct mean_state_t` (which uses `long double`), detected by CRAN's
+  gcc-USBAN machine.
+
 ## 0.2.0 Submission
 
 This release includes new specialized sliding variants, and better compatibility with vctrs classes.
