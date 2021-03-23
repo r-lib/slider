@@ -1,6 +1,6 @@
 Package: slider
 Title: Sliding Window Functions
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: 
     c(person(given = "Davis",
              family = "Vaughan",

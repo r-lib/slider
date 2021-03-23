@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.2.1
 
 * Fixed a C alignment issue detected by CRAN's USBAN machine related to
