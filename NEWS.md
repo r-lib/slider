@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.2.2
 
 * Updated internal usage of `vec_order()` to prepare for a breaking change
