@@ -323,7 +323,7 @@ is_sorted <- function(x) {
 }
 
 compute_non_ascending_locations <- function(x) {
-  order <- vec_order(x, "asc")
+  order <- vec_order(x, direction = "asc")
 
   if (is_sorted(order)) {
     return(integer())
