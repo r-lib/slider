@@ -1,13 +1,13 @@
-## R CMD check results
-
-0 errors | 0 warnings | 0 notes
-
 ## revdepcheck results
 
 We checked 5 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
+
+## 0.2.2 Submission
+
+This is a patch release to prepare for a small breaking change in vctrs related to the signature of `vec_order()`.
 
 ## 0.2.1 Submission
 
