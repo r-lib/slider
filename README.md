@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=master)
+coverage](https://codecov.io/gh/DavisVaughan/slider/branch/main/graph/badge.svg)](https://codecov.io/gh/DavisVaughan/slider?branch=main)
 [![R-CMD-check](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
 <!-- badges: end -->
 
@@ -195,7 +195,7 @@ df <- tibble(
 df$regressions <- slide(df, ~lm(y ~ x, data = .x), .before = 19, .complete = TRUE)
 
 df[15:25,]
-#> # A tibble: 11 x 3
+#> # A tibble: 11 × 3
 #>         y      x regressions
 #>     <dbl>  <dbl> <list>     
 #>  1 -0.556  0.519 <NULL>     
