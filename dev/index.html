@@ -23,6 +23,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -41,12 +43,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/slider.html">Get started</a>
 </li>
@@ -74,7 +70,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/DavisVaughan/slider/">
+  <a href="https://github.com/DavisVaughan/slider/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,52 +87,52 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="slider" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#slider" class="anchor"></a>slider</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="slider">slider<a class="anchor" aria-label="anchor" href="#slider"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p>slider provides a family of general purpose “sliding window” functions. The API is purposefully <em>very</em> similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other “window” based computations.</p>
 <p>There are 3 core functions in slider:</p>
 <ul>
-<li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <a href="https://purrr.tidyverse.org/reference/map.html"><code>purrr::map()</code></a>, but uses a sliding window to do so. It is type-stable, and always returns a result with the same size as its input.</p></li>
+<li><p><code><a href="reference/slide.html">slide()</a></code> iterates over your data like <a href="https://purrr.tidyverse.org/reference/map.html" class="external-link"><code>purrr::map()</code></a>, but uses a sliding window to do so. It is type-stable, and always returns a result with the same size as its input.</p></li>
 <li><p><code><a href="reference/slide_index.html">slide_index()</a></code> computes a rolling calculation <em>relative to an index</em>. If you have ever wanted to compute something like a “3 month rolling average” where the number of days in each month is irregular, you might like this function.</p></li>
 <li><p><code><a href="reference/slide_period.html">slide_period()</a></code> is similar to <code><a href="reference/slide_index.html">slide_index()</a></code> in that it slides relative to an index, but it first breaks the index up into “time blocks”, like 2 month blocks of time, and then it slides over <code>.x</code> using indices defined by those blocks.</p></li>
 </ul>
-<p>Each of these core functions have the same variants as <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>. For example, <code><a href="reference/slide.html">slide()</a></code> has <code><a href="reference/slide.html">slide_dbl()</a></code>, <code><a href="reference/slide2.html">slide2()</a></code>, and <code><a href="reference/slide2.html">pslide()</a></code>, along with the other combinations of these variants that you might expect from having previously used purrr.</p>
-<p>To learn more about these three functions, read the <a href="https://davisvaughan.github.io/slider/articles/slider.html">introduction vignette</a>.</p>
+<p>Each of these core functions have the same variants as <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>. For example, <code><a href="reference/slide.html">slide()</a></code> has <code><a href="reference/slide.html">slide_dbl()</a></code>, <code><a href="reference/slide2.html">slide2()</a></code>, and <code><a href="reference/slide2.html">pslide()</a></code>, along with the other combinations of these variants that you might expect from having previously used purrr.</p>
+<p>To learn more about these three functions, read the <a href="https://davisvaughan.github.io/slider/articles/slider.html" class="external-link">introduction vignette</a>.</p>
 <p>There are also a set of extremely fast specialized variants of <code><a href="reference/slide.html">slide_dbl()</a></code> for the most common use cases. These include <code><a href="reference/summary-slide.html">slide_sum()</a></code> for rolling sums and <code><a href="reference/summary-slide.html">slide_mean()</a></code> for rolling averages. There are index variants of each of these as well, like <code><a href="reference/summary-index.html">slide_index_sum()</a></code>.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install the released version from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install the released version from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"slider"</span><span class="op">)</span></code></pre></div>
-<p>Install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"slider"</span><span class="op">)</span></code></pre></div>
+<p>Install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DavisVaughan/slider"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<p>The <a href="https://davisvaughan.github.io/slider/reference/slide.html">help page for <code>slide()</code></a> has many examples, but here are a few:</p>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<p>The <a href="https://davisvaughan.github.io/slider/reference/slide.html" class="external-link">help page for <code>slide()</code></a> has many examples, but here are a few:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/slider">slider</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/slider" class="external-link">slider</a></span><span class="op">)</span></code></pre></div>
 <p>The classic example would be to do a moving average. <code><a href="reference/slide.html">slide()</a></code> handles this with a combination of the <code>.before</code> and <code>.after</code> arguments, which control the width of the window and the alignment.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Moving average (Aligned right)</span>
 <span class="co"># "The current element + 2 elements before"</span>
-<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1.0 1.5 2.0 3.0 4.0</span>
 
 <span class="co"># Align left</span>
 <span class="co"># "The current element + 2 elements after"</span>
-<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .after <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .after <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2.0 3.0 4.0 4.5 5.0</span>
 
 <span class="co"># Center aligned</span>
 <span class="co"># "The current element + 1 element before + 1 element after"</span>
-<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1.5 2.0 3.0 4.0 4.5</span></code></pre></div>
 <p>With <code>Inf</code>, you can do a “cumulative slide” to compute cumulative expressions. I think of this as saying “give me everything before the current element.”</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -180,11 +176,11 @@
 <span class="co">#&gt; [[4]]</span>
 <span class="co">#&gt; [1] 2 3 4</span></code></pre></div>
 </div>
-<div id="data-frames" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-frames" class="anchor"></a>Data frames</h2>
-<p>Unlike <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> iterates over data frames in a row wise fashion. Interestingly this means the default of <code><a href="reference/slide.html">slide()</a></code> becomes a generic row wise iterator, with nice syntax for accessing data frame columns.</p>
-<p>There is a <a href="https://davisvaughan.github.io/slider/articles/rowwise.html">vignette specifically about this</a>.</p>
+<div class="section level2">
+<h2 id="data-frames">Data frames<a class="anchor" aria-label="anchor" href="#data-frames"></a>
+</h2>
+<p>Unlike <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>, <code><a href="reference/slide.html">slide()</a></code> iterates over data frames in a row wise fashion. Interestingly this means the default of <code><a href="reference/slide.html">slide()</a></code> becomes a generic row wise iterator, with nice syntax for accessing data frame columns.</p>
+<p>There is a <a href="https://davisvaughan.github.io/slider/articles/rowwise.html" class="external-link">vignette specifically about this</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mini_cars</span> <span class="op">&lt;-</span> <span class="va">cars</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span>
 
@@ -209,18 +205,18 @@
 <span class="co">#&gt; [1]  6 14 11 29</span></code></pre></div>
 <p>This makes rolling regressions trivial!</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
-  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
+  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
+  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co"># Window size of 20 rows</span>
 <span class="co"># The current row + 19 before</span>
 <span class="co"># (see slide_index() for how to do this relative to a date vector!)</span>
-<span class="va">df</span><span class="op">$</span><span class="va">regressions</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/slide.html">slide</a></span><span class="op">(</span><span class="va">df</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">19</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">df</span><span class="op">$</span><span class="va">regressions</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/slide.html">slide</a></span><span class="op">(</span><span class="va">df</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">19</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">df</span><span class="op">[</span><span class="fl">15</span><span class="op">:</span><span class="fl">25</span>,<span class="op">]</span>
 <span class="co">#&gt; # A tibble: 11 x 3</span>
@@ -238,14 +234,14 @@
 <span class="co">#&gt; 10 -0.729 -0.256 &lt;lm&gt;       </span>
 <span class="co">#&gt; 11 -0.625  1.84  &lt;lm&gt;</span></code></pre></div>
 </div>
-<div id="index-sliding" class="section level2">
-<h2 class="hasAnchor">
-<a href="#index-sliding" class="anchor"></a>Index sliding</h2>
+<div class="section level2">
+<h2 id="index-sliding">Index sliding<a class="anchor" aria-label="anchor" href="#index-sliding"></a>
+</h2>
 <p>In many business settings, the value you want to compute is tied to some <em>index</em>, like a date vector. In these cases, you’ll probably want to compute sliding windows relative to the index, and not using the fixed window that <code><a href="reference/slide.html">slide()</a></code> provides. You can use <code><a href="reference/slide_index.html">slide_index()</a></code> to pass in both <code>.x</code> and an index, <code>.i</code>, and the window will be calculated relative to that index.</p>
 <p>Here, when computing a “2 day window”, you probably don’t want <code>"2019-08-16"</code> and <code>"2019-08-18"</code> to be grouped together. <code><a href="reference/slide.html">slide()</a></code> has no concept of an index, so when you specify a window size of 2, it will group these two together. <code><a href="reference/slide_index.html">slide_index()</a></code>, on the other hand, will do the right thing.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>
-<span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2019-08-15"</span>, <span class="st">"2019-08-16"</span>, <span class="st">"2019-08-18"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2019-08-15"</span>, <span class="st">"2019-08-16"</span>, <span class="st">"2019-08-18"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># slide() has no concept of an "index"</span>
 <span class="fu"><a href="reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
@@ -269,9 +265,9 @@
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt; [1] 3</span></code></pre></div>
 <p>Essentially what happens is that when we get to <code>"2019-08-18"</code>, it “looks backwards” 1 day to set a window boundary at <code>"2019-08-17"</code>. Since the date at position 2, <code>"2019-08-16"</code>, is before <code>"2019-08-17"</code>, it is not included.</p>
-<p>Powerfully, you can pass through any object to <code>.before</code> that computes a value from <code>.i - .before</code>. This means that you could also have used a lubridate period object (which gets even more interesting when you use <code>weeks()</code> or <code><a href="https://rdrr.io/r/base/weekday.POSIXt.html">months()</a></code>):</p>
+<p>Powerfully, you can pass through any object to <code>.before</code> that computes a value from <code>.i - .before</code>. This means that you could also have used a lubridate period object (which gets even more interesting when you use <code>weeks()</code> or <code><a href="https://rdrr.io/r/base/weekday.POSIXt.html" class="external-link">months()</a></code>):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/slide_index.html">slide_index</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">i</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="reference/slide_index.html">slide_index</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">i</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [1] 1</span>
 <span class="co">#&gt; </span>
@@ -281,12 +277,12 @@
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt; [1] 3</span></code></pre></div>
 </div>
-<div id="period-sliding" class="section level2">
-<h2 class="hasAnchor">
-<a href="#period-sliding" class="anchor"></a>Period sliding</h2>
+<div class="section level2">
+<h2 id="period-sliding">Period sliding<a class="anchor" aria-label="anchor" href="#period-sliding"></a>
+</h2>
 <p><code><a href="reference/slide_period.html">slide_period()</a></code> is different from <code><a href="reference/slide_index.html">slide_index()</a></code> in that it first breaks the index into “time blocks” and then slides over <code>.x</code> relative to those blocks. For example, in the monthly period slide below, <code>i</code> is broken up into 4 time blocks of “the current block of monthly data, plus one block before this one”. The locations of those blocks are the locations that are used to slice <code>.x</code> with.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
   <span class="st">"2019-01-29"</span>, 
   <span class="st">"2019-01-30"</span>, 
   <span class="st">"2019-02-05"</span>, 
@@ -308,11 +304,11 @@
 <span class="co">#&gt; [1] "2019-04-01" "2019-05-10"</span></code></pre></div>
 <p>One neat thing to notice is that <code><a href="reference/slide_period.html">slide_period()</a></code> is aware of the distance between elements of <code>.i</code> in the period you specify. The practical implication of this is that in the above example, group 3 with <code>2019-04-01</code> did <em>not</em> include <code>2019-02-05</code> in it, because it is more than 1 month group away.</p>
 </div>
-<div id="inspiration" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inspiration" class="anchor"></a>Inspiration</h2>
+<div class="section level2">
+<h2 id="inspiration">Inspiration<a class="anchor" aria-label="anchor" href="#inspiration"></a>
+</h2>
 <p>This package is inspired heavily by SQL’s window functions. The API is similar, but more general because you can iterate over any kind of R object.</p>
-<p>There have been multiple attempts at creating sliding window functions (I personally created <code>rollify()</code>, and worked a little bit on <code>tsibble::slide()</code> with <a href="https://github.com/earowang">Earo Wang</a>).</p>
+<p>There have been multiple attempts at creating sliding window functions (I personally created <code>rollify()</code>, and worked a little bit on <code>tsibble::slide()</code> with <a href="https://github.com/earowang" class="external-link">Earo Wang</a>).</p>
 <ul>
 <li><code>zoo::rollapply()</code></li>
 <li><code>tibbletime::rollify()</code></li>
@@ -327,23 +323,23 @@
 <li><p>I believe it is overall more consistent, backed by a theory that can always justify the sliding window generated by any combination of the parameters.</p></li>
 </ul>
 <p>Earo and I have spoken, and we have mutually agreed that it would be best to deprecate <code>tsibble::slide()</code> in favor of <code><a href="reference/slide.html">slider::slide()</a></code>.</p>
-<p>Additionally, <a href="https://github.com/Rdatatable/data.table">data.table</a>’s non-equi joins have been pretty much the only solution to the problem that <code><a href="reference/slide_index.html">slide_index()</a></code> tries to solve. Their solution is robust and quite fast, and has been a nice benchmark for slider. slider is trying to solve a much narrower problem, so the API here is more focused.</p>
+<p>Additionally, <a href="https://github.com/Rdatatable/data.table" class="external-link">data.table</a>’s non-equi joins have been pretty much the only solution to the problem that <code><a href="reference/slide_index.html">slide_index()</a></code> tries to solve. Their solution is robust and quite fast, and has been a nice benchmark for slider. slider is trying to solve a much narrower problem, so the API here is more focused.</p>
 </div>
-<div id="performance" class="section level2">
-<h2 class="hasAnchor">
-<a href="#performance" class="anchor"></a>Performance</h2>
-<p>Like <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code>, the core functions of slider, such as <code><a href="reference/slide.html">slide()</a></code> and <code><a href="reference/slide_index.html">slide_index()</a></code>, are optimized in C to be as fast as possible, but there is overhead involved in calling <code>.f</code> repeatedly. These functions are meant to be as <em>general purpose</em> as possible, at the cost of some performance. This means that slider can be used for more abstract computations, like rolling regressions, or any other custom function that you want to use in a rolling fashion.</p>
-<p>slider also provides <em>specialized</em> functions for some of the most common use cases, such as <code><a href="reference/summary-slide.html">slide_mean()</a></code>, or <code><a href="reference/summary-index.html">slide_index_sum()</a></code>. These compute their corresponding metric at the C level, using a specialized algorithm, and are often much faster than their <code><a href="reference/slide.html">slide_dbl(x, fn)</a></code> equivalent.</p>
+<div class="section level2">
+<h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
+</h2>
+<p>Like <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>, the core functions of slider, such as <code><a href="reference/slide.html">slide()</a></code> and <code><a href="reference/slide_index.html">slide_index()</a></code>, are optimized in C to be as fast as possible, but there is overhead involved in calling <code>.f</code> repeatedly. These functions are meant to be as <em>general purpose</em> as possible, at the cost of some performance. This means that slider can be used for more abstract computations, like rolling regressions, or any other custom function that you want to use in a rolling fashion.</p>
+<p>slider also provides <em>specialized</em> functions for some of the most common use cases, such as <code><a href="reference/summary-slide.html">slide_mean()</a></code>, or <code><a href="reference/summary-index.html">slide_index_sum()</a></code>. These compute their corresponding metric at the C level, using a specialized algorithm, and are often much faster than their <code>slide_dbl(x, fn)</code> equivalent.</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>I’ve found the following references very useful to understand more about window functions:</p>
 <ul>
-<li><p><a href="https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS">Postgres SQL documentation</a></p></li>
-<li><p><a href="https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions">dbplyr window function vignette</a></p></li>
-<li><p><a href="https://www.sqlite.org/windowfunctions.html">SQLite documentation - with a flowchart</a></p></li>
-<li><p><a href="https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE">Vertica Rows vs Range discussion</a></p></li>
+<li><p><a href="https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS" class="external-link">Postgres SQL documentation</a></p></li>
+<li><p><a href="https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions" class="external-link">dbplyr window function vignette</a></p></li>
+<li><p><a href="https://www.sqlite.org/windowfunctions.html" class="external-link">SQLite documentation - with a flowchart</a></p></li>
+<li><p><a href="https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE" class="external-link">Vertica Rows vs Range discussion</a></p></li>
 </ul>
 </div>
 </div>
@@ -351,48 +347,58 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=slider">https://​cloud.r-project.org/​package=slider</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/DavisVaughan/slider/">https://​github.com/​DavisVaughan/​slider/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/DavisVaughan/slider/issues">https://​github.com/​DavisVaughan/​slider/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Davis Vaughan <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=slider" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/DavisVaughan/slider/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/DavisVaughan/slider/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://codecov.io/gh/DavisVaughan/slider?branch=master"><img src="https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/DavisVaughan/slider/actions"><img src="https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing slider</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Davis Vaughan <br><small class="roles"> Author, maintainer </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://codecov.io/gh/DavisVaughan/slider?branch=master" class="external-link"><img src="https://codecov.io/gh/DavisVaughan/slider/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/DavisVaughan/slider/actions" class="external-link"><img src="https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Davis Vaughan.</p>
+  <p></p>
+<p>Developed by Davis Vaughan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -400,6 +406,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,12 +40,6 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/slider.html">Get started</a>
 </li>
@@ -71,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/DavisVaughan/slider/">
+  <a href="https://github.com/DavisVaughan/slider/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -92,17 +88,17 @@
       <h1 data-toc-skip>Converting from tsibble</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/DavisVaughan/slider/blob/master/vignettes/tsibble.Rmd"><code>vignettes/tsibble.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DavisVaughan/slider/blob/HEAD/vignettes/tsibble.Rmd" class="external-link"><code>vignettes/tsibble.Rmd</code></a></small>
       <div class="hidden name"><code>tsibble.Rmd</code></div>
 
     </div>
 
     
     
-<p>The <a href="https://tsibble.tidyverts.org/">tsibble</a> package is where the name <code><a href="../reference/slide.html">slide()</a></code> originated. It contained original implementations of <code><a href="../reference/slide.html">slide()</a></code> and friends, along with variations like <code>tile()</code> and <code>stretch()</code>, all of which have been superceded by slider. As of tsibble 1.0.0, those functions have been completely removed in favor of using slider. The goal of this vignette is to explain how to transition from tsibble to slider.</p>
-<div id="slide" class="section level2">
-<h2 class="hasAnchor">
-<a href="#slide" class="anchor"></a>slide()</h2>
+<p>The <a href="https://tsibble.tidyverts.org/" class="external-link">tsibble</a> package is where the name <code><a href="../reference/slide.html">slide()</a></code> originated. It contained original implementations of <code><a href="../reference/slide.html">slide()</a></code> and friends, along with variations like <code>tile()</code> and <code>stretch()</code>, all of which have been superceded by slider. As of tsibble 1.0.0, those functions have been completely removed in favor of using slider. The goal of this vignette is to explain how to transition from tsibble to slider.</p>
+<div class="section level2">
+<h2 id="slide">slide()<a class="anchor" aria-label="anchor" href="#slide"></a>
+</h2>
 <p>tsibble’s <code>.size</code> and <code>.align</code> arguments are roughly equivalent to using <code>.before</code> and <code>.after</code> in slider. In tsibble, you’d specify the full width of the window with <code>.size</code>, and then you’d specify how to construct that window by <code>.align</code>ing yourself to the left, right, or center. In slider, you always start at the “current” element, and then specify how many elements <code>.before</code> and <code>.after</code> the current element that you want in the window. The width of the window in slider terms could be computed as <code>.after - .before + 1</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>
@@ -154,9 +150,9 @@
 <p>As you will see in the next section, expanding windows are easy to create by setting <code>.before</code> or <code>.after</code> to <code>Inf</code>.</p>
 <p>This syntax also translates naturally to <code><a href="../reference/slide_index.html">slide_index()</a></code>, where the bounds of the window are (by default) computed as <code>.i - .before</code> and <code>.i + .after</code>, which often cannot be expressed by a single window size value.</p>
 </div>
-<div id="tile" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tile" class="anchor"></a>tile()</h2>
+<div class="section level2">
+<h2 id="tile">tile()<a class="anchor" aria-label="anchor" href="#tile"></a>
+</h2>
 <p>Tiling uses non-overlapping windows. For example, this segments <code>x</code> into 4 non-overlapping buckets, where as many buckets as possible have a window size of 3.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>
@@ -206,9 +202,9 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[10]]</span>
 <span class="co">#&gt; [1] 10</span></code></pre></div>
-<p>This isn’t exactly the same, as <code><a href="../reference/slide.html">slide()</a></code> is guaranteed to be size-stable, returning an object with the same size as <code>.x</code>. However, if you <code><a href="https://purrr.tidyverse.org/reference/keep.html">purrr::compact()</a></code> the result to drop the <code>NULL</code> values, then they are equivalent.</p>
+<p>This isn’t exactly the same, as <code><a href="../reference/slide.html">slide()</a></code> is guaranteed to be size-stable, returning an object with the same size as <code>.x</code>. However, if you <code><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">purrr::compact()</a></code> the result to drop the <code>NULL</code> values, then they are equivalent.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html">compact</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">compact</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; [1] 1 2 3</span>
 <span class="co">#&gt; </span>
@@ -221,9 +217,9 @@
 <span class="co">#&gt; [[4]]</span>
 <span class="co">#&gt; [1] 10</span></code></pre></div>
 </div>
-<div id="stretch" class="section level2">
-<h2 class="hasAnchor">
-<a href="#stretch" class="anchor"></a>stretch()</h2>
+<div class="section level2">
+<h2 id="stretch">stretch()<a class="anchor" aria-label="anchor" href="#stretch"></a>
+</h2>
 <p>To construct expanding windows with tsibble, you’ve probably used <code>stretch()</code>. This fixes an initial window size, and then expands to add more observations without dropping any.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>
@@ -271,7 +267,7 @@
 <p>There isn’t a direct equivalent of this in slider, but your function could return <code>NULL</code> if the current window size didn’t hold enough elements:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">identity3</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span>
     <span class="cn">NULL</span>
   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
     <span class="va">x</span>
@@ -304,11 +300,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Davis Vaughan.</p>
+  <p></p>
+<p>Developed by Davis Vaughan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -316,6 +314,8 @@
 
   
 
+
+  
 
   </body>
 </html>
