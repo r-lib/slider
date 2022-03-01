@@ -1,4 +1,0 @@
-> check_index_must_be_ascending(c(1, 2, 1, 4, 5, 3), ".i")
-Error: `.i` must be in ascending order.
-i It is not ascending at locations: 3, 6.
-

@@ -1,4 +1,0 @@
-> check_index_incompatible_type(x, ".i")
-Error: `.i` has an incorrect type.
-x It must inherit from Date, POSIXct, or POSIXlt, not foo/bar/baz.
-

@@ -20,8 +20,8 @@ Depends:
 Imports: 
     ellipsis (>= 0.3.1),
     glue,
-    rlang (>= 0.4.5),
-    vctrs (>= 0.3.6),
+    rlang (>= 1.0.1),
+    vctrs (>= 0.3.8),
     warp
 Suggests: 
     covr,
@@ -31,7 +31,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo:
-    vctrs (>= 0.3.6)
+    vctrs (>= 0.3.8)
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

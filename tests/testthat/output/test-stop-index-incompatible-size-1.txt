@@ -1,4 +1,0 @@
-> stop_index_incompatible_size(1, 2, ".i")
-Error: `.i` has an incorrect size.
-x It must have size 2, not 1.
-
