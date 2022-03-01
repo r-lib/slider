@@ -387,3 +387,9 @@ window functions:
 
 -   [Vertica Rows vs Range
     discussion](https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE)
+
+## Code of Conduct
+
+Please note that the slider project is released with a [Contributor Code
+of Conduct](https://davisvaughan.github.io/slider/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
