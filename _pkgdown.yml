@@ -1,6 +1,7 @@
 url: https://davisvaughan.github.io/slider/
 
-destination: docs
+template:
+  bootstrap: 5
 
 development:
   mode: auto
