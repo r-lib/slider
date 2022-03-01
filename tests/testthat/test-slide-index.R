@@ -172,10 +172,9 @@ test_that("negative .before errors if its absolute value is past .after", {
   i <- new_date(c(0, 1, 2, 3))
   x <- i
 
-  expect_error(
-    slide_index(x, i, identity, .before = -1, .after = 0),
-    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_index(x, i, identity, .before = -1, .after = 0)
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -312,10 +311,9 @@ test_that("errors if negative .before Duration is further than .after", {
   i <- lubridate::as_datetime(new_date(c(0, 1, 2, 3)))
   x <- seq_along(i)
 
-  expect_error(
-    slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = 0),
-    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_index(x, i, identity, .before = -lubridate::ddays(1), .after = 0)
+  })
 })
 
 test_that("can use millisecond Durations with POSIXct", {
@@ -668,10 +666,9 @@ test_that("negative .after errors if its absolute value is past .before", {
   i <- new_date(c(0, 1, 2, 3))
   x <- i
 
-  expect_error(
-    slide_index(x, i, identity, .after = -1, .before = 0),
-    "the start of the range is after the end of the range at location[(]s[)]: 1, 2, 3, 4"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_index(x, i, identity, .after = -1, .before = 0)
+  })
 })
 
 # ------------------------------------------------------------------------------

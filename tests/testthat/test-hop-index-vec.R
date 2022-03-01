@@ -2,10 +2,9 @@
 # type / size strict-ness
 
 test_that("size of each `.f` result must be 1", {
-  expect_error(
-    hop_index_vec(1, 1, 1, 1, ~c(.x, 1)),
-    "In iteration 1, the result of `.f` had size 2, not 1"
-  )
+  expect_snapshot({
+    (expect_error(hop_index_vec(1, 1, 1, 1, ~c(.x, 1))))
+  })
 })
 
 test_that("inner type is allowed to be different", {
@@ -16,10 +15,12 @@ test_that("inner type is allowed to be different", {
 })
 
 test_that("inner type can be restricted with list_of", {
-  expect_error(
-    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -46,14 +47,10 @@ test_that("`.ptype = NULL` fails if no common type is found", {
 })
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
-  expect_error(
-    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 2, not 1."
-  )
-  expect_error(
-    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 0, not 1."
-  )
+  expect_snapshot({
+    (expect_error(hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL)))
+    (expect_error(hop_index_vec(1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL)))
+  })
 })
 
 test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {

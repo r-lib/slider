@@ -25,14 +25,12 @@ test_that("hop_index2_vec() errors if it can't simplify", {
 # .ptype
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
-  expect_error(
-    hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 2, not 1."
-  )
-  expect_error(
-    hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 0, not 1."
-  )
+  expect_snapshot(error = TRUE, {
+    hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL)
+  })
+  expect_snapshot(error = TRUE, {
+    hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL)
+  })
 })
 
 test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {
