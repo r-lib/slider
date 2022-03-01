@@ -13,7 +13,8 @@ Description: Provides type-stable rolling window functions over any R data
     advanced usage, an index can be used as a secondary vector that
     defines how sliding windows are to be created.
 License: MIT + file LICENSE
-URL: https://github.com/DavisVaughan/slider
+URL: https://github.com/DavisVaughan/slider,
+    https://davisvaughan.github.io/slider/
 BugReports: https://github.com/DavisVaughan/slider/issues
 Depends: 
     R (>= 3.3.0)
@@ -37,7 +38,7 @@ VignetteBuilder:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 SystemRequirements: C++11
 Collate: 
     'block.R'
