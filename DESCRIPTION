@@ -14,7 +14,7 @@ URL: https://github.com/DavisVaughan/slider,
     https://davisvaughan.github.io/slider/
 BugReports: https://github.com/DavisVaughan/slider/issues
 Depends: 
-    R (>= 3.3.0)
+    R (>= 3.4.0)
 Imports: 
     ellipsis (>= 0.3.1),
     glue,

@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Bumped minimal version of R to >=3.4.0 to align with tidyverse standards.
+
 * Fixed redirecting URLs.
 
 * Bumped minimal version of rlang to >=1.0.1 and vctrs to >=0.3.8 (#165).
