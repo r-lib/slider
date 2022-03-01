@@ -35,7 +35,7 @@ test_that("phop() can iterate over a data frame with a data frame column", {
 })
 
 test_that("phop() requires a list-like input", {
-  expect_error(phop(1:5, ~.x), "list, not integer")
+  expect_snapshot(error = TRUE, phop(1:5, ~.x))
 })
 
 test_that("phop() forces arguments in the same way as base R / pmap()", {

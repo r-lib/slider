@@ -47,14 +47,12 @@ test_that("can't access non-existant `.x` with empty `.l` and `.i`, but size `n 
 # .ptype
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
-  expect_error(
-    phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 2, not 1."
-  )
-  expect_error(
-    phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 0, not 1."
-  )
+  expect_snapshot(error = TRUE, {
+    phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL)
+  })
+  expect_snapshot(error = TRUE, {
+    phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL)
+  })
 })
 
 test_that("size 0 `.starts` / `.stops` returns size 0 `.ptype`", {

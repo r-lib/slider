@@ -147,11 +147,15 @@ test_that("can use a negative before to 'look forward'", {
 })
 
 test_that("error if negative .before's abs() is > .after", {
-  expect_error(slide(1:5, identity, .before = -1), "cannot be greater than `.after`.")
+  expect_snapshot(error = TRUE, {
+    slide(1:5, identity, .before = -1)
+  })
 })
 
 test_that("both .before and .after cannot be negative", {
-  expect_error(slide(1:5, identity, .before = -1, .after = -1), "cannot both be negative.")
+  expect_snapshot(error = TRUE, {
+    slide(1:5, identity, .before = -1, .after = -1)
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -182,7 +186,7 @@ test_that("can use a negative .after to 'look backward'", {
 })
 
 test_that("error if negative .after's abs() is > .before", {
-  expect_error(slide(1:5, identity, .after = -1), "cannot be greater than `.before`.")
+  expect_snapshot(error = TRUE, slide(1:5, identity, .after = -1))
 })
 
 # ------------------------------------------------------------------------------
@@ -497,25 +501,25 @@ test_that("names are retained on inner sliced object", {
 # validation
 
 test_that("cannot use invalid .before", {
-  expect_error(slide(1, identity, .before = c(1, 2)), regexp = "1, not 2")
+  expect_snapshot(error = TRUE, slide(1, identity, .before = c(1, 2)))
   expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_incompatible_type")
 })
 
 test_that("cannot use invalid .after", {
-  expect_error(slide(1, identity, .after = c(1, 2)), regexp = "1, not 2")
+  expect_snapshot(error = TRUE, slide(1, identity, .after = c(1, 2)))
   expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_incompatible_type")
 })
 
 test_that("cannot use invalid .step", {
-  expect_error(slide(1, identity, .step = -1), "at least 1, not -1")
-  expect_error(slide(1, identity, .step = 0), "at least 1, not 0")
+  expect_snapshot(error = TRUE, slide(1, identity, .step = -1))
+  expect_snapshot(error = TRUE, slide(1, identity, .step = 0))
 
-  expect_error(slide(1, identity, .step = c(1, 2)), regexp = "1, not 2")
+  expect_snapshot(error = TRUE, slide(1, identity, .step = c(1, 2)))
   expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_incompatible_type")
 })
 
 test_that("cannot use invalid .complete", {
-  expect_error(slide(1, identity, .complete = c(TRUE, TRUE)), regexp = "1, not 2")
+  expect_snapshot(error = TRUE, slide(1, identity, .complete = c(TRUE, TRUE)))
   expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_incompatible_type")
 })
 

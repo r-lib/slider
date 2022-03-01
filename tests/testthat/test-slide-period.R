@@ -76,17 +76,15 @@ test_that("can use negative `.before`", {
 test_that("`.before` range cannot be after `.after` range", {
   i <- as.Date(c("2019-01-01", "2019-02-01", "2019-04-01"))
 
-  expect_error(
-    slide_period(1:3, i, "month", identity, .before = -1),
-    "start of the range is after"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_period(1:3, i, "month", identity, .before = -1)
+  })
 })
 
 test_that("`.before` cannot be NA", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .before = NA_integer_),
-    "`.before` cannot be `NA`"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_period(1, new_date(0), "year", identity, .before = NA_integer_)
+  })
 })
 
 test_that("`.before` cannot be -Inf", {
@@ -155,17 +153,15 @@ test_that("can use negative `.after`", {
 test_that("`.after` range cannot be before `.before` range", {
   i <- as.Date(c("2019-01-01", "2019-02-01", "2019-04-01"))
 
-  expect_error(
-    slide_period(1:3, i, "month", identity, .after = -1),
-    "start of the range is after"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_period(1:3, i, "month", identity, .after = -1)
+  })
 })
 
 test_that("`.after` cannot be NA", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .after = NA_integer_),
-    "`.after` cannot be `NA`"
-  )
+  expect_snapshot(error = TRUE, {
+    slide_period(1, new_date(0), "year", identity, .after = NA_integer_)
+  })
 })
 
 test_that("`.after` cannot be -Inf", {

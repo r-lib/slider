@@ -35,7 +35,7 @@ test_that("empty input returns a list, but after the index size check", {
     list()
   )
 
-  expect_error(
+  expect_snapshot((expect_error(
     hop_index2(
       .x = integer(),
       .y = integer(),
@@ -45,7 +45,7 @@ test_that("empty input returns a list, but after the index size check", {
       .f = ~.x
     ),
     class = "slider_error_index_incompatible_size"
-  )
+  )))
 })
 
 test_that("empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops` returns size `n` empty ptype", {
@@ -53,6 +53,8 @@ test_that("empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops`
 })
 
 test_that("empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
-  expect_error(hop_index2(integer(), integer(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
-  expect_error(hop_index2(integer(), integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(hop_index2(integer(), integer(), integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size"))
+    (expect_error(hop_index2(integer(), integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type"))
+  })
 })

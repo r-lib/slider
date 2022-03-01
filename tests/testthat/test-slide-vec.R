@@ -2,17 +2,11 @@
 # type / size strict-ness
 
 test_that("size of each `.f` result must be 1", {
-  expect_error(
-    slide_vec(1:2, ~c(.x, 1)),
-    "In iteration 1, the result of `.f` had size 2, not 1"
-  )
+  expect_snapshot(error = TRUE, slide_vec(1:2, ~c(.x, 1)))
 })
 
 test_that("size of each `.f` result must be 1", {
-  expect_error(
-    slide_dbl(1:2, ~c(.x, 1)),
-    "In iteration 1, the result of `.f` had size 2, not 1"
-  )
+  expect_snapshot(error = TRUE, slide_dbl(1:2, ~c(.x, 1)))
 })
 
 test_that("inner type is allowed to be different", {
@@ -60,10 +54,9 @@ test_that("`.ptype = NULL` fails if no common type is found", {
 })
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
-  expect_error(
-    slide_vec(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL),
-    "In iteration 1, the result of `.f` had size 2, not 1."
-  )
+  expect_snapshot(error = TRUE, {
+    slide_vec(1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL)
+  })
 })
 
 test_that("`.ptype = NULL` returns `NULL` with size 0 `.x`", {

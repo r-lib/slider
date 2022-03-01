@@ -34,7 +34,7 @@ test_that("pslide() can iterate over a data frame with a data frame column", {
 })
 
 test_that("pslide() requires a list-like input", {
-  expect_error(pslide(1:5, ~.x), "list, not integer")
+  expect_snapshot(error = TRUE, pslide(1:5, ~.x))
 })
 
 test_that("pslide() forces arguments in the same way as base R / pmap()", {
