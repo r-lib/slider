@@ -1,75 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/rowwise.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/slider.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/articles/rowwise.html</loc>
   </url>
   <url>
-    <loc>/articles/tsibble.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/articles/slider.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/articles/tsibble.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/authors.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/index.html</loc>
   </url>
   <url>
-    <loc>/reference/block.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/hop.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/block.html</loc>
   </url>
   <url>
-    <loc>/reference/hop2.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/hop.html</loc>
   </url>
   <url>
-    <loc>/reference/hop_index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/hop2.html</loc>
   </url>
   <url>
-    <loc>/reference/hop_index2.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/hop_index.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/hop_index2.html</loc>
   </url>
   <url>
-    <loc>/reference/slide.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/slide2.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide.html</loc>
   </url>
   <url>
-    <loc>/reference/slide_index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide2.html</loc>
   </url>
   <url>
-    <loc>/reference/slide_index2.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide_index.html</loc>
   </url>
   <url>
-    <loc>/reference/slide_period.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide_index2.html</loc>
   </url>
   <url>
-    <loc>/reference/slide_period2.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide_period.html</loc>
   </url>
   <url>
-    <loc>/reference/slider-package.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slide_period2.html</loc>
   </url>
   <url>
-    <loc>/reference/summary-index.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/slider-package.html</loc>
   </url>
   <url>
-    <loc>/reference/summary-slide.html</loc>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/summary-index.html</loc>
+  </url>
+  <url>
+    <loc>https://davisvaughan.github.io/slider/dev/reference/summary-slide.html</loc>
   </url>
 </urlset>
