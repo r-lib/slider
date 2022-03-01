@@ -1,13 +1,10 @@
 Package: slider
 Title: Sliding Window Functions
 Version: 0.2.2.9000
-Authors@R: 
-    c(person(given = "Davis",
-             family = "Vaughan",
-             role = c("aut", "cre"),
-             email = "davis@rstudio.com"),
-      person(given = "RStudio",
-             role = "cph"))
+Authors@R: c(
+    person("Davis", "Vaughan", , "davis@rstudio.com", role = c("aut", "cre")),
+    person("RStudio", role = c("cph", "fnd"))
+  )
 Description: Provides type-stable rolling window functions over any R data
     type. Cumulative and expanding windows are also supported. For more
     advanced usage, an index can be used as a secondary vector that
