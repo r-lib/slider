@@ -7,7 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/DavisVaughan/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DavisVaughan/slider?branch=main)
-[![R-CMD-check](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
+[![R-CMD-check](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 slider provides a family of general purpose “sliding window” functions.

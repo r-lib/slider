@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/DavisVaughan/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DavisVaughan/slider?branch=main)
-[![R-CMD-check](https://github.com/DavisVaughan/slider/workflows/R-CMD-check/badge.svg)](https://github.com/DavisVaughan/slider/actions)
+[![R-CMD-check](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 slider provides a family of general purpose "sliding window" functions. The API is purposefully _very_ similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other "window" based computations.
