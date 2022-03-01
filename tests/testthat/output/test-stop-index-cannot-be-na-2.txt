@@ -1,4 +1,0 @@
-> check_index_cannot_be_na(rep(NA, 100), ".i")
-Error: `.i` cannot be `NA`.
-i It is `NA` at locations: 1, 2, 3, 4, 5, 6, 7, 8, 9, ....
-
