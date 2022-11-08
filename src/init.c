@@ -66,10 +66,10 @@ void R_init_slider(DllInfo *dll)
 }
 
 // slider-vctrs-private.c
-void slider_initialize_vctrs_private();
+void slider_initialize_vctrs_private(void);
 
 // slider-vctrs-public.c
-void slider_initialize_vctrs_public();
+void slider_initialize_vctrs_public(void);
 
 // utils.c
 void slider_initialize_utils(SEXP);

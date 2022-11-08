@@ -7,8 +7,8 @@ extern "C" {
 
 #include "summary-core-types.h"
 
-size_t align_of_long_double();
-size_t align_of_mean_state_t();
+size_t align_of_long_double(void);
+size_t align_of_mean_state_t(void);
 
 } // extern "C"
 
