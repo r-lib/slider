@@ -12,7 +12,7 @@ local_c_foobar <- function(frame = caller_env()) {
       signal("", class = "slider_c_foobar")
       xs <- list(...)
       xs <- lapply(xs, unclass)
-      out <- vec_unchop(xs)
+      out <- list_unchop(xs)
       foobar(out)
     }
   )
