@@ -10,11 +10,11 @@ extern "C" {
  * that.
  */
 
-size_t align_of_long_double() {
+size_t align_of_long_double(void) {
   return alignof(long double);
 }
 
-size_t align_of_mean_state_t() {
+size_t align_of_mean_state_t(void) {
   return alignof(struct mean_state_t);
 }
 
