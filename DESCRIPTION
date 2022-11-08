@@ -18,8 +18,8 @@ Depends:
 Imports: 
     ellipsis (>= 0.3.1),
     glue,
-    rlang (>= 1.0.1),
-    vctrs (>= 0.3.8),
+    rlang (>= 1.0.6),
+    vctrs (>= 0.5.0),
     warp
 Suggests: 
     covr,
