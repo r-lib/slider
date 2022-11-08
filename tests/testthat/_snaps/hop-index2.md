@@ -16,13 +16,13 @@
       class = "vctrs_error_incompatible_size"))
     Output
       <error/vctrs_error_incompatible_size>
-      Error in `stop_vctrs()`:
+      Error in `hop_index_common()`:
       ! Can't recycle `..1` (size 3) to match `..2` (size 2).
     Code
       (expect_error(hop_index2(integer(), integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
       )
     Output
-      <error/vctrs_error_incompatible_type>
-      Error in `stop_vctrs()`:
+      <error/vctrs_error_cast>
+      Error in `hop_index_common()`:
       ! Can't convert `.stops` <character> to match type of `.i` <integer>.
 

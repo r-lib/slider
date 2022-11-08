@@ -3,8 +3,8 @@
     Code
       hop2_vec(1:2, 1:2, 1:2, 1:2, fn, .ptype = NULL)
     Condition
-      Error in `stop_vctrs()`:
-      ! Can't combine `..1` <double> and `..2` <character>.
+      Error in `list_unchop()`:
+      ! Can't combine `x[[1]]` <double> and `x[[2]]` <character>.
 
 # `.ptype = NULL` validates that element lengths are 1
 
