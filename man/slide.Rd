@@ -149,9 +149,9 @@ not named, an integer column is used instead.
 \item If \code{NULL}, the input names are used as row names.
 }}
 
-\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
-options.
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, \code{"check_unique"},
+\code{"unique_quiet"}, or  \code{"universal_quiet"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the
+meaning of these options.
 
 With \code{vec_rbind()}, the repair function is applied to all inputs
 separately. This is because \code{vec_rbind()} needs to align their
@@ -161,11 +161,11 @@ repair function after all inputs have been concatenated together
 in a final data frame. Hence \code{vec_cbind()} allows the more
 permissive minimal names repair.}
 
-\item{.size}{If, \code{NULL}, the default, will determine the number of
-rows in \code{vec_cbind()} output by using the standard recycling rules.
+\item{.size}{If, \code{NULL}, the default, will determine the number of rows in
+\code{vec_cbind()} output by using the tidyverse \link[vctrs:vector_recycling_rules]{recycling rules}.
 
-Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.}
+Alternatively, specify the desired number of rows, and any inputs of length
+1 will be recycled appropriately.}
 }
 \value{
 A vector fulfilling the following invariants:
@@ -192,14 +192,20 @@ A vector fulfilling the following invariants:
 sub-window of \code{.x}.
 }
 \details{
-Unlike \code{lapply()} or \code{purrr::map()}, which construct calls like\preformatted{.f(.x[[i]], ...)
-}
+Unlike \code{lapply()} or \code{purrr::map()}, which construct calls like
 
-the equivalent with \code{slide()} looks like\preformatted{.f(vctrs::vec_slice(.x, i), ...)
-}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{.f(.x[[i]], ...)
+}\if{html}{\out{</div>}}
 
-which is approximately\preformatted{.f(.x[i], ...)
-}
+the equivalent with \code{slide()} looks like
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{.f(vctrs::vec_slice(.x, i), ...)
+}\if{html}{\out{</div>}}
+
+which is approximately
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{.f(.x[i], ...)
+}\if{html}{\out{</div>}}
 
 except in the case of data frames or arrays, which are iterated
 over row-wise.

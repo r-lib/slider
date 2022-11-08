@@ -305,15 +305,7 @@ epoch time of \verb{1970-01-01 00:00:00}, \emph{in the time zone of the index}.
 This is generally used to define the anchor time to count from, which is
 relevant when the every value is \verb{> 1}.}
 
-\item{.before}{\verb{[integer(1) / Inf]}
-
-The number of values before or after the current element to
-include in the sliding window. Set to \code{Inf} to select all elements
-before or after the current element. Negative values are allowed, which
-allows you to "look forward" from the current element if used as the
-\code{.before} value, or "look backwards" if used as \code{.after}.}
-
-\item{.after}{\verb{[integer(1) / Inf]}
+\item{.before, .after}{\verb{[integer(1) / Inf]}
 
 The number of values before or after the current element to
 include in the sliding window. Set to \code{Inf} to select all elements
@@ -349,9 +341,9 @@ not named, an integer column is used instead.
 \item If \code{NULL}, the input names are used as row names.
 }}
 
-\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, or
-\code{"check_unique"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the meaning of these
-options.
+\item{.name_repair}{One of \code{"unique"}, \code{"universal"}, \code{"check_unique"},
+\code{"unique_quiet"}, or  \code{"universal_quiet"}. See \code{\link[vctrs:vec_as_names]{vec_as_names()}} for the
+meaning of these options.
 
 With \code{vec_rbind()}, the repair function is applied to all inputs
 separately. This is because \code{vec_rbind()} needs to align their
@@ -361,11 +353,11 @@ repair function after all inputs have been concatenated together
 in a final data frame. Hence \code{vec_cbind()} allows the more
 permissive minimal names repair.}
 
-\item{.size}{If, \code{NULL}, the default, will determine the number of
-rows in \code{vec_cbind()} output by using the standard recycling rules.
+\item{.size}{If, \code{NULL}, the default, will determine the number of rows in
+\code{vec_cbind()} output by using the tidyverse \link[vctrs:vector_recycling_rules]{recycling rules}.
 
-Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.}
+Alternatively, specify the desired number of rows, and any inputs of length
+1 will be recycled appropriately.}
 
 \item{.l}{\verb{[list]}
 

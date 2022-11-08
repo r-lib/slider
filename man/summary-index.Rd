@@ -108,30 +108,7 @@ are allowed.
 
 \item{...}{These dots are for future extensions and must be empty.}
 
-\item{before}{\verb{[vector(1) / function / Inf]}
-\itemize{
-\item If a vector of size 1, these represent the number of values before or
-after the current element of \code{.i} to include in the sliding window.
-Negative values are allowed, which allows you to "look forward" from the
-current element if used as the \code{.before} value, or "look backwards" if used
-as \code{.after}. Boundaries are computed from these elements as \code{.i - .before}
-and \code{.i + .after}. Any object that can be added or subtracted from \code{.i}
-with \code{+} and \code{-} can be used. For example, a lubridate period, such as
-\code{\link[lubridate:period]{lubridate::weeks()}}.
-\item If \code{Inf}, this selects all elements before or after the current element.
-\item If a function, or a one-sided formula which can be coerced to a function,
-it is applied to \code{.i} to compute the boundaries. Note that this function
-will only be applied to the \emph{unique} values of \code{.i}, so it should not rely
-on the original length of \code{.i} in any way. This is useful for applying a
-complex arithmetic operation that can't be expressed with a single \code{-} or
-\code{+} operation. One example would be to use \code{\link[lubridate:mplus]{lubridate::add_with_rollback()}}
-to avoid invalid dates at the end of the month.
-}
-
-The ranges that result from applying \code{.before} and \code{.after} have the same
-3 restrictions as \code{.i} itself.}
-
-\item{after}{\verb{[vector(1) / function / Inf]}
+\item{before, after}{\verb{[vector(1) / function / Inf]}
 \itemize{
 \item If a vector of size 1, these represent the number of values before or
 after the current element of \code{.i} to include in the sliding window.

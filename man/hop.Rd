@@ -77,7 +77,9 @@ when you either need to hand craft boundary locations, or want to compute a
 result with a size that is different from \code{.x}.
 }
 \details{
-\code{hop()} is very close to being a faster version of:\preformatted{map2(
+\code{hop()} is very close to being a faster version of:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{map2(
   .starts,
   .stops,
   function(start, stop) \{
@@ -85,7 +87,7 @@ result with a size that is different from \code{.x}.
     .f(x_slice, ...)
   \}
 )
-}
+}\if{html}{\out{</div>}}
 
 Because of this, \code{\link[=hop_index]{hop_index()}} is often the more useful function. \code{hop()}
 mainly exists for API completeness.
@@ -94,14 +96,18 @@ The main difference is that the start and stop values make up ranges of
 \emph{possible} locations along \code{.x}, and it is not enforced that these locations
 actually exist along \code{.x}. As an example, with \code{hop()} you can do the
 following, which would be an error with \code{vec_slice()} because \code{0L} is
-out of bounds.\preformatted{hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
+out of bounds.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{hop(c("a", "b"), .starts = 0L, .stops = 1L, ~.x)
 #> [[1]]
 #> [1] "a"
-}
+}\if{html}{\out{</div>}}
 
 \code{hop()} allows these out of bounds values to be fully compatible with
 \code{slide()}. It is always possible to construct a \code{hop()} call from a \code{slide()}
-call. For example, the following are equivalent:\preformatted{slide(1:2, ~.x, .before = 1)
+call. For example, the following are equivalent:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{slide(1:2, ~.x, .before = 1)
 
 hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
 
@@ -110,7 +116,7 @@ hop(1:2, .starts = c(0, 1), .stops = c(1, 2), ~.x)
 #>
 #> [[2]]
 #> [1] 1 2
-}
+}\if{html}{\out{</div>}}
 }
 \examples{
 # `hop()` let's you manually specify locations to apply `.f` at.
