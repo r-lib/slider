@@ -8,8 +8,8 @@
 <meta name="description" content="slider">
 <title>Converting from tsibble • slider</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Converting from tsibble">
 <meta property="og:description" content="slider">
@@ -75,7 +75,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Converting from tsibble</h1>
             
       
@@ -85,197 +85,244 @@
 
     
     
-<p>The <a href="https://tsibble.tidyverts.org/" class="external-link">tsibble</a> package is where the name <code><a href="../reference/slide.html">slide()</a></code> originated. It contained original implementations of <code><a href="../reference/slide.html">slide()</a></code> and friends, along with variations like <code>tile()</code> and <code>stretch()</code>, all of which have been superceded by slider. As of tsibble 1.0.0, those functions have been completely removed in favor of using slider. The goal of this vignette is to explain how to transition from tsibble to slider.</p>
+<p>The <a href="https://tsibble.tidyverts.org/" class="external-link">tsibble</a> package is
+where the name <code><a href="../reference/slide.html">slide()</a></code> originated. It contained original
+implementations of <code><a href="../reference/slide.html">slide()</a></code> and friends, along with
+variations like <code>tile()</code> and <code>stretch()</code>, all of
+which have been superceded by slider. As of tsibble 1.0.0, those
+functions have been completely removed in favor of using slider. The
+goal of this vignette is to explain how to transition from tsibble to
+slider.</p>
 <div class="section level2">
 <h2 id="slide">slide()<a class="anchor" aria-label="anchor" href="#slide"></a>
 </h2>
-<p>tsibble’s <code>.size</code> and <code>.align</code> arguments are roughly equivalent to using <code>.before</code> and <code>.after</code> in slider. In tsibble, you’d specify the full width of the window with <code>.size</code>, and then you’d specify how to construct that window by <code>.align</code>ing yourself to the left, right, or center. In slider, you always start at the “current” element, and then specify how many elements <code>.before</code> and <code>.after</code> the current element that you want in the window. The width of the window in slider terms could be computed as <code>.after - .before + 1</code>.</p>
+<p>tsibble’s <code>.size</code> and <code>.align</code> arguments are
+roughly equivalent to using <code>.before</code> and <code>.after</code>
+in slider. In tsibble, you’d specify the full width of the window with
+<code>.size</code>, and then you’d specify how to construct that window
+by <code>.align</code>ing yourself to the left, right, or center. In
+slider, you always start at the “current” element, and then specify how
+many elements <code>.before</code> and <code>.after</code> the current
+element that you want in the window. The width of the window in slider
+terms could be computed as <code>.after - .before + 1</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>
-
-<span class="co"># The current element, and 1 before it</span>
-<span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="fl">1</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 2 3</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
+<span></span>
+<span><span class="co"># The current element, and 1 before it</span></span>
+<span><span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="fl">1</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 2 3</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Window size of 2, assume the current element is the right side of the window</span>
-<span class="fu">tsibble</span><span class="fu">::</span><span class="fu">slide</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .size <span class="op">=</span> <span class="fl">2</span>, .align <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 2 3</span></code></pre></div>
-<p>We also have to set the <code>.complete</code> argument of slider’s <code><a href="../reference/slide.html">slide()</a></code> to <code>TRUE</code>, as by default slider allows partial windows, but tsibble’s version does not. The equivalent argument to this in tsibble is <code>.partial</code> (note that they are interpreted inversely of each other).</p>
-<p>There is no <code>.fill</code> equivalent in slider. slider always uses the vctrs definition of a missing value (a typed <code>NA</code> for most vectors, a <code>NULL</code> for lists). This is why the slider result above has a <code>NULL</code>, while the tsibble result used an <code>NA</code> (the default <code>.fill</code> value in tsibble).</p>
-<p>Specifying windows using <code>.before</code> and <code>.after</code> might first feel a bit unnatural to a tsibble or zoo user, but it is generally more flexible. You can generate irregular windows that aren’t possible with tsibble, like:</p>
+<code class="sourceCode R"><span><span class="co"># Window size of 2, assume the current element is the right side of the window</span></span>
+<span><span class="fu">tsibble</span><span class="fu">::</span><span class="fu">slide</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .size <span class="op">=</span> <span class="fl">2</span>, .align <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 2 3</span></span></code></pre></div>
+<p>We also have to set the <code>.complete</code> argument of slider’s
+<code><a href="../reference/slide.html">slide()</a></code> to <code>TRUE</code>, as by default slider allows
+partial windows, but tsibble’s version does not. The equivalent argument
+to this in tsibble is <code>.partial</code> (note that they are
+interpreted inversely of each other).</p>
+<p>There is no <code>.fill</code> equivalent in slider. slider always
+uses the vctrs definition of a missing value (a typed <code>NA</code>
+for most vectors, a <code>NULL</code> for lists). This is why the slider
+result above has a <code>NULL</code>, while the tsibble result used an
+<code>NA</code> (the default <code>.fill</code> value in tsibble).</p>
+<p>Specifying windows using <code>.before</code> and <code>.after</code>
+might first feel a bit unnatural to a tsibble or zoo user, but it is
+generally more flexible. You can generate irregular windows that aren’t
+possible with tsibble, like:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># The current element, along with 1 before and 3 after (if they exist)</span>
-<span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1 2 3 4</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2 3 4 5</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 2 3 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 3 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[5]]</span>
-<span class="co">#&gt; [1] 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[6]]</span>
-<span class="co">#&gt; [1] 5 6</span></code></pre></div>
-<p>As you will see in the next section, expanding windows are easy to create by setting <code>.before</code> or <code>.after</code> to <code>Inf</code>.</p>
-<p>This syntax also translates naturally to <code><a href="../reference/slide_index.html">slide_index()</a></code>, where the bounds of the window are (by default) computed as <code>.i - .before</code> and <code>.i + .after</code>, which often cannot be expressed by a single window size value.</p>
+<code class="sourceCode R"><span><span class="co"># The current element, along with 1 before and 3 after (if they exist)</span></span>
+<span><span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4 5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 2 3 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 3 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[5]]</span></span>
+<span><span class="co">#&gt; [1] 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[6]]</span></span>
+<span><span class="co">#&gt; [1] 5 6</span></span></code></pre></div>
+<p>As you will see in the next section, expanding windows are easy to
+create by setting <code>.before</code> or <code>.after</code> to
+<code>Inf</code>.</p>
+<p>This syntax also translates naturally to <code><a href="../reference/slide_index.html">slide_index()</a></code>,
+where the bounds of the window are (by default) computed as
+<code>.i - .before</code> and <code>.i + .after</code>, which often
+cannot be expressed by a single window size value.</p>
 </div>
 <div class="section level2">
 <h2 id="tile">tile()<a class="anchor" aria-label="anchor" href="#tile"></a>
 </h2>
-<p>Tiling uses non-overlapping windows. For example, this segments <code>x</code> into 4 non-overlapping buckets, where as many buckets as possible have a window size of 3.</p>
+<p>Tiling uses non-overlapping windows. For example, this segments
+<code>x</code> into 4 non-overlapping buckets, where as many buckets as
+possible have a window size of 3.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>
-
-<span class="fu">tsibble</span><span class="fu">::</span><span class="fu">tile</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 7 8 9</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 10</span></code></pre></div>
-<p>There is no direct equivalent to this in slider, but you can get close with <code><a href="../reference/slide.html">slide()</a></code>. <code>tile()</code> seems to left-align the index, so we need the current element plus two <code>.after</code> it. Since this is a non-overlapping window, we want to <code>.step</code> forward by the size of the window, three.</p>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span></span>
+<span><span class="fu">tsibble</span><span class="fu">::</span><span class="fu">tile</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 7 8 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 10</span></span></code></pre></div>
+<p>There is no direct equivalent to this in slider, but you can get
+close with <code><a href="../reference/slide.html">slide()</a></code>. <code>tile()</code> seems to left-align
+the index, so we need the current element plus two <code>.after</code>
+it. Since this is a non-overlapping window, we want to
+<code>.step</code> forward by the size of the window, three.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .after <span class="op">=</span> <span class="fl">2</span>, .step <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">result</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[5]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[6]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[7]]</span>
-<span class="co">#&gt; [1] 7 8 9</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[8]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[9]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[10]]</span>
-<span class="co">#&gt; [1] 10</span></code></pre></div>
-<p>This isn’t exactly the same, as <code><a href="../reference/slide.html">slide()</a></code> is guaranteed to be size-stable, returning an object with the same size as <code>.x</code>. However, if you <code><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">purrr::compact()</a></code> the result to drop the <code>NULL</code> values, then they are equivalent.</p>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .after <span class="op">=</span> <span class="fl">2</span>, .step <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">result</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[5]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[6]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[7]]</span></span>
+<span><span class="co">#&gt; [1] 7 8 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[8]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[9]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[10]]</span></span>
+<span><span class="co">#&gt; [1] 10</span></span></code></pre></div>
+<p>This isn’t exactly the same, as <code><a href="../reference/slide.html">slide()</a></code> is guaranteed to
+be size-stable, returning an object with the same size as
+<code>.x</code>. However, if you <code><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">purrr::compact()</a></code> the
+result to drop the <code>NULL</code> values, then they are
+equivalent.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">compact</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 4 5 6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 7 8 9</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 10</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/keep.html" class="external-link">compact</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 4 5 6</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 7 8 9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 10</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="stretch">stretch()<a class="anchor" aria-label="anchor" href="#stretch"></a>
 </h2>
-<p>To construct expanding windows with tsibble, you’ve probably used <code>stretch()</code>. This fixes an initial window size, and then expands to add more observations without dropping any.</p>
+<p>To construct expanding windows with tsibble, you’ve probably used
+<code>stretch()</code>. This fixes an initial window size, and then
+expands to add more observations without dropping any.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>
-
-<span class="fu">tsibble</span><span class="fu">::</span><span class="fu">stretch</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 1 2 3 4</span></code></pre></div>
-<p>With slider, you can set <code>.before = Inf</code> to select the current element plus all elements before this one.</p>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span></span>
+<span></span>
+<span><span class="fu">tsibble</span><span class="fu">::</span><span class="fu">stretch</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
+<p>With slider, you can set <code>.before = Inf</code> to select the
+current element plus all elements before this one.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 1 2 3 4</span></code></pre></div>
-<p><code>stretch()</code> allows you to set <code>.init</code> to fix an initial minimum window size:</p>
+<code class="sourceCode R"><span><span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .before <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
+<p><code>stretch()</code> allows you to set <code>.init</code> to fix an
+initial minimum window size:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tsibble</span><span class="fu">::</span><span class="fu">stretch</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .init <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 1 2 3 4</span></code></pre></div>
-<p>There isn’t a direct equivalent of this in slider, but your function could return <code>NULL</code> if the current window size didn’t hold enough elements:</p>
+<code class="sourceCode R"><span><span class="fu">tsibble</span><span class="fu">::</span><span class="fu">stretch</span><span class="op">(</span><span class="va">x</span>, <span class="va">identity</span>, .init <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
+<p>There isn’t a direct equivalent of this in slider, but your function
+could return <code>NULL</code> if the current window size didn’t hold
+enough elements:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">identity3</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span>
-    <span class="cn">NULL</span>
-  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">x</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-
-<span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity3</span>, .before <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 1 2 3 4</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">identity3</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="cn">NULL</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">slider</span><span class="fu">::</span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">identity3</span>, .before <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3 4</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -290,7 +337,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

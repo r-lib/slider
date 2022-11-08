@@ -8,8 +8,8 @@
 <meta name="description" content="slider">
 <title>Row-wise iteration with slider • slider</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Row-wise iteration with slider">
 <meta property="og:description" content="slider">
@@ -75,7 +75,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Row-wise iteration with slider</h1>
             
       
@@ -86,311 +86,377 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/slider" class="external-link">slider</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p>slider is implemented with a new convention that began in vctrs, treating a data frame as a vector of rows. This makes <code><a href="../reference/slide.html">slide()</a></code> a <em>row-wise iterator</em> over a data frame, which can be useful for solving some previously tricky problems in the tidyverse.</p>
-<p>The point of this vignette is to go through a few examples of a row-oriented workflow. The examples are adapted from <a href="https://github.com/jennybc/row-oriented-workflows" class="external-link">Jenny Bryan’s talk of row-oriented workflows with purrr</a>, to show how this workflow is improved with <code><a href="../reference/slide.html">slide()</a></code>.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/slider" class="external-link">slider</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>slider is implemented with a new convention that began in vctrs,
+treating a data frame as a vector of rows. This makes
+<code><a href="../reference/slide.html">slide()</a></code> a <em>row-wise iterator</em> over a data frame,
+which can be useful for solving some previously tricky problems in the
+tidyverse.</p>
+<p>The point of this vignette is to go through a few examples of a
+row-oriented workflow. The examples are adapted from <a href="https://github.com/jennybc/row-oriented-workflows" class="external-link">Jenny Bryan’s
+talk of row-oriented workflows with purrr</a>, to show how this workflow
+is improved with <code><a href="../reference/slide.html">slide()</a></code>.</p>
 <div class="section level2">
 <h2 id="row-wise-iteration">Row-wise iteration<a class="anchor" aria-label="anchor" href="#row-wise-iteration"></a>
 </h2>
-<p>Let’s first explore using <code><a href="../reference/slide.html">slide()</a></code> as a row wise iterator in general. We’ll start with this simple data frame.</p>
+<p>Let’s first explore using <code><a href="../reference/slide.html">slide()</a></code> as a row wise iterator
+in general. We’ll start with this simple data frame.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
-  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,
-  y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
-<span class="op">)</span>
-
-<span class="va">example</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     4 d</span></code></pre></div>
-<p>If we were to pass the <code>x</code> column to <code><a href="../reference/slide.html">slide()</a></code>, it would iterate over that using the window specified by <code>.before</code>, <code>.after</code>, and <code>.complete</code>. The defaults are similar to <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>.</p>
+<code class="sourceCode R"><span><span class="va">example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  y <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">example</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     4 d</span></span></code></pre></div>
+<p>If we were to pass the <code>x</code> column to <code><a href="../reference/slide.html">slide()</a></code>,
+it would iterate over that using the window specified by
+<code>.before</code>, <code>.after</code>, and <code>.complete</code>.
+The defaults are similar to <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span><span class="op">$</span><span class="va">x</span>, <span class="op">~</span><span class="va">.x</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 4</span>
-
-<span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span><span class="op">$</span><span class="va">x</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 1 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 1 2 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; [1] 2 3 4</span></code></pre></div>
-<p>When applied to the entire <code>example</code> data frame, <code>map()</code> treats it as a list and iterates over the columns. <code><a href="../reference/slide.html">slide()</a></code>, on the other hand, iterates over rows. This is consistent with the vctrs idea of <em>size</em>, which is the length of an atomic vector, but the number of rows of a data frame or matrix. <code><a href="../reference/slide.html">slide()</a></code> always returns an object with the same <em>size</em> as its input. Because the number of rows in <code>example</code> is 4, the output size is 4 and you get one row per element in the output.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span><span class="op">$</span><span class="va">x</span>, <span class="op">~</span><span class="va">.x</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 4</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span><span class="op">$</span><span class="va">x</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 1 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 2 3 4</span></span></code></pre></div>
+<p>When applied to the entire <code>example</code> data frame,
+<code>map()</code> treats it as a list and iterates over the columns.
+<code><a href="../reference/slide.html">slide()</a></code>, on the other hand, iterates over rows. This is
+consistent with the vctrs idea of <em>size</em>, which is the length of
+an atomic vector, but the number of rows of a data frame or matrix.
+<code><a href="../reference/slide.html">slide()</a></code> always returns an object with the same
+<em>size</em> as its input. Because the number of rows in
+<code>example</code> is 4, the output size is 4 and you get one row per
+element in the output.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     3 c    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     4 d</span></code></pre></div>
-<p>You can still use the other arguments to <code><a href="../reference/slide.html">slide()</a></code> to control the window size.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     3 c    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     4 d</span></span></code></pre></div>
+<p>You can still use the other arguments to <code><a href="../reference/slide.html">slide()</a></code> to
+control the window size.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Current row + 2 before</span>
-<span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     3 c    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     4 d</span>
-
-<span class="co"># Center aligned, with no partial results</span>
-<span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">1</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span>
-<span class="co">#&gt;       x y    </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     3 c    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     4 d    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[4]]</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
-<p>Often, using <code><a href="../reference/slide.html">slide()</a></code> with its defaults will be enough, as it is common to iterate over just one row at a time.</p>
+<code class="sourceCode R"><span><span class="co"># Current row + 2 before</span></span>
+<span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     3 c    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     4 d</span></span>
+<span></span>
+<span><span class="co"># Center aligned, with no partial results</span></span>
+<span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">example</span>, <span class="op">~</span><span class="va">.x</span>, .before <span class="op">=</span> <span class="fl">1</span>, .after <span class="op">=</span> <span class="fl">1</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 a    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 b    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 c    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;       x y    </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     2 b    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     3 c    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     4 d    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<p>Often, using <code><a href="../reference/slide.html">slide()</a></code> with its defaults will be enough,
+as it is common to iterate over just one row at a time.</p>
 </div>
 <div class="section level2">
 <h2 id="varying-parameter-combinations">Varying parameter combinations<a class="anchor" aria-label="anchor" href="#varying-parameter-combinations"></a>
 </h2>
-<p>A nice use of a tibble is as a structured way to store parameter combinations. For example, we could store multiple rows of parameter combinations where each row could be supplied to <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> to generate different types of uniform random variables.</p>
+<p>A nice use of a tibble is as a structured way to store parameter
+combinations. For example, we could store multiple rows of parameter
+combinations where each row could be supplied to <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> to
+generate different types of uniform random variables.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
-  n <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
-  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span>,
-  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="va">parameters</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span>
-<span class="co">#&gt;       n   min   max</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1     0     1</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2    10   100</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3   100  <span style="text-decoration: underline;">1</span>000</span></code></pre></div>
-<p>With <code><a href="../reference/slide.html">slide()</a></code> you can pass these parameters on to <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> by iterating over <code>parameters</code> row-wise. This gives you access to the data frame of the current row through <code>.x</code>. Because it is a data frame, you have access to each column by name. Notice how there is no restriction that the columns of the data frame be the same as the argument names of <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code>.</p>
+<code class="sourceCode R"><span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span>  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span>,</span>
+<span>  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">parameters</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
+<span><span class="co">#&gt;       n   min   max</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2    10   100</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3   100  <span style="text-decoration: underline;">1</span>000</span></span></code></pre></div>
+<p>With <code><a href="../reference/slide.html">slide()</a></code> you can pass these parameters on to
+<code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> by iterating over <code>parameters</code> row-wise.
+This gives you access to the data frame of the current row through
+<code>.x</code>. Because it is a data frame, you have access to each
+column by name. Notice how there is no restriction that the columns of
+the data frame be the same as the argument names of
+<code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">parameters</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">n</span>, <span class="va">.x</span><span class="op">$</span><span class="va">min</span>, <span class="va">.x</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] 0.2875775</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] 80.94746 46.80792</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] 894.7157 946.4206 141.0008</span></code></pre></div>
-<p>This can also be done with <code><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">purrr::pmap()</a></code>, but you either have to name the <code>parameters</code> tibble with the same column names as the function you are calling, or you have to access each column positionally as <code>..1</code>, <code>..3</code>, etc.</p>
-<p>A third alternative that works nicely here is to use <code><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise()</a></code> before calling <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>. Just remember to wrap the result of <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> in a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>!</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span><span class="va">parameters</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">n</span>, <span class="va">.x</span><span class="op">$</span><span class="va">min</span>, <span class="va">.x</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 0.2875775</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 80.94746 46.80792</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 894.7157 946.4206 141.0008</span></span></code></pre></div>
+<p>This can also be done with <code><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">purrr::pmap()</a></code>, but you either
+have to name the <code>parameters</code> tibble with the same column
+names as the function you are calling, or you have to access each column
+positionally as <code>..1</code>, <code>..3</code>, etc.</p>
+<p>A third alternative that works nicely here is to use
+<code><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise()</a></code> before calling <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code>. Just
+remember to wrap the result of <code><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif()</a></code> in a
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>!</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">parameters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>random <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># Rowwise: </span></span>
-<span class="co">#&gt;       n   min   max random   </span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1     0     1 <span style="color: #949494;">&lt;dbl [1]&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2    10   100 <span style="color: #949494;">&lt;dbl [2]&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3   100  <span style="text-decoration: underline;">1</span>000 <span style="color: #949494;">&lt;dbl [3]&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">parameters</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>random <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Rowwise: </span></span></span>
+<span><span class="co">#&gt;       n   min   max random   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1     0     1 <span style="color: #949494;">&lt;dbl [1]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2    10   100 <span style="color: #949494;">&lt;dbl [2]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3   100  <span style="text-decoration: underline;">1</span>000 <span style="color: #949494;">&lt;dbl [3]&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="sliding-inside-a-mutate">Sliding inside a mutate()<a class="anchor" aria-label="anchor" href="#sliding-inside-a-mutate"></a>
 </h2>
-<p>For these examples, we will consider a <code>company</code> data set containing the <code>day</code> a sale was made, the number of calls, <code>n_calls</code>, that were placed on that day, and the number of <code>sales</code> that resulted from those calls.</p>
+<p>For these examples, we will consider a <code>company</code> data set
+containing the <code>day</code> a sale was made, the number of calls,
+<code>n_calls</code>, that were placed on that day, and the number of
+<code>sales</code> that resulted from those calls.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">company</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
-  day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
-  sales <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>,
-  n_calls <span class="op">=</span> <span class="va">sales</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="va">company</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 3</span></span>
-<span class="co">#&gt;      day sales n_calls</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897</span></code></pre></div>
-<p>When <code><a href="../reference/slide.html">slide()</a></code>-ing inside of a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> call, there are a few scenarios that can arise. First, you might want to slide over a single column. This is easy enough in both the un-grouped and grouped case.</p>
+<code class="sourceCode R"><span><span class="va">company</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  sales <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  n_calls <span class="op">=</span> <span class="va">sales</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">company</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 3</span></span></span>
+<span><span class="co">#&gt;      day sales n_calls</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897</span></span></code></pre></div>
+<p>When <code><a href="../reference/slide.html">slide()</a></code>-ing inside of a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> call,
+there are a few scenarios that can arise. First, you might want to slide
+over a single column. This is easy enough in both the un-grouped and
+grouped case.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sales_roll <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="va">sales</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">2</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span>
-<span class="co">#&gt;      day sales n_calls sales_roll</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740       68.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835       83.3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309       86  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989       74.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682       82.3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602       52.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627       57.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897       35.7</span>
-
-<span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sales_roll <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="va">sales</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">2</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># Groups:   day [2]</span></span>
-<span class="co">#&gt;      day sales n_calls sales_roll</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740       68.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835       83.3</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309       86  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682       <span style="color: #BB0000;">NA</span>  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602       52.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627       57.7</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897       35.7</span></code></pre></div>
-<p>If you need to apply a sliding function that takes a data frame as input to slide over, then you’ll need some way to access the “current” data frame that <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> is acting on. As of dplyr 1.0.0, you can access this with <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code>. When there is only 1 group, the current data frame is the input itself, but when there are multiple groups <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> returns the data frame corresponding to the current group that is being worked on.</p>
-<p>As an example, imagine you want to fit a rolling linear model predicting sales from the number of calls. The most robust way to do this in a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> is to use <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> to access the data frame to slide over. Since <code><a href="../reference/slide.html">slide()</a></code> iterates row-wise, <code>.x</code> corresponds to the current slice of the current data frame.</p>
+<code class="sourceCode R"><span><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sales_roll <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="va">sales</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">2</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span></span>
+<span><span class="co">#&gt;      day sales n_calls sales_roll</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740       68.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835       83.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309       86  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989       74.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682       82.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602       52.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627       57.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897       35.7</span></span>
+<span></span>
+<span><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sales_roll <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide_dbl</a></span><span class="op">(</span><span class="va">sales</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">2</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   day [2]</span></span></span>
+<span><span class="co">#&gt;      day sales n_calls sales_roll</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740       68.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835       83.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309       86  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682       <span style="color: #BB0000;">NA</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602       52.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627       57.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897       35.7</span></span></code></pre></div>
+<p>If you need to apply a sliding function that takes a data frame as
+input to slide over, then you’ll need some way to access the “current”
+data frame that <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> is acting on. As of dplyr 1.0.0,
+you can access this with <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code>. When there is only 1
+group, the current data frame is the input itself, but when there are
+multiple groups <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> returns the data frame
+corresponding to the current group that is being worked on.</p>
+<p>As an example, imagine you want to fit a rolling linear model
+predicting sales from the number of calls. The most robust way to do
+this in a <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> is to use <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> to
+access the data frame to slide over. Since <code><a href="../reference/slide.html">slide()</a></code> iterates
+row-wise, <code>.x</code> corresponds to the current slice of the
+current data frame.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span>
-      .x <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data</a></span><span class="op">(</span><span class="op">)</span>,
-      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, 
-      .before <span class="op">=</span> <span class="fl">2</span>, 
-      .complete <span class="op">=</span> <span class="cn">TRUE</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span>
-<span class="co">#&gt;      day sales n_calls regressions</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897 <span style="color: #949494;">&lt;lm&gt;</span></span></code></pre></div>
-<p>When you group by <code>day</code>, <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> will first correspond to all rows where <code>day == 1</code>, and then where <code>day == 2</code>. Notice how the output has two clumps of <code>NULL</code>s, proving that the rolling regressions “restarted” between groups.</p>
+<code class="sourceCode R"><span><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span></span>
+<span>      .x <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, </span>
+<span>      .before <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>      .complete <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span></span>
+<span><span class="co">#&gt;      day sales n_calls regressions</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897 <span style="color: #949494;">&lt;lm&gt;</span></span></span></code></pre></div>
+<p>When you group by <code>day</code>, <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> will
+first correspond to all rows where <code>day == 1</code>, and then where
+<code>day == 2</code>. Notice how the output has two clumps of
+<code>NULL</code>s, proving that the rolling regressions “restarted”
+between groups.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span>
-      .x <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data</a></span><span class="op">(</span><span class="op">)</span>,
-      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, 
-      .before <span class="op">=</span> <span class="fl">2</span>, 
-      .complete <span class="op">=</span> <span class="cn">TRUE</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># Groups:   day [2]</span></span>
-<span class="co">#&gt;      day sales n_calls regressions</span>
-<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682 <span style="color: #949494;">&lt;NULL&gt;</span>     </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627 <span style="color: #949494;">&lt;lm&gt;</span>       </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897 <span style="color: #949494;">&lt;lm&gt;</span></span></code></pre></div>
-<p>In the past, you might have used <code>.</code> in place of <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code>. This <code>.</code> is actually from the magrittr <code>%&gt;%</code>, not from dplyr, and has a few issues. The biggest one is that it won’t work with grouped data frames, it will always return the entire data set rather than the current group’s data frame. The other issue is that, even with un-grouped data frames, you can’t take advantage of the sequential nature of how <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> evaluates expressions. For example, the following doesn’t work because <code>.</code> corresponds to <code>company</code> without the updated <code>log_sales</code> column.</p>
+<code class="sourceCode R"><span><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span></span>
+<span>      .x <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, </span>
+<span>      .before <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>      .complete <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Groups:   day [2]</span></span></span>
+<span><span class="co">#&gt;      day sales n_calls regressions</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>     1    25     544 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>     1    90     516 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>     1    91     740 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>     1    69     835 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>     1    98     309 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>     2    57     989 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>     2    92     682 <span style="color: #949494;">&lt;NULL&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>     2     9     602 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>     2    72     627 <span style="color: #949494;">&lt;lm&gt;</span>       </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>     2    26     897 <span style="color: #949494;">&lt;lm&gt;</span></span></span></code></pre></div>
+<p>In the past, you might have used <code>.</code> in place of
+<code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code>. This <code>.</code> is actually from the
+magrittr <code>%&gt;%</code>, not from dplyr, and has a few issues. The
+biggest one is that it won’t work with grouped data frames, it will
+always return the entire data set rather than the current group’s data
+frame. The other issue is that, even with un-grouped data frames, you
+can’t take advantage of the sequential nature of how
+<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> evaluates expressions. For example, the following
+doesn’t work because <code>.</code> corresponds to <code>company</code>
+without the updated <code>log_sales</code> column.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    log_sales <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">sales</span><span class="op">)</span>,
-    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span>
-      .x <span class="op">=</span> <span class="va">.</span>,
-      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">log_sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, 
-      .before <span class="op">=</span> <span class="fl">2</span>, 
-      .complete <span class="op">=</span> <span class="cn">TRUE</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mutate()`:</span></span>
-<span class="co">#&gt; <span style="color: #BBBB00;">!</span> Problem while computing `regressions = slide(...)`.</span>
-<span class="co">#&gt; <span style="font-weight: bold;">Caused by error in `model.frame.default()`:</span></span>
-<span class="co">#&gt; <span style="color: #BBBB00;">!</span> variable lengths differ (found for 'n_calls')</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">company</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    log_sales <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">sales</span><span class="op">)</span>,</span>
+<span>    regressions <span class="op">=</span> <span class="fu"><a href="../reference/slide.html">slide</a></span><span class="op">(</span></span>
+<span>      .x <span class="op">=</span> <span class="va">.</span>,</span>
+<span>      .f <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">log_sales</span> <span class="op">~</span> <span class="va">n_calls</span>, <span class="va">.x</span><span class="op">)</span>, </span>
+<span>      .before <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>      .complete <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `mutate()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Problem while computing `regressions = slide(...)`.</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Caused by error in `model.frame.default()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> variable lengths differ (found for 'n_calls')</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -405,7 +471,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
