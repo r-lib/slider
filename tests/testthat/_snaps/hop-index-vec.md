@@ -17,9 +17,9 @@
       }, .ptype = list_of(.ptype = double())), class = "vctrs_error_incompatible_type")
       )
     Output
-      <error/vctrs_error_incompatible_type>
-      Error in `stop_vctrs()`:
-      ! Can't convert <character> to <double>.
+      <error/vctrs_error_cast>
+      Error in `list_unchop()`:
+      ! Can't convert `..1` <character> to <double>.
 
 # `.ptype = NULL` validates that element lengths are 1
 

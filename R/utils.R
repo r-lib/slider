@@ -77,7 +77,7 @@ vec_simplify <- function(x, ptype) {
   names <- vec_names(x)
   x <- vec_set_names(x, NULL)
 
-  out <- vec_unchop(x, ptype = ptype)
+  out <- list_unchop(x, ptype = ptype)
 
   vec_set_names(out, names)
 }

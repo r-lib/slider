@@ -65,7 +65,7 @@ cnd_body.slider_error_endpoints_must_be_ascending <- function(cnd, ...) {
 # ------------------------------------------------------------------------------
 
 check_generated_endpoints_cannot_be_na <- function(endpoints, by_arg) {
-  na_indicators <- vec_equal_na(endpoints)
+  na_indicators <- vec_detect_missing(endpoints)
 
   if (any(na_indicators)) {
     na_locations <- which(na_indicators)
@@ -166,7 +166,7 @@ cnd_body.slider_error_generated_endpoints_incompatible_size <- function(cnd, ...
 # ------------------------------------------------------------------------------
 
 check_endpoints_cannot_be_na <- function(endpoints, endpoints_arg) {
-  na_indicators <- vec_equal_na(endpoints)
+  na_indicators <- vec_detect_missing(endpoints)
 
   if (any(na_indicators)) {
     na_locations <- which(na_indicators)
@@ -233,7 +233,7 @@ cnd_body.slider_error_index_must_be_ascending <- function(cnd, ...) {
 # ------------------------------------------------------------------------------
 
 check_index_cannot_be_na <- function(i, i_arg = "i") {
-  na_indicators <- vec_equal_na(i)
+  na_indicators <- vec_detect_missing(i)
 
   if (any(na_indicators)) {
     na_locations <- which(na_indicators)
