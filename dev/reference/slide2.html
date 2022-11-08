@@ -304,9 +304,9 @@ not named, an integer column is used instead.</p></li>
 
 
 <dt>.name_repair</dt>
-<dd><p>One of <code>"unique"</code>, <code>"universal"</code>, or
-<code>"check_unique"</code>. See <code><a href="https://vctrs.r-lib.org/reference/vec_as_names.html" class="external-link">vec_as_names()</a></code> for the meaning of these
-options.</p>
+<dd><p>One of <code>"unique"</code>, <code>"universal"</code>, <code>"check_unique"</code>,
+<code>"unique_quiet"</code>, or  <code>"universal_quiet"</code>. See <code><a href="https://vctrs.r-lib.org/reference/vec_as_names.html" class="external-link">vec_as_names()</a></code> for the
+meaning of these options.</p>
 <p>With <code><a href="https://vctrs.r-lib.org/reference/vec_bind.html" class="external-link">vec_rbind()</a></code>, the repair function is applied to all inputs
 separately. This is because <code><a href="https://vctrs.r-lib.org/reference/vec_bind.html" class="external-link">vec_rbind()</a></code> needs to align their
 columns before binding the rows, and thus needs all inputs to
@@ -317,10 +317,10 @@ permissive minimal names repair.</p></dd>
 
 
 <dt>.size</dt>
-<dd><p>If, <code>NULL</code>, the default, will determine the number of
-rows in <code><a href="https://vctrs.r-lib.org/reference/vec_bind.html" class="external-link">vec_cbind()</a></code> output by using the standard recycling rules.</p>
-<p>Alternatively, specify the desired number of rows, and any inputs
-of length 1 will be recycled appropriately.</p></dd>
+<dd><p>If, <code>NULL</code>, the default, will determine the number of rows in
+<code><a href="https://vctrs.r-lib.org/reference/vec_bind.html" class="external-link">vec_cbind()</a></code> output by using the tidyverse <a href="https://vctrs.r-lib.org/reference/vector_recycling_rules.html" class="external-link">recycling rules</a>.</p>
+<p>Alternatively, specify the desired number of rows, and any inputs of length
+1 will be recycled appropriately.</p></dd>
 
 
 <dt>.l</dt>
