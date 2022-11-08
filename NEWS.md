@@ -4,7 +4,7 @@
 
 * Fixed redirecting URLs.
 
-* Bumped minimal version of rlang to >=1.0.1 and vctrs to >=0.3.8 (#165).
+* Bumped minimal version of rlang to >=1.0.6 and vctrs to >=0.5.0 (#165, #174).
 
 # slider 0.2.2
 
