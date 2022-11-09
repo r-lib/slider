@@ -15,7 +15,7 @@
     increment_window(window, &index, range, i);                \
     slice_and_update_env(x, window.seq, env, type, container); \
                                                                \
-    SEXP elt = PROTECT(r_force_eval(f_call, env, force));      \
+    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));    \
                                                                \
     if (atomic && vec_size(elt) != 1) {                        \
       stop_not_all_size_one(i + 1, vec_size(elt));             \
@@ -126,7 +126,7 @@ SEXP slide_index_common_impl(SEXP x,
     increment_window(window, &index, range, i);                \
     slice_and_update_env(x, window.seq, env, type, container); \
                                                                \
-    SEXP elt = PROTECT(r_force_eval(f_call, env, force));      \
+    SEXP elt = PROTECT(R_forceAndCall(f_call, force, env));    \
                                                                \
     if (atomic && vec_size(elt) != 1) {                        \
       stop_not_all_size_one(i + 1, vec_size(elt));             \
