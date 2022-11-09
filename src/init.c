@@ -11,8 +11,6 @@ extern SEXP hop_index_common_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP
 extern SEXP slider_block(SEXP, SEXP, SEXP);
 extern SEXP slider_compute_from(SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_compute_to(SEXP, SEXP, SEXP, SEXP);
-extern SEXP slider_vec_set_names(SEXP, SEXP);
-extern SEXP slider_vec_names(SEXP);
 extern SEXP slider_sum(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_mean(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP slider_prod(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -39,8 +37,6 @@ static const R_CallMethodDef CallEntries[] = {
   {"slider_block",              (DL_FUNC) &slider_block, 3},
   {"slider_compute_from",       (DL_FUNC) &slider_compute_from, 4},
   {"slider_compute_to",         (DL_FUNC) &slider_compute_to, 4},
-  {"slider_vec_set_names",      (DL_FUNC) &slider_vec_set_names, 2},
-  {"slider_vec_names",          (DL_FUNC) &slider_vec_names, 1},
   {"slider_sum",                (DL_FUNC) &slider_sum, 6},
   {"slider_mean",               (DL_FUNC) &slider_mean, 6},
   {"slider_prod",               (DL_FUNC) &slider_prod, 6},
