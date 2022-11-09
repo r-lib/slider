@@ -1,5 +1,8 @@
 # slider (development version)
 
+* Index (`.i`) types that aren't explicitly understood by vctrs are now handled
+  slightly better (#182).
+
 * The `slide_index_*()` and `hop_index_*()` families now use `vctrs::vec_rank()`
   internally to compute a dense rank, which should be a little faster than the
   previous home grown approach (#177).
