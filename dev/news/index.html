@@ -56,7 +56,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="slider-development-version">slider (development version)<a class="anchor" aria-label="anchor" href="#slider-development-version"></a></h2>
-<ul><li><p>Removed <code>R_forceAndCall()</code> fallback now that R &gt;=3.4.0 is required (<a href="https://github.com/DavisVaughan/slider/issues/172" class="external-link">#172</a>).</p></li>
+<ul><li><p>The <code>slide_index_*()</code> and <code>hop_index_*()</code> families now use <code><a href="https://vctrs.r-lib.org/reference/vec_rank.html" class="external-link">vctrs::vec_rank()</a></code> internally to compute a dense rank, which should be a little faster than the previous home grown approach (<a href="https://github.com/DavisVaughan/slider/issues/177" class="external-link">#177</a>).</p></li>
+<li><p>Removed <code>R_forceAndCall()</code> fallback now that R &gt;=3.4.0 is required (<a href="https://github.com/DavisVaughan/slider/issues/172" class="external-link">#172</a>).</p></li>
 <li><p>Fixed <code>-Wstrict-prototypes</code> warnings as requested by CRAN (<a href="https://github.com/DavisVaughan/slider/issues/173" class="external-link">#173</a>).</p></li>
 <li><p>Bumped minimal version of R to &gt;=3.4.0 to align with tidyverse standards.</p></li>
 <li><p>Fixed redirecting URLs.</p></li>

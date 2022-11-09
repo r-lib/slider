@@ -5,7 +5,7 @@ articles:
   rowwise: rowwise.html
   slider: slider.html
   tsibble: tsibble.html
-last_built: 2022-11-09T16:59Z
+last_built: 2022-11-09T17:42Z
 urls:
   reference: https://davisvaughan.github.io/slider/reference
   article: https://davisvaughan.github.io/slider/articles
