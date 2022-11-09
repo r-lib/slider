@@ -1,9 +1,12 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   rowwise: rowwise.html
   slider: slider.html
   tsibble: tsibble.html
-last_built: 2021-07-01T19:52Z
+last_built: 2022-11-09T16:50Z
+urls:
+  reference: https://davisvaughan.github.io/slider/reference
+  article: https://davisvaughan.github.io/slider/articles
 
