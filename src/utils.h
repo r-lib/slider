@@ -25,14 +25,6 @@ static inline uint64_t min_u64(uint64_t x, uint64_t y) {
   return x < y ? x : y;
 }
 
-static inline SEXP r_force_eval(SEXP call, SEXP env, const int n_force) {
-#if defined(R_VERSION) && R_VERSION >= R_Version(3, 2, 3)
-  return R_forceAndCall(call, n_force, env);
-#else
-  return Rf_eval(call, env);
-#endif
-}
-
 static inline SEXP r_lst_get(SEXP x, int i) {
   return VECTOR_ELT(x, i);
 }
