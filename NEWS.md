@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Removed `R_forceAndCall()` fallback now that R >=3.4.0 is required (#172).
+
 * Fixed `-Wstrict-prototypes` warnings as requested by CRAN (#173).
 
 * Bumped minimal version of R to >=3.4.0 to align with tidyverse standards.
