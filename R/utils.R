@@ -84,9 +84,11 @@ vec_simplify <- function(x, ptype) {
 
 compute_combined_ranks <- function(...) {
   args <- list2(...)
-  combined <- vec_c(!!!args, .name_spec = zap())
+  combined <- list_unchop(args, name_spec = zap())
 
-  ranks <- slider_dense_rank(combined)
+  # Expected that there are no missing values in `combined`.
+  # Incomplete rows do get ranked, with missing values coming last.
+  ranks <- vec_rank(combined, ties = "dense")
 
   n_args <- length(args)
   sizes <- list_sizes(args)
@@ -105,13 +107,3 @@ compute_combined_ranks <- function(...) {
 
   out
 }
-
-# TODO: Replace with `vec_rank(x, ties = "dense")`
-# https://github.com/r-lib/vctrs/issues/1251
-#
-# This impl is taken from `dplyr::dense_rank()`.
-# Expected that there are no missing values in `x`.
-slider_dense_rank <- function(x) {
-  vec_match(x, vec_sort(vec_unique(x)))
-}
-
