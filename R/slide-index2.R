@@ -301,7 +301,6 @@ slide_index2_impl <- function(.x,
 
   .f <- as_function(.f)
 
-  # TODO - more efficiently? reuse .x/.y rather than recycle
   args <- vec_recycle_common(.x, .y)
 
   f_call <- expr(.f(.x, .y, ...))

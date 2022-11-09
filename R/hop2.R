@@ -106,9 +106,6 @@ hop2_impl <- function(.x, .y, .starts, .stops, .f, ..., .ptype, .constrain, .ato
   vec_assert(.x)
   vec_assert(.y)
 
-  # TODO - Do more efficiently internally by reusing rather than recycling
-  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
-  # But use `vec_size_common()` to check sizes and get `.size`
   args <- vec_recycle_common(.x, .y)
 
   .f <- as_function(.f)

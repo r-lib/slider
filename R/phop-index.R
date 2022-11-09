@@ -61,7 +61,6 @@ phop_index_impl <- function(.l,
 
   .f <- as_function(.f)
 
-  # TODO - more efficiently? reuse elements rather than recycle
   .l <- vec_recycle_common(!!!.l)
 
   type <- vec_size(.l)

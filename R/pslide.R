@@ -220,9 +220,6 @@ pslide_impl <- function(.l,
 
   lapply(.l, vec_assert)
 
-  # TODO - Do more efficiently internally by reusing rather than recycling
-  # https://github.com/tidyverse/purrr/blob/e4d553989e3d18692ebeeedb334b6223ae9ea294/src/map.c#L129
-  # But use `vec_size_common()` to check sizes and get `.size`
   .l <- vec_recycle_common(!!!.l)
 
   .f <- as_function(.f)
