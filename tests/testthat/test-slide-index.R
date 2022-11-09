@@ -845,6 +845,54 @@ test_that("can use Durations/Periods to handle daylight savings differently", {
 })
 
 # ------------------------------------------------------------------------------
+# .before / .after - non-vctrs types
+
+test_that(".i/.before/.after can be non-vctrs types (#182)", {
+  local_c_foobar()
+
+  i <- foobar(1:4)
+  x <- seq_along(i)
+
+  expect_identical(
+    slide_index(x, i, identity, .before = 2L),
+    list(
+      1L,
+      1:2,
+      1:3,
+      2:4
+    )
+  )
+  expect_identical(
+    slide_index(x, i, identity, .before = foobar(2L)),
+    list(
+      1L,
+      1:2,
+      1:3,
+      2:4
+    )
+  )
+
+  expect_identical(
+    slide_index(x, i, identity, .after = 2L),
+    list(
+      1:3,
+      2:4,
+      3:4,
+      4L
+    )
+  )
+  expect_identical(
+    slide_index(x, i, identity, .after = foobar(2L)),
+    list(
+      1:3,
+      2:4,
+      3:4,
+      4L
+    )
+  )
+})
+
+# ------------------------------------------------------------------------------
 # .before / .after - function
 
 test_that(".before/.after - can use a function", {
