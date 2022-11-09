@@ -4,7 +4,7 @@ template:
   bootstrap: 5
 
 development:
-  mode: auto
+  mode: release
 
 reference:
 - title: Slide family
