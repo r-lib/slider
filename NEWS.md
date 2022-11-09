@@ -1,5 +1,9 @@
 # slider (development version)
 
+* The `slide_index_*()` and `hop_index_*()` families now use `vctrs::vec_rank()`
+  internally to compute a dense rank, which should be a little faster than the
+  previous home grown approach (#177).
+
 * Removed `R_forceAndCall()` fallback now that R >=3.4.0 is required (#172).
 
 * Fixed `-Wstrict-prototypes` warnings as requested by CRAN (#173).
