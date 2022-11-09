@@ -84,7 +84,11 @@ vec_simplify <- function(x, ptype) {
 
 compute_combined_ranks <- function(...) {
   args <- list2(...)
-  combined <- list_unchop(args, name_spec = zap())
+
+  # TODO: Ideally we'd set `name_spec = zap()` to drop names from both `args`
+  # and its elements for performance, but that doesn't work for non-vctrs types.
+  # https://github.com/r-lib/vctrs/issues/1106
+  combined <- list_unchop(unname(args))
 
   # Expected that there are no missing values in `combined`.
   # Incomplete rows do get ranked, with missing values coming last.
