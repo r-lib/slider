@@ -46,7 +46,6 @@ Collate:
     'hop-index2.R'
     'hop.R'
     'hop2.R'
-    'names.R'
     'phop-index.R'
     'phop.R'
     'slide-index2.R'
