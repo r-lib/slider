@@ -57,7 +57,7 @@
     Code
       stop_index_incompatible_size(1, 2, ".i")
     Condition
-      Error in `stop_index_incompatible_size()`:
+      Error:
       ! `.i` has an incorrect size.
       x It must have size 2, not 1.
 

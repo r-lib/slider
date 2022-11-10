@@ -5,7 +5,7 @@
       .stops = integer(), .f = ~.x), class = "slider_error_index_incompatible_size"))
     Output
       <error/slider_error_index_incompatible_size>
-      Error in `stop_index_incompatible_size()`:
+      Error in `hop_index_common()`:
       ! `.i` has an incorrect size.
       x It must have size 0, not 1.
 

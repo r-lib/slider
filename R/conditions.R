@@ -266,11 +266,18 @@ cnd_body.slider_error_index_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_index_incompatible_size <- function(i_size, size, i_arg = "i") {
+stop_index_incompatible_size <- function(i_size,
+                                         size,
+                                         i_arg = "i",
+                                         ...,
+                                         call = caller_env()) {
+  check_dots_empty0(...)
+
   stop_index(
     i_size = i_size,
     size = size,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_incompatible_size"
   )
 }

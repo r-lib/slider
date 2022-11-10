@@ -36,7 +36,7 @@
       )
     Output
       <error/slider_error_index_incompatible_size>
-      Error in `stop_index_incompatible_size()`:
+      Error in `block()`:
       ! `i` has an incorrect size.
       x It must have size 2, not 1.
 
