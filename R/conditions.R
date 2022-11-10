@@ -1,17 +1,18 @@
-check_index_incompatible_type <- function(i, i_arg = "i") {
+check_index_incompatible_type <- function(i, i_arg = "i", call = caller_env()) {
   is_datelike <- inherits(i, c("Date", "POSIXt"))
 
   if (is_datelike) {
     return(invisible(i))
   }
 
-  stop_index_incompatible_type(i, i_arg)
+  stop_index_incompatible_type(i, i_arg = i_arg, call = call)
 }
 
-stop_index_incompatible_type <- function(i, i_arg = "i") {
+stop_index_incompatible_type <- function(i, i_arg = "i", call = caller_env()) {
   stop_index(
     i_class = class(i),
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_incompatible_type"
   )
 }

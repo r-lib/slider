@@ -3,7 +3,7 @@
     Code
       check_index_incompatible_type(1, ".i")
     Condition
-      Error in `stop_index_incompatible_type()`:
+      Error:
       ! `.i` has an incorrect type.
       x It must inherit from Date, POSIXct, or POSIXlt, not numeric.
 
@@ -66,7 +66,7 @@
     Code
       check_index_incompatible_type(x, ".i")
     Condition
-      Error in `stop_index_incompatible_type()`:
+      Error:
       ! `.i` has an incorrect type.
       x It must inherit from Date, POSIXct, or POSIXlt, not foo/bar/baz.
 

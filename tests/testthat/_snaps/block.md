@@ -25,7 +25,7 @@
       (expect_error(block(1, 1), class = "slider_error_index_incompatible_type"))
     Output
       <error/slider_error_index_incompatible_type>
-      Error in `stop_index_incompatible_type()`:
+      Error in `block()`:
       ! `i` has an incorrect type.
       x It must inherit from Date, POSIXct, or POSIXlt, not numeric.
 
