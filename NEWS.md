@@ -1,5 +1,11 @@
 # slider (development version)
 
+* New `slider_plus()` and `slider_minus()` developer facing helpers that allow
+  package authors to register custom double dispatch methods to override the
+  default computation of `.i - .before` and `.i + .after` when generating index
+  bounds internally. This is intended to allow the clock and almanac packages to
+  register methods so their custom types can be used natively in slider (#91).
+
 * Index (`.i`) types that aren't explicitly understood by vctrs are now handled
   slightly better (#182).
 

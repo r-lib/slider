@@ -124,7 +124,7 @@ check_before <- function(before, before_arg) {
   } else {
     vec_assert(before, size = 1L, arg = before_arg)
     unbounded <- is_unbounded(before)
-    fn <- function(i) { i - before }
+    fn <- function(i) slider_minus(i, before)
   }
 
   list(fn = fn, unbounded = unbounded)
@@ -140,7 +140,7 @@ check_after <- function(after, after_arg) {
   } else {
     vec_assert(after, size = 1L, arg = after_arg)
     unbounded <- is_unbounded(after)
-    fn <- function(i) { i + after }
+    fn <- function(i) slider_plus(i, after)
   }
 
   list(fn = fn, unbounded = unbounded)
