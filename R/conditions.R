@@ -287,8 +287,8 @@ cnd_body.slider_error_index_incompatible_size <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_endpoints <- function(message = NULL, class = character(), ...) {
-  stop_slider(message, class = c(class, "slider_error_endpoints"), ...)
+stop_endpoints <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  stop_slider(message, class = c(class, "slider_error_endpoints"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------
