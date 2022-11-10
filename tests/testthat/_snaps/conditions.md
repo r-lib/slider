@@ -48,7 +48,7 @@
     Code
       check_index_cannot_be_na(c(NA, 1, NA), ".i")
     Condition
-      Error in `stop_index_cannot_be_na()`:
+      Error:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 1, 3.
 
@@ -75,7 +75,7 @@
     Code
       check_index_cannot_be_na(rep(NA, 100), ".i")
     Condition
-      Error in `stop_index_cannot_be_na()`:
+      Error:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 1, 2, 3, 4, 5, 6, 7, 8, 9, ....
 

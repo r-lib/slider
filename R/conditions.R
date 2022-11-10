@@ -233,7 +233,7 @@ cnd_body.slider_error_index_must_be_ascending <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_index_cannot_be_na <- function(i, i_arg = "i") {
+check_index_cannot_be_na <- function(i, i_arg = "i", call = caller_env()) {
   if (!vec_any_missing(i)) {
     return(invisible(i))
   }
@@ -241,13 +241,14 @@ check_index_cannot_be_na <- function(i, i_arg = "i") {
   na_indicators <- vec_detect_missing(i)
   na_locations <- which(na_indicators)
 
-  stop_index_cannot_be_na(na_locations, i_arg)
+  stop_index_cannot_be_na(na_locations, i_arg = i_arg, call = call)
 }
 
-stop_index_cannot_be_na <- function(locations, i_arg = "i") {
+stop_index_cannot_be_na <- function(locations, i_arg = "i", call = caller_env()) {
   stop_index(
     locations = locations,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_cannot_be_na"
   )
 }

@@ -15,7 +15,7 @@
       )
     Output
       <error/slider_error_index_cannot_be_na>
-      Error in `stop_index_cannot_be_na()`:
+      Error in `block()`:
       ! `i` cannot be `NA`.
       i It is `NA` at locations: 2.
 
