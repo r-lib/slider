@@ -293,8 +293,8 @@ stop_endpoints <- function(message = NULL, class = character(), ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_index <- function(message = NULL, class = character(), ...) {
-  stop_slider(message, class = c(class, "slider_error_index"), ...)
+stop_index <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  stop_slider(message, class = c(class, "slider_error_index"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------

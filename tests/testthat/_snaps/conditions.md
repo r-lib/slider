@@ -3,7 +3,7 @@
     Code
       check_index_incompatible_type(1, ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_incompatible_type()`:
       ! `.i` has an incorrect type.
       x It must inherit from Date, POSIXct, or POSIXlt, not numeric.
 
@@ -39,7 +39,7 @@
     Code
       check_index_must_be_ascending(c(1, 2, 1, 4, 5, 3), ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_must_be_ascending()`:
       ! `.i` must be in ascending order.
       i It is not ascending at locations: 3, 6.
 
@@ -48,7 +48,7 @@
     Code
       check_index_cannot_be_na(c(NA, 1, NA), ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_cannot_be_na()`:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 1, 3.
 
@@ -57,7 +57,7 @@
     Code
       stop_index_incompatible_size(1, 2, ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_incompatible_size()`:
       ! `.i` has an incorrect size.
       x It must have size 2, not 1.
 
@@ -66,7 +66,7 @@
     Code
       check_index_incompatible_type(x, ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_incompatible_type()`:
       ! `.i` has an incorrect type.
       x It must inherit from Date, POSIXct, or POSIXlt, not foo/bar/baz.
 
@@ -75,7 +75,7 @@
     Code
       check_index_cannot_be_na(rep(NA, 100), ".i")
     Condition
-      Error in `stop_index()`:
+      Error in `stop_index_cannot_be_na()`:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 1, 2, 3, 4, 5, 6, 7, 8, 9, ....
 
