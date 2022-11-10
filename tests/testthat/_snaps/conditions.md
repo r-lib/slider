@@ -39,7 +39,7 @@
     Code
       check_index_must_be_ascending(c(1, 2, 1, 4, 5, 3), ".i")
     Condition
-      Error in `stop_index_must_be_ascending()`:
+      Error:
       ! `.i` must be in ascending order.
       i It is not ascending at locations: 3, 6.
 

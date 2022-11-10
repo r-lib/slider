@@ -47,7 +47,7 @@
       )
     Output
       <error/slider_error_index_must_be_ascending>
-      Error in `stop_index_must_be_ascending()`:
+      Error in `block()`:
       ! `i` must be in ascending order.
       i It is not ascending at locations: 3, 2.
 

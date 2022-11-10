@@ -200,20 +200,21 @@ cnd_body.slider_error_endpoints_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_index_must_be_ascending <- function(i, i_arg = "i") {
+check_index_must_be_ascending <- function(i, i_arg = "i", call = caller_env()) {
   locations <- compute_non_ascending_locations(i)
 
   if (identical(locations, integer())) {
     return(invisible(i))
   }
 
-  stop_index_must_be_ascending(locations, i_arg)
+  stop_index_must_be_ascending(locations, i_arg = i_arg, call = call)
 }
 
-stop_index_must_be_ascending <- function(locations, i_arg = "i") {
+stop_index_must_be_ascending <- function(locations, i_arg = "i", call = caller_env()) {
   stop_index(
     locations = locations,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_must_be_ascending"
   )
 }
