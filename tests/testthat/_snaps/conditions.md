@@ -12,7 +12,7 @@
     Code
       check_endpoints_must_be_ascending(c(1, 2, 1, 3, 4, 2), ".starts")
     Condition
-      Error in `stop_endpoints_must_be_ascending()`:
+      Error:
       ! `.starts` must be in ascending order.
       i It is not ascending at locations: 3, 6.
 

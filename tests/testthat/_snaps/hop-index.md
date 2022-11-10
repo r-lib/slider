@@ -27,7 +27,7 @@
       )
     Output
       <error/slider_error_endpoints_must_be_ascending>
-      Error in `stop_endpoints_must_be_ascending()`:
+      Error in `hop_index_common()`:
       ! `.starts` must be in ascending order.
       i It is not ascending at locations: 2.
 
@@ -38,7 +38,7 @@
       )
     Output
       <error/slider_error_endpoints_must_be_ascending>
-      Error in `stop_endpoints_must_be_ascending()`:
+      Error in `hop_index_common()`:
       ! `.stops` must be in ascending order.
       i It is not ascending at locations: 2.
 

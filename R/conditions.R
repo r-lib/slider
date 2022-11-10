@@ -32,20 +32,29 @@ cnd_body.slider_error_index_incompatible_type <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_endpoints_must_be_ascending <- function(endpoints, endpoints_arg) {
+check_endpoints_must_be_ascending <- function(endpoints,
+                                              endpoints_arg,
+                                              call = caller_env()) {
   locations <- compute_non_ascending_locations(endpoints)
 
   if (identical(locations, integer())) {
     return(invisible(endpoints))
   }
 
-  stop_endpoints_must_be_ascending(locations, endpoints_arg)
+  stop_endpoints_must_be_ascending(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    call = call
+  )
 }
 
-stop_endpoints_must_be_ascending <- function(locations, endpoints_arg) {
+stop_endpoints_must_be_ascending <- function(locations,
+                                             endpoints_arg,
+                                             call = caller_env()) {
   stop_endpoints(
     locations = locations,
     endpoints_arg = endpoints_arg,
+    call = call,
     class = "slider_error_endpoints_must_be_ascending"
   )
 }
