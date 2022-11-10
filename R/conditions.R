@@ -299,8 +299,8 @@ stop_index <- function(message = NULL, class = character(), ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_slider <- function(message = NULL, class = character(), ...) {
-  abort(message, class = c(class, "slider_error"), ...)
+stop_slider <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  abort(message, class = c(class, "slider_error"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------
