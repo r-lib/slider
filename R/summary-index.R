@@ -14,7 +14,7 @@
 #' For more details about the implementation, see the help page of
 #' [slide_sum()].
 #'
-#' @inheritParams ellipsis::dots_empty
+#' @inheritParams rlang::args_dots_empty
 #' @inheritParams slide_index
 #'
 #' @param x `[vector]`
@@ -70,7 +70,7 @@ slide_index_sum <- function(x,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_sum_core)
 }
 
@@ -89,7 +89,7 @@ slide_index_prod <- function(x,
                              after = 0L,
                              complete = FALSE,
                              na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_prod_core)
 }
 
@@ -108,7 +108,7 @@ slide_index_mean <- function(x,
                              after = 0L,
                              complete = FALSE,
                              na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_mean_core)
 }
 
@@ -127,7 +127,7 @@ slide_index_min <- function(x,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_min_core)
 }
 
@@ -146,7 +146,7 @@ slide_index_max <- function(x,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_max_core)
 }
 
@@ -165,7 +165,7 @@ slide_index_all <- function(x,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_all_core)
 }
 
@@ -184,7 +184,7 @@ slide_index_any <- function(x,
                             after = 0L,
                             complete = FALSE,
                             na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   slide_index_summary(x, i, before, after, complete, na_rm, slide_index_any_core)
 }
 

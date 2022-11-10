@@ -22,7 +22,7 @@
 #' small differences between `slide_mean(x)` and `slide_dbl(x, mean)` in some
 #' cases.
 #'
-#' @inheritParams ellipsis::dots_empty
+#' @inheritParams rlang::args_dots_empty
 #' @inheritParams slide
 #'
 #' @param x `[vector]`
@@ -105,7 +105,7 @@ slide_sum <- function(x,
                       step = 1L,
                       complete = FALSE,
                       na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_sum, x, before, after, step, complete, na_rm)
 }
 
@@ -118,7 +118,7 @@ slide_prod <- function(x,
                        step = 1L,
                        complete = FALSE,
                        na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_prod, x, before, after, step, complete, na_rm)
 }
 
@@ -131,7 +131,7 @@ slide_mean <- function(x,
                        step = 1L,
                        complete = FALSE,
                        na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_mean, x, before, after, step, complete, na_rm)
 }
 
@@ -144,7 +144,7 @@ slide_min <- function(x,
                       step = 1L,
                       complete = FALSE,
                       na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_min, x, before, after, step, complete, na_rm)
 }
 
@@ -157,7 +157,7 @@ slide_max <- function(x,
                       step = 1L,
                       complete = FALSE,
                       na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_max, x, before, after, step, complete, na_rm)
 }
 
@@ -170,7 +170,7 @@ slide_all <- function(x,
                       step = 1L,
                       complete = FALSE,
                       na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_all, x, before, after, step, complete, na_rm)
 }
 
@@ -183,6 +183,6 @@ slide_any <- function(x,
                       step = 1L,
                       complete = FALSE,
                       na_rm = FALSE) {
-  ellipsis::check_dots_empty()
+  check_dots_empty0(...)
   .Call(slider_any, x, before, after, step, complete, na_rm)
 }

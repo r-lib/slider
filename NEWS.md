@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Removed ellipsis in favor of using the equivalent functions in rlang (#185).
+
 * New `slider_plus()` and `slider_minus()` developer facing helpers that allow
   package authors to register custom double dispatch methods to override the
   default computation of `.i - .before` and `.i + .after` when generating index
