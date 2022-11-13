@@ -898,20 +898,16 @@ test_that(".before/.after - using a function can help with lubridate `+ months(1
 test_that(".before/.after - generated endpoints must be in weakly ascending order", {
   x <- c(1, 2)
 
-  expect_error(
-    slide_index(x, x, identity, .before = ~.x - c(2, 4)),
-    class = "slider_error_generated_endpoints_must_be_ascending"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .before = ~.x - c(2, 4))
-  )
-  expect_error(
-    slide_index(x, x, identity, .after = ~.x + c(4, 2)),
-    class = "slider_error_generated_endpoints_must_be_ascending"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .after = ~.x + c(4, 2))
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, x, identity, .before = ~.x - c(2, 4)),
+      class = "slider_error_generated_endpoints_must_be_ascending"
+    ))
+    (expect_error(
+      slide_index(x, x, identity, .after = ~.x + c(4, 2)),
+      class = "slider_error_generated_endpoints_must_be_ascending"
+    ))
+  })
 })
 
 test_that(".before/.after - generated endpoints must maintain .before <= .after ordering", {
