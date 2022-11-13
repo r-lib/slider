@@ -117,20 +117,29 @@ cnd_body.slider_error_generated_endpoints_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_must_be_ascending <- function(endpoints, by_arg) {
+check_generated_endpoints_must_be_ascending <- function(endpoints,
+                                                        by_arg,
+                                                        call = caller_env()) {
   locations <- compute_non_ascending_locations(endpoints)
 
   if (identical(locations, integer())) {
     return(invisible(endpoints))
   }
 
-  stop_generated_endpoints_must_be_ascending(locations, by_arg)
+  stop_generated_endpoints_must_be_ascending(
+    locations = locations,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_must_be_ascending <- function(locations, by_arg) {
+stop_generated_endpoints_must_be_ascending <- function(locations,
+                                                       by_arg,
+                                                       call = caller_env()) {
   stop_endpoints(
     locations = locations,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_must_be_ascending"
   )
 }
