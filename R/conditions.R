@@ -74,21 +74,30 @@ cnd_body.slider_error_endpoints_must_be_ascending <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_cannot_be_na <- function(endpoints, by_arg) {
+check_generated_endpoints_cannot_be_na <- function(endpoints,
+                                                   by_arg,
+                                                   call = caller_env()) {
   if (!vec_any_missing(endpoints)) {
     return(invisible(endpoints))
   }
 
-  na_indicators <- vec_detect_missing(endpoints)
-  na_locations <- which(na_indicators)
+  indicators <- vec_detect_missing(endpoints)
+  locations <- which(indicators)
 
-  stop_generated_endpoints_cannot_be_na(na_locations, by_arg)
+  stop_generated_endpoints_cannot_be_na(
+    locations = locations,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_cannot_be_na <- function(locations, by_arg) {
+stop_generated_endpoints_cannot_be_na <- function(locations,
+                                                  by_arg,
+                                                  call = caller_env()) {
   stop_endpoints(
     locations = locations,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_cannot_be_na"
   )
 }
