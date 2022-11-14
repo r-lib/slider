@@ -70,7 +70,8 @@ pslide_period_vec_direct <- function(.l,
                                      .before,
                                      .after,
                                      .complete,
-                                     .ptype) {
+                                     .ptype,
+                                     .slider_error_call = caller_env()) {
   pslide_period_impl(
     .l,
     .i,
@@ -84,7 +85,8 @@ pslide_period_vec_direct <- function(.l,
     .complete = .complete,
     .ptype = .ptype,
     .constrain = TRUE,
-    .atomic = TRUE
+    .atomic = TRUE,
+    .slider_error_call = .slider_error_call
   )
 }
 
@@ -270,14 +272,14 @@ pslide_period_impl <- function(.l,
                                .complete,
                                .ptype,
                                .constrain,
-                               .atomic) {
-  check_is_list(.l)
+                               .atomic,
+                               .slider_error_call = caller_env()) {
+  .l <- slider_check_list(.l, call = .slider_error_call)
+  list_check_all_vectors(.l, call = .slider_error_call)
 
-  lapply(.l, vec_assert)
+  .f <- as_function(.f, call = .slider_error_call)
 
-  .f <- as_function(.f)
-
-  .l <- vec_recycle_common(!!!.l)
+  .l <- vec_recycle_common(!!!.l, .call = .slider_error_call)
 
   type <- vec_size(.l)
 
@@ -308,6 +310,7 @@ pslide_period_impl <- function(.l,
     constrain = .constrain,
     atomic = .atomic,
     env = environment(),
-    type = type
+    type = type,
+    slider_error_call = .slider_error_call
   )
 }

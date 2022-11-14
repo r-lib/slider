@@ -6,20 +6,28 @@ test_that("basic call works", {
 })
 
 test_that("`.x` must be a vector", {
-  expect_error(slide_period(call("fn")), class = "vctrs_error_scalar_type")
+  expect_snapshot({
+    (expect_error(slide_period(call("fn")), class = "vctrs_error_scalar_type"))
+  })
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_period(1, new_date(c(1, 2)), "year", identity), class = "slider_error_index_incompatible_size")
+  expect_snapshot({
+    (expect_error(slide_period(1, new_date(c(1, 2)), "year", identity), class = "slider_error_index_incompatible_size"))
+  })
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_period(1:2, new_date(c(2, 1)), "year", identity), class = "slider_error_index_must_be_ascending")
+  expect_snapshot({
+    (expect_error(slide_period(1:2, new_date(c(2, 1)), "year", identity), class = "slider_error_index_must_be_ascending"))
+  })
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_period(integer(), new_date(), "year", ~.x), list())
-  expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size")
+  expect_snapshot({
+    (expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size"))
+  })
 })
 
 test_that("empty input works with `.complete = TRUE` (#111)", {
@@ -27,8 +35,10 @@ test_that("empty input works with `.complete = TRUE` (#111)", {
 })
 
 test_that(".i must not contain NA values", {
-  expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na")
-  expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na")
+  expect_snapshot({
+    (expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na"))
+    (expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na"))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -88,24 +98,30 @@ test_that("`.before` cannot be NA", {
 })
 
 test_that("`.before` cannot be -Inf", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .before = -Inf),
-    class = "vctrs_error_cast_lossy"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period(1, new_date(0), "year", identity, .before = -Inf),
+      class = "vctrs_error_cast_lossy"
+    ))
+  })
 })
 
 test_that(".before must be size 1", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .before = c(1L, 2L)),
-    class = "vctrs_error_assert_size"
-  )
+  expect_snapshot({
+    expect_error(
+      slide_period(1, new_date(0), "year", identity, .before = c(1L, 2L)),
+      class = "vctrs_error_assert_size"
+    )
+  })
 })
 
 test_that("error if .before is NULL", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .before = NULL),
-    class = "vctrs_error_scalar_type"
-  )
+  expect_snapshot({
+    expect_error(
+      slide_period(1, new_date(0), "year", identity, .before = NULL),
+      class = "vctrs_error_scalar_type"
+    )
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -165,24 +181,30 @@ test_that("`.after` cannot be NA", {
 })
 
 test_that("`.after` cannot be -Inf", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .after = -Inf),
-    class = "vctrs_error_cast_lossy"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period(1, new_date(0), "year", identity, .after = -Inf),
+      class = "vctrs_error_cast_lossy"
+    ))
+  })
 })
 
 test_that(".after must be size 1", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .after = c(1L, 2L)),
-    class = "vctrs_error_assert_size"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period(1, new_date(0), "year", identity, .after = c(1L, 2L)),
+      class = "vctrs_error_assert_size"
+    ))
+  })
 })
 
 test_that("error if .after is NULL", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .after = NULL),
-    class = "vctrs_error_scalar_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period(1, new_date(0), "year", identity, .after = NULL),
+      class = "vctrs_error_scalar_type"
+    ))
+  })
 })
 
 
@@ -220,24 +242,30 @@ test_that("works when the window is between values and `.complete = TRUE`", {
 })
 
 test_that("`.complete` cannot be NA", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .complete = NA),
-    "`.complete` cannot be `NA`"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period(1, new_date(0), "year", identity, .complete = NA),
+      "`.complete` cannot be `NA`"
+    ))
+  })
 })
 
 test_that(".complete must be size 1", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .complete = c(TRUE, FALSE)),
-    class = "vctrs_error_assert_size"
-  )
+  expect_snapshot({
+    expect_error(
+      slide_period(1, new_date(0), "year", identity, .complete = c(TRUE, FALSE)),
+      class = "vctrs_error_assert_size"
+    )
+  })
 })
 
 test_that("error if .complete is NULL", {
-  expect_error(
-    slide_period(1, new_date(0), "year", identity, .complete = NULL),
-    class = "vctrs_error_scalar_type"
-  )
+  expect_snapshot({
+    expect_error(
+      slide_period(1, new_date(0), "year", identity, .complete = NULL),
+      class = "vctrs_error_scalar_type"
+    )
+  })
 })
 
 # ------------------------------------------------------------------------------

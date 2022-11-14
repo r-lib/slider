@@ -1,3 +1,64 @@
+# `.x` must be a vector
+
+    Code
+      (expect_error(slide_period(call("fn")), class = "vctrs_error_scalar_type"))
+    Output
+      <error/vctrs_error_scalar_type>
+      Error in `slide_period()`:
+      ! `.x` must be a vector, not a call.
+
+# .x must be the same size as .i
+
+    Code
+      (expect_error(slide_period(1, new_date(c(1, 2)), "year", identity), class = "slider_error_index_incompatible_size")
+      )
+    Output
+      <error/slider_error_index_incompatible_size>
+      Error in `slide_period()`:
+      ! `.i` has an incorrect size.
+      x It must have size 1, not 2.
+
+# .i must be ascending
+
+    Code
+      (expect_error(slide_period(1:2, new_date(c(2, 1)), "year", identity), class = "slider_error_index_must_be_ascending")
+      )
+    Output
+      <error/slider_error_index_must_be_ascending>
+      Error in `slide_period()`:
+      ! `.i` must be in ascending order.
+      i It is not ascending at locations: 2.
+
+# empty input returns a list, but after the index size check
+
+    Code
+      (expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size")
+      )
+    Output
+      <error/slider_error_index_incompatible_size>
+      Error in `slide_period()`:
+      ! `.i` has an incorrect size.
+      x It must have size 0, not 1.
+
+# .i must not contain NA values
+
+    Code
+      (expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na")
+      )
+    Output
+      <error/slider_error_index_cannot_be_na>
+      Error in `slide_period()`:
+      ! `.i` cannot be `NA`.
+      i It is `NA` at locations: 2.
+    Code
+      (expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na")
+      )
+    Output
+      <error/slider_error_index_cannot_be_na>
+      Error in `slide_period()`:
+      ! `.i` cannot be `NA`.
+      i It is `NA` at locations: 1.
+
 # `.before` range cannot be after `.after` range
 
     Code
@@ -11,8 +72,31 @@
     Code
       slide_period(1, new_date(0), "year", identity, .before = NA_integer_)
     Condition
-      Error in `check_slide_period_before()`:
+      Error in `slide_period()`:
       ! `.before` cannot be `NA`.
+
+# `.before` cannot be -Inf
+
+    Code
+      (expect_error(slide_period(1, new_date(0), "year", identity, .before = -Inf),
+      class = "vctrs_error_cast_lossy"))
+    Output
+      <error/vctrs_error_cast_lossy>
+      Error in `slide_period()`:
+      ! Can't convert from `.before` <double> to <integer> due to loss of precision.
+      * Locations: 1
+
+# .before must be size 1
+
+    Code
+      expect_error(slide_period(1, new_date(0), "year", identity, .before = c(1L, 2L)),
+      class = "vctrs_error_assert_size")
+
+# error if .before is NULL
+
+    Code
+      expect_error(slide_period(1, new_date(0), "year", identity, .before = NULL),
+      class = "vctrs_error_scalar_type")
 
 # `.after` range cannot be before `.before` range
 
@@ -27,6 +111,59 @@
     Code
       slide_period(1, new_date(0), "year", identity, .after = NA_integer_)
     Condition
-      Error in `check_slide_period_after()`:
+      Error in `slide_period()`:
       ! `.after` cannot be `NA`.
+
+# `.after` cannot be -Inf
+
+    Code
+      (expect_error(slide_period(1, new_date(0), "year", identity, .after = -Inf),
+      class = "vctrs_error_cast_lossy"))
+    Output
+      <error/vctrs_error_cast_lossy>
+      Error in `slide_period()`:
+      ! Can't convert from `.after` <double> to <integer> due to loss of precision.
+      * Locations: 1
+
+# .after must be size 1
+
+    Code
+      (expect_error(slide_period(1, new_date(0), "year", identity, .after = c(1L, 2L)),
+      class = "vctrs_error_assert_size"))
+    Output
+      <error/vctrs_error_assert_size>
+      Error in `slide_period()`:
+      ! `.after` must have size 1, not size 2.
+
+# error if .after is NULL
+
+    Code
+      (expect_error(slide_period(1, new_date(0), "year", identity, .after = NULL),
+      class = "vctrs_error_scalar_type"))
+    Output
+      <error/vctrs_error_scalar_type>
+      Error in `slide_period()`:
+      ! `.after` must be a vector, not `NULL`.
+
+# `.complete` cannot be NA
+
+    Code
+      (expect_error(slide_period(1, new_date(0), "year", identity, .complete = NA),
+      "`.complete` cannot be `NA`"))
+    Output
+      <error/rlang_error>
+      Error in `slide_period()`:
+      ! `.complete` cannot be `NA`.
+
+# .complete must be size 1
+
+    Code
+      expect_error(slide_period(1, new_date(0), "year", identity, .complete = c(TRUE,
+        FALSE)), class = "vctrs_error_assert_size")
+
+# error if .complete is NULL
+
+    Code
+      expect_error(slide_period(1, new_date(0), "year", identity, .complete = NULL),
+      class = "vctrs_error_scalar_type")
 
