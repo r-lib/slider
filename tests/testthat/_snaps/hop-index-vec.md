@@ -4,7 +4,7 @@
       (expect_error(hop_index_vec(1, 1, 1, 1, ~ c(.x, 1))))
     Output
       <error/rlang_error>
-      Error in `glubort()`:
+      Error in `stop_not_all_size_one()`:
       ! In iteration 1, the result of `.f` had size 2, not 1.
 
 # inner type can be restricted with list_of
@@ -31,7 +31,7 @@
       }, .ptype = NULL)))
     Output
       <error/rlang_error>
-      Error in `glubort()`:
+      Error in `stop_not_all_size_one()`:
       ! In iteration 1, the result of `.f` had size 2, not 1.
     Code
       (expect_error(hop_index_vec(1:2, 1:2, 1:2, 1:2, ~ if (.x == 1L) {
@@ -41,6 +41,6 @@
       }, .ptype = NULL)))
     Output
       <error/rlang_error>
-      Error in `glubort()`:
+      Error in `stop_not_all_size_one()`:
       ! In iteration 1, the result of `.f` had size 0, not 1.
 
