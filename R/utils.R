@@ -6,12 +6,45 @@ is_unbounded <- function(x) {
   identical(x, Inf)
 }
 
-check_is_list <- function(.l) {
+# TODO: Remove me
+check_is_list <- function(.l, .call = caller_env()) {
   if (!is.list(.l)) {
-    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."))
+    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."), call = .call)
   }
 
   invisible(.l)
+}
+
+slider_check_list <- function(x,
+                              arg = caller_arg(x),
+                              call = caller_env()) {
+  out <- slider_compat_list(x)
+  vec_check_list(out, arg = arg, call = call)
+  out
+}
+
+slider_compat_list <- function(x) {
+  if (is.data.frame(x)) {
+    # For compatibility, `pslide()`, `phop()`, and friends allow data frames
+    slider_new_list(x)
+  } else {
+    x
+  }
+}
+
+slider_new_list <- function(x) {
+  if (!is_list(x)) {
+    abort("`x` must be a VECSXP.", .internal = TRUE)
+  }
+
+  names <- names(x)
+  if (is.null(names)) {
+    attributes(x) <- NULL
+  } else {
+    attributes(x) <- list(names = names)
+  }
+
+  x
 }
 
 # Thrown to here from C

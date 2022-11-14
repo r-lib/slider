@@ -139,10 +139,11 @@ hop_impl <- function(.x,
                      ...,
                      .ptype,
                      .constrain,
-                     .atomic) {
-  vec_assert(.x)
+                     .atomic,
+                     .slider_error_call = caller_env()) {
+  vec_assert(.x, call = .slider_error_call)
 
-  .f <- as_function(.f)
+  .f <- as_function(.f, call = .slider_error_call)
 
   f_call <- expr(.f(.x, ...))
 
@@ -157,6 +158,7 @@ hop_impl <- function(.x,
     env = environment(),
     type = type,
     constrain = .constrain,
-    atomic = .atomic
+    atomic = .atomic,
+    slider_error_call = .slider_error_call
   )
 }

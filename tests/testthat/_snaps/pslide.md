@@ -3,6 +3,6 @@
     Code
       pslide(1:5, ~.x)
     Condition
-      Error in `check_is_list()`:
+      Error in `pslide_impl()`:
       ! `.l` must be a list, not integer.
 
