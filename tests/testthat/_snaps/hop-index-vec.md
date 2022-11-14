@@ -18,7 +18,7 @@
       )
     Output
       <error/vctrs_error_cast>
-      Error in `list_unchop()`:
+      Error in `hop_index_vec()`:
       ! Can't convert `..1` <character> to <double>.
 
 # `.ptype = NULL` validates that element lengths are 1

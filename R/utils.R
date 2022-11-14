@@ -77,11 +77,19 @@ compute_size <- function(x, type) {
 #
 # slide_vec(1, ~c(y = 2))
 # purrr::map_dbl(1, ~c(y = 2))
-vec_simplify <- function(x, ptype) {
+vec_simplify <- function(x,
+                         ptype,
+                         error_arg = caller_arg(x),
+                         error_call = caller_env()) {
   names <- vec_names(x)
-  x <- vec_set_names(x, NULL)
+  unnamed <- vec_set_names(x, NULL)
 
-  out <- list_unchop(x, ptype = ptype)
+  out <- list_unchop(
+    x = unnamed,
+    ptype = ptype,
+    error_arg = error_arg,
+    error_call = error_call
+  )
 
   vec_set_names(out, names)
 }
