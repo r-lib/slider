@@ -55,7 +55,8 @@ pslide_vec_direct <- function(.l,
                               .after,
                               .step,
                               .complete,
-                              .ptype) {
+                              .ptype,
+                              .slider_error_call = caller_env()) {
   pslide_impl(
     .l,
     .f,
@@ -66,7 +67,8 @@ pslide_vec_direct <- function(.l,
     .complete = .complete,
     .ptype = .ptype,
     .constrain = TRUE,
-    .atomic = TRUE
+    .atomic = TRUE,
+    .slider_error_call = .slider_error_call
   )
 }
 
@@ -215,14 +217,14 @@ pslide_impl <- function(.l,
                         .complete,
                         .ptype,
                         .constrain,
-                        .atomic) {
-  check_is_list(.l)
+                        .atomic,
+                        .slider_error_call = caller_env()) {
+  .l <- slider_check_list(.l, call = .slider_error_call)
+  list_check_all_vectors(.l, call = .slider_error_call)
 
-  lapply(.l, vec_assert)
+  .l <- vec_recycle_common(!!!.l, .arg = ".l", .call = .slider_error_call)
 
-  .l <- vec_recycle_common(!!!.l)
-
-  .f <- as_function(.f)
+  .f <- as_function(.f, call = .slider_error_call)
 
   type <- vec_size(.l)
 

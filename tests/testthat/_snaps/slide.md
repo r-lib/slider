@@ -30,6 +30,16 @@
       Error:
       ! `.before` must have size 1, not 2.
 
+---
+
+    Code
+      (expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_incompatible_type")
+      )
+    Output
+      <error/vctrs_error_cast>
+      Error:
+      ! Can't convert <character> to <integer>.
+
 # cannot use invalid .after
 
     Code
@@ -37,6 +47,16 @@
     Condition
       Error:
       ! `.after` must have size 1, not 2.
+
+---
+
+    Code
+      (expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_incompatible_type")
+      )
+    Output
+      <error/vctrs_error_cast>
+      Error:
+      ! Can't convert <character> to <integer>.
 
 # cannot use invalid .step
 
@@ -62,6 +82,16 @@
       Error:
       ! `.step` must have size 1, not 2.
 
+---
+
+    Code
+      (expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_incompatible_type")
+      )
+    Output
+      <error/vctrs_error_cast>
+      Error:
+      ! Can't convert <character> to <integer>.
+
 # cannot use invalid .complete
 
     Code
@@ -69,4 +99,14 @@
     Condition
       Error:
       ! `.complete` must have size 1, not 2.
+
+---
+
+    Code
+      (expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_incompatible_type")
+      )
+    Output
+      <error/vctrs_error_cast>
+      Error:
+      ! Can't convert <character> to <logical>.
 

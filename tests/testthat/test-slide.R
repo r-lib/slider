@@ -502,12 +502,16 @@ test_that("names are retained on inner sliced object", {
 
 test_that("cannot use invalid .before", {
   expect_snapshot(error = TRUE, slide(1, identity, .before = c(1, 2)))
-  expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide(1, identity, .before = "x"), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("cannot use invalid .after", {
   expect_snapshot(error = TRUE, slide(1, identity, .after = c(1, 2)))
-  expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide(1, identity, .after = "x"), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("cannot use invalid .step", {
@@ -515,12 +519,16 @@ test_that("cannot use invalid .step", {
   expect_snapshot(error = TRUE, slide(1, identity, .step = 0))
 
   expect_snapshot(error = TRUE, slide(1, identity, .step = c(1, 2)))
-  expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide(1, identity, .step = "x"), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("cannot use invalid .complete", {
   expect_snapshot(error = TRUE, slide(1, identity, .complete = c(TRUE, TRUE)))
-  expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide(1, identity, .complete = "hi"), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 # ------------------------------------------------------------------------------
