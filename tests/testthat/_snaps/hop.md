@@ -20,7 +20,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `stop_endpoints_cannot_be_na()`:
+      Error in `hop_common()`:
       ! `.starts` cannot be `NA`.
       i It is `NA` at locations: 2.
     Code
@@ -28,7 +28,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `stop_endpoints_cannot_be_na()`:
+      Error in `hop_common()`:
       ! `.starts` cannot be `NA`.
       i It is `NA` at locations: 1.
 
@@ -39,7 +39,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `stop_endpoints_cannot_be_na()`:
+      Error in `hop_common()`:
       ! `.stops` cannot be `NA`.
       i It is `NA` at locations: 2.
     Code
@@ -47,7 +47,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `stop_endpoints_cannot_be_na()`:
+      Error in `hop_common()`:
       ! `.stops` cannot be `NA`.
       i It is `NA` at locations: 1.
 

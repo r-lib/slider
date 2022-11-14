@@ -30,7 +30,7 @@
     Code
       check_endpoints_cannot_be_na(c(NA, 1, NA), ".starts")
     Condition
-      Error in `stop_endpoints_cannot_be_na()`:
+      Error:
       ! `.starts` cannot be `NA`.
       i It is `NA` at locations: 1, 3.
 

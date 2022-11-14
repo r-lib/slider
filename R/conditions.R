@@ -205,21 +205,30 @@ cnd_body.slider_error_generated_endpoints_incompatible_size <- function(cnd, ...
 
 # ------------------------------------------------------------------------------
 
-check_endpoints_cannot_be_na <- function(endpoints, endpoints_arg) {
+check_endpoints_cannot_be_na <- function(endpoints,
+                                         endpoints_arg,
+                                         call = caller_env()) {
   if (!vec_any_missing(endpoints)) {
     return(invisible(endpoints))
   }
 
-  na_indicators <- vec_detect_missing(endpoints)
-  na_locations <- which(na_indicators)
+  indicators <- vec_detect_missing(endpoints)
+  locations <- which(indicators)
 
-  stop_endpoints_cannot_be_na(na_locations, endpoints_arg)
+  stop_endpoints_cannot_be_na(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    call = call
+  )
 }
 
-stop_endpoints_cannot_be_na <- function(locations, endpoints_arg) {
+stop_endpoints_cannot_be_na <- function(locations,
+                                        endpoints_arg,
+                                        call = caller_env()) {
   stop_endpoints(
     locations = locations,
     endpoints_arg = endpoints_arg,
+    call = call,
     class = "slider_error_endpoints_cannot_be_na"
   )
 }
