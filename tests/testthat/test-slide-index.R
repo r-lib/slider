@@ -947,20 +947,16 @@ test_that(".before/.after - generated endpoints shouldn't rely on original `.i` 
   x <- c(1, 1)
   adjust <- c(2, 3)
 
-  expect_error(
-    slide_index(x, x, identity, .before = ~.x - adjust),
-    class = "slider_error_generated_endpoints_incompatible_size"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .before = ~.x - adjust)
-  )
-  expect_error(
-    slide_index(x, x, identity, .after = ~.x + adjust),
-    class = "slider_error_generated_endpoints_incompatible_size"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .after = ~.x + adjust)
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, x, identity, .before = ~.x - adjust),
+      class = "slider_error_generated_endpoints_incompatible_size"
+    ))
+    (expect_error(
+      slide_index(x, x, identity, .after = ~.x + adjust),
+      class = "slider_error_generated_endpoints_incompatible_size"
+    ))
+  })
 })
 
 test_that(".before/.after - function must have 1 argument", {
