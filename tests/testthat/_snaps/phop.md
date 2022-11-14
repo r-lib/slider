@@ -6,7 +6,7 @@
     Output
       <error/vctrs_error_incompatible_size>
       Error in `phop()`:
-      ! Can't recycle `..1` (size 0) to match `..2` (size 2).
+      ! Can't recycle `.l[[1]]` (size 0) to match `.l[[2]]` (size 2).
 
 ---
 
@@ -16,7 +16,7 @@
     Output
       <error/vctrs_error_incompatible_size>
       Error in `phop()`:
-      ! Can't recycle `..1` (size 2) to match `..2` (size 3).
+      ! Can't recycle `.l[[1]]` (size 2) to match `.l[[2]]` (size 3).
 
 # phop() requires a list-like input
 

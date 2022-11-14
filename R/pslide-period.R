@@ -279,7 +279,7 @@ pslide_period_impl <- function(.l,
 
   .f <- as_function(.f, call = .slider_error_call)
 
-  .l <- vec_recycle_common(!!!.l, .call = .slider_error_call)
+  .l <- vec_recycle_common(!!!.l, .arg = ".l", .call = .slider_error_call)
 
   type <- vec_size(.l)
 
