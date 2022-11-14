@@ -15,10 +15,12 @@ test_that("phop_index_vec() can simplify automatically", {
 
 test_that("phop_index_vec() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, fn, .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      phop_index_vec(list(1:2, 1:2), 1:2, 1:2, 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("completely empty input returns ptype", {

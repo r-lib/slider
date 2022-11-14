@@ -40,10 +40,12 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 })
 
 test_that("`.ptype = NULL` fails if no common type is found", {
-  expect_error(
-    hop_index_vec(1:2, 1:2, 1:2, 1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_index_vec(1:2, 1:2, 1:2, 1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
@@ -77,10 +79,12 @@ test_that("`.ptype = NULL` returns `NULL` with one size 0 and one size 1 starts 
 })
 
 test_that("`.ptype = NULL` errors with non recyclable starts/stops", {
-  expect_error(
-    hop_index_vec(integer(), integer(), integer(), 1:2, ~.x, .ptype = NULL),
-    class = "vctrs_error_incompatible_size"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_index_vec(integer(), integer(), integer(), 1:2, ~.x, .ptype = NULL),
+      class = "vctrs_error_incompatible_size"
+    ))
+  })
 })
 
 test_that(".ptypes with a vec_proxy() are restored to original type", {

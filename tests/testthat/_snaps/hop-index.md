@@ -5,7 +5,7 @@
       )
     Output
       <error/slider_error_index_incompatible_size>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.i` has an incorrect size.
       x It must have size 1, not 2.
 
@@ -16,7 +16,7 @@
       )
     Output
       <error/slider_error_index_must_be_ascending>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.i` must be in ascending order.
       i It is not ascending at locations: 2.
 
@@ -27,7 +27,7 @@
       )
     Output
       <error/slider_error_endpoints_must_be_ascending>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.starts` must be in ascending order.
       i It is not ascending at locations: 2.
 
@@ -38,7 +38,7 @@
       )
     Output
       <error/slider_error_endpoints_must_be_ascending>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.stops` must be in ascending order.
       i It is not ascending at locations: 2.
 
@@ -49,14 +49,14 @@
       )
     Output
       <error/vctrs_error_incompatible_size>
-      Error in `hop_index_common()`:
-      ! Can't recycle `..1` (size 3) to match `..2` (size 2).
+      Error in `hop_index()`:
+      ! Can't recycle `.starts` (size 3) to match `.stops` (size 2).
     Code
       (expect_error(hop_index(integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
       )
     Output
       <error/vctrs_error_cast>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! Can't convert `.stops` <character> to match type of `.i` <integer>.
 
 # .i must not contain NA values
@@ -66,7 +66,7 @@
       )
     Output
       <error/slider_error_index_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 2.
     Code
@@ -74,7 +74,7 @@
       )
     Output
       <error/slider_error_index_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.i` cannot be `NA`.
       i It is `NA` at locations: 1.
 
@@ -85,7 +85,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.starts` cannot be `NA`.
       i It is `NA` at locations: 2.
     Code
@@ -93,7 +93,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.starts` cannot be `NA`.
       i It is `NA` at locations: 1.
 
@@ -104,7 +104,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.stops` cannot be `NA`.
       i It is `NA` at locations: 2.
     Code
@@ -112,7 +112,7 @@
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! `.stops` cannot be `NA`.
       i It is `NA` at locations: 1.
 
@@ -123,8 +123,8 @@
       )
     Output
       <error/vctrs_error_incompatible_size>
-      Error in `hop_index_common()`:
-      ! Can't recycle `..1` (size 2) to match `..2` (size 3).
+      Error in `hop_index()`:
+      ! Can't recycle `.starts` (size 2) to match `.stops` (size 3).
 
 # .starts and .stops are cast to .i
 
@@ -133,6 +133,6 @@
       )
     Output
       <error/vctrs_error_cast>
-      Error in `hop_index_common()`:
+      Error in `hop_index()`:
       ! Can't convert `.starts` <character> to match type of `.i` <date>.
 

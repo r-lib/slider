@@ -137,10 +137,19 @@ hop_index_vec <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-hop_index_impl <- function(.x, .i, .starts, .stops, .f, ..., .ptype, .constrain, .atomic) {
-  vec_assert(.x)
+hop_index_impl <- function(.x,
+                           .i,
+                           .starts,
+                           .stops,
+                           .f,
+                           ...,
+                           .ptype,
+                           .constrain,
+                           .atomic,
+                           .slider_error_call = caller_env()) {
+  vec_assert(.x, call = .slider_error_call)
 
-  .f <- as_function(.f)
+  .f <- as_function(.f, call = .slider_error_call)
 
   f_call <- expr(.f(.x, ...))
 
@@ -156,6 +165,7 @@ hop_index_impl <- function(.x, .i, .starts, .stops, .f, ..., .ptype, .constrain,
     constrain = .constrain,
     atomic = .atomic,
     env = environment(),
-    type = type
+    type = type,
+    slider_error_call = .slider_error_call
   )
 }

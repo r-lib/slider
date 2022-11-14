@@ -54,14 +54,14 @@ phop_index_impl <- function(.l,
                             ...,
                             .ptype,
                             .constrain,
-                            .atomic) {
-  check_is_list(.l)
+                            .atomic,
+                            .slider_error_call = caller_env()) {
+  .l <- slider_check_list(.l, call = .slider_error_call)
+  list_check_all_vectors(.l, call = .slider_error_call)
 
-  lapply(.l, vec_assert)
+  .f <- as_function(.f, call = .slider_error_call)
 
-  .f <- as_function(.f)
-
-  .l <- vec_recycle_common(!!!.l)
+  .l <- vec_recycle_common(!!!.l, .call = .slider_error_call)
 
   type <- vec_size(.l)
 
@@ -88,6 +88,7 @@ phop_index_impl <- function(.l,
     constrain = .constrain,
     atomic = .atomic,
     env = environment(),
-    type = type
+    type = type,
+    slider_error_call = .slider_error_call
   )
 }

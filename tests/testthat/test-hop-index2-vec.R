@@ -15,10 +15,12 @@ test_that("hop_index2_vec() can simplify automatically", {
 
 test_that("hop_index2_vec() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, fn, .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_index2_vec(1:2, 1:2, 1:2, 1:2, 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------

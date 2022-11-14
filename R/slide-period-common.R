@@ -68,7 +68,8 @@ slide_period_common <- function(x,
     constrain = constrain,
     atomic = atomic,
     env = env,
-    type = type
+    type = type,
+    slider_error_call = current_env() # TODO: Update this env
   )
 
   if (!complete) {
