@@ -19,7 +19,9 @@ stop_not_all_size_one <- function(iteration, size) {
   message <- glue::glue(
     "In iteration {iteration}, the result of `.f` had size {size}, not 1."
   )
-  abort(message)
+
+  # TODO: Use correct `call` passed through C
+  abort(message, call = NULL)
 }
 
 # Thrown to here from C
@@ -34,7 +36,8 @@ stop_slide_start_past_stop <- function(starts, stops) {
     "the start of the range is after the end of the range at location(s): {at}."
   ))
 
-  abort(message)
+  # TODO: Use correct `call` passed through C
+  abort(message, call = NULL)
 }
 
 # Thrown to here from C
@@ -49,7 +52,8 @@ stop_hop_start_past_stop <- function(starts, stops) {
     "a start is after a stop at location(s): {at}."
   ))
 
-  abort(message)
+  # TODO: Use correct `call` passed through C
+  abort(message, call = NULL)
 }
 
 compute_size <- function(x, type) {
