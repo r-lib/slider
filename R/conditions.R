@@ -159,21 +159,33 @@ cnd_body.slider_error_generated_endpoints_must_be_ascending <- function(cnd, ...
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_incompatible_size <- function(endpoints, size, by_arg) {
+check_generated_endpoints_incompatible_size <- function(endpoints,
+                                                        size,
+                                                        by_arg,
+                                                        call = caller_env()) {
   endpoints_size <- vec_size(endpoints)
 
   if (endpoints_size == size) {
     return(invisible(endpoints))
   }
 
-  stop_generated_endpoints_incompatible_size(endpoints_size, size, by_arg)
+  stop_generated_endpoints_incompatible_size(
+    endpoints_size = endpoints_size,
+    size = size,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_incompatible_size <- function(endpoints_size, size, by_arg) {
+stop_generated_endpoints_incompatible_size <- function(endpoints_size,
+                                                       size,
+                                                       by_arg,
+                                                       call = caller_env()) {
   stop_endpoints(
     endpoints_size = endpoints_size,
     size = size,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_incompatible_size"
   )
 }
