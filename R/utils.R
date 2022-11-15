@@ -6,15 +6,6 @@ is_unbounded <- function(x) {
   identical(x, Inf)
 }
 
-# TODO: Remove me
-check_is_list <- function(.l, .call = caller_env()) {
-  if (!is.list(.l)) {
-    abort(paste0("`.l` must be a list, not ", vec_ptype_full(.l), "."), call = .call)
-  }
-
-  invisible(.l)
-}
-
 slider_check_list <- function(x,
                               arg = caller_arg(x),
                               call = caller_env()) {

@@ -3,7 +3,9 @@ test_that("empty input returns a list, but after the index size check", {
   expect_equal(pslide_index(list(integer(), 1), integer(), ~.x), list())
   expect_equal(pslide_index(list(1, integer()), integer(), ~.x), list())
 
-  expect_error(pslide_index(list(integer(), integer()), 1, ~.x), class = "slider_error_index_incompatible_size")
+  expect_snapshot({
+    (expect_error(pslide_index(list(integer(), integer()), 1, ~.x), class = "slider_error_index_incompatible_size"))
+  })
 })
 
 test_that("completely empty input returns a list", {

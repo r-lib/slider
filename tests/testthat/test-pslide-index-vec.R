@@ -17,14 +17,16 @@ test_that("pslide_index_vec() can simplify automatically", {
 
 test_that("pslide_index_*() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    pslide_index_vec(list(1:2, 1:2), 1:2, fn, .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
-  expect_error(
-    pslide_index_int(list(1:2, 1:2), 1:2, fn),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      pslide_index_vec(list(1:2, 1:2), 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+    (expect_error(
+      pslide_index_int(list(1:2, 1:2), 1:2, fn),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("completely empty input returns ptype", {
@@ -58,7 +60,9 @@ test_that("pslide_index_chr() works", {
 })
 
 test_that("pslide_index_chr() cannot coerce", {
-  expect_error(pslide_index_chr(list(1, 1), 1, ~.x + .y), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(pslide_index_chr(list(1, 1), 1, ~.x + .y), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("pslide_index_lgl() works", {
