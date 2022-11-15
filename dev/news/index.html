@@ -56,7 +56,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="slider-development-version">slider (development version)<a class="anchor" aria-label="anchor" href="#slider-development-version"></a></h2>
-<ul><li><p>Improved reported error calls throughout the package (<a href="https://github.com/DavisVaughan/slider/issues/168" class="external-link">#168</a>).</p></li>
+<ul><li><p>Improved reported error calls and error messages throughout the package, and switched from glue to cli (<a href="https://github.com/DavisVaughan/slider/issues/168" class="external-link">#168</a>, <a href="https://github.com/DavisVaughan/slider/issues/188" class="external-link">#188</a>).</p></li>
 <li><p>Removed ellipsis in favor of using the equivalent functions in rlang (<a href="https://github.com/DavisVaughan/slider/issues/185" class="external-link">#185</a>).</p></li>
 <li><p>New <code><a href="../reference/index-arithmetic.html">slider_plus()</a></code> and <code><a href="../reference/index-arithmetic.html">slider_minus()</a></code> developer facing helpers that allow package authors to register custom double dispatch methods to override the default computation of <code>.i - .before</code> and <code>.i + .after</code> when generating index bounds internally. This is intended to allow the clock and almanac packages to register methods so their custom types can be used natively in slider (<a href="https://github.com/DavisVaughan/slider/issues/91" class="external-link">#91</a>).</p></li>
 <li><p>Index (<code>.i</code>) types that aren’t explicitly understood by vctrs are now handled slightly better (<a href="https://github.com/DavisVaughan/slider/issues/182" class="external-link">#182</a>).</p></li>
