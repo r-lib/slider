@@ -1,6 +1,7 @@
 # slider (development version)
 
-* Improved reported error calls throughout the package (#168).
+* Improved reported error calls and error messages throughout the package, and
+  switched from glue to cli (#168, #188).
 
 * Removed ellipsis in favor of using the equivalent functions in rlang (#185).
 
