@@ -11,17 +11,18 @@ slide_period_common <- function(x,
                                 constrain,
                                 atomic,
                                 env,
-                                type) {
-  check_index_incompatible_type(i, ".i")
-  check_index_cannot_be_na(i, ".i")
-  check_index_must_be_ascending(i, ".i")
+                                type,
+                                slider_error_call) {
+  check_index_incompatible_type(i, ".i", call = slider_error_call)
+  check_index_cannot_be_na(i, ".i", call = slider_error_call)
+  check_index_must_be_ascending(i, ".i", call = slider_error_call)
 
   before_unbounded <- is_unbounded(before)
   after_unbounded <- is_unbounded(after)
 
-  before <- check_slide_period_before(before, before_unbounded)
-  after <- check_slide_period_after(after, after_unbounded)
-  complete <- check_slide_period_complete(complete)
+  before <- check_slide_period_before(before, before_unbounded, call = slider_error_call)
+  after <- check_slide_period_after(after, after_unbounded, call = slider_error_call)
+  complete <- check_slide_period_complete(complete, call = slider_error_call)
 
   groups <- warp_distance(
     i,
@@ -68,7 +69,8 @@ slide_period_common <- function(x,
     constrain = constrain,
     atomic = atomic,
     env = env,
-    type = type
+    type = type,
+    slider_error_call = slider_error_call
   )
 
   if (!complete) {
@@ -84,7 +86,7 @@ slide_period_common <- function(x,
     back <- vec_init(ptype, n = size_back)
   }
 
-  out <- vec_c(front, out, back)
+  out <- vec_c(front, out, back, .error_call = slider_error_call)
 
   out
 }
@@ -97,45 +99,49 @@ compute_to <- function(stops, last, n, after_unbounded) {
   .Call(slider_compute_to, stops, last, n, after_unbounded)
 }
 
-check_slide_period_before <- function(x, unbounded) {
-  vec_assert(x, size = 1L, arg = ".before")
+check_slide_period_before <- function(x,
+                                      unbounded,
+                                      call = caller_env()) {
+  vec_assert(x, size = 1L, arg = ".before", call = call)
 
   if (unbounded) {
     return(x)
   }
 
-  x <- vec_cast(x, integer(), x_arg = ".before")
+  x <- vec_cast(x, integer(), x_arg = ".before", call = call)
 
   if (is.na(x)) {
-    abort("`.before` cannot be `NA`.")
+    abort("`.before` cannot be `NA`.", call = call)
   }
 
   x
 }
 
-check_slide_period_after <- function(x, unbounded) {
-  vec_assert(x, size = 1L, arg = ".after")
+check_slide_period_after <- function(x,
+                                     unbounded,
+                                     call = caller_env()) {
+  vec_assert(x, size = 1L, arg = ".after", call = call)
 
   if (unbounded) {
     return(x)
   }
 
-  x <- vec_cast(x, integer(), x_arg = ".after")
+  x <- vec_cast(x, integer(), x_arg = ".after", call = call)
 
   if (is.na(x)) {
-    abort("`.after` cannot be `NA`.")
+    abort("`.after` cannot be `NA`.", call = call)
   }
 
   x
 }
 
-check_slide_period_complete <- function(x) {
-  vec_assert(x, size = 1L, arg = ".complete")
+check_slide_period_complete <- function(x, call = caller_env()) {
+  vec_assert(x, size = 1L, arg = ".complete", call = call)
 
-  x <- vec_cast(x, logical(), x_arg = ".complete")
+  x <- vec_cast(x, logical(), x_arg = ".complete", call = call)
 
   if (is.na(x)) {
-    abort("`.complete` cannot be `NA`.")
+    abort("`.complete` cannot be `NA`.", call = call)
   }
 
   x

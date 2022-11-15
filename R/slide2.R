@@ -134,7 +134,8 @@ slide2_vec_direct <- function(.x,
                               .after,
                               .step,
                               .complete,
-                              .ptype) {
+                              .ptype,
+                              .slider_error_call = caller_env()) {
   slide2_impl(
     .x,
     .y,
@@ -146,7 +147,8 @@ slide2_vec_direct <- function(.x,
     .complete = .complete,
     .ptype = .ptype,
     .constrain = TRUE,
-    .atomic = TRUE
+    .atomic = TRUE,
+    .slider_error_call = .slider_error_call
   )
 }
 
@@ -308,13 +310,14 @@ slide2_impl <- function(.x,
                         .complete,
                         .ptype,
                         .constrain,
-                        .atomic) {
-  vec_assert(.x)
-  vec_assert(.y)
+                        .atomic,
+                        .slider_error_call = caller_env()) {
+  vec_assert(.x, call = .slider_error_call)
+  vec_assert(.y, call = .slider_error_call)
 
-  args <- vec_recycle_common(.x, .y)
+  args <- vec_recycle_common(.x = .x, .y = .y, .call = .slider_error_call)
 
-  .f <- as_function(.f)
+  .f <- as_function(.f, call = .slider_error_call)
 
   f_call <- expr(.f(.x, .y, ...))
 

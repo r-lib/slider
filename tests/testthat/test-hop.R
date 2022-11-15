@@ -25,18 +25,24 @@ test_that("empty `.x`, but size `n > 0` `.starts` and `.stops` returns size `n` 
 })
 
 test_that("empty `.x`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first", {
-  expect_error(hop(integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size")
-  expect_error(hop(integer(), 1, "x", ~.x), class = "vctrs_error_subscript_type")
+  expect_snapshot({
+    (expect_error(hop(integer(), 1:3, 1:2, ~.x), class = "vctrs_error_incompatible_size"))
+    (expect_error(hop(integer(), 1, "x", ~.x), class = "vctrs_error_subscript_type"))
+  })
 })
 
 test_that(".starts must not contain NA values", {
-  expect_error(hop(1:2, c(1, NA), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
-  expect_error(hop(1:2, c(NA, 1), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_snapshot({
+    (expect_error(hop(1:2, c(1, NA), 1:2, identity), class = "slider_error_endpoints_cannot_be_na"))
+    (expect_error(hop(1:2, c(NA, 1), 1:2, identity), class = "slider_error_endpoints_cannot_be_na"))
+  })
 })
 
 test_that(".stops must not contain NA values", {
-  expect_error(hop(1:2, 1:2, c(1, NA), identity), class = "slider_error_endpoints_cannot_be_na")
-  expect_error(hop(1:2, 1:2, c(NA, 1), identity), class = "slider_error_endpoints_cannot_be_na")
+  expect_snapshot({
+    (expect_error(hop(1:2, 1:2, c(1, NA), identity), class = "slider_error_endpoints_cannot_be_na"))
+    (expect_error(hop(1:2, 1:2, c(NA, 1), identity), class = "slider_error_endpoints_cannot_be_na"))
+  })
 })
 
 test_that("recycling is used for .starts/.stops", {
@@ -56,7 +62,9 @@ test_that("recycling is used for .starts/.stops", {
     )
   )
 
-  expect_error(hop(1:2, 1:2, 1:3, ~.x), class = "vctrs_error_incompatible_size")
+  expect_snapshot({
+    expect_error(hop(1:2, 1:2, 1:3, ~.x), class = "vctrs_error_incompatible_size")
+  })
 })
 
 test_that("0 length .starts/.stops are allowed", {
@@ -111,8 +119,26 @@ test_that("duplicated .starts/.stops pairs are allowed", {
 })
 
 test_that("`.starts` and `.stops` must be integerish", {
-  expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_type")
-  expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_type")
+  expect_snapshot({
+    (expect_error(hop(1, "x", 1, identity), class = "vctrs_error_subscript_type"))
+    (expect_error(hop(1, 1, "x", identity), class = "vctrs_error_subscript_type"))
+  })
+})
+
+test_that("`error_call` and `.error_call` args aren't swallowed", {
+  fn <- function(x, error_call) {
+    abort("hi", call = error_call)
+  }
+  fn_dot <- function(x, .error_call) {
+    abort("hi", call = .error_call)
+  }
+
+  expect_snapshot(error = TRUE, {
+    hop(1, 1, 1, fn, error_call = call("foo"))
+  })
+  expect_snapshot(error = TRUE, {
+    hop(1, 1, 1, fn_dot, .error_call = call("foo"))
+  })
 })
 
 # ------------------------------------------------------------------------------

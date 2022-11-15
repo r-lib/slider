@@ -5,7 +5,7 @@
       .stops = integer(), .f = ~.x), class = "slider_error_index_incompatible_size"))
     Output
       <error/slider_error_index_incompatible_size>
-      Error in `stop_slider()`:
+      Error in `hop_index2()`:
       ! `.i` has an incorrect size.
       x It must have size 0, not 1.
 
@@ -16,13 +16,13 @@
       class = "vctrs_error_incompatible_size"))
     Output
       <error/vctrs_error_incompatible_size>
-      Error in `hop_index_common()`:
-      ! Can't recycle `..1` (size 3) to match `..2` (size 2).
+      Error in `hop_index2()`:
+      ! Can't recycle `.starts` (size 3) to match `.stops` (size 2).
     Code
       (expect_error(hop_index2(integer(), integer(), integer(), 1, "x", ~.x), class = "vctrs_error_incompatible_type")
       )
     Output
       <error/vctrs_error_cast>
-      Error in `hop_index_common()`:
+      Error in `hop_index2()`:
       ! Can't convert `.stops` <character> to match type of `.i` <integer>.
 

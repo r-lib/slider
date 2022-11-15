@@ -13,10 +13,12 @@ test_that("inner type is allowed to be different", {
 })
 
 test_that("inner type can be restricted with list_of", {
-  expect_error(
-    hop_vec(1:2, 1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_vec(1:2, 1:2, 1:2, ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -36,10 +38,12 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 })
 
 test_that("`.ptype = NULL` fails if no common type is found", {
-  expect_error(
-    hop_vec(1:2, 1:2, 1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      hop_vec(1:2, 1:2, 1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {

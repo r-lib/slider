@@ -1,17 +1,18 @@
-check_index_incompatible_type <- function(i, i_arg = "i") {
+check_index_incompatible_type <- function(i, i_arg = "i", call = caller_env()) {
   is_datelike <- inherits(i, c("Date", "POSIXt"))
 
   if (is_datelike) {
     return(invisible(i))
   }
 
-  stop_index_incompatible_type(i, i_arg)
+  stop_index_incompatible_type(i, i_arg = i_arg, call = call)
 }
 
-stop_index_incompatible_type <- function(i, i_arg = "i") {
+stop_index_incompatible_type <- function(i, i_arg = "i", call = caller_env()) {
   stop_index(
     i_class = class(i),
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_incompatible_type"
   )
 }
@@ -31,20 +32,29 @@ cnd_body.slider_error_index_incompatible_type <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_endpoints_must_be_ascending <- function(endpoints, endpoints_arg) {
+check_endpoints_must_be_ascending <- function(endpoints,
+                                              endpoints_arg,
+                                              call = caller_env()) {
   locations <- compute_non_ascending_locations(endpoints)
 
   if (identical(locations, integer())) {
     return(invisible(endpoints))
   }
 
-  stop_endpoints_must_be_ascending(locations, endpoints_arg)
+  stop_endpoints_must_be_ascending(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    call = call
+  )
 }
 
-stop_endpoints_must_be_ascending <- function(locations, endpoints_arg) {
+stop_endpoints_must_be_ascending <- function(locations,
+                                             endpoints_arg,
+                                             call = caller_env()) {
   stop_endpoints(
     locations = locations,
     endpoints_arg = endpoints_arg,
+    call = call,
     class = "slider_error_endpoints_must_be_ascending"
   )
 }
@@ -64,21 +74,30 @@ cnd_body.slider_error_endpoints_must_be_ascending <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_cannot_be_na <- function(endpoints, by_arg) {
+check_generated_endpoints_cannot_be_na <- function(endpoints,
+                                                   by_arg,
+                                                   call = caller_env()) {
   if (!vec_any_missing(endpoints)) {
     return(invisible(endpoints))
   }
 
-  na_indicators <- vec_detect_missing(endpoints)
-  na_locations <- which(na_indicators)
+  indicators <- vec_detect_missing(endpoints)
+  locations <- which(indicators)
 
-  stop_generated_endpoints_cannot_be_na(na_locations, by_arg)
+  stop_generated_endpoints_cannot_be_na(
+    locations = locations,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_cannot_be_na <- function(locations, by_arg) {
+stop_generated_endpoints_cannot_be_na <- function(locations,
+                                                  by_arg,
+                                                  call = caller_env()) {
   stop_endpoints(
     locations = locations,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_cannot_be_na"
   )
 }
@@ -98,20 +117,29 @@ cnd_body.slider_error_generated_endpoints_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_must_be_ascending <- function(endpoints, by_arg) {
+check_generated_endpoints_must_be_ascending <- function(endpoints,
+                                                        by_arg,
+                                                        call = caller_env()) {
   locations <- compute_non_ascending_locations(endpoints)
 
   if (identical(locations, integer())) {
     return(invisible(endpoints))
   }
 
-  stop_generated_endpoints_must_be_ascending(locations, by_arg)
+  stop_generated_endpoints_must_be_ascending(
+    locations = locations,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_must_be_ascending <- function(locations, by_arg) {
+stop_generated_endpoints_must_be_ascending <- function(locations,
+                                                       by_arg,
+                                                       call = caller_env()) {
   stop_endpoints(
     locations = locations,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_must_be_ascending"
   )
 }
@@ -131,21 +159,33 @@ cnd_body.slider_error_generated_endpoints_must_be_ascending <- function(cnd, ...
 
 # ------------------------------------------------------------------------------
 
-check_generated_endpoints_incompatible_size <- function(endpoints, size, by_arg) {
+check_generated_endpoints_incompatible_size <- function(endpoints,
+                                                        size,
+                                                        by_arg,
+                                                        call = caller_env()) {
   endpoints_size <- vec_size(endpoints)
 
   if (endpoints_size == size) {
     return(invisible(endpoints))
   }
 
-  stop_generated_endpoints_incompatible_size(endpoints_size, size, by_arg)
+  stop_generated_endpoints_incompatible_size(
+    endpoints_size = endpoints_size,
+    size = size,
+    by_arg = by_arg,
+    call = call
+  )
 }
 
-stop_generated_endpoints_incompatible_size <- function(endpoints_size, size, by_arg) {
+stop_generated_endpoints_incompatible_size <- function(endpoints_size,
+                                                       size,
+                                                       by_arg,
+                                                       call = caller_env()) {
   stop_endpoints(
     endpoints_size = endpoints_size,
     size = size,
     by_arg = by_arg,
+    call = call,
     class = "slider_error_generated_endpoints_incompatible_size"
   )
 }
@@ -165,21 +205,30 @@ cnd_body.slider_error_generated_endpoints_incompatible_size <- function(cnd, ...
 
 # ------------------------------------------------------------------------------
 
-check_endpoints_cannot_be_na <- function(endpoints, endpoints_arg) {
+check_endpoints_cannot_be_na <- function(endpoints,
+                                         endpoints_arg,
+                                         call = caller_env()) {
   if (!vec_any_missing(endpoints)) {
     return(invisible(endpoints))
   }
 
-  na_indicators <- vec_detect_missing(endpoints)
-  na_locations <- which(na_indicators)
+  indicators <- vec_detect_missing(endpoints)
+  locations <- which(indicators)
 
-  stop_endpoints_cannot_be_na(na_locations, endpoints_arg)
+  stop_endpoints_cannot_be_na(
+    locations = locations,
+    endpoints_arg = endpoints_arg,
+    call = call
+  )
 }
 
-stop_endpoints_cannot_be_na <- function(locations, endpoints_arg) {
+stop_endpoints_cannot_be_na <- function(locations,
+                                        endpoints_arg,
+                                        call = caller_env()) {
   stop_endpoints(
     locations = locations,
     endpoints_arg = endpoints_arg,
+    call = call,
     class = "slider_error_endpoints_cannot_be_na"
   )
 }
@@ -199,20 +248,21 @@ cnd_body.slider_error_endpoints_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_index_must_be_ascending <- function(i, i_arg = "i") {
+check_index_must_be_ascending <- function(i, i_arg = "i", call = caller_env()) {
   locations <- compute_non_ascending_locations(i)
 
   if (identical(locations, integer())) {
     return(invisible(i))
   }
 
-  stop_index_must_be_ascending(locations, i_arg)
+  stop_index_must_be_ascending(locations, i_arg = i_arg, call = call)
 }
 
-stop_index_must_be_ascending <- function(locations, i_arg = "i") {
+stop_index_must_be_ascending <- function(locations, i_arg = "i", call = caller_env()) {
   stop_index(
     locations = locations,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_must_be_ascending"
   )
 }
@@ -232,7 +282,7 @@ cnd_body.slider_error_index_must_be_ascending <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-check_index_cannot_be_na <- function(i, i_arg = "i") {
+check_index_cannot_be_na <- function(i, i_arg = "i", call = caller_env()) {
   if (!vec_any_missing(i)) {
     return(invisible(i))
   }
@@ -240,13 +290,14 @@ check_index_cannot_be_na <- function(i, i_arg = "i") {
   na_indicators <- vec_detect_missing(i)
   na_locations <- which(na_indicators)
 
-  stop_index_cannot_be_na(na_locations, i_arg)
+  stop_index_cannot_be_na(na_locations, i_arg = i_arg, call = call)
 }
 
-stop_index_cannot_be_na <- function(locations, i_arg = "i") {
+stop_index_cannot_be_na <- function(locations, i_arg = "i", call = caller_env()) {
   stop_index(
     locations = locations,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_cannot_be_na"
   )
 }
@@ -266,11 +317,15 @@ cnd_body.slider_error_index_cannot_be_na <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_index_incompatible_size <- function(i_size, size, i_arg = "i") {
+stop_index_incompatible_size <- function(i_size,
+                                         size,
+                                         i_arg = "i",
+                                         call = caller_env()) {
   stop_index(
     i_size = i_size,
     size = size,
     i_arg = i_arg,
+    call = call,
     class = "slider_error_index_incompatible_size"
   )
 }
@@ -287,20 +342,20 @@ cnd_body.slider_error_index_incompatible_size <- function(cnd, ...) {
 
 # ------------------------------------------------------------------------------
 
-stop_endpoints <- function(message = NULL, class = character(), ...) {
-  stop_slider(message, class = c(class, "slider_error_endpoints"), ...)
+stop_endpoints <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  stop_slider(message, class = c(class, "slider_error_endpoints"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------
 
-stop_index <- function(message = NULL, class = character(), ...) {
-  stop_slider(message, class = c(class, "slider_error_index"), ...)
+stop_index <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  stop_slider(message, class = c(class, "slider_error_index"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------
 
-stop_slider <- function(message = NULL, class = character(), ...) {
-  abort(message, class = c(class, "slider_error"), ...)
+stop_slider <- function(message = NULL, class = character(), ..., call = caller_env()) {
+  abort(message, class = c(class, "slider_error"), ..., call = call)
 }
 
 # ------------------------------------------------------------------------------

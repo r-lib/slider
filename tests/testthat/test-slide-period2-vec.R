@@ -18,17 +18,21 @@ test_that("inner type is allowed to be different", {
 })
 
 test_that("inner type can be restricted with list_of", {
-  expect_error(
-    slide_period2_vec(1:2, 1:2, new_date(c(1, 2)), "day", ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period2_vec(1:2, 1:2, new_date(c(1, 2)), "day", ~if (.x == 1L) {list_of(1)} else {list_of("hi")}, .ptype = list_of(.ptype = double())),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("type can be restricted", {
-  expect_error(
-    slide_period2_int(1:2, 1:2, new_date(c(1, 2)), "day", ~if (.x == 1L) {1L} else {"hi"}),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period2_int(1:2, 1:2, new_date(c(1, 2)), "day", ~if (.x == 1L) {1L} else {"hi"}),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("empty input works with `.complete = TRUE` (#111)", {
@@ -41,7 +45,9 @@ test_that("empty input works with `.complete = TRUE` (#111)", {
 test_that(".ptype is respected", {
   expect_equal(slide_period2_vec(1, 1, new_date(0), "day", ~.x), 1)
   expect_equal(slide_period2_vec(1, 1, new_date(0), "day", ~.x, .ptype = int()), 1L)
-  expect_error(slide_period2_vec(1, 1, new_date(0), "day", ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy")
+  expect_snapshot({
+    (expect_error(slide_period2_vec(1, 1, new_date(0), "day", ~.x + .5, .ptype = integer()), class = "vctrs_error_cast_lossy"))
+  })
 })
 
 test_that("`.ptype = NULL` results in 'guessed' .ptype", {
@@ -52,10 +58,12 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 })
 
 test_that("`.ptype = NULL` fails if no common type is found", {
-  expect_error(
-    slide_period2_vec(1:2, 1:2, new_date(c(0, 1)), "day", ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_period2_vec(1:2, 1:2, new_date(c(0, 1)), "day", ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
@@ -154,7 +162,9 @@ test_that("slide_period2_chr() works", {
 })
 
 test_that("slide_period2_chr() cannot coerce", {
-  expect_error(slide_period2_chr(1, 1, new_date(0), "day", ~.x), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide_period2_chr(1, 1, new_date(0), "day", ~.x), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("slide_period2_lgl() works", {

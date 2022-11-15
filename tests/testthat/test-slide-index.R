@@ -21,21 +21,29 @@ test_that("defaults work with `.i`", {
 })
 
 test_that(".x must be the same size as .i", {
-  expect_error(slide_index(1, 1:2, identity), class = "slider_error_index_incompatible_size")
+  expect_snapshot({
+    (expect_error(slide_index(1, 1:2, identity), class = "slider_error_index_incompatible_size"))
+  })
 })
 
 test_that(".i must be ascending", {
-  expect_error(slide_index(1:2, 2:1, identity), class = "slider_error_index_must_be_ascending")
+  expect_snapshot({
+    (expect_error(slide_index(1:2, 2:1, identity), class = "slider_error_index_must_be_ascending"))
+  })
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_index(integer(), integer(), ~.x), list())
-  expect_error(slide_index(integer(), 1, ~.x), class = "slider_error_index_incompatible_size")
+  expect_snapshot({
+    (expect_error(slide_index(integer(), 1, ~.x), class = "slider_error_index_incompatible_size"))
+  })
 })
 
 test_that(".i must not contain NA values", {
   expect_error(slide_index(1:2, c(1, NA), identity), class = "slider_error_index_cannot_be_na")
-  expect_error(slide_index(1:2, c(NA, 1), identity), class = "slider_error_index_cannot_be_na")
+  expect_snapshot({
+    (expect_error(slide_index(1:2, c(NA, 1), identity), class = "slider_error_index_cannot_be_na"))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -97,17 +105,21 @@ test_that("using .before on an irregular date index works", {
 })
 
 test_that(".before must be size 1", {
-  expect_error(
-    slide_index(1, 1, identity, .before = c(1L, 2L)),
-    class = "vctrs_error_assert_size"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, 1, identity, .before = c(1L, 2L)),
+      class = "vctrs_error_assert_size"
+    ))
+  })
 })
 
 test_that("error if .before is NULL", {
-  expect_error(
-    slide_index(1, 1, identity, .before = NULL),
-    class = "vctrs_error_scalar_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, 1, identity, .before = NULL),
+      class = "vctrs_error_scalar_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -442,10 +454,12 @@ test_that("can generally use (tricky!) month Periods with Dates", {
   # General solution is to use ~ .x %m-% months(1) instead
   i <- as.Date("2019-03-30") + months(0:3)
 
-  expect_error(
-    slide_index(x, i, identity, .before = months(1)),
-    class = "slider_error_generated_endpoints_cannot_be_na"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, i, identity, .before = months(1)),
+      class = "slider_error_generated_endpoints_cannot_be_na"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -541,17 +555,21 @@ test_that("using .after on an irregular date index works", {
 })
 
 test_that(".after must be size 1", {
-  expect_error(
-    slide_index(1, 1, identity, .after = c(1L, 2L)),
-    class = "vctrs_error_assert_size"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, 1, identity, .after = c(1L, 2L)),
+      class = "vctrs_error_assert_size"
+    ))
+  })
 })
 
 test_that("error if .after is NULL", {
-  expect_error(
-    slide_index(1, 1, identity, .after = NULL),
-    class = "vctrs_error_scalar_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, 1, identity, .after = NULL),
+      class = "vctrs_error_scalar_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -768,10 +786,12 @@ test_that("can generally use (tricky!) month Periods with Dates", {
   # General solution is to use ~ .x %m-% months(1) instead
   i <- as.Date("2019-01-30") + months(-3:0)
 
-  expect_error(
-    slide_index(x, i, identity, .after = months(1)),
-    class = "slider_error_generated_endpoints_cannot_be_na"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, i, identity, .after = months(1)),
+      class = "slider_error_generated_endpoints_cannot_be_na"
+    ))
+  })
 })
 
 
@@ -898,52 +918,38 @@ test_that(".before/.after - using a function can help with lubridate `+ months(1
 test_that(".before/.after - generated endpoints must be in weakly ascending order", {
   x <- c(1, 2)
 
-  expect_error(
-    slide_index(x, x, identity, .before = ~.x - c(2, 4)),
-    class = "slider_error_generated_endpoints_must_be_ascending"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .before = ~.x - c(2, 4))
-  )
-  expect_error(
-    slide_index(x, x, identity, .after = ~.x + c(4, 2)),
-    class = "slider_error_generated_endpoints_must_be_ascending"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .after = ~.x + c(4, 2))
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, x, identity, .before = ~.x - c(2, 4)),
+      class = "slider_error_generated_endpoints_must_be_ascending"
+    ))
+    (expect_error(
+      slide_index(x, x, identity, .after = ~.x + c(4, 2)),
+      class = "slider_error_generated_endpoints_must_be_ascending"
+    ))
+  })
 })
 
 test_that(".before/.after - generated endpoints must maintain .before <= .after ordering", {
-  expect_error(
-    slide_index(1:2, 1:2, identity, .before = ~.x + 1, .after = 0),
-    "start of the range is after the end of the range"
-  )
-  expect_snapshot_error(
-    slide_index(1:2, 1:2, identity, .before = ~.x + 1, .after = 0)
-  )
-  expect_error(
-    slide_index(1:2, 1:2, identity, .before = 0, .after = ~.x - 1),
-    "start of the range is after the end of the range"
-  )
-  expect_snapshot_error(
-    slide_index(1:2, 1:2, identity, .before = 0, .after = ~.x - 1)
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1:2, 1:2, identity, .before = ~.x + 1, .after = 0)
+    ))
+    (expect_error(
+      slide_index(1:2, 1:2, identity, .before = 0, .after = ~.x - 1)
+    ))
+  })
 })
 
 test_that(".before/.after - generated endpoints can't be NA", {
-  expect_error(
-    slide_index(1:2, 1:2, identity, .before = ~rep(NA_integer_, length(.x)))
-  )
-  expect_snapshot_error(
-    slide_index(1:2, 1:2, identity, .before = ~rep(NA_integer_, length(.x)))
-  )
-  expect_error(
-    slide_index(1:2, 1:2, identity, .after = ~rep(NA_integer_, length(.x)))
-  )
-  expect_snapshot_error(
-    slide_index(1:2, 1:2, identity, .after = ~rep(NA_integer_, length(.x)))
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1:2, 1:2, identity, .before = ~rep(NA_integer_, length(.x)))
+    ))
+    (expect_error(
+      slide_index(1:2, 1:2, identity, .after = ~rep(NA_integer_, length(.x)))
+    ))
+  })
 })
 
 test_that(".before/.after - generated endpoints shouldn't rely on original `.i` length", {
@@ -951,23 +957,20 @@ test_that(".before/.after - generated endpoints shouldn't rely on original `.i` 
   x <- c(1, 1)
   adjust <- c(2, 3)
 
-  expect_error(
-    slide_index(x, x, identity, .before = ~.x - adjust),
-    class = "slider_error_generated_endpoints_incompatible_size"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .before = ~.x - adjust)
-  )
-  expect_error(
-    slide_index(x, x, identity, .after = ~.x + adjust),
-    class = "slider_error_generated_endpoints_incompatible_size"
-  )
-  expect_snapshot_error(
-    slide_index(x, x, identity, .after = ~.x + adjust)
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(x, x, identity, .before = ~.x - adjust),
+      class = "slider_error_generated_endpoints_incompatible_size"
+    ))
+    (expect_error(
+      slide_index(x, x, identity, .after = ~.x + adjust),
+      class = "slider_error_generated_endpoints_incompatible_size"
+    ))
+  })
 })
 
 test_that(".before/.after - function must have 1 argument", {
+  # Base R errors
   expect_error(slide_index(1, 1, identity, .before = function(x, y) x + y))
   expect_error(slide_index(1, 1, identity, .before = ~.x + .y))
   expect_error(slide_index(1, 1, identity, .after = function(x, y) x + y))
@@ -1044,10 +1047,12 @@ test_that(".complete only ensures that there is at least 1 value before that cou
 })
 
 test_that("cannot use an invalid .complete value", {
-  expect_error(
-    slide_index(1, 1, identity, .complete = "hi"),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, 1, identity, .complete = "hi"),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -1238,19 +1243,23 @@ test_that("can use a data frame index", {
 test_that("`.i - .before` must be castable to `.i`", {
   i <- 1L
 
-  expect_error(
-    slide_index(1, i, identity, .before = 1.5),
-    class = "vctrs_error_cast_lossy"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, i, identity, .before = 1.5),
+      class = "vctrs_error_cast_lossy"
+    ))
+  })
 })
 
 test_that("`.i + .after` must be castable to `.i`", {
   i <- 1L
 
-  expect_error(
-    slide_index(1, i, identity, .after = 1.5),
-    class = "vctrs_error_cast_lossy"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index(1, i, identity, .after = 1.5),
+      class = "vctrs_error_cast_lossy"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -1352,4 +1361,20 @@ test_that(paste0(
     slide_index(1:3, c(1, 3, 4), identity, .before = -1, .after = 1),
     list(integer(), 3, integer())
   )
+})
+
+test_that("`error_call` and `.error_call` args aren't swallowed", {
+  fn <- function(x, error_call) {
+    abort("hi", call = error_call)
+  }
+  fn_dot <- function(x, .error_call) {
+    abort("hi", call = .error_call)
+  }
+
+  expect_snapshot(error = TRUE, {
+    slide_index(1, 1, fn, error_call = call("foo"))
+  })
+  expect_snapshot(error = TRUE, {
+    slide_index(1, 1, fn_dot, .error_call = call("foo"))
+  })
 })

@@ -17,18 +17,22 @@ test_that("slide2_vec() can simplify automatically", {
 
 test_that("slide2_vec() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    slide2_vec(1:2, 1:2, fn, .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide2_vec(1:2, 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 test_that("slide2_*() errors if it can't cast", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    slide2_int(1:2, 1:2, fn),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide2_int(1:2, 1:2, fn),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -55,7 +59,9 @@ test_that("slide2_chr() works", {
 })
 
 test_that("slide2_chr() cannot coerce", {
-  expect_error(slide2_chr(1, 1, ~.x + .y), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide2_chr(1, 1, ~.x + .y), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("slide2_lgl() works", {

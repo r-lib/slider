@@ -1,14 +1,29 @@
-hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain, atomic) {
+hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain, atomic, slider_error_call) {
   x_size <- compute_size(x, type)
 
-  check_endpoints_cannot_be_na(starts, ".starts")
-  check_endpoints_cannot_be_na(stops, ".stops")
+  check_endpoints_cannot_be_na(starts, ".starts", call = slider_error_call)
+  check_endpoints_cannot_be_na(stops, ".stops", call = slider_error_call)
 
-  starts <- vec_as_subscript(starts, logical = "error", character = "error", arg = ".starts")
-  stops <- vec_as_subscript(stops, logical = "error", character = "error", arg = ".stops")
+  starts <- vec_as_subscript(
+    starts,
+    logical = "error",
+    character = "error",
+    arg = ".starts",
+    call = slider_error_call
+  )
+  stops <- vec_as_subscript(
+    stops,
+    logical = "error",
+    character = "error",
+    arg = ".stops",
+    call = slider_error_call
+  )
 
-  size <- vec_size_common(starts, stops)
-  args <- vec_recycle_common(starts, stops, .size = size)
+  args <- vec_recycle_common(
+    starts = starts,
+    stops = stops,
+    .call = slider_error_call
+  )
 
   starts <- args[[1L]]
   stops <- args[[2L]]

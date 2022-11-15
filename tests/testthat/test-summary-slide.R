@@ -490,7 +490,9 @@ test_that("works when the window is completely OOB", {
 })
 
 test_that("input must be castable to logical", {
-  expect_error(slide_all(1:5), class = "vctrs_error_cast_lossy")
+  expect_snapshot({
+    (expect_error(slide_all(1:5), class = "vctrs_error_cast_lossy"))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -573,7 +575,9 @@ test_that("works when the window is completely OOB", {
 })
 
 test_that("input must be castable to logical", {
-  expect_error(slide_any(1:5), class = "vctrs_error_cast_lossy")
+  expect_snapshot({
+    (expect_error(slide_any(1:5), class = "vctrs_error_cast_lossy"))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -596,7 +600,9 @@ test_that("can cast integer and logical input", {
 })
 
 test_that("types that can't be cast to numeric are not supported", {
-  expect_error(slide_sum("x"), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide_sum("x"), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("arrays of dimensionality 1 are supported", {
@@ -607,7 +613,9 @@ test_that("arrays of dimensionality 1 are supported", {
 })
 
 test_that("arrays of dimensionality >1 are not supported", {
-  expect_error(slide_sum(array(1:4, dim = c(2, 2)), before = 1), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide_sum(array(1:4, dim = c(2, 2)), before = 1), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("works when the window is completely OOB", {

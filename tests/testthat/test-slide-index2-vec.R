@@ -17,14 +17,18 @@ test_that("slide_index2_vec() can simplify automatically", {
 
 test_that("slide_index2_*() errors if it can't simplify", {
   fn <- function(x, y) if (x == 1L) {1} else {"hi"}
-  expect_error(
-    slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
-    class = "vctrs_error_incompatible_type"
-  )
-  expect_error(
-    slide_index2_int(1:2, 1:2, 1:2, fn),
-    class = "vctrs_error_incompatible_type"
-  )
+  expect_snapshot({
+    (expect_error(
+      slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
+  expect_snapshot({
+    (expect_error(
+      slide_index2_int(1:2, 1:2, 1:2, fn),
+      class = "vctrs_error_incompatible_type"
+    ))
+  })
 })
 
 # ------------------------------------------------------------------------------
@@ -51,7 +55,9 @@ test_that("slide_index2_chr() works", {
 })
 
 test_that("slide_index2_chr() cannot coerce", {
-  expect_error(slide_index2_chr(1, 1, 1, ~.x), class = "vctrs_error_incompatible_type")
+  expect_snapshot({
+    (expect_error(slide_index2_chr(1, 1, 1, ~.x), class = "vctrs_error_incompatible_type"))
+  })
 })
 
 test_that("slide_index2_lgl() works", {

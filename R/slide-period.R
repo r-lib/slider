@@ -167,7 +167,8 @@ slide_period_vec_direct <- function(.x,
                                     .before,
                                     .after,
                                     .complete,
-                                    .ptype) {
+                                    .ptype,
+                                    .slider_error_call = caller_env()) {
   slide_period_impl(
     .x,
     .i,
@@ -181,7 +182,8 @@ slide_period_vec_direct <- function(.x,
     .complete = .complete,
     .ptype = .ptype,
     .constrain = TRUE,
-    .atomic = TRUE
+    .atomic = TRUE,
+    .slider_error_call = .slider_error_call
   )
 }
 
@@ -367,10 +369,11 @@ slide_period_impl <- function(.x,
                               .complete,
                               .ptype,
                               .constrain,
-                              .atomic) {
-  vec_assert(.x)
+                              .atomic,
+                              .slider_error_call = caller_env()) {
+  vec_assert(.x, call = .slider_error_call)
 
-  .f <- as_function(.f)
+  .f <- as_function(.f, call = .slider_error_call)
 
   f_call <- expr(.f(.x, ...))
 
@@ -390,6 +393,7 @@ slide_period_impl <- function(.x,
     constrain = .constrain,
     atomic = .atomic,
     env = environment(),
-    type = type
+    type = type,
+    slider_error_call = .slider_error_call
   )
 }

@@ -200,17 +200,26 @@ slide_index_summary <- function(x,
                                 after,
                                 complete,
                                 na_rm,
-                                fn_core) {
-  info <- slide_index_info(i, before, after, "i", "before", "after")
+                                fn_core,
+                                slider_error_call = caller_env()) {
+  info <- slide_index_info(
+    i = i,
+    before = before,
+    after = after,
+    i_arg = "i",
+    before_arg = "before",
+    after_arg = "after",
+    slider_error_call = slider_error_call
+  )
 
   x_size <- compute_size(x, -1L)
   i_size <- vec_size(i)
 
   if (i_size != x_size) {
-    stop_index_incompatible_size(i_size, x_size, "i")
+    stop_index_incompatible_size(i_size, x_size, "i", call = slider_error_call)
   }
 
-  complete <- check_complete(complete, "complete")
+  complete <- check_complete(complete, "complete", call = slider_error_call)
 
   i <- info$i
   starts <- info$starts
