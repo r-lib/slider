@@ -38,7 +38,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/DavisVaughan/slider/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/r-lib/slider/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -51,31 +51,31 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/DavisVaughan/slider/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/r-lib/slider/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="slider-development-version">slider (development version)<a class="anchor" aria-label="anchor" href="#slider-development-version"></a></h2>
-<ul><li><p>Improved reported error calls and error messages throughout the package, and switched from glue to cli (<a href="https://github.com/DavisVaughan/slider/issues/168" class="external-link">#168</a>, <a href="https://github.com/DavisVaughan/slider/issues/188" class="external-link">#188</a>).</p></li>
-<li><p>Removed ellipsis in favor of using the equivalent functions in rlang (<a href="https://github.com/DavisVaughan/slider/issues/185" class="external-link">#185</a>).</p></li>
-<li><p>New <code><a href="../reference/index-arithmetic.html">slider_plus()</a></code> and <code><a href="../reference/index-arithmetic.html">slider_minus()</a></code> developer facing helpers that allow package authors to register custom double dispatch methods to override the default computation of <code>.i - .before</code> and <code>.i + .after</code> when generating index bounds internally. This is intended to allow the clock and almanac packages to register methods so their custom types can be used natively in slider (<a href="https://github.com/DavisVaughan/slider/issues/91" class="external-link">#91</a>).</p></li>
-<li><p>Index (<code>.i</code>) types that aren’t explicitly understood by vctrs are now handled slightly better (<a href="https://github.com/DavisVaughan/slider/issues/182" class="external-link">#182</a>).</p></li>
-<li><p>The <code>slide_index_*()</code> and <code>hop_index_*()</code> families now use <code><a href="https://vctrs.r-lib.org/reference/vec_rank.html" class="external-link">vctrs::vec_rank()</a></code> internally to compute a dense rank, which should be a little faster than the previous home grown approach (<a href="https://github.com/DavisVaughan/slider/issues/177" class="external-link">#177</a>).</p></li>
-<li><p>Removed <code>R_forceAndCall()</code> fallback now that R &gt;=3.4.0 is required (<a href="https://github.com/DavisVaughan/slider/issues/172" class="external-link">#172</a>).</p></li>
-<li><p>Fixed <code>-Wstrict-prototypes</code> warnings as requested by CRAN (<a href="https://github.com/DavisVaughan/slider/issues/173" class="external-link">#173</a>).</p></li>
+<ul><li><p>Improved reported error calls and error messages throughout the package, and switched from glue to cli (<a href="https://github.com/r-lib/slider/issues/168" class="external-link">#168</a>, <a href="https://github.com/r-lib/slider/issues/188" class="external-link">#188</a>).</p></li>
+<li><p>Removed ellipsis in favor of using the equivalent functions in rlang (<a href="https://github.com/r-lib/slider/issues/185" class="external-link">#185</a>).</p></li>
+<li><p>New <code><a href="../reference/index-arithmetic.html">slider_plus()</a></code> and <code><a href="../reference/index-arithmetic.html">slider_minus()</a></code> developer facing helpers that allow package authors to register custom double dispatch methods to override the default computation of <code>.i - .before</code> and <code>.i + .after</code> when generating index bounds internally. This is intended to allow the clock and almanac packages to register methods so their custom types can be used natively in slider (<a href="https://github.com/r-lib/slider/issues/91" class="external-link">#91</a>).</p></li>
+<li><p>Index (<code>.i</code>) types that aren’t explicitly understood by vctrs are now handled slightly better (<a href="https://github.com/r-lib/slider/issues/182" class="external-link">#182</a>).</p></li>
+<li><p>The <code>slide_index_*()</code> and <code>hop_index_*()</code> families now use <code><a href="https://vctrs.r-lib.org/reference/vec_rank.html" class="external-link">vctrs::vec_rank()</a></code> internally to compute a dense rank, which should be a little faster than the previous home grown approach (<a href="https://github.com/r-lib/slider/issues/177" class="external-link">#177</a>).</p></li>
+<li><p>Removed <code>R_forceAndCall()</code> fallback now that R &gt;=3.4.0 is required (<a href="https://github.com/r-lib/slider/issues/172" class="external-link">#172</a>).</p></li>
+<li><p>Fixed <code>-Wstrict-prototypes</code> warnings as requested by CRAN (<a href="https://github.com/r-lib/slider/issues/173" class="external-link">#173</a>).</p></li>
 <li><p>Bumped minimal version of R to &gt;=3.4.0 to align with tidyverse standards.</p></li>
 <li><p>Fixed redirecting URLs.</p></li>
-<li><p>Bumped minimal version of rlang to &gt;=1.0.6 and vctrs to &gt;=0.5.0 (<a href="https://github.com/DavisVaughan/slider/issues/165" class="external-link">#165</a>, <a href="https://github.com/DavisVaughan/slider/issues/174" class="external-link">#174</a>).</p></li>
+<li><p>Bumped minimal version of rlang to &gt;=1.0.6 and vctrs to &gt;=0.5.0 (<a href="https://github.com/r-lib/slider/issues/165" class="external-link">#165</a>, <a href="https://github.com/r-lib/slider/issues/174" class="external-link">#174</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.2" id="slider-022">slider 0.2.2<a class="anchor" aria-label="anchor" href="#slider-022"></a></h2><p class="text-muted">CRAN release: 2021-07-01</p>
-<ul><li>Updated internal usage of <code><a href="https://vctrs.r-lib.org/reference/vec_order.html" class="external-link">vec_order()</a></code> to prepare for a breaking change in vctrs (<a href="https://github.com/DavisVaughan/slider/issues/153" class="external-link">#153</a>).</li>
+<ul><li>Updated internal usage of <code><a href="https://vctrs.r-lib.org/reference/vec_order.html" class="external-link">vec_order()</a></code> to prepare for a breaking change in vctrs (<a href="https://github.com/r-lib/slider/issues/153" class="external-link">#153</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="slider-021">slider 0.2.1<a class="anchor" aria-label="anchor" href="#slider-021"></a></h2><p class="text-muted">CRAN release: 2021-03-23</p>
 <ul><li><p>Fixed a C alignment issue detected by CRAN’s USBAN machine related to allocating vectors of <code>long double</code>.</p></li>
-<li><p>Fixed a test that relied too strongly on the size of the C type, <code>long double</code>, which can vary across platforms (<a href="https://github.com/DavisVaughan/slider/issues/147" class="external-link">#147</a>).</p></li>
-<li><p>Fixed an out of sync vignette entry (<a href="https://github.com/DavisVaughan/slider/issues/148" class="external-link">#148</a>).</p></li>
+<li><p>Fixed a test that relied too strongly on the size of the C type, <code>long double</code>, which can vary across platforms (<a href="https://github.com/r-lib/slider/issues/147" class="external-link">#147</a>).</p></li>
+<li><p>Fixed an out of sync vignette entry (<a href="https://github.com/r-lib/slider/issues/148" class="external-link">#148</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="slider-020">slider 0.2.0<a class="anchor" aria-label="anchor" href="#slider-020"></a></h2><p class="text-muted">CRAN release: 2021-03-18</p>
@@ -89,18 +89,18 @@
 <li><p><code><a href="../reference/summary-slide.html">slide_any()</a></code>, <code><a href="../reference/summary-index.html">slide_index_any()</a></code>: for rolling any</p></li>
 <li><p><code><a href="../reference/summary-slide.html">slide_all()</a></code>, <code><a href="../reference/summary-index.html">slide_index_all()</a></code>: for rolling all</p></li>
 </ul></li>
-<li><p>The <code>slide_index_*()</code> family now allows <code>.before</code> and <code>.after</code> to be functions of 1 argument (the index) that compute the boundaries of the sliding window. This can be extremely useful when the default, which computes <code>.i - .before</code> and <code>.i + .after</code>, is not applicable or correct for your needs. One use case is to set <code>.before = ~.x %m-% months(1)</code> rather than <code>.before = months(1)</code> to perform a 1 month rolling window in a way that won’t generate <code>NA</code> values on invalid dates (like 1 month before 2019-03-31) (<a href="https://github.com/DavisVaughan/slider/issues/139" class="external-link">#139</a>).</p></li>
-<li><p>The <code>slide_index_*()</code> family has undergone some internal changes to make it more compatible with custom vctrs classes that could be provided as the index (<code>.i</code>), such as the date-time classes in the clock package (<a href="https://github.com/DavisVaughan/slider/issues/133" class="external-link">#133</a>, <a href="https://github.com/DavisVaughan/slider/issues/130" class="external-link">#130</a>).</p></li>
-<li><p>For the <code>slide_index_*()</code> family, it is now required that <code>.i - .before</code> and <code>.i + .after</code> be castable to <code>.i</code> by <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html" class="external-link">vctrs::vec_cast()</a></code>. Similarly, for the <code>hop_index_*()</code> family, <code>.starts</code> and <code>.stops</code> must both be castable to <code>.i</code> (<a href="https://github.com/DavisVaughan/slider/issues/132" class="external-link">#132</a>).</p></li>
-<li><p>New vignette, <code><a href="../articles/tsibble.html">vignette("tsibble")</a></code>, explaining how to transition from tsibble to slider (<a href="https://github.com/DavisVaughan/slider/issues/128" class="external-link">#128</a>).</p></li>
+<li><p>The <code>slide_index_*()</code> family now allows <code>.before</code> and <code>.after</code> to be functions of 1 argument (the index) that compute the boundaries of the sliding window. This can be extremely useful when the default, which computes <code>.i - .before</code> and <code>.i + .after</code>, is not applicable or correct for your needs. One use case is to set <code>.before = ~.x %m-% months(1)</code> rather than <code>.before = months(1)</code> to perform a 1 month rolling window in a way that won’t generate <code>NA</code> values on invalid dates (like 1 month before 2019-03-31) (<a href="https://github.com/r-lib/slider/issues/139" class="external-link">#139</a>).</p></li>
+<li><p>The <code>slide_index_*()</code> family has undergone some internal changes to make it more compatible with custom vctrs classes that could be provided as the index (<code>.i</code>), such as the date-time classes in the clock package (<a href="https://github.com/r-lib/slider/issues/133" class="external-link">#133</a>, <a href="https://github.com/r-lib/slider/issues/130" class="external-link">#130</a>).</p></li>
+<li><p>For the <code>slide_index_*()</code> family, it is now required that <code>.i - .before</code> and <code>.i + .after</code> be castable to <code>.i</code> by <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html" class="external-link">vctrs::vec_cast()</a></code>. Similarly, for the <code>hop_index_*()</code> family, <code>.starts</code> and <code>.stops</code> must both be castable to <code>.i</code> (<a href="https://github.com/r-lib/slider/issues/132" class="external-link">#132</a>).</p></li>
+<li><p>New vignette, <code><a href="../articles/tsibble.html">vignette("tsibble")</a></code>, explaining how to transition from tsibble to slider (<a href="https://github.com/r-lib/slider/issues/128" class="external-link">#128</a>).</p></li>
 <li><p><code><a href="../articles/rowwise.html">vignette("rowwise")</a></code> has been updated to use <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_data()</a></code> from dplyr 1.0.0, which makes it significantly easier to do rolling operations on data frames (like rolling regressions) using slider in a dplyr pipeline.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.5" id="slider-015">slider 0.1.5<a class="anchor" aria-label="anchor" href="#slider-015"></a></h2><p class="text-muted">CRAN release: 2020-07-21</p>
-<ul><li><p><code><a href="../reference/slide_period.html">slide_period()</a></code> and friends have slightly better handling of size zero input when <code>.complete = TRUE</code> (<a href="https://github.com/DavisVaughan/slider/issues/111" class="external-link">#111</a>).</p></li>
-<li><p>Better error messages for <code>NA</code> input with <code>.before</code>, <code>.after</code>, <code>.step</code> and <code>.complete</code> have been added (<a href="https://github.com/DavisVaughan/slider/issues/110" class="external-link">#110</a>).</p></li>
-<li><p>A few instances of possibly unsafe C protection usage have been fixed (<a href="https://github.com/DavisVaughan/slider/issues/112" class="external-link">#112</a>).</p></li>
-<li><p>Tests have been updated to use only numeric values in the <code><a href="https://vctrs.r-lib.org/reference/new_date.html" class="external-link">vctrs::new_date()</a></code> constructor (<a href="https://github.com/DavisVaughan/slider/issues/113" class="external-link">#113</a>).</p></li>
+<ul><li><p><code><a href="../reference/slide_period.html">slide_period()</a></code> and friends have slightly better handling of size zero input when <code>.complete = TRUE</code> (<a href="https://github.com/r-lib/slider/issues/111" class="external-link">#111</a>).</p></li>
+<li><p>Better error messages for <code>NA</code> input with <code>.before</code>, <code>.after</code>, <code>.step</code> and <code>.complete</code> have been added (<a href="https://github.com/r-lib/slider/issues/110" class="external-link">#110</a>).</p></li>
+<li><p>A few instances of possibly unsafe C protection usage have been fixed (<a href="https://github.com/r-lib/slider/issues/112" class="external-link">#112</a>).</p></li>
+<li><p>Tests have been updated to use only numeric values in the <code><a href="https://vctrs.r-lib.org/reference/new_date.html" class="external-link">vctrs::new_date()</a></code> constructor (<a href="https://github.com/r-lib/slider/issues/113" class="external-link">#113</a>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="slider-014">slider 0.1.4<a class="anchor" aria-label="anchor" href="#slider-014"></a></h2><p class="text-muted">CRAN release: 2020-05-28</p>
@@ -112,8 +112,8 @@
 <ul><li><p>Updated to stay compatible with vctrs 0.3.0.</p></li>
 <li><p>A few edge cases with size zero input in the index functions have been fixed.</p></li>
 <li><p>The default for the <code>.names_to</code> argument of <code>*_dfr()</code> variants has been updated to <code><a href="https://rlang.r-lib.org/reference/zap.html" class="external-link">rlang::zap()</a></code> to match the default of the function it is passed on to, <code><a href="https://vctrs.r-lib.org/reference/vec_bind.html" class="external-link">vctrs::vec_rbind()</a></code>.</p></li>
-<li><p>All <code>*_vec()</code> variants now maintain size stability when auto-simplifying (i.e. when <code>.ptype = NULL</code>) (<a href="https://github.com/DavisVaughan/slider/issues/78" class="external-link">#78</a>, <a href="https://github.com/DavisVaughan/slider/issues/93" class="external-link">#93</a>).</p></li>
-<li><p><code><a href="../reference/hop.html">hop()</a></code> and its variants no longer place the names of <code>.x</code> on the output. Because there is no <em>size</em> guarantee on the output, the size of <code>.x</code> can be different than the size of the output, meaning that the names might not line up. This also affects <code><a href="../reference/slide_period.html">slide_period()</a></code>, which is implemented using a <code><a href="../reference/hop.html">hop()</a></code> variant (<a href="https://github.com/DavisVaughan/slider/issues/75" class="external-link">#75</a>).</p></li>
+<li><p>All <code>*_vec()</code> variants now maintain size stability when auto-simplifying (i.e. when <code>.ptype = NULL</code>) (<a href="https://github.com/r-lib/slider/issues/78" class="external-link">#78</a>, <a href="https://github.com/r-lib/slider/issues/93" class="external-link">#93</a>).</p></li>
+<li><p><code><a href="../reference/hop.html">hop()</a></code> and its variants no longer place the names of <code>.x</code> on the output. Because there is no <em>size</em> guarantee on the output, the size of <code>.x</code> can be different than the size of the output, meaning that the names might not line up. This also affects <code><a href="../reference/slide_period.html">slide_period()</a></code>, which is implemented using a <code><a href="../reference/hop.html">hop()</a></code> variant (<a href="https://github.com/r-lib/slider/issues/75" class="external-link">#75</a>).</p></li>
 <li><p>With data frames containing row names, <code><a href="../reference/slide.html">slide()</a></code> and its variants now copy those row names onto the output. This is an implicit benefit from vctrs gaining better support for data frame row names.</p></li>
 </ul></div>
     <div class="section level2">
