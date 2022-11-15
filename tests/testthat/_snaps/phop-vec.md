@@ -19,7 +19,8 @@
     Output
       <error/rlang_error>
       Error:
-      ! In iteration 1, the result of `.f` had size 2, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 2.
     Code
       (expect_error(phop_vec(list(1:2, 1:2), 1:2, 1:2, ~ if (.x == 1L) {
         NULL
@@ -29,5 +30,6 @@
     Output
       <error/rlang_error>
       Error:
-      ! In iteration 1, the result of `.f` had size 0, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 0.
 

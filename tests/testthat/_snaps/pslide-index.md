@@ -6,6 +6,5 @@
     Output
       <error/slider_error_index_incompatible_size>
       Error in `pslide_index()`:
-      ! `.i` has an incorrect size.
-      x It must have size 0, not 1.
+      ! `.i` must have size 0, not 1.
 

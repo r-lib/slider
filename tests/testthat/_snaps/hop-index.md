@@ -6,8 +6,7 @@
     Output
       <error/slider_error_index_incompatible_size>
       Error in `hop_index()`:
-      ! `.i` has an incorrect size.
-      x It must have size 1, not 2.
+      ! `.i` must have size 1, not 2.
 
 # .i must be ascending
 
@@ -17,8 +16,8 @@
     Output
       <error/slider_error_index_must_be_ascending>
       Error in `hop_index()`:
+      i In locations: 2
       ! `.i` must be in ascending order.
-      i It is not ascending at locations: 2.
 
 # .starts must be ascending
 
@@ -28,8 +27,8 @@
     Output
       <error/slider_error_endpoints_must_be_ascending>
       Error in `hop_index()`:
+      i In locations: 2
       ! `.starts` must be in ascending order.
-      i It is not ascending at locations: 2.
 
 # .stops must be ascending
 
@@ -39,8 +38,8 @@
     Output
       <error/slider_error_endpoints_must_be_ascending>
       Error in `hop_index()`:
+      i In locations: 2
       ! `.stops` must be in ascending order.
-      i It is not ascending at locations: 2.
 
 # empty `.x` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first
 
@@ -67,16 +66,16 @@
     Output
       <error/slider_error_index_cannot_be_na>
       Error in `hop_index()`:
-      ! `.i` cannot be `NA`.
-      i It is `NA` at locations: 2.
+      i In locations: 2
+      ! `.i` can't be `NA`.
     Code
       (expect_error(hop_index(1:2, c(NA, 1), 1:2, 1:2, identity), class = "slider_error_index_cannot_be_na")
       )
     Output
       <error/slider_error_index_cannot_be_na>
       Error in `hop_index()`:
-      ! `.i` cannot be `NA`.
-      i It is `NA` at locations: 1.
+      i In locations: 1
+      ! `.i` can't be `NA`.
 
 # .starts must not contain NA values
 
@@ -86,16 +85,16 @@
     Output
       <error/slider_error_endpoints_cannot_be_na>
       Error in `hop_index()`:
-      ! `.starts` cannot be `NA`.
-      i It is `NA` at locations: 2.
+      i In locations: 2
+      ! `.starts` can't be `NA`.
     Code
       (expect_error(hop_index(1:2, 1:2, c(NA, 1), 1:2, identity), class = "slider_error_endpoints_cannot_be_na")
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
       Error in `hop_index()`:
-      ! `.starts` cannot be `NA`.
-      i It is `NA` at locations: 1.
+      i In locations: 1
+      ! `.starts` can't be `NA`.
 
 # .stops must not contain NA values
 
@@ -105,16 +104,16 @@
     Output
       <error/slider_error_endpoints_cannot_be_na>
       Error in `hop_index()`:
-      ! `.stops` cannot be `NA`.
-      i It is `NA` at locations: 2.
+      i In locations: 2
+      ! `.stops` can't be `NA`.
     Code
       (expect_error(hop_index(1:2, 1:2, 1:2, c(NA, 1), identity), class = "slider_error_endpoints_cannot_be_na")
       )
     Output
       <error/slider_error_endpoints_cannot_be_na>
       Error in `hop_index()`:
-      ! `.stops` cannot be `NA`.
-      i It is `NA` at locations: 1.
+      i In locations: 1
+      ! `.stops` can't be `NA`.
 
 # recycling is used for .starts/.stops
 

@@ -242,11 +242,8 @@ test_that("works when the window is between values and `.complete = TRUE`", {
 })
 
 test_that("`.complete` cannot be NA", {
-  expect_snapshot({
-    (expect_error(
-      slide_period(1, new_date(0), "year", identity, .complete = NA),
-      "`.complete` cannot be `NA`"
-    ))
+  expect_snapshot(error = TRUE, {
+    slide_period(1, new_date(0), "year", identity, .complete = NA)
   })
 })
 

@@ -16,7 +16,8 @@
       }, .ptype = NULL)
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 2, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 2.
 
 ---
 
@@ -28,5 +29,6 @@
       }, .ptype = NULL)
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 0, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 0.
 

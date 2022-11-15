@@ -26,8 +26,7 @@
     Output
       <error/slider_error_index_incompatible_size>
       Error in `slide_index_sum()`:
-      ! `i` has an incorrect size.
-      x It must have size 1, not 3.
+      ! `i` must have size 1, not 3.
 
 # types that can't be cast to numeric are not supported
 

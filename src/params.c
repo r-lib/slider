@@ -182,7 +182,7 @@ void check_double_negativeness(int before, int after, bool before_positive, bool
   if (!before_positive && !after_positive) {
     Rf_errorcall(
       R_NilValue,
-      "`.before` (%i) and `.after` (%i) cannot both be negative.",
+      "`.before` (%i) and `.after` (%i) can't both be negative.",
       before,
       after
     );
@@ -204,7 +204,7 @@ void check_after_negativeness(int after, int before, bool after_positive, bool b
   if (abs_after > before) {
     Rf_errorcall(
       R_NilValue,
-      "When `.after` (%i) is negative, it's absolute value (%i) cannot be greater than `.before` (%i).",
+      "When `.after` (%i) is negative, its absolute value (%i) can't be greater than `.before` (%i).",
       after,
       abs_after,
       before
@@ -227,7 +227,7 @@ void check_before_negativeness(int before, int after, bool before_positive, bool
   if (abs_before > after) {
     Rf_errorcall(
       R_NilValue,
-      "When `.before` (%i) is negative, it's absolute value (%i) cannot be greater than `.after` (%i).",
+      "When `.before` (%i) is negative, its absolute value (%i) can't be greater than `.after` (%i).",
       before,
       abs_before,
       after

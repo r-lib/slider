@@ -6,8 +6,7 @@
     Output
       <error/slider_error_index_incompatible_size>
       Error in `hop_index2()`:
-      ! `.i` has an incorrect size.
-      x It must have size 0, not 1.
+      ! `.i` must have size 0, not 1.
 
 # empty `.x` and `.y` and `.i`, but size `n > 0` `.starts` and `.stops`: sizes and types are checked first
 

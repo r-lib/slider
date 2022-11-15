@@ -4,7 +4,7 @@
       slide(1:5, identity, .before = -1)
     Condition
       Error:
-      ! When `.before` (-1) is negative, it's absolute value (1) cannot be greater than `.after` (0).
+      ! When `.before` (-1) is negative, its absolute value (1) can't be greater than `.after` (0).
 
 # both .before and .after cannot be negative
 
@@ -12,7 +12,7 @@
       slide(1:5, identity, .before = -1, .after = -1)
     Condition
       Error:
-      ! `.before` (-1) and `.after` (-1) cannot both be negative.
+      ! `.before` (-1) and `.after` (-1) can't both be negative.
 
 # error if negative .after's abs() is > .before
 
@@ -20,7 +20,7 @@
       slide(1:5, identity, .after = -1)
     Condition
       Error:
-      ! When `.after` (-1) is negative, it's absolute value (1) cannot be greater than `.before` (0).
+      ! When `.after` (-1) is negative, its absolute value (1) can't be greater than `.before` (0).
 
 # cannot use invalid .before
 

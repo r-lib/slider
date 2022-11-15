@@ -16,8 +16,8 @@
     Output
       <error/slider_error_index_cannot_be_na>
       Error in `block()`:
-      ! `i` cannot be `NA`.
-      i It is `NA` at locations: 2.
+      i In locations: 2
+      ! `i` can't be `NA`.
 
 # type of `i` is validated
 
@@ -26,8 +26,7 @@
     Output
       <error/slider_error_index_incompatible_type>
       Error in `block()`:
-      ! `i` has an incorrect type.
-      x It must inherit from Date, POSIXct, or POSIXlt, not numeric.
+      ! `i` must be a <Date>, <POSIXct>, or <POSIXlt>, not a number.
 
 # length of `i` must be identical to `x`
 
@@ -37,8 +36,7 @@
     Output
       <error/slider_error_index_incompatible_size>
       Error in `block()`:
-      ! `i` has an incorrect size.
-      x It must have size 2, not 1.
+      ! `i` must have size 2, not 1.
 
 # `i` must be ascending
 
@@ -48,6 +46,6 @@
     Output
       <error/slider_error_index_must_be_ascending>
       Error in `block()`:
+      i In locations: 2 and 3
       ! `i` must be in ascending order.
-      i It is not ascending at locations: 3, 2.
 
