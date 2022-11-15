@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Improved reported error calls throughout the package (#168).
+
 * Removed ellipsis in favor of using the equivalent functions in rlang (#185).
 
 * New `slider_plus()` and `slider_minus()` developer facing helpers that allow
