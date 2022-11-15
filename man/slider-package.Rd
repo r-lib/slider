@@ -11,9 +11,9 @@ Provides type-stable rolling window functions over any R data type. Cumulative a
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/DavisVaughan/slider}
-  \item \url{https://davisvaughan.github.io/slider/}
-  \item Report bugs at \url{https://github.com/DavisVaughan/slider/issues}
+  \item \url{https://github.com/r-lib/slider}
+  \item \url{https://slider.r-lib.org}
+  \item Report bugs at \url{https://github.com/r-lib/slider/issues}
 }
 
 }

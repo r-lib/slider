@@ -17,8 +17,8 @@ knitr::opts_chunk$set(
 # slider
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/DavisVaughan/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DavisVaughan/slider?branch=main)
-[![R-CMD-check](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/slider?branch=main)
+[![R-CMD-check](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 slider provides a family of general purpose "sliding window" functions. The API is purposefully _very_ similar to purrr. The goal of these functions is usually to compute rolling averages, cumulative sums, rolling regressions, or other "window" based computations.
@@ -33,7 +33,7 @@ There are 3 core functions in slider:
 
 Each of these core functions have the same variants as `purrr::map()`. For example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`, along with the other combinations of these variants that you might expect from having previously used purrr.
 
-To learn more about these three functions, read the [introduction vignette](https://davisvaughan.github.io/slider/articles/slider.html).
+To learn more about these three functions, read the [introduction vignette](https://slider.r-lib.org/articles/slider.html).
 
 There are also a set of extremely fast specialized variants of `slide_dbl()` for the most common use cases. These include `slide_sum()` for rolling sums and `slide_mean()` for rolling averages. There are index variants of each of these as well, like `slide_index_sum()`.
 
@@ -48,12 +48,12 @@ install.packages("slider")
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-remotes::install_github("DavisVaughan/slider")
+remotes::install_github("r-lib/slider")
 ```
 
 ## Examples
 
-The [help page for `slide()`](https://davisvaughan.github.io/slider/reference/slide.html) has many examples, but here are a few:
+The [help page for `slide()`](https://slider.r-lib.org/reference/slide.html) has many examples, but here are a few:
 
 ```{r}
 library(slider)
@@ -93,7 +93,7 @@ slide(1:4, ~.x, .before = 2, .complete = TRUE)
 
 Unlike `purrr::map()`, `slide()` iterates over data frames in a row wise fashion. Interestingly this means the default of `slide()` becomes a generic row wise iterator, with nice syntax for accessing data frame columns.
 
-There is a [vignette specifically about this](https://davisvaughan.github.io/slider/articles/rowwise.html).
+There is a [vignette specifically about this](https://slider.r-lib.org/articles/rowwise.html).
 
 ```{r}
 mini_cars <- cars[1:4,]
@@ -211,4 +211,4 @@ I've found the following references very useful to understand more about window 
 
 ## Code of Conduct
   
-Please note that the slider project is released with a [Contributor Code of Conduct](https://davisvaughan.github.io/slider/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the slider project is released with a [Contributor Code of Conduct](https://slider.r-lib.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

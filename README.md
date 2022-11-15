@@ -6,8 +6,8 @@
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/DavisVaughan/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DavisVaughan/slider?branch=main)
-[![R-CMD-check](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DavisVaughan/slider/actions/workflows/R-CMD-check.yaml)
+coverage](https://codecov.io/gh/r-lib/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/slider?branch=main)
+[![R-CMD-check](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 slider provides a family of general purpose “sliding window” functions.
@@ -17,20 +17,20 @@ rolling regressions, or other “window” based computations.
 
 There are 3 core functions in slider:
 
--   `slide()` iterates over your data like
-    [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html),
-    but uses a sliding window to do so. It is type-stable, and always
-    returns a result with the same size as its input.
+- `slide()` iterates over your data like
+  [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), but
+  uses a sliding window to do so. It is type-stable, and always returns
+  a result with the same size as its input.
 
--   `slide_index()` computes a rolling calculation *relative to an
-    index*. If you have ever wanted to compute something like a “3 month
-    rolling average” where the number of days in each month is
-    irregular, you might like this function.
+- `slide_index()` computes a rolling calculation *relative to an index*.
+  If you have ever wanted to compute something like a “3 month rolling
+  average” where the number of days in each month is irregular, you
+  might like this function.
 
--   `slide_period()` is similar to `slide_index()` in that it slides
-    relative to an index, but it first breaks the index up into “time
-    blocks”, like 2 month blocks of time, and then it slides over `.x`
-    using indices defined by those blocks.
+- `slide_period()` is similar to `slide_index()` in that it slides
+  relative to an index, but it first breaks the index up into “time
+  blocks”, like 2 month blocks of time, and then it slides over `.x`
+  using indices defined by those blocks.
 
 Each of these core functions have the same variants as `purrr::map()`.
 For example, `slide()` has `slide_dbl()`, `slide2()`, and `pslide()`,
@@ -38,7 +38,7 @@ along with the other combinations of these variants that you might
 expect from having previously used purrr.
 
 To learn more about these three functions, read the [introduction
-vignette](https://davisvaughan.github.io/slider/articles/slider.html).
+vignette](https://slider.r-lib.org/articles/slider.html).
 
 There are also a set of extremely fast specialized variants of
 `slide_dbl()` for the most common use cases. These include `slide_sum()`
@@ -57,14 +57,14 @@ install.packages("slider")
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-remotes::install_github("DavisVaughan/slider")
+remotes::install_github("r-lib/slider")
 ```
 
 ## Examples
 
 The [help page for
-`slide()`](https://davisvaughan.github.io/slider/reference/slide.html)
-has many examples, but here are a few:
+`slide()`](https://slider.r-lib.org/reference/slide.html) has many
+examples, but here are a few:
 
 ``` r
 library(slider)
@@ -152,7 +152,7 @@ generic row wise iterator, with nice syntax for accessing data frame
 columns.
 
 There is a [vignette specifically about
-this](https://davisvaughan.github.io/slider/articles/rowwise.html).
+this](https://slider.r-lib.org/articles/rowwise.html).
 
 ``` r
 mini_cars <- cars[1:4,]
@@ -323,28 +323,28 @@ There have been multiple attempts at creating sliding window functions
 (I personally created `rollify()`, and worked a little bit on
 `tsibble::slide()` with [Earo Wang](https://github.com/earowang)).
 
--   `zoo::rollapply()`
--   `tibbletime::rollify()`
--   `tsibble::slide()`
+- `zoo::rollapply()`
+- `tibbletime::rollify()`
+- `tsibble::slide()`
 
 I believe that slider is the next iteration of these. There are a few
 reasons for this:
 
--   To me, the API is more intuitive, and is more flexible because
-    `.before` and `.after` let you completely control the entry point
-    (as opposed to fixed entry points like `"center"`, `"left"`, etc.
+- To me, the API is more intuitive, and is more flexible because
+  `.before` and `.after` let you completely control the entry point (as
+  opposed to fixed entry points like `"center"`, `"left"`, etc.
 
--   It is objectively faster because it is written purely in C.
+- It is objectively faster because it is written purely in C.
 
--   With `slide_vec()` you can return any kind of object, and are not
-    limited to the suffixed versions: `_dbl`, `_int`, etc.
+- With `slide_vec()` you can return any kind of object, and are not
+  limited to the suffixed versions: `_dbl`, `_int`, etc.
 
--   It iterates rowwise over data frames, consistent with the vctrs
-    framework.
+- It iterates rowwise over data frames, consistent with the vctrs
+  framework.
 
--   I believe it is overall more consistent, backed by a theory that can
-    always justify the sliding window generated by any combination of
-    the parameters.
+- I believe it is overall more consistent, backed by a theory that can
+  always justify the sliding window generated by any combination of the
+  parameters.
 
 Earo and I have spoken, and we have mutually agreed that it would be
 best to deprecate `tsibble::slide()` in favor of `slider::slide()`.
@@ -376,20 +376,20 @@ equivalent.
 I’ve found the following references very useful to understand more about
 window functions:
 
--   [Postgres SQL
-    documentation](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
+- [Postgres SQL
+  documentation](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
 
--   [dbplyr window function
-    vignette](https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions)
+- [dbplyr window function
+  vignette](https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions)
 
--   [SQLite documentation - with a
-    flowchart](https://www.sqlite.org/windowfunctions.html)
+- [SQLite documentation - with a
+  flowchart](https://www.sqlite.org/windowfunctions.html)
 
--   [Vertica Rows vs Range
-    discussion](https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE)
+- [Vertica Rows vs Range
+  discussion](https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE)
 
 ## Code of Conduct
 
 Please note that the slider project is released with a [Contributor Code
-of Conduct](https://davisvaughan.github.io/slider/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
+of Conduct](https://slider.r-lib.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
