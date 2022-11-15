@@ -4,7 +4,8 @@
       pslide_period_vec(list(1:2, 1:2), new_date(c(1, 2)), "day", ~ c(.x, .y))
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 2, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 2.
 
 ---
 
@@ -12,7 +13,8 @@
       pslide_period_int(list(1:2, 1:2), new_date(c(1, 2)), "day", ~ c(.x, .y))
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 2, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 2.
 
 # inner type can be restricted with list_of
 
@@ -64,7 +66,8 @@
       }, .ptype = NULL)
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 2, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 2.
 
 ---
 
@@ -76,7 +79,8 @@
       }, .ptype = NULL)
     Condition
       Error:
-      ! In iteration 1, the result of `.f` had size 0, not 1.
+      i In index: 1
+      ! The result of `.f` must have size 1, not 0.
 
 # pslide_period_chr() cannot coerce
 

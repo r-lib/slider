@@ -182,7 +182,7 @@ void check_double_negativeness(int before, int after, bool before_positive, bool
   if (!before_positive && !after_positive) {
     Rf_errorcall(
       R_NilValue,
-      "`.before` (%i) and `.after` (%i) cannot both be negative.",
+      "`.before` (%i) and `.after` (%i) can't both be negative.",
       before,
       after
     );

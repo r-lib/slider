@@ -111,7 +111,7 @@ check_slide_period_before <- function(x,
   x <- vec_cast(x, integer(), x_arg = ".before", call = call)
 
   if (is.na(x)) {
-    abort("`.before` cannot be `NA`.", call = call)
+    abort("`.before` can't be `NA`.", call = call)
   }
 
   x
@@ -129,7 +129,7 @@ check_slide_period_after <- function(x,
   x <- vec_cast(x, integer(), x_arg = ".after", call = call)
 
   if (is.na(x)) {
-    abort("`.after` cannot be `NA`.", call = call)
+    abort("`.after` can't be `NA`.", call = call)
   }
 
   x
@@ -141,7 +141,7 @@ check_slide_period_complete <- function(x, call = caller_env()) {
   x <- vec_cast(x, logical(), x_arg = ".complete", call = call)
 
   if (is.na(x)) {
-    abort("`.complete` cannot be `NA`.", call = call)
+    abort("`.complete` can't be `NA`.", call = call)
   }
 
   x

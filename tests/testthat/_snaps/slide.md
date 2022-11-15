@@ -12,7 +12,7 @@
       slide(1:5, identity, .before = -1, .after = -1)
     Condition
       Error:
-      ! `.before` (-1) and `.after` (-1) cannot both be negative.
+      ! `.before` (-1) and `.after` (-1) can't both be negative.
 
 # error if negative .after's abs() is > .before
 
