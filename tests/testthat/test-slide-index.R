@@ -1362,3 +1362,19 @@ test_that(paste0(
     list(integer(), 3, integer())
   )
 })
+
+test_that("`error_call` and `.error_call` args aren't swallowed", {
+  fn <- function(x, error_call) {
+    abort("hi", call = error_call)
+  }
+  fn_dot <- function(x, .error_call) {
+    abort("hi", call = .error_call)
+  }
+
+  expect_snapshot(error = TRUE, {
+    slide_index(1, 1, fn, error_call = call("foo"))
+  })
+  expect_snapshot(error = TRUE, {
+    slide_index(1, 1, fn_dot, .error_call = call("foo"))
+  })
+})

@@ -232,3 +232,19 @@
       ! Can't convert from `stops` <double> to `.i` <integer> due to loss of precision.
       * Locations: 1
 
+# `error_call` and `.error_call` args aren't swallowed
+
+    Code
+      slide_index(1, 1, fn, error_call = call("foo"))
+    Condition
+      Error in `foo()`:
+      ! hi
+
+---
+
+    Code
+      slide_index(1, 1, fn_dot, .error_call = call("foo"))
+    Condition
+      Error in `foo()`:
+      ! hi
+

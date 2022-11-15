@@ -110,3 +110,19 @@
       Error:
       ! Can't convert <character> to <logical>.
 
+# `error_call` and `.error_call` args aren't swallowed
+
+    Code
+      slide(1, fn, error_call = call("foo"))
+    Condition
+      Error in `foo()`:
+      ! hi
+
+---
+
+    Code
+      slide(1, fn_dot, .error_call = call("foo"))
+    Condition
+      Error in `foo()`:
+      ! hi
+
