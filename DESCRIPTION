@@ -28,7 +28,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 LinkingTo:
-    vctrs (>= 0.3.8)
+    vctrs (>= 0.5.0)
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
