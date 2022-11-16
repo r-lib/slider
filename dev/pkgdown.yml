@@ -5,7 +5,7 @@ articles:
   rowwise: rowwise.html
   slider: slider.html
   tsibble: tsibble.html
-last_built: 2022-11-16T14:50Z
+last_built: 2022-11-16T14:55Z
 urls:
   reference: https://slider.r-lib.org/reference
   article: https://slider.r-lib.org/articles
