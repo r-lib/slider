@@ -1,6 +1,6 @@
 Package: slider
 Title: Sliding Window Functions
-Version: 0.3.0
+Version: 0.3.0.9000
 Authors@R: c(
     person("Davis", "Vaughan", , "davis@rstudio.com", role = c("aut", "cre")),
     person("RStudio", role = c("cph", "fnd"))

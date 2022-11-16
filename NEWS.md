@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.3.0
 
 * Improved reported error calls and error messages throughout the package, and
