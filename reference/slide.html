@@ -309,7 +309,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># This can be used for rolling means</span></span></span>
 <span class="r-in"><span><span class="fu">slide_dbl</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.11180490 -0.28056327 -0.09445826  0.17356268 -0.05875171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.5824408  0.5430943  0.2640316  0.3343719 -0.4782024</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or more flexible rolling operations</span></span></span>
 <span class="r-in"><span><span class="fu">slide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>, <span class="op">~</span> <span class="va">.x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span>, .before <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
@@ -317,16 +317,16 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.547451  0.547451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.9664771 -0.9664771</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.9778534  0.1170487  0.8608047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.7049033 -1.2280508  0.5231475</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.5791693  1.3229254 -1.9020947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.88782537  0.86337299  0.02445238</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.9503805 -2.2746396  1.3242592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.1065418 -0.9454624  1.0520043</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># `.after` allows you to "align to the left" rather than the right</span></span></span>
@@ -594,8 +594,8 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 <span class="r-in"><span><span class="co"># this, then it doesn't exist as a built in option.</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">slide_dbl</span><span class="op">(</span><span class="va">x</span>, <span class="va">mean</span>, .before <span class="op">=</span> <span class="fl">3</span>, .step <span class="op">=</span> <span class="fl">2</span>, .complete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]         NA         NA         NA  0.3436822         NA  0.1286339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7]         NA  0.4285507         NA -0.1979954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]          NA          NA          NA  0.67668547          NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] -0.05918937          NA -0.78744772          NA  0.39913339</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Adding an option to `slide_dbl()` to remove the `NA` values would destroy</span></span></span>
 <span class="r-in"><span><span class="co"># its size stability. Instead, you can use a combination of `slide_dfr()`</span></span></span>
@@ -617,7 +617,7 @@ to the type required by the variant of <code>slide_*()</code> being used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4     7   10</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="hop_index.html">hop_index_vec</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">i</span>, <span class="va">idx</span><span class="op">$</span><span class="va">start</span>, <span class="va">idx</span><span class="op">$</span><span class="va">stop</span>, <span class="va">mean</span>, .ptype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.3436822  0.1286339  0.4285507 -0.1979954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.67668547 -0.05918937 -0.78744772  0.39913339</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
