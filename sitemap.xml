@@ -1,81 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://davisvaughan.github.io/slider/404.html</loc>
+    <loc>https://slider.r-lib.org/404.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/CODE_OF_CONDUCT.html</loc>
+    <loc>https://slider.r-lib.org/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/LICENSE-text.html</loc>
+    <loc>https://slider.r-lib.org/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/LICENSE.html</loc>
+    <loc>https://slider.r-lib.org/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/articles/index.html</loc>
+    <loc>https://slider.r-lib.org/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/articles/rowwise.html</loc>
+    <loc>https://slider.r-lib.org/articles/rowwise.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/articles/slider.html</loc>
+    <loc>https://slider.r-lib.org/articles/slider.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/articles/tsibble.html</loc>
+    <loc>https://slider.r-lib.org/articles/tsibble.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/authors.html</loc>
+    <loc>https://slider.r-lib.org/authors.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/index.html</loc>
+    <loc>https://slider.r-lib.org/index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/news/index.html</loc>
+    <loc>https://slider.r-lib.org/news/index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/block.html</loc>
+    <loc>https://slider.r-lib.org/reference/block.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/hop.html</loc>
+    <loc>https://slider.r-lib.org/reference/hop.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/hop2.html</loc>
+    <loc>https://slider.r-lib.org/reference/hop2.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/hop_index.html</loc>
+    <loc>https://slider.r-lib.org/reference/hop_index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/hop_index2.html</loc>
+    <loc>https://slider.r-lib.org/reference/hop_index2.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/index.html</loc>
+    <loc>https://slider.r-lib.org/reference/index-arithmetic.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide.html</loc>
+    <loc>https://slider.r-lib.org/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide2.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide_index.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide2.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide_index2.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide_index.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide_period.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide_index2.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slide_period2.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide_period.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/slider-package.html</loc>
+    <loc>https://slider.r-lib.org/reference/slide_period2.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/summary-index.html</loc>
+    <loc>https://slider.r-lib.org/reference/slider-package.html</loc>
   </url>
   <url>
-    <loc>https://davisvaughan.github.io/slider/reference/summary-slide.html</loc>
+    <loc>https://slider.r-lib.org/reference/summary-index.html</loc>
+  </url>
+  <url>
+    <loc>https://slider.r-lib.org/reference/summary-slide.html</loc>
   </url>
 </urlset>
