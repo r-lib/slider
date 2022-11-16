@@ -3,14 +3,6 @@
 * Improved reported error calls and error messages throughout the package, and
   switched from glue to cli (#168, #188).
 
-* Removed ellipsis in favor of using the equivalent functions in rlang (#185).
-
-* New `slider_plus()` and `slider_minus()` developer facing helpers that allow
-  package authors to register custom double dispatch methods to override the
-  default computation of `.i - .before` and `.i + .after` when generating index
-  bounds internally. This is intended to allow the clock and almanac packages to
-  register methods so their custom types can be used natively in slider (#91).
-
 * Index (`.i`) types that aren't explicitly understood by vctrs are now handled
   slightly better (#182).
 
@@ -18,15 +10,23 @@
   internally to compute a dense rank, which should be a little faster than the
   previous home grown approach (#177).
 
+* New `slider_plus()` and `slider_minus()` developer facing helpers that allow
+  package authors to register custom double dispatch methods to override the
+  default computation of `.i - .before` and `.i + .after` when generating index
+  bounds internally. This is intended to allow the clock and almanac packages to
+  register methods so their custom types can be used natively in slider (#91).
+
+* Removed ellipsis in favor of using the equivalent functions in rlang (#185).
+
 * Removed `R_forceAndCall()` fallback now that R >=3.4.0 is required (#172).
 
 * Fixed `-Wstrict-prototypes` warnings as requested by CRAN (#173).
 
 * Bumped minimal version of R to >=3.4.0 to align with tidyverse standards.
 
-* Fixed redirecting URLs.
-
 * Bumped minimal version of rlang to >=1.0.6 and vctrs to >=0.5.0 (#165, #174).
+
+* Fixed redirecting URLs.
 
 # slider 0.2.2
 
