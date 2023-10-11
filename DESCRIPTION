@@ -13,7 +13,7 @@ License: MIT + file LICENSE
 URL: https://github.com/r-lib/slider, https://slider.r-lib.org
 BugReports: https://github.com/r-lib/slider/issues
 Depends: 
-    R (>= 3.4.0)
+    R (>= 3.6.0)
 Imports:
     cli (>= 3.4.1),
     rlang (>= 1.0.6),
