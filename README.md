@@ -57,7 +57,7 @@ install.packages("slider")
 Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
-remotes::install_github("r-lib/slider")
+pak::pak("r-lib/slider")
 ```
 
 ## Examples
