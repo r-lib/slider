@@ -1,5 +1,8 @@
 # slider (development version)
 
+* Bumped required versions of vctrs, cli, and rlang to their current CRAN
+  versions.
+
 * Bumped required R version to >= 3.6.0.
 
 # slider 0.3.0
