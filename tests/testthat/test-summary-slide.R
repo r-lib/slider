@@ -43,19 +43,18 @@ test_that("NA / NaN results are correct", {
   x <- c(rep(1, 10), rep(NA, 10), 1:4)
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `sum()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_sum(x, before = 3),
     slide_dbl(x, sum, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_sum(y, before = 3),
     slide_dbl(y, sum, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_sum(rev(y), before = 3),
-  #   slide_dbl(rev(y), sum, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -71,10 +70,13 @@ test_that("Inf and -Inf results are correct", {
   expect_identical(slide_sum(x, before = 1), c(1, Inf, NaN, -Inf))
 })
 
-test_that("precision matches base R (long doubles)", {
+test_that("precision matches base R (long doubles) (#147) (#198)", {
+  skip_on_cran()
   skip_if_no_long_double()
   x <- rep(1/7, 10)
-  expect_identical(sum(x), slide_sum(x, before = Inf)[[length(x)]])
+  # Use equal, not identical, because even with long doubles some
+  # platforms like Valgrind have differences out around the 17th digit
+  expect_equal(sum(x), slide_sum(x, before = Inf)[[length(x)]])
 })
 
 test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
@@ -132,19 +134,18 @@ test_that("NA / NaN results are correct", {
   x <- c(rep(1, 10), rep(NA, 10), 1:4)
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `prod()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_prod(x, before = 3),
     slide_dbl(x, prod, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_prod(y, before = 3),
     slide_dbl(y, prod, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_prod(rev(y), before = 3),
-  #   slide_dbl(rev(y), prod, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -215,19 +216,18 @@ test_that("NA / NaN results are correct", {
   x <- c(rep(1, 10), rep(NA, 10), 1:4)
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `mean()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_mean(x, before = 3),
     slide_dbl(x, mean, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_mean(y, before = 3),
     slide_dbl(y, mean, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_mean(rev(y), before = 3),
-  #   slide_dbl(rev(y), mean, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -243,10 +243,13 @@ test_that("Inf and -Inf results are correct", {
   expect_identical(slide_mean(x, before = 1), c(1, Inf, NaN, -Inf))
 })
 
-test_that("precision matches base R (long doubles)", {
+test_that("precision matches base R (long doubles) (#147) (#198)", {
+  skip_on_cran()
   skip_if_no_long_double()
   x <- c(1/7, 1/7, 1/3)
-  expect_identical(mean(x), slide_mean(x, before = Inf)[[length(x)]])
+  # Use equal, not identical, because even with long doubles some
+  # platforms like Valgrind have differences out around the 17th digit
+  expect_equal(mean(x), slide_mean(x, before = Inf)[[length(x)]])
 })
 
 test_that("Inf + -Inf = NaN propagates with `na_rm = TRUE`", {
