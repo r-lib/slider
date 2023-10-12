@@ -4,7 +4,8 @@ extern "C" {
 
 /*
  * `alignof()` is C++11 specific, so this single compilation unit requires
- * C++11, and we call these helpers from C in `summary-core.h`.
+ * C++11 (which is guaranteed by recent R versions now), and we call these
+ * helpers from C in `summary-core.h`.
  *
  * Technically `alignof()` is also in C11, but it is unclear how well R supports
  * that.
