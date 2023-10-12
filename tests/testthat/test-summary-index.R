@@ -41,19 +41,18 @@ test_that("NA / NaN results are correct", {
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
   i <- seq_along(x)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `sum()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_index_sum(x, i, before = 3),
     slide_index_dbl(x, i, sum, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_index_sum(y, i, before = 3),
     slide_index_dbl(y, i, sum, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_index_sum(rev(y), i, before = 3),
-  #   slide_index_dbl(rev(y), i, sum, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -113,19 +112,18 @@ test_that("NA / NaN results are correct", {
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
   i <- seq_along(x)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `prod()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_index_prod(x, i, before = 3),
     slide_index_dbl(x, i, prod, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_index_prod(y, i, before = 3),
     slide_index_dbl(y, i, prod, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_index_prod(rev(y), i, before = 3),
-  #   slide_index_dbl(rev(y), i, prod, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {
@@ -184,19 +182,18 @@ test_that("NA / NaN results are correct", {
   y <- c(rep(NA, 10), rep(NaN, 10), 1:4)
   i <- seq_along(x)
 
-  expect_identical(
+  # NA vs NaN results are platform dependent in `mean()` (especially on valgrind, #198),
+  # and order dependent (but probably stable) in the segment tree, so we can't actually
+  # robustly test the actual NA vs NaN results here. Instead we just use `expect_equal()`
+  # which tests the values and the fact that there is an NA-ish thing there.
+  expect_equal(
     slide_index_mean(x, i, before = 3),
     slide_index_dbl(x, i, mean, .before = 3)
   )
-  expect_identical(
+  expect_equal(
     slide_index_mean(y, i, before = 3),
     slide_index_dbl(y, i, mean, .before = 3)
   )
-  # The NA / NaN ordering is platform dependent
-  # expect_identical(
-  #   slide_index_mean(rev(y), i, before = 3),
-  #   slide_index_dbl(rev(y), i, mean, .before = 3)
-  # )
 })
 
 test_that("`na_rm = TRUE` works", {

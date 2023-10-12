@@ -1,5 +1,8 @@
 # slider (development version)
 
+* Fixed tests that failed under valgrind due to `NA` vs `NaN` peculiarities
+  (#198).
+
 * Bumped required versions of vctrs, cli, and rlang to their current CRAN
   versions.
 
@@ -55,17 +58,17 @@
 * New family of very fast specialized sliding functions:
 
   - `slide_sum()`, `slide_index_sum()`: for rolling sums
-  
+
   - `slide_mean()`, `slide_index_mean()`: for rolling averages
-  
+
   - `slide_prod()`, `slide_index_prod()`: for rolling products
-  
+
   - `slide_min()`, `slide_index_min()`: for rolling minimums
-  
+
   - `slide_max()`, `slide_index_max()`: for rolling maximums
-  
+
   - `slide_any()`, `slide_index_any()`: for rolling any
-  
+
   - `slide_all()`, `slide_index_all()`: for rolling all
 
 * The `slide_index_*()` family now allows `.before` and `.after` to be
@@ -79,7 +82,7 @@
 * The `slide_index_*()` family has undergone some internal changes to make it
   more compatible with custom vctrs classes that could be provided as the
   index (`.i`), such as the date-time classes in the clock package (#133, #130).
-  
+
 * For the `slide_index_*()` family, it is now required that `.i - .before` and
   `.i + .after` be castable to `.i` by `vctrs::vec_cast()`. Similarly, for
   the `hop_index_*()` family, `.starts` and `.stops` must both be castable to
@@ -109,7 +112,7 @@
 
 * As a followup to a change in slider 0.1.3, edge cases with size zero input
   in `hop()` have also been fixed.
-  
+
 * C code has been refactored to be less reliant on vctrs internals.
 
 # slider 0.1.3
