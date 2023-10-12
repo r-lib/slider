@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.3.1
 
 * Fixed tests that failed under valgrind due to `NA` vs `NaN` peculiarities
