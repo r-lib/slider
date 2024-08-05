@@ -65,7 +65,7 @@
       check_index_incompatible_type(x, ".i")
     Condition
       Error:
-      ! `.i` must be a <Date>, <POSIXct>, or <POSIXlt>, not a <foo/bar/baz> object.
+      ! `.i` must be a <Date>, <POSIXct>, or <POSIXlt>, not a <foo> object.
 
 # trimming works
 

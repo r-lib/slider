@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Updated snapshot tests to use the latest version of cli.
+
 # slider 0.3.1
 
 * Fixed tests that failed under valgrind due to `NA` vs `NaN` peculiarities
