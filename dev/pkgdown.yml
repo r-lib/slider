@@ -1,12 +1,11 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   rowwise: rowwise.html
   slider: slider.html
   tsibble: tsibble.html
-last_built: 2023-10-12T15:33Z
+last_built: 2024-08-05T09:21Z
 urls:
   reference: https://slider.r-lib.org/reference
   article: https://slider.r-lib.org/articles
-
