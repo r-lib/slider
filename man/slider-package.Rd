@@ -2,8 +2,8 @@
 % Please edit documentation in R/slider-package.R
 \docType{package}
 \name{slider-package}
+\alias{slider}
 \alias{slider-package}
-\alias{_PACKAGE}
 \title{slider: Sliding Window Functions}
 \description{
 Provides type-stable rolling window functions over any R data type. Cumulative and expanding windows are also supported. For more advanced usage, an index can be used as a secondary vector that defines how sliding windows are to be created.

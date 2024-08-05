@@ -229,7 +229,7 @@ in a final data frame. Hence \code{vec_cbind()} allows the more
 permissive minimal names repair.}
 
 \item{.size}{If, \code{NULL}, the default, will determine the number of rows in
-\code{vec_cbind()} output by using the tidyverse \link[vctrs:vector_recycling_rules]{recycling rules}.
+\code{vec_cbind()} output by using the tidyverse \link[vctrs:theory-faq-recycling]{recycling rules}.
 
 Alternatively, specify the desired number of rows, and any inputs of length
 1 will be recycled appropriately.}
