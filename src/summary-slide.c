@@ -83,7 +83,7 @@ static SEXP slide_summary_lgl(SEXP x,
   R_xlen_t start = p_opts->start;                              \
   R_xlen_t stop = p_opts->stop;                                \
                                                                \
-  R_xlen_t start_stop = p_opts->start_step;                    \
+  R_xlen_t start_step = p_opts->start_step;                    \
   R_xlen_t stop_step = p_opts->stop_step;                      \
                                                                \
   for (R_xlen_t i = iter_min; i < iter_max; i += iter_step) {  \
@@ -101,7 +101,7 @@ static SEXP slide_summary_lgl(SEXP x,
       window_stop = 0;                                         \
     }                                                          \
                                                                \
-    start += start_stop;                                       \
+    start += start_step;                                       \
     stop += stop_step;                                         \
                                                                \
     CTYPE result = INIT;                                       \
