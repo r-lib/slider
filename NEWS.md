@@ -1,3 +1,5 @@
+# slider (development version)
+
 # slider 0.3.2
 
 * Removed usage of non-API `STRING_PTR()` (#209).
