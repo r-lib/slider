@@ -1,84 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://slider.r-lib.org/404.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/articles/rowwise.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/articles/slider.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/articles/tsibble.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/block.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/hop.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/hop2.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/hop_index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/hop_index2.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/index-arithmetic.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide2.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide_index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide_index2.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide_period.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slide_period2.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/slider-package.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/summary-index.html</loc>
-  </url>
-  <url>
-    <loc>https://slider.r-lib.org/reference/summary-slide.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://slider.r-lib.org/404.html</loc></url>
+<url><loc>https://slider.r-lib.org/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://slider.r-lib.org/LICENSE-text.html</loc></url>
+<url><loc>https://slider.r-lib.org/LICENSE.html</loc></url>
+<url><loc>https://slider.r-lib.org/articles/index.html</loc></url>
+<url><loc>https://slider.r-lib.org/articles/rowwise.html</loc></url>
+<url><loc>https://slider.r-lib.org/articles/slider.html</loc></url>
+<url><loc>https://slider.r-lib.org/articles/tsibble.html</loc></url>
+<url><loc>https://slider.r-lib.org/authors.html</loc></url>
+<url><loc>https://slider.r-lib.org/index.html</loc></url>
+<url><loc>https://slider.r-lib.org/news/index.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/block.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/hop.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/hop2.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/hop_index.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/hop_index2.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/index-arithmetic.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/index.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide2.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide_index.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide_index2.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide_period.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slide_period2.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/slider-package.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/summary-index.html</loc></url>
+<url><loc>https://slider.r-lib.org/reference/summary-slide.html</loc></url>
 </urlset>
+
