@@ -13,3 +13,5 @@
 ^CRAN-RELEASE$
 ^revdep$
 ^CRAN-SUBMISSION$
+^compile_commands\.json$
+^\.cache$
