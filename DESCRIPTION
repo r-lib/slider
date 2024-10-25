@@ -30,8 +30,8 @@ LinkingTo:
     vctrs (>= 0.6.3)
 VignetteBuilder:
     knitr
-Config/Needs/website: tidyverse/tidytemplate
 Config/build/compilation-database: true
+Config/Needs/website: tidyverse/tidytemplate
 Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2024-10-25
 Encoding: UTF-8
