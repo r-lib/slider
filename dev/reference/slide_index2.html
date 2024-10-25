@@ -234,7 +234,8 @@ complex arithmetic operation that can't be expressed with a single <code>-</code
 <code>+</code> operation. One example would be to use <code><a href="https://lubridate.tidyverse.org/reference/mplus.html" class="external-link">lubridate::add_with_rollback()</a></code>
 to avoid invalid dates at the end of the month.</p></li>
 </ul><p>The ranges that result from applying <code>.before</code> and <code>.after</code> have the same
-3 restrictions as <code>.i</code> itself.</p></dd>
+3 restrictions as <code>.i</code> itself, and are cast to the type of <code>.i</code> using
+<code><a href="https://vctrs.r-lib.org/reference/vec_cast.html" class="external-link">vctrs::vec_cast()</a></code>.</p></dd>
 
 
 <dt id="arg--complete">.complete<a class="anchor" aria-label="anchor" href="#arg--complete"></a></dt>

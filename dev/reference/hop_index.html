@@ -84,10 +84,10 @@ are allowed.</p></li>
 <dd><p><code>[vector]</code></p>
 <p>Vectors of boundary values that make up the windows to bucket <code>.i</code> with.
 Both <code>.starts</code> and <code>.stops</code> will be recycled to their common size, and
-that common size will be the size of the result. Both vectors should be
-the same type as <code>.i</code>. These boundaries are both <em>inclusive</em>, meaning
-that the slice of <code>.x</code> that will be used in each call to <code>.f</code> is where
-<code>.i &gt;= start &amp; .i &lt;= stop</code> returns <code>TRUE</code>.</p></dd>
+that common size will be the size of the result. Both vectors will be cast
+to the type of <code>.i</code> using <code><a href="https://vctrs.r-lib.org/reference/vec_cast.html" class="external-link">vctrs::vec_cast()</a></code>. These boundaries are both
+<em>inclusive</em>, meaning that the slice of <code>.x</code> that will be used in each call
+to <code>.f</code> is where <code>.i &gt;= start &amp; .i &lt;= stop</code> returns <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg--f">.f<a class="anchor" aria-label="anchor" href="#arg--f"></a></dt>
