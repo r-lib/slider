@@ -15,14 +15,4 @@
 #define SLIDE -1
 #define SLIDE2 -2
 
-// Compatibility ------------------------------------------------
-
-#if (R_VERSION < R_Version(3, 5, 0))
-  #define LOGICAL_RO(x) ((const int*) LOGICAL(x))
-  #define INTEGER_RO(x) ((const int*) INTEGER(x))
-  #define REAL_RO(x) ((const double*) REAL(x))
-  #define RAW_RO(x) ((const Rbyte*) RAW(x))
-  #define STRING_PTR_RO(x) ((const SEXP*) STRING_PTR(x))
-#endif
-
 #endif

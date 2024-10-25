@@ -39,6 +39,17 @@ SEXP slider_ns_env = NULL;
   return out;                                                  \
 } while (0)
 
+#define SLIDER_INIT_BARRIER(CTYPE, SET, NA_VALUE) do {         \
+  SEXP out = PROTECT(Rf_allocVector(type, size));              \
+                                                               \
+  for (R_xlen_t i = 0; i < size; ++i) {                        \
+    SET(out, i, NA_VALUE);                                     \
+  }                                                            \
+                                                               \
+  UNPROTECT(1);                                                \
+  return out;                                                  \
+} while (0)
+
 // Lists are initialized with `NULL` elements
 static SEXP list_init(R_xlen_t size) {
   return Rf_allocVector(VECSXP, size);
@@ -49,7 +60,7 @@ SEXP slider_init(SEXPTYPE type, R_xlen_t size) {
   case LGLSXP:  SLIDER_INIT_ATOMIC(int, LOGICAL, NA_LOGICAL);
   case INTSXP:  SLIDER_INIT_ATOMIC(int, INTEGER, NA_INTEGER);
   case REALSXP: SLIDER_INIT_ATOMIC(double, REAL, NA_REAL);
-  case STRSXP:  SLIDER_INIT_ATOMIC(SEXP, STRING_PTR, NA_STRING);
+  case STRSXP:  SLIDER_INIT_BARRIER(SEXP, SET_STRING_ELT, NA_STRING);
   case VECSXP:  return list_init(size);
   default: Rf_errorcall(R_NilValue, "Internal error: Unknown type in `slider_init()`.");
   }
@@ -57,6 +68,17 @@ SEXP slider_init(SEXPTYPE type, R_xlen_t size) {
 }
 
 #undef SLIDER_INIT_ATOMIC
+#undef SLIDER_INIT_BARRIER
+
+// -----------------------------------------------------------------------------
+
+void list_fill(SEXP x, SEXP value) {
+  R_xlen_t size = Rf_xlength(x);
+
+  for (R_xlen_t i = 0; i < size; ++i) {
+    SET_VECTOR_ELT(x, i, value);
+  }
+}
 
 // -----------------------------------------------------------------------------
 

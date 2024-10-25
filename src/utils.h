@@ -79,6 +79,8 @@ extern SEXP slider_ns_env;
 
 SEXP slider_init(SEXPTYPE type, R_xlen_t size);
 
+void list_fill(SEXP x, SEXP value);
+
 void stop_not_all_size_one(int iteration, int size);
 
 void check_slide_starts_not_past_stops(SEXP starts,
