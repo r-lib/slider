@@ -20,4 +20,5 @@
 #'   to avoid invalid dates at the end of the month.
 #'
 #'   The ranges that result from applying `.before` and `.after` have the same
-#'   3 restrictions as `.i` itself.
+#'   3 restrictions as `.i` itself, and are cast to the type of `.i` using
+#'   [vctrs::vec_cast()].

@@ -32,10 +32,10 @@ are allowed.
 
 Vectors of boundary values that make up the windows to bucket \code{.i} with.
 Both \code{.starts} and \code{.stops} will be recycled to their common size, and
-that common size will be the size of the result. Both vectors should be
-the same type as \code{.i}. These boundaries are both \emph{inclusive}, meaning
-that the slice of \code{.x} that will be used in each call to \code{.f} is where
-\code{.i >= start & .i <= stop} returns \code{TRUE}.}
+that common size will be the size of the result. Both vectors will be cast
+to the type of \code{.i} using \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}. These boundaries are both
+\emph{inclusive}, meaning that the slice of \code{.x} that will be used in each call
+to \code{.f} is where \code{.i >= start & .i <= stop} returns \code{TRUE}.}
 
 \item{.f}{\verb{[function / formula]}
 

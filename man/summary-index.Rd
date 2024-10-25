@@ -129,7 +129,8 @@ to avoid invalid dates at the end of the month.
 }
 
 The ranges that result from applying \code{.before} and \code{.after} have the same
-3 restrictions as \code{.i} itself.}
+3 restrictions as \code{.i} itself, and are cast to the type of \code{.i} using
+\code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}.}
 
 \item{complete}{\verb{[logical(1)]}
 
