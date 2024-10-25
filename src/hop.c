@@ -39,23 +39,14 @@
   }                                                               \
 } while (0)
 
-#define HOP_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_ONE) do {         \
-  CTYPE* p_out = DEREF(out);                                   \
-  HOP_LOOP(ASSIGN_ONE);                                        \
+#define HOP_LOOP_ATOMIC(CTYPE, DEREF, ASSIGN_ONE) do { \
+  CTYPE* p_out = DEREF(out);                           \
+  HOP_LOOP(ASSIGN_ONE);                                \
 } while (0)
 
-#define HOP_LOOP_BARRIER(ASSIGN_ONE) do {                      \
-  SEXP p_out = out;                                            \
-                                                               \
-  /* Initialize with `NA`, not `NULL` */                       \
-  /* for size stability when auto-simplifying */               \
-  if (atomic && !constrain) {                                  \
-    for (R_len_t i = 0; i < size; ++i) {                       \
-      SET_VECTOR_ELT(p_out, i, slider_shared_na_lgl);          \
-    }                                                          \
-  }                                                            \
-                                                               \
-  HOP_LOOP(ASSIGN_ONE);                                        \
+#define HOP_LOOP_BARRIER(ASSIGN_ONE) do { \
+  SEXP p_out = out;                       \
+  HOP_LOOP(ASSIGN_ONE);                   \
 } while (0)
 
 // -----------------------------------------------------------------------------
@@ -92,11 +83,16 @@ SEXP hop_common_impl(SEXP x,
   SEXPTYPE out_type = TYPEOF(ptype);
   SEXP out = PROTECT(slider_init(out_type, size));
 
+  if (atomic && !constrain && out_type == VECSXP) {
+    // Initialize with `NA`, not `NULL`, for size stability when auto simplifying
+    list_fill(out, slider_shared_na_lgl);
+  }
+
   switch (out_type) {
   case INTSXP:  HOP_LOOP_ATOMIC(int, INTEGER, assign_one_int); break;
   case REALSXP: HOP_LOOP_ATOMIC(double, REAL, assign_one_dbl); break;
   case LGLSXP:  HOP_LOOP_ATOMIC(int, LOGICAL, assign_one_lgl); break;
-  case STRSXP:  HOP_LOOP_ATOMIC(SEXP, STRING_PTR, assign_one_chr); break;
+  case STRSXP:  HOP_LOOP_BARRIER(assign_one_chr); break;
   case VECSXP:  HOP_LOOP_BARRIER(assign_one_lst); break;
   default:      never_reached("hop_common_impl");
   }

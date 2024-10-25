@@ -72,6 +72,16 @@ SEXP slider_init(SEXPTYPE type, R_xlen_t size) {
 
 // -----------------------------------------------------------------------------
 
+void list_fill(SEXP x, SEXP value) {
+  R_xlen_t size = Rf_xlength(x);
+
+  for (R_xlen_t i = 0; i < size; ++i) {
+    SET_VECTOR_ELT(x, i, value);
+  }
+}
+
+// -----------------------------------------------------------------------------
+
 void stop_not_all_size_one(int iteration, int size) {
   SEXP call = PROTECT(
     Rf_lang3(
