@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Codecov test
-coverage](https://codecov.io/gh/r-lib/slider/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/slider?branch=main)
+coverage](https://codecov.io/gh/r-lib/slider/graph/badge.svg)](https://app.codecov.io/gh/r-lib/slider)
 [![R-CMD-check](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/slider/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
