@@ -14,12 +14,20 @@ test_that("phop_vec() can simplify automatically", {
 })
 
 test_that("phop_vec() errors if it can't simplify", {
-  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  fn <- function(x, y) {
+    if (x == 1L) {
+      1
+    } else {
+      "hi"
+    }
+  }
   expect_snapshot({
-    (expect_error(
-      phop_vec(list(1:2, 1:2), 1:2, 1:2, fn, .ptype = NULL),
-      class = "vctrs_error_incompatible_type"
-    ))
+    (
+      expect_error(
+        phop_vec(list(1:2, 1:2), 1:2, 1:2, fn, .ptype = NULL),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
@@ -28,17 +36,54 @@ test_that("phop_vec() errors if it can't simplify", {
 
 test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_snapshot({
-    (expect_error(phop_vec(list(1:2, 1:2), 1:2, 1:2, ~if(.x == 1L) {1:2} else {1}, .ptype = NULL)))
-    (expect_error(phop_vec(list(1:2, 1:2), 1:2, 1:2, ~if(.x == 1L) {NULL} else {2}, .ptype = NULL)))
+    (
+      expect_error(
+        phop_vec(
+          list(1:2, 1:2),
+          1:2,
+          1:2,
+          ~if (.x == 1L) {
+            1:2
+          } else {
+            1
+          },
+          .ptype = NULL
+        )
+      )
+    )
+    (
+      expect_error(
+        phop_vec(
+          list(1:2, 1:2),
+          1:2,
+          1:2,
+          ~if (.x == 1L) {
+            NULL
+          } else {
+            2
+          },
+          .ptype = NULL
+        )
+      )
+    )
   })
 })
 
 test_that("`phop_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
-  expect_condition(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
+  expect_identical(
+    phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    foobar(1:3)
+  )
+  expect_condition(
+    phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    class = "slider_c_foobar"
+  )
 
   expect_identical(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x)), foobar(1:3))
-  expect_condition(phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
+  expect_condition(
+    phop_vec(list(1:3, 1:3), 1:3, 1:3, ~foobar(.x)),
+    class = "slider_c_foobar"
+  )
 })

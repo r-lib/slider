@@ -63,18 +63,36 @@
 #'
 #' # Only evaluate the sum on windows that have the potential to be complete
 #' slide_index_sum(x, i, before = 2, after = 1, complete = TRUE)
-slide_index_sum <- function(x,
-                            i,
-                            ...,
-                            before = 0L,
-                            after = 0L,
-                            complete = FALSE,
-                            na_rm = FALSE) {
+slide_index_sum <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_sum_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_sum_core
+  )
 }
 
-slide_index_sum_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+slide_index_sum_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
   .Call(slider_index_sum_core, x, i, starts, stops, peer_sizes, complete, na_rm)
 }
 
@@ -82,56 +100,128 @@ slide_index_sum_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 #' @rdname summary-index
 #' @export
-slide_index_prod <- function(x,
-                             i,
-                             ...,
-                             before = 0L,
-                             after = 0L,
-                             complete = FALSE,
-                             na_rm = FALSE) {
+slide_index_prod <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_prod_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_prod_core
+  )
 }
 
-slide_index_prod_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
-  .Call(slider_index_prod_core, x, i, starts, stops, peer_sizes, complete, na_rm)
+slide_index_prod_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
+  .Call(
+    slider_index_prod_core,
+    x,
+    i,
+    starts,
+    stops,
+    peer_sizes,
+    complete,
+    na_rm
+  )
 }
 
 # ------------------------------------------------------------------------------
 
 #' @rdname summary-index
 #' @export
-slide_index_mean <- function(x,
-                             i,
-                             ...,
-                             before = 0L,
-                             after = 0L,
-                             complete = FALSE,
-                             na_rm = FALSE) {
+slide_index_mean <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_mean_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_mean_core
+  )
 }
 
-slide_index_mean_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
-  .Call(slider_index_mean_core, x, i, starts, stops, peer_sizes, complete, na_rm)
+slide_index_mean_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
+  .Call(
+    slider_index_mean_core,
+    x,
+    i,
+    starts,
+    stops,
+    peer_sizes,
+    complete,
+    na_rm
+  )
 }
 
 # ------------------------------------------------------------------------------
 
 #' @rdname summary-index
 #' @export
-slide_index_min <- function(x,
-                            i,
-                            ...,
-                            before = 0L,
-                            after = 0L,
-                            complete = FALSE,
-                            na_rm = FALSE) {
+slide_index_min <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_min_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_min_core
+  )
 }
 
-slide_index_min_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+slide_index_min_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
   .Call(slider_index_min_core, x, i, starts, stops, peer_sizes, complete, na_rm)
 }
 
@@ -139,18 +229,36 @@ slide_index_min_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 #' @rdname summary-index
 #' @export
-slide_index_max <- function(x,
-                            i,
-                            ...,
-                            before = 0L,
-                            after = 0L,
-                            complete = FALSE,
-                            na_rm = FALSE) {
+slide_index_max <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_max_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_max_core
+  )
 }
 
-slide_index_max_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+slide_index_max_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
   .Call(slider_index_max_core, x, i, starts, stops, peer_sizes, complete, na_rm)
 }
 
@@ -158,18 +266,36 @@ slide_index_max_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 #' @rdname summary-index
 #' @export
-slide_index_all <- function(x,
-                            i,
-                            ...,
-                            before = 0L,
-                            after = 0L,
-                            complete = FALSE,
-                            na_rm = FALSE) {
+slide_index_all <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_all_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_all_core
+  )
 }
 
-slide_index_all_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+slide_index_all_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
   .Call(slider_index_all_core, x, i, starts, stops, peer_sizes, complete, na_rm)
 }
 
@@ -177,31 +303,51 @@ slide_index_all_core <- function(x, i, starts, stops, peer_sizes, complete, na_r
 
 #' @rdname summary-index
 #' @export
-slide_index_any <- function(x,
-                            i,
-                            ...,
-                            before = 0L,
-                            after = 0L,
-                            complete = FALSE,
-                            na_rm = FALSE) {
+slide_index_any <- function(
+  x,
+  i,
+  ...,
+  before = 0L,
+  after = 0L,
+  complete = FALSE,
+  na_rm = FALSE
+) {
   check_dots_empty0(...)
-  slide_index_summary(x, i, before, after, complete, na_rm, slide_index_any_core)
+  slide_index_summary(
+    x,
+    i,
+    before,
+    after,
+    complete,
+    na_rm,
+    slide_index_any_core
+  )
 }
 
-slide_index_any_core <- function(x, i, starts, stops, peer_sizes, complete, na_rm) {
+slide_index_any_core <- function(
+  x,
+  i,
+  starts,
+  stops,
+  peer_sizes,
+  complete,
+  na_rm
+) {
   .Call(slider_index_any_core, x, i, starts, stops, peer_sizes, complete, na_rm)
 }
 
 # ------------------------------------------------------------------------------
 
-slide_index_summary <- function(x,
-                                i,
-                                before,
-                                after,
-                                complete,
-                                na_rm,
-                                fn_core,
-                                slider_error_call = caller_env()) {
+slide_index_summary <- function(
+  x,
+  i,
+  before,
+  after,
+  complete,
+  na_rm,
+  fn_core,
+  slider_error_call = caller_env()
+) {
   info <- slide_index_info(
     i = i,
     before = before,

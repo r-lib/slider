@@ -1,4 +1,15 @@
-hop_common <- function(x, starts, stops, f_call, ptype, env, type, constrain, atomic, slider_error_call) {
+hop_common <- function(
+  x,
+  starts,
+  stops,
+  f_call,
+  ptype,
+  env,
+  type,
+  constrain,
+  atomic,
+  slider_error_call
+) {
   x_size <- compute_size(x, type)
 
   check_endpoints_cannot_be_na(starts, ".starts", call = slider_error_call)

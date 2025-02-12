@@ -82,7 +82,12 @@ block <- function(x, i, period, every = 1L, origin = NULL) {
     stop_index_incompatible_size(i_size, x_size, "i")
   }
 
-  boundaries <- warp_boundary(i, period = period, every = every, origin = origin)
+  boundaries <- warp_boundary(
+    i,
+    period = period,
+    every = every,
+    origin = origin
+  )
 
   .Call(slider_block, x, boundaries$start, boundaries$stop)
 }

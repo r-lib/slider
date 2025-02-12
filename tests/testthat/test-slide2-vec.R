@@ -16,22 +16,38 @@ test_that("slide2_vec() can simplify automatically", {
 })
 
 test_that("slide2_vec() errors if it can't simplify", {
-  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  fn <- function(x, y) {
+    if (x == 1L) {
+      1
+    } else {
+      "hi"
+    }
+  }
   expect_snapshot({
-    (expect_error(
-      slide2_vec(1:2, 1:2, fn, .ptype = NULL),
-      class = "vctrs_error_incompatible_type"
-    ))
+    (
+      expect_error(
+        slide2_vec(1:2, 1:2, fn, .ptype = NULL),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
 test_that("slide2_*() errors if it can't cast", {
-  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  fn <- function(x, y) {
+    if (x == 1L) {
+      1
+    } else {
+      "hi"
+    }
+  }
   expect_snapshot({
-    (expect_error(
-      slide2_int(1:2, 1:2, fn),
-      class = "vctrs_error_incompatible_type"
-    ))
+    (
+      expect_error(
+        slide2_int(1:2, 1:2, fn),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
@@ -60,7 +76,12 @@ test_that("slide2_chr() works", {
 
 test_that("slide2_chr() cannot coerce", {
   expect_snapshot({
-    (expect_error(slide2_chr(1, 1, ~.x + .y), class = "vctrs_error_incompatible_type"))
+    (
+      expect_error(
+        slide2_chr(1, 1, ~.x + .y),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
@@ -123,8 +144,14 @@ test_that("`.ptype = NULL` is size stable (#78)", {
 test_that("`slide2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
-  expect_condition(slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
+  expect_identical(
+    slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    foobar(1:3)
+  )
+  expect_condition(
+    slide2_vec(1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    class = "slider_c_foobar"
+  )
 
   expect_identical(slide2_vec(1:3, 1:3, ~foobar(.x)), foobar(1:3))
   expect_condition(slide2_vec(1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
@@ -136,18 +163,39 @@ test_that("`slide2_vec()` falls back to `c()` method as required", {
 test_that(".step produces typed `NA` values", {
   expect_identical(slide2_int(1:3, 1:3, ~.x, .step = 2), c(1L, NA, 3L))
   expect_identical(slide2_dbl(1:3, 1:3, ~.x, .step = 2), c(1, NA, 3))
-  expect_identical(slide2_chr(c("a", "b", "c"), 1:3, ~.x, .step = 2), c("a", NA, "c"))
+  expect_identical(
+    slide2_chr(c("a", "b", "c"), 1:3, ~.x, .step = 2),
+    c("a", NA, "c")
+  )
   expect_identical(slide2_vec(1:3, 1:3, ~.x, .step = 2), c(1L, NA, 3L))
-  expect_identical(slide2_vec(1:3, 1:3, ~.x, .step = 2, .ptype = integer()), c(1L, NA, 3L))
+  expect_identical(
+    slide2_vec(1:3, 1:3, ~.x, .step = 2, .ptype = integer()),
+    c(1L, NA, 3L)
+  )
 })
 
 # ------------------------------------------------------------------------------
 # .complete
 
 test_that(".complete produces typed `NA` values", {
-  expect_identical(slide2_int(1:3, 1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
-  expect_identical(slide2_dbl(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
-  expect_identical(slide2_chr(1:3, 1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
-  expect_identical(slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
-  expect_identical(slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+  expect_identical(
+    slide2_int(1:3, 1:3, ~1L, .before = 1, .complete = TRUE),
+    c(NA, 1L, 1L)
+  )
+  expect_identical(
+    slide2_dbl(1:3, 1:3, ~1, .before = 1, .complete = TRUE),
+    c(NA, 1, 1)
+  )
+  expect_identical(
+    slide2_chr(1:3, 1:3, ~"1", .before = 1, .complete = TRUE),
+    c(NA, "1", "1")
+  )
+  expect_identical(
+    slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE),
+    c(NA, 1, 1)
+  )
+  expect_identical(
+    slide2_vec(1:3, 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()),
+    c(NA, 1L, 1L)
+  )
 })

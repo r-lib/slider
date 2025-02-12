@@ -78,13 +78,7 @@ hop2 <- function(.x, .y, .starts, .stops, .f, ...) {
 
 #' @rdname hop2
 #' @export
-hop2_vec <- function(.x,
-                     .y,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...,
-                     .ptype = NULL) {
+hop2_vec <- function(.x, .y, .starts, .stops, .f, ..., .ptype = NULL) {
   out <- hop2_impl(
     .x,
     .y,
@@ -102,16 +96,18 @@ hop2_vec <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-hop2_impl <- function(.x,
-                      .y,
-                      .starts,
-                      .stops,
-                      .f,
-                      ...,
-                      .ptype,
-                      .constrain,
-                      .atomic,
-                      .slider_error_call = caller_env()) {
+hop2_impl <- function(
+  .x,
+  .y,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   vec_assert(.x, call = .slider_error_call)
   vec_assert(.y, call = .slider_error_call)
 

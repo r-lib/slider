@@ -1,12 +1,7 @@
 #' @include hop-index2.R
 #' @rdname hop_index2
 #' @export
-phop_index <- function(.l,
-                       .i,
-                       .starts,
-                       .stops,
-                       .f,
-                       ...) {
+phop_index <- function(.l, .i, .starts, .stops, .f, ...) {
   phop_index_impl(
     .l,
     .i,
@@ -22,13 +17,7 @@ phop_index <- function(.l,
 
 #' @rdname hop_index2
 #' @export
-phop_index_vec <- function(.l,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...,
-                           .ptype = NULL) {
+phop_index_vec <- function(.l, .i, .starts, .stops, .f, ..., .ptype = NULL) {
   out <- phop_index_impl(
     .l,
     .i,
@@ -46,16 +35,18 @@ phop_index_vec <- function(.l,
 
 # ------------------------------------------------------------------------------
 
-phop_index_impl <- function(.l,
-                            .i,
-                            .starts,
-                            .stops,
-                            .f,
-                            ...,
-                            .ptype,
-                            .constrain,
-                            .atomic,
-                            .slider_error_call = caller_env()) {
+phop_index_impl <- function(
+  .l,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   .l <- slider_check_list(.l, call = .slider_error_call)
   list_check_all_vectors(.l, call = .slider_error_call)
 
@@ -76,7 +67,7 @@ phop_index_impl <- function(.l,
   # into `.f` as argument names
   names(slicers) <- names(.l)
 
-  f_call <- expr(.f(!!! slicers, ...))
+  f_call <- expr(.f(!!!slicers, ...))
 
   hop_index_common(
     x = .l,
