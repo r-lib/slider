@@ -2,9 +2,7 @@ is_unbounded <- function(x) {
   identical(x, Inf)
 }
 
-slider_check_list <- function(x,
-                              arg = caller_arg(x),
-                              call = caller_env()) {
+slider_check_list <- function(x, arg = caller_arg(x), call = caller_env()) {
   out <- slider_compat_list(x)
   vec_check_list(out, arg = arg, call = call)
   out
@@ -96,10 +94,12 @@ compute_size <- function(x, type) {
 #
 # slide_vec(1, ~c(y = 2))
 # purrr::map_dbl(1, ~c(y = 2))
-vec_simplify <- function(x,
-                         ptype,
-                         error_arg = caller_arg(x),
-                         error_call = caller_env()) {
+vec_simplify <- function(
+  x,
+  ptype,
+  error_arg = caller_arg(x),
+  error_call = caller_env()
+) {
   names <- vec_names(x)
   unnamed <- vec_set_names(x, NULL)
 
@@ -130,7 +130,7 @@ compute_combined_ranks <- function(...) {
   indices <- vector("list", n_args)
 
   current_start <- 1L
-  for(i in seq_len(n_args)) {
+  for (i in seq_len(n_args)) {
     next_start <- current_start + sizes[[i]]
     current_stop <- next_start - 1L
     indices[[i]] <- seq2(current_start, current_stop)

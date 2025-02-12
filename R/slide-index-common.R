@@ -1,15 +1,17 @@
-slide_index_common <- function(x,
-                               i,
-                               f_call,
-                               before,
-                               after,
-                               complete,
-                               ptype,
-                               constrain,
-                               atomic,
-                               env,
-                               type,
-                               slider_error_call) {
+slide_index_common <- function(
+  x,
+  i,
+  f_call,
+  before,
+  after,
+  complete,
+  ptype,
+  constrain,
+  atomic,
+  env,
+  type,
+  slider_error_call
+) {
   info <- slide_index_info(
     i = i,
     before = before,
@@ -54,13 +56,15 @@ slide_index_common <- function(x,
 
 # ------------------------------------------------------------------------------
 
-slide_index_info <- function(i,
-                             before,
-                             after,
-                             i_arg,
-                             before_arg,
-                             after_arg,
-                             slider_error_call) {
+slide_index_info <- function(
+  i,
+  before,
+  after,
+  i_arg,
+  before_arg,
+  after_arg,
+  slider_error_call
+) {
   vec_assert(i, arg = i_arg, call = slider_error_call)
 
   check_index_cannot_be_na(i, i_arg, call = slider_error_call)
@@ -95,13 +99,15 @@ slide_index_info <- function(i,
   )
 }
 
-compute_ranges <- function(i,
-                           before,
-                           after,
-                           i_arg,
-                           before_arg,
-                           after_arg,
-                           slider_error_call) {
+compute_ranges <- function(
+  i,
+  before,
+  after,
+  i_arg,
+  before_arg,
+  after_arg,
+  slider_error_call
+) {
   i_size <- vec_size(i)
 
   start_unbounded <- before$unbounded
@@ -114,9 +120,22 @@ compute_ranges <- function(i,
   } else {
     starts <- before$fn(i)
     starts <- vec_cast(starts, i, to_arg = ".i", call = slider_error_call)
-    check_generated_endpoints_incompatible_size(starts, i_size, before_arg, call = slider_error_call)
-    check_generated_endpoints_cannot_be_na(starts, before_arg, call = slider_error_call)
-    check_generated_endpoints_must_be_ascending(starts, before_arg, call = slider_error_call)
+    check_generated_endpoints_incompatible_size(
+      starts,
+      i_size,
+      before_arg,
+      call = slider_error_call
+    )
+    check_generated_endpoints_cannot_be_na(
+      starts,
+      before_arg,
+      call = slider_error_call
+    )
+    check_generated_endpoints_must_be_ascending(
+      starts,
+      before_arg,
+      call = slider_error_call
+    )
   }
 
   if (stop_unbounded) {
@@ -124,9 +143,22 @@ compute_ranges <- function(i,
   } else {
     stops <- after$fn(i)
     stops <- vec_cast(stops, i, to_arg = ".i", call = slider_error_call)
-    check_generated_endpoints_incompatible_size(stops, i_size, after_arg, call = slider_error_call)
-    check_generated_endpoints_cannot_be_na(stops, after_arg, call = slider_error_call)
-    check_generated_endpoints_must_be_ascending(stops, after_arg, call = slider_error_call)
+    check_generated_endpoints_incompatible_size(
+      stops,
+      i_size,
+      after_arg,
+      call = slider_error_call
+    )
+    check_generated_endpoints_cannot_be_na(
+      stops,
+      after_arg,
+      call = slider_error_call
+    )
+    check_generated_endpoints_must_be_ascending(
+      stops,
+      after_arg,
+      call = slider_error_call
+    )
   }
 
   ranks <- compute_combined_ranks(i = i, starts = starts, stops = stops)

@@ -132,7 +132,7 @@ s3_method_get <- function(name) {
   NULL
 }
 
-ns_methods_table <- function (ns) {
+ns_methods_table <- function(ns) {
   ns$.__S3MethodsTable__.
 }
 

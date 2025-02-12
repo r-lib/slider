@@ -113,13 +113,7 @@ hop_index <- function(.x, .i, .starts, .stops, .f, ...) {
 
 #' @rdname hop_index
 #' @export
-hop_index_vec <- function(.x,
-                          .i,
-                          .starts,
-                          .stops,
-                          .f,
-                          ...,
-                          .ptype = NULL) {
+hop_index_vec <- function(.x, .i, .starts, .stops, .f, ..., .ptype = NULL) {
   out <- hop_index_impl(
     .x,
     .i,
@@ -137,16 +131,18 @@ hop_index_vec <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-hop_index_impl <- function(.x,
-                           .i,
-                           .starts,
-                           .stops,
-                           .f,
-                           ...,
-                           .ptype,
-                           .constrain,
-                           .atomic,
-                           .slider_error_call = caller_env()) {
+hop_index_impl <- function(
+  .x,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   vec_assert(.x, call = .slider_error_call)
 
   .f <- as_function(.f, call = .slider_error_call)

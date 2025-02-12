@@ -75,14 +75,16 @@
 #'
 #' @seealso [slide()], [slide_index2()], [hop_index2()]
 #' @export
-slide2 <- function(.x,
-                   .y,
-                   .f,
-                   ...,
-                   .before = 0L,
-                   .after = 0L,
-                   .step = 1L,
-                   .complete = FALSE) {
+slide2 <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   slide2_impl(
     .x,
     .y,
@@ -100,15 +102,17 @@ slide2 <- function(.x,
 
 #' @rdname slide2
 #' @export
-slide2_vec <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .ptype = NULL) {
+slide2_vec <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .ptype = NULL
+) {
   out <- slide2_impl(
     .x,
     .y,
@@ -126,16 +130,18 @@ slide2_vec <- function(.x,
   vec_simplify(out, .ptype)
 }
 
-slide2_vec_direct <- function(.x,
-                              .y,
-                              .f,
-                              ...,
-                              .before,
-                              .after,
-                              .step,
-                              .complete,
-                              .ptype,
-                              .slider_error_call = caller_env()) {
+slide2_vec_direct <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before,
+  .after,
+  .step,
+  .complete,
+  .ptype,
+  .slider_error_call = caller_env()
+) {
   slide2_impl(
     .x,
     .y,
@@ -154,14 +160,16 @@ slide2_vec_direct <- function(.x,
 
 #' @rdname slide2
 #' @export
-slide2_dbl <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+slide2_dbl <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   slide2_vec_direct(
     .x,
     .y,
@@ -177,14 +185,16 @@ slide2_dbl <- function(.x,
 
 #' @rdname slide2
 #' @export
-slide2_int <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+slide2_int <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   slide2_vec_direct(
     .x,
     .y,
@@ -200,14 +210,16 @@ slide2_int <- function(.x,
 
 #' @rdname slide2
 #' @export
-slide2_lgl <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+slide2_lgl <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   slide2_vec_direct(
     .x,
     .y,
@@ -223,14 +235,16 @@ slide2_lgl <- function(.x,
 
 #' @rdname slide2
 #' @export
-slide2_chr <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+slide2_chr <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   slide2_vec_direct(
     .x,
     .y,
@@ -247,16 +261,18 @@ slide2_chr <- function(.x,
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide2
 #' @export
-slide2_dfr <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .names_to = rlang::zap(),
-                       .name_repair = c("unique", "universal", "check_unique")) {
+slide2_dfr <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .names_to = rlang::zap(),
+  .name_repair = c("unique", "universal", "check_unique")
+) {
   out <- slide2(
     .x,
     .y,
@@ -274,16 +290,18 @@ slide2_dfr <- function(.x,
 #' @inheritParams vctrs::vec_cbind
 #' @rdname slide2
 #' @export
-slide2_dfc <- function(.x,
-                       .y,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .size = NULL,
-                       .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+slide2_dfc <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+) {
   out <- slide2(
     .x,
     .y,
@@ -300,18 +318,20 @@ slide2_dfc <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-slide2_impl <- function(.x,
-                        .y,
-                        .f,
-                        ...,
-                        .before,
-                        .after,
-                        .step,
-                        .complete,
-                        .ptype,
-                        .constrain,
-                        .atomic,
-                        .slider_error_call = caller_env()) {
+slide2_impl <- function(
+  .x,
+  .y,
+  .f,
+  ...,
+  .before,
+  .after,
+  .step,
+  .complete,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   vec_assert(.x, call = .slider_error_call)
   vec_assert(.y, call = .slider_error_call)
 

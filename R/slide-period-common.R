@@ -1,18 +1,20 @@
-slide_period_common <- function(x,
-                                i,
-                                period,
-                                f_call,
-                                every,
-                                origin,
-                                before,
-                                after,
-                                complete,
-                                ptype,
-                                constrain,
-                                atomic,
-                                env,
-                                type,
-                                slider_error_call) {
+slide_period_common <- function(
+  x,
+  i,
+  period,
+  f_call,
+  every,
+  origin,
+  before,
+  after,
+  complete,
+  ptype,
+  constrain,
+  atomic,
+  env,
+  type,
+  slider_error_call
+) {
   check_index_incompatible_type(i, ".i", call = slider_error_call)
   check_index_cannot_be_na(i, ".i", call = slider_error_call)
   check_index_must_be_ascending(i, ".i", call = slider_error_call)
@@ -20,8 +22,16 @@ slide_period_common <- function(x,
   before_unbounded <- is_unbounded(before)
   after_unbounded <- is_unbounded(after)
 
-  before <- check_slide_period_before(before, before_unbounded, call = slider_error_call)
-  after <- check_slide_period_after(after, after_unbounded, call = slider_error_call)
+  before <- check_slide_period_before(
+    before,
+    before_unbounded,
+    call = slider_error_call
+  )
+  after <- check_slide_period_after(
+    after,
+    after_unbounded,
+    call = slider_error_call
+  )
   complete <- check_slide_period_complete(complete, call = slider_error_call)
 
   groups <- warp_distance(
@@ -99,9 +109,7 @@ compute_to <- function(stops, last, n, after_unbounded) {
   .Call(slider_compute_to, stops, last, n, after_unbounded)
 }
 
-check_slide_period_before <- function(x,
-                                      unbounded,
-                                      call = caller_env()) {
+check_slide_period_before <- function(x, unbounded, call = caller_env()) {
   vec_assert(x, size = 1L, arg = ".before", call = call)
 
   if (unbounded) {
@@ -117,9 +125,7 @@ check_slide_period_before <- function(x,
   x
 }
 
-check_slide_period_after <- function(x,
-                                     unbounded,
-                                     call = caller_env()) {
+check_slide_period_after <- function(x, unbounded, call = caller_env()) {
   vec_assert(x, size = 1L, arg = ".after", call = call)
 
   if (unbounded) {

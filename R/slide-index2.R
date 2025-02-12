@@ -62,14 +62,16 @@
 #'
 #' @seealso [slide2()], [hop_index2()], [slide_index()]
 #' @export
-slide_index2 <- function(.x,
-                         .y,
-                         .i,
-                         .f,
-                         ...,
-                         .before = 0L,
-                         .after = 0L,
-                         .complete = FALSE) {
+slide_index2 <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+) {
   slide_index2_impl(
     .x,
     .y,
@@ -87,15 +89,17 @@ slide_index2 <- function(.x,
 
 #' @rdname slide_index2
 #' @export
-slide_index2_vec <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE,
-                             .ptype = NULL) {
+slide_index2_vec <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .ptype = NULL
+) {
   out <- slide_index2_impl(
     .x,
     .y,
@@ -113,16 +117,18 @@ slide_index2_vec <- function(.x,
   vec_simplify(out, .ptype)
 }
 
-slide_index2_vec_direct <- function(.x,
-                                    .y,
-                                    .i,
-                                    .f,
-                                    ...,
-                                    .before,
-                                    .after,
-                                    .complete,
-                                    .ptype,
-                                    .slider_error_call = caller_env()) {
+slide_index2_vec_direct <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before,
+  .after,
+  .complete,
+  .ptype,
+  .slider_error_call = caller_env()
+) {
   slide_index2_impl(
     .x,
     .y,
@@ -141,14 +147,16 @@ slide_index2_vec_direct <- function(.x,
 
 #' @rdname slide_index2
 #' @export
-slide_index2_dbl <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
+slide_index2_dbl <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+) {
   slide_index2_vec_direct(
     .x,
     .y,
@@ -164,14 +172,16 @@ slide_index2_dbl <- function(.x,
 
 #' @rdname slide_index2
 #' @export
-slide_index2_int <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
+slide_index2_int <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+) {
   slide_index2_vec_direct(
     .x,
     .y,
@@ -187,14 +197,16 @@ slide_index2_int <- function(.x,
 
 #' @rdname slide_index2
 #' @export
-slide_index2_lgl <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
+slide_index2_lgl <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+) {
   slide_index2_vec_direct(
     .x,
     .y,
@@ -210,14 +222,16 @@ slide_index2_lgl <- function(.x,
 
 #' @rdname slide_index2
 #' @export
-slide_index2_chr <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE) {
+slide_index2_chr <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE
+) {
   slide_index2_vec_direct(
     .x,
     .y,
@@ -234,16 +248,18 @@ slide_index2_chr <- function(.x,
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide_index2
 #' @export
-slide_index2_dfr <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE,
-                             .names_to = rlang::zap(),
-                             .name_repair = c("unique", "universal", "check_unique")) {
+slide_index2_dfr <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .names_to = rlang::zap(),
+  .name_repair = c("unique", "universal", "check_unique")
+) {
   out <- slide_index2(
     .x,
     .y,
@@ -261,16 +277,18 @@ slide_index2_dfr <- function(.x,
 #' @inheritParams vctrs::vec_cbind
 #' @rdname slide_index2
 #' @export
-slide_index2_dfc <- function(.x,
-                             .y,
-                             .i,
-                             .f,
-                             ...,
-                             .before = 0L,
-                             .after = 0L,
-                             .complete = FALSE,
-                             .size = NULL,
-                             .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+slide_index2_dfc <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+) {
   out <- slide_index2(
     .x,
     .y,
@@ -287,18 +305,20 @@ slide_index2_dfc <- function(.x,
 
 # ------------------------------------------------------------------------------
 
-slide_index2_impl <- function(.x,
-                              .y,
-                              .i,
-                              .f,
-                              ...,
-                              .before,
-                              .after,
-                              .complete,
-                              .ptype,
-                              .constrain,
-                              .atomic,
-                              .slider_error_call = caller_env()) {
+slide_index2_impl <- function(
+  .x,
+  .y,
+  .i,
+  .f,
+  ...,
+  .before,
+  .after,
+  .complete,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   vec_assert(.x, call = .slider_error_call)
   vec_assert(.y, call = .slider_error_call)
 

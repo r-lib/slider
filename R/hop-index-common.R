@@ -1,15 +1,16 @@
-hop_index_common <- function(x,
-                             i,
-                             starts,
-                             stops,
-                             f_call,
-                             ptype,
-                             constrain,
-                             atomic,
-                             env,
-                             type,
-                             slider_error_call) {
-
+hop_index_common <- function(
+  x,
+  i,
+  starts,
+  stops,
+  f_call,
+  ptype,
+  constrain,
+  atomic,
+  env,
+  type,
+  slider_error_call
+) {
   x_size <- compute_size(x, type)
   i_size <- vec_size(i)
 
@@ -32,8 +33,20 @@ hop_index_common <- function(x,
   i <- unrep$key
   peer_sizes <- unrep$times
 
-  starts <- vec_cast(starts, i, x_arg = ".starts", to_arg = ".i", call = slider_error_call)
-  stops <- vec_cast(stops, i, x_arg = ".stops", to_arg = ".i", call = slider_error_call)
+  starts <- vec_cast(
+    starts,
+    i,
+    x_arg = ".starts",
+    to_arg = ".i",
+    call = slider_error_call
+  )
+  stops <- vec_cast(
+    stops,
+    i,
+    x_arg = ".stops",
+    to_arg = ".i",
+    call = slider_error_call
+  )
 
   size <- vec_size_common(
     .starts = starts,

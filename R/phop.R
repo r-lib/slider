@@ -1,11 +1,7 @@
 #' @include hop2.R
 #' @rdname hop2
 #' @export
-phop <- function(.l,
-                 .starts,
-                 .stops,
-                 .f,
-                 ...) {
+phop <- function(.l, .starts, .stops, .f, ...) {
   phop_impl(
     .l,
     .starts,
@@ -20,12 +16,7 @@ phop <- function(.l,
 
 #' @rdname hop2
 #' @export
-phop_vec <- function(.l,
-                     .starts,
-                     .stops,
-                     .f,
-                     ...,
-                     .ptype = NULL) {
+phop_vec <- function(.l, .starts, .stops, .f, ..., .ptype = NULL) {
   out <- phop_impl(
     .l,
     .starts,
@@ -42,15 +33,17 @@ phop_vec <- function(.l,
 
 # ------------------------------------------------------------------------------
 
-phop_impl <- function(.l,
-                      .starts,
-                      .stops,
-                      .f,
-                      ...,
-                      .ptype,
-                      .constrain,
-                      .atomic,
-                      .slider_error_call = caller_env()) {
+phop_impl <- function(
+  .l,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   .l <- slider_check_list(.l, call = .slider_error_call)
   list_check_all_vectors(.l, call = .slider_error_call)
 
@@ -71,7 +64,7 @@ phop_impl <- function(.l,
   # into `.f` as argument names
   names(slicers) <- names(.l)
 
-  f_call <- expr(.f(!!! slicers, ...))
+  f_call <- expr(.f(!!!slicers, ...))
 
   hop_common(
     x = .l,

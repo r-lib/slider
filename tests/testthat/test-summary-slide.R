@@ -21,8 +21,14 @@ test_that("negative before/after works", {
   expect_identical(slide_sum(x, before = -1, after = 2), c(5, 7, 4, 0))
   expect_identical(slide_sum(x, before = 2, after = -1), c(0, 1, 3, 5))
 
-  expect_identical(slide_sum(x, before = -1, after = 2, complete = TRUE), c(5, 7, NA, NA))
-  expect_identical(slide_sum(x, before = 2, after = -1, complete = TRUE), c(NA, NA, 3, 5))
+  expect_identical(
+    slide_sum(x, before = -1, after = 2, complete = TRUE),
+    c(5, 7, NA, NA)
+  )
+  expect_identical(
+    slide_sum(x, before = 2, after = -1, complete = TRUE),
+    c(NA, NA, 3, 5)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -36,7 +42,10 @@ test_that("step / complete works", {
   x <- 1:4 + 0
 
   expect_identical(slide_sum(x, before = 1, step = 2), c(1, NA, 5, NA))
-  expect_identical(slide_sum(x, before = 1, step = 2, complete = TRUE), c(NA, 3, NA, 7))
+  expect_identical(
+    slide_sum(x, before = 1, step = 2, complete = TRUE),
+    c(NA, 3, NA, 7)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -73,7 +82,7 @@ test_that("Inf and -Inf results are correct", {
 test_that("precision matches base R (long doubles) (#147) (#198)", {
   skip_on_cran()
   skip_if_no_long_double()
-  x <- rep(1/7, 10)
+  x <- rep(1 / 7, 10)
   # Use equal, not identical, because even with long doubles some
   # platforms like Valgrind have differences out around the 17th digit
   expect_equal(sum(x), slide_sum(x, before = Inf)[[length(x)]])
@@ -112,8 +121,14 @@ test_that("negative before/after works", {
   expect_identical(slide_prod(x, before = -1, after = 2), c(6, 12, 4, 1))
   expect_identical(slide_prod(x, before = 2, after = -1), c(1, 1, 2, 6))
 
-  expect_identical(slide_prod(x, before = -1, after = 2, complete = TRUE), c(6, 12, NA, NA))
-  expect_identical(slide_prod(x, before = 2, after = -1, complete = TRUE), c(NA, NA, 2, 6))
+  expect_identical(
+    slide_prod(x, before = -1, after = 2, complete = TRUE),
+    c(6, 12, NA, NA)
+  )
+  expect_identical(
+    slide_prod(x, before = 2, after = -1, complete = TRUE),
+    c(NA, NA, 2, 6)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -127,7 +142,10 @@ test_that("step / complete works", {
   x <- 1:4 + 0
 
   expect_identical(slide_prod(x, before = 1, step = 2), c(1, NA, 6, NA))
-  expect_identical(slide_prod(x, before = 1, step = 2, complete = TRUE), c(NA, 2, NA, 12))
+  expect_identical(
+    slide_prod(x, before = 1, step = 2, complete = TRUE),
+    c(NA, 2, NA, 12)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -191,25 +209,46 @@ test_that("integer after works", {
 test_that("negative before/after works", {
   x <- 1:4 + 0
 
-  expect_identical(slide_mean(x, before = -1, after = 2), slide_dbl(x, mean, .before = -1, .after = 2))
-  expect_identical(slide_mean(x, before = 2, after = -1), slide_dbl(x, mean, .before = 2, .after = -1))
+  expect_identical(
+    slide_mean(x, before = -1, after = 2),
+    slide_dbl(x, mean, .before = -1, .after = 2)
+  )
+  expect_identical(
+    slide_mean(x, before = 2, after = -1),
+    slide_dbl(x, mean, .before = 2, .after = -1)
+  )
 
-  expect_identical(slide_mean(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, mean, .before = -1, .after = 2, .complete = TRUE))
-  expect_identical(slide_mean(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, mean, .before = 2, .after = -1, .complete = TRUE))
+  expect_identical(
+    slide_mean(x, before = -1, after = 2, complete = TRUE),
+    slide_dbl(x, mean, .before = -1, .after = 2, .complete = TRUE)
+  )
+  expect_identical(
+    slide_mean(x, before = 2, after = -1, complete = TRUE),
+    slide_dbl(x, mean, .before = 2, .after = -1, .complete = TRUE)
+  )
 })
 
 test_that("`Inf` before/after works", {
   x <- 1:4 + 0
 
-  expect_identical(slide_mean(x, before = Inf), slide_dbl(x, mean, .before = Inf))
+  expect_identical(
+    slide_mean(x, before = Inf),
+    slide_dbl(x, mean, .before = Inf)
+  )
   expect_identical(slide_mean(x, after = Inf), slide_dbl(x, mean, .after = Inf))
 })
 
 test_that("step / complete works", {
   x <- 1:4 + 0
 
-  expect_identical(slide_mean(x, before = 1, step = 2), slide_dbl(x, mean, .before = 1, .step = 2))
-  expect_identical(slide_mean(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, mean, .before = 1, .step = 2, .complete = TRUE))
+  expect_identical(
+    slide_mean(x, before = 1, step = 2),
+    slide_dbl(x, mean, .before = 1, .step = 2)
+  )
+  expect_identical(
+    slide_mean(x, before = 1, step = 2, complete = TRUE),
+    slide_dbl(x, mean, .before = 1, .step = 2, .complete = TRUE)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -246,7 +285,7 @@ test_that("Inf and -Inf results are correct", {
 test_that("precision matches base R (long doubles) (#147) (#198)", {
   skip_on_cran()
   skip_if_no_long_double()
-  x <- c(1/7, 1/7, 1/3)
+  x <- c(1 / 7, 1 / 7, 1 / 3)
   # Use equal, not identical, because even with long doubles some
   # platforms like Valgrind have differences out around the 17th digit
   expect_equal(mean(x), slide_mean(x, before = Inf)[[length(x)]])
@@ -292,8 +331,14 @@ test_that("negative before/after works", {
   expect_identical(slide_min(x, before = -1, after = 2), c(2, 3, 4, Inf))
   expect_identical(slide_min(x, before = 2, after = -1), c(Inf, 1, 1, 2))
 
-  expect_identical(slide_min(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, min, .before = -1, .after = 2, .complete = TRUE))
-  expect_identical(slide_min(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, min, .before = 2, .after = -1, .complete = TRUE))
+  expect_identical(
+    slide_min(x, before = -1, after = 2, complete = TRUE),
+    slide_dbl(x, min, .before = -1, .after = 2, .complete = TRUE)
+  )
+  expect_identical(
+    slide_min(x, before = 2, after = -1, complete = TRUE),
+    slide_dbl(x, min, .before = 2, .after = -1, .complete = TRUE)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -306,8 +351,14 @@ test_that("`Inf` before/after works", {
 test_that("step / complete works", {
   x <- 1:4 + 0
 
-  expect_identical(slide_min(x, before = 1, step = 2), slide_dbl(x, min, .before = 1, .step = 2))
-  expect_identical(slide_min(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, min, .before = 1, .step = 2, .complete = TRUE))
+  expect_identical(
+    slide_min(x, before = 1, step = 2),
+    slide_dbl(x, min, .before = 1, .step = 2)
+  )
+  expect_identical(
+    slide_min(x, before = 1, step = 2, complete = TRUE),
+    slide_dbl(x, min, .before = 1, .step = 2, .complete = TRUE)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -364,8 +415,14 @@ test_that("negative before/after works", {
   expect_identical(slide_max(x, before = -1, after = 2), c(3, 4, 4, -Inf))
   expect_identical(slide_max(x, before = 2, after = -1), c(-Inf, 1, 2, 3))
 
-  expect_identical(slide_max(x, before = -1, after = 2, complete = TRUE), slide_dbl(x, max, .before = -1, .after = 2, .complete = TRUE))
-  expect_identical(slide_max(x, before = 2, after = -1, complete = TRUE), slide_dbl(x, max, .before = 2, .after = -1, .complete = TRUE))
+  expect_identical(
+    slide_max(x, before = -1, after = 2, complete = TRUE),
+    slide_dbl(x, max, .before = -1, .after = 2, .complete = TRUE)
+  )
+  expect_identical(
+    slide_max(x, before = 2, after = -1, complete = TRUE),
+    slide_dbl(x, max, .before = 2, .after = -1, .complete = TRUE)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -378,8 +435,14 @@ test_that("`Inf` before/after works", {
 test_that("step / complete works", {
   x <- 1:4 + 0
 
-  expect_identical(slide_max(x, before = 1, step = 2), slide_dbl(x, max, .before = 1, .step = 2))
-  expect_identical(slide_max(x, before = 1, step = 2, complete = TRUE), slide_dbl(x, max, .before = 1, .step = 2, .complete = TRUE))
+  expect_identical(
+    slide_max(x, before = 1, step = 2),
+    slide_dbl(x, max, .before = 1, .step = 2)
+  )
+  expect_identical(
+    slide_max(x, before = 1, step = 2, complete = TRUE),
+    slide_dbl(x, max, .before = 1, .step = 2, .complete = TRUE)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -433,11 +496,23 @@ test_that("integer after works", {
 test_that("negative before/after works", {
   x <- c(TRUE, FALSE, TRUE, TRUE)
 
-  expect_identical(slide_all(x, before = -1, after = 2), slide_lgl(x, all, .before = -1, .after = 2))
-  expect_identical(slide_all(x, before = 2, after = -1), slide_lgl(x, all, .before = 2, .after = -1))
+  expect_identical(
+    slide_all(x, before = -1, after = 2),
+    slide_lgl(x, all, .before = -1, .after = 2)
+  )
+  expect_identical(
+    slide_all(x, before = 2, after = -1),
+    slide_lgl(x, all, .before = 2, .after = -1)
+  )
 
-  expect_identical(slide_all(x, before = -1, after = 2, complete = TRUE), slide_lgl(x, all, .before = -1, .after = 2, .complete = TRUE))
-  expect_identical(slide_all(x, before = 2, after = -1, complete = TRUE), slide_lgl(x, all, .before = 2, .after = -1, .complete = TRUE))
+  expect_identical(
+    slide_all(x, before = -1, after = 2, complete = TRUE),
+    slide_lgl(x, all, .before = -1, .after = 2, .complete = TRUE)
+  )
+  expect_identical(
+    slide_all(x, before = 2, after = -1, complete = TRUE),
+    slide_lgl(x, all, .before = 2, .after = -1, .complete = TRUE)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -450,8 +525,14 @@ test_that("`Inf` before/after works", {
 test_that("step / complete works", {
   x <- c(TRUE, FALSE, TRUE, TRUE)
 
-  expect_identical(slide_all(x, before = 1, step = 2), slide_lgl(x, all, .before = 1, .step = 2))
-  expect_identical(slide_all(x, before = 1, step = 2, complete = TRUE), slide_lgl(x, all, .before = 1, .step = 2, .complete = TRUE))
+  expect_identical(
+    slide_all(x, before = 1, step = 2),
+    slide_lgl(x, all, .before = 1, .step = 2)
+  )
+  expect_identical(
+    slide_all(x, before = 1, step = 2, complete = TRUE),
+    slide_lgl(x, all, .before = 1, .step = 2, .complete = TRUE)
+  )
 })
 
 test_that("NA / NaN results are correct", {
@@ -482,14 +563,20 @@ test_that("`na_rm = TRUE` works", {
   y <- c(TRUE, NA, FALSE, NA, TRUE)
 
   expect_identical(slide_all(x, na_rm = TRUE), TRUE)
-  expect_identical(slide_all(y, na_rm = TRUE, before = 1), slide_lgl(y, all, na.rm = TRUE, .before = 1))
+  expect_identical(
+    slide_all(y, na_rm = TRUE, before = 1),
+    slide_lgl(y, all, na.rm = TRUE, .before = 1)
+  )
 })
 
 test_that("works when the window is completely OOB", {
   x <- c(TRUE, FALSE, NA)
 
   expect_identical(slide_all(x, before = 4, after = -4), c(TRUE, TRUE, TRUE))
-  expect_identical(slide_all(x, before = 4, after = -4), slide_lgl(x, all, .before = 4, .after = -4))
+  expect_identical(
+    slide_all(x, before = 4, after = -4),
+    slide_lgl(x, all, .before = 4, .after = -4)
+  )
 })
 
 test_that("input must be castable to logical", {
@@ -518,11 +605,23 @@ test_that("integer after works", {
 test_that("negative before/after works", {
   x <- c(FALSE, TRUE, FALSE, FALSE)
 
-  expect_identical(slide_any(x, before = -1, after = 2), slide_lgl(x, any, .before = -1, .after = 2))
-  expect_identical(slide_any(x, before = 2, after = -1), slide_lgl(x, any, .before = 2, .after = -1))
+  expect_identical(
+    slide_any(x, before = -1, after = 2),
+    slide_lgl(x, any, .before = -1, .after = 2)
+  )
+  expect_identical(
+    slide_any(x, before = 2, after = -1),
+    slide_lgl(x, any, .before = 2, .after = -1)
+  )
 
-  expect_identical(slide_any(x, before = -1, after = 2, complete = TRUE), slide_lgl(x, any, .before = -1, .after = 2, .complete = TRUE))
-  expect_identical(slide_any(x, before = 2, after = -1, complete = TRUE), slide_lgl(x, any, .before = 2, .after = -1, .complete = TRUE))
+  expect_identical(
+    slide_any(x, before = -1, after = 2, complete = TRUE),
+    slide_lgl(x, any, .before = -1, .after = 2, .complete = TRUE)
+  )
+  expect_identical(
+    slide_any(x, before = 2, after = -1, complete = TRUE),
+    slide_lgl(x, any, .before = 2, .after = -1, .complete = TRUE)
+  )
 })
 
 test_that("`Inf` before/after works", {
@@ -535,8 +634,14 @@ test_that("`Inf` before/after works", {
 test_that("step / complete works", {
   x <- c(FALSE, TRUE, FALSE, FALSE)
 
-  expect_identical(slide_any(x, before = 1, step = 2), slide_lgl(x, any, .before = 1, .step = 2))
-  expect_identical(slide_any(x, before = 1, step = 2, complete = TRUE), slide_lgl(x, any, .before = 1, .step = 2, .complete = TRUE))
+  expect_identical(
+    slide_any(x, before = 1, step = 2),
+    slide_lgl(x, any, .before = 1, .step = 2)
+  )
+  expect_identical(
+    slide_any(x, before = 1, step = 2, complete = TRUE),
+    slide_lgl(x, any, .before = 1, .step = 2, .complete = TRUE)
+  )
 })
 
 test_that("NA results are correct", {
@@ -567,14 +672,20 @@ test_that("`na_rm = TRUE` works", {
   y <- c(TRUE, NA, FALSE, NA, TRUE)
 
   expect_identical(slide_any(x, na_rm = TRUE), FALSE)
-  expect_identical(slide_any(y, na_rm = TRUE, before = 1), slide_lgl(y, any, na.rm = TRUE, .before = 1))
+  expect_identical(
+    slide_any(y, na_rm = TRUE, before = 1),
+    slide_lgl(y, any, na.rm = TRUE, .before = 1)
+  )
 })
 
 test_that("works when the window is completely OOB", {
   x <- c(TRUE, FALSE, NA)
 
   expect_identical(slide_any(x, before = 4, after = -4), c(FALSE, FALSE, FALSE))
-  expect_identical(slide_any(x, before = 4, after = -4), slide_lgl(x, any, .before = 4, .after = -4))
+  expect_identical(
+    slide_any(x, before = 4, after = -4),
+    slide_lgl(x, any, .before = 4, .after = -4)
+  )
 })
 
 test_that("input must be castable to logical", {
@@ -599,7 +710,10 @@ test_that("names are kept (even on casting)", {
 
 test_that("can cast integer and logical input", {
   expect_identical(slide_sum(1:5, before = 1), slide_sum(1:5 + 0, before = 1))
-  expect_identical(slide_sum(c(TRUE, FALSE, TRUE), before = 1), slide_sum(c(1, 0, 1), before = 1))
+  expect_identical(
+    slide_sum(c(TRUE, FALSE, TRUE), before = 1),
+    slide_sum(c(1, 0, 1), before = 1)
+  )
 })
 
 test_that("types that can't be cast to numeric are not supported", {
@@ -617,7 +731,12 @@ test_that("arrays of dimensionality 1 are supported", {
 
 test_that("arrays of dimensionality >1 are not supported", {
   expect_snapshot({
-    (expect_error(slide_sum(array(1:4, dim = c(2, 2)), before = 1), class = "vctrs_error_incompatible_type"))
+    (
+      expect_error(
+        slide_sum(array(1:4, dim = c(2, 2)), before = 1),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 

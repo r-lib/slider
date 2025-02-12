@@ -7,8 +7,14 @@ test_that("slide_index2_*() works", {
 })
 
 test_that("slide_index2_*() retains names of x", {
-  expect_identical(slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
-  expect_identical(slide_index2_int(c(x = 1L), c(y = 1L), 1, ~.x + .y), c(x = 2L))
+  expect_identical(
+    slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~.x + .y),
+    c(x = 2L)
+  )
+  expect_identical(
+    slide_index2_int(c(x = 1L), c(y = 1L), 1, ~.x + .y),
+    c(x = 2L)
+  )
 })
 
 test_that("slide_index2_vec() can simplify automatically", {
@@ -16,18 +22,28 @@ test_that("slide_index2_vec() can simplify automatically", {
 })
 
 test_that("slide_index2_*() errors if it can't simplify", {
-  fn <- function(x, y) if (x == 1L) {1} else {"hi"}
+  fn <- function(x, y) {
+    if (x == 1L) {
+      1
+    } else {
+      "hi"
+    }
+  }
   expect_snapshot({
-    (expect_error(
-      slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
-      class = "vctrs_error_incompatible_type"
-    ))
+    (
+      expect_error(
+        slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
   expect_snapshot({
-    (expect_error(
-      slide_index2_int(1:2, 1:2, 1:2, fn),
-      class = "vctrs_error_incompatible_type"
-    ))
+    (
+      expect_error(
+        slide_index2_int(1:2, 1:2, 1:2, fn),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
@@ -56,7 +72,12 @@ test_that("slide_index2_chr() works", {
 
 test_that("slide_index2_chr() cannot coerce", {
   expect_snapshot({
-    (expect_error(slide_index2_chr(1, 1, 1, ~.x), class = "vctrs_error_incompatible_type"))
+    (
+      expect_error(
+        slide_index2_chr(1, 1, 1, ~.x),
+        class = "vctrs_error_incompatible_type"
+      )
+    )
   })
 })
 
@@ -119,31 +140,72 @@ test_that("pslide_index_dfc() works", {
 # .ptype
 
 test_that("`.ptype = NULL` is size stable (#78)", {
-  expect_length(slide_index2_vec(1:4, 1:4, 1:4, ~1, .before = 1, .complete = TRUE), 4)
+  expect_length(
+    slide_index2_vec(1:4, 1:4, 1:4, ~1, .before = 1, .complete = TRUE),
+    4
+  )
 })
 
 test_that("size 0 inputs returns .ptype", {
-  expect_identical(slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = NULL), NULL)
-  expect_identical(slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = double()), double())
+  expect_identical(
+    slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = NULL),
+    NULL
+  )
+  expect_identical(
+    slide_index2_vec(integer(), integer(), integer(), ~.x, .ptype = double()),
+    double()
+  )
 })
 
 test_that("`slide_index2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
-  expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), foobar(1:3))
-  expect_condition(slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())), class = "slider_c_foobar")
+  expect_identical(
+    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    foobar(1:3)
+  )
+  expect_condition(
+    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    class = "slider_c_foobar"
+  )
 
   expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x)), foobar(1:3))
-  expect_condition(slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x)), class = "slider_c_foobar")
+  expect_condition(
+    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x)),
+    class = "slider_c_foobar"
+  )
 })
 
 # ------------------------------------------------------------------------------
 # .complete
 
 test_that(".complete produces typed `NA` values", {
-  expect_identical(slide_index2_int(1:3, 1:3, 1:3, ~1L, .before = 1, .complete = TRUE), c(NA, 1L, 1L))
-  expect_identical(slide_index2_dbl(1:3, 1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
-  expect_identical(slide_index2_chr(1:3, 1:3, 1:3, ~"1", .before = 1, .complete = TRUE), c(NA, "1", "1"))
-  expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~1, .before = 1, .complete = TRUE), c(NA, 1, 1))
-  expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~1, .before = 1, .complete = TRUE, .ptype = integer()), c(NA, 1L, 1L))
+  expect_identical(
+    slide_index2_int(1:3, 1:3, 1:3, ~1L, .before = 1, .complete = TRUE),
+    c(NA, 1L, 1L)
+  )
+  expect_identical(
+    slide_index2_dbl(1:3, 1:3, 1:3, ~1, .before = 1, .complete = TRUE),
+    c(NA, 1, 1)
+  )
+  expect_identical(
+    slide_index2_chr(1:3, 1:3, 1:3, ~"1", .before = 1, .complete = TRUE),
+    c(NA, "1", "1")
+  )
+  expect_identical(
+    slide_index2_vec(1:3, 1:3, 1:3, ~1, .before = 1, .complete = TRUE),
+    c(NA, 1, 1)
+  )
+  expect_identical(
+    slide_index2_vec(
+      1:3,
+      1:3,
+      1:3,
+      ~1,
+      .before = 1,
+      .complete = TRUE,
+      .ptype = integer()
+    ),
+    c(NA, 1L, 1L)
+  )
 })

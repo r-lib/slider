@@ -4,7 +4,12 @@ test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_index2(1, integer(), integer(), ~.x), list())
 
   expect_snapshot({
-    (expect_error(slide_index2(integer(), integer(), 1, ~.x), class = "slider_error_index_incompatible_size"))
+    (
+      expect_error(
+        slide_index2(integer(), integer(), 1, ~.x),
+        class = "slider_error_index_incompatible_size"
+      )
+    )
   })
 })
 

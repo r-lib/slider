@@ -13,31 +13,59 @@ test_that("`.x` must be a vector", {
 
 test_that(".x must be the same size as .i", {
   expect_snapshot({
-    (expect_error(slide_period(1, new_date(c(1, 2)), "year", identity), class = "slider_error_index_incompatible_size"))
+    (
+      expect_error(
+        slide_period(1, new_date(c(1, 2)), "year", identity),
+        class = "slider_error_index_incompatible_size"
+      )
+    )
   })
 })
 
 test_that(".i must be ascending", {
   expect_snapshot({
-    (expect_error(slide_period(1:2, new_date(c(2, 1)), "year", identity), class = "slider_error_index_must_be_ascending"))
+    (
+      expect_error(
+        slide_period(1:2, new_date(c(2, 1)), "year", identity),
+        class = "slider_error_index_must_be_ascending"
+      )
+    )
   })
 })
 
 test_that("empty input returns a list, but after the index size check", {
   expect_equal(slide_period(integer(), new_date(), "year", ~.x), list())
   expect_snapshot({
-    (expect_error(slide_period(integer(), new_date(0), "year", ~.x), class = "slider_error_index_incompatible_size"))
+    (
+      expect_error(
+        slide_period(integer(), new_date(0), "year", ~.x),
+        class = "slider_error_index_incompatible_size"
+      )
+    )
   })
 })
 
 test_that("empty input works with `.complete = TRUE` (#111)", {
-  expect_equal(slide_period(integer(), new_date(), "year", ~.x, .complete = TRUE), list())
+  expect_equal(
+    slide_period(integer(), new_date(), "year", ~.x, .complete = TRUE),
+    list()
+  )
 })
 
 test_that(".i must not contain NA values", {
   expect_snapshot({
-    (expect_error(slide_period(1:2, new_date(c(1, NA)), "year", identity), class = "slider_error_index_cannot_be_na"))
-    (expect_error(slide_period(1:2, new_date(c(NA, 1)), "year", identity), class = "slider_error_index_cannot_be_na"))
+    (
+      expect_error(
+        slide_period(1:2, new_date(c(1, NA)), "year", identity),
+        class = "slider_error_index_cannot_be_na"
+      )
+    )
+    (
+      expect_error(
+        slide_period(1:2, new_date(c(NA, 1)), "year", identity),
+        class = "slider_error_index_cannot_be_na"
+      )
+    )
   })
 })
 
@@ -99,10 +127,12 @@ test_that("`.before` cannot be NA", {
 
 test_that("`.before` cannot be -Inf", {
   expect_snapshot({
-    (expect_error(
-      slide_period(1, new_date(0), "year", identity, .before = -Inf),
-      class = "vctrs_error_cast_lossy"
-    ))
+    (
+      expect_error(
+        slide_period(1, new_date(0), "year", identity, .before = -Inf),
+        class = "vctrs_error_cast_lossy"
+      )
+    )
   })
 })
 
@@ -182,61 +212,98 @@ test_that("`.after` cannot be NA", {
 
 test_that("`.after` cannot be -Inf", {
   expect_snapshot({
-    (expect_error(
-      slide_period(1, new_date(0), "year", identity, .after = -Inf),
-      class = "vctrs_error_cast_lossy"
-    ))
+    (
+      expect_error(
+        slide_period(1, new_date(0), "year", identity, .after = -Inf),
+        class = "vctrs_error_cast_lossy"
+      )
+    )
   })
 })
 
 test_that(".after must be size 1", {
   expect_snapshot({
-    (expect_error(
-      slide_period(1, new_date(0), "year", identity, .after = c(1L, 2L)),
-      class = "vctrs_error_assert_size"
-    ))
+    (
+      expect_error(
+        slide_period(1, new_date(0), "year", identity, .after = c(1L, 2L)),
+        class = "vctrs_error_assert_size"
+      )
+    )
   })
 })
 
 test_that("error if .after is NULL", {
   expect_snapshot({
-    (expect_error(
-      slide_period(1, new_date(0), "year", identity, .after = NULL),
-      class = "vctrs_error_scalar_type"
-    ))
+    (
+      expect_error(
+        slide_period(1, new_date(0), "year", identity, .after = NULL),
+        class = "vctrs_error_scalar_type"
+      )
+    )
   })
 })
-
 
 # ------------------------------------------------------------------------------
 # .complete
 
 test_that("`.complete` works", {
   expect_equal(
-    slide_period(1:2, new_date(c(30, 31)), "month", identity, .before = 1, .complete = TRUE),
+    slide_period(
+      1:2,
+      new_date(c(30, 31)),
+      "month",
+      identity,
+      .before = 1,
+      .complete = TRUE
+    ),
     list(NULL, 1:2)
   )
 
   expect_equal(
-    slide_period(1:2, new_date(c(30, 31)), "month", identity, .after = 1, .complete = TRUE),
+    slide_period(
+      1:2,
+      new_date(c(30, 31)),
+      "month",
+      identity,
+      .after = 1,
+      .complete = TRUE
+    ),
     list(1:2, NULL)
   )
 })
 
-test_that(paste0(
-            "proof that we need to be careful about slicing `starts` and `stops` ",
-            "when `.complete = TRUE` if we are completely OOB"
-          ), {
-
-  expect_equal(
-    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 4, .after = -4, .complete = TRUE),
-    list(NULL, NULL, NULL)
-  )
-})
+test_that(
+  paste0(
+    "proof that we need to be careful about slicing `starts` and `stops` ",
+    "when `.complete = TRUE` if we are completely OOB"
+  ),
+  {
+    expect_equal(
+      slide_period(
+        1:3,
+        new_date(c(0, 2, 3)),
+        "day",
+        identity,
+        .before = 4,
+        .after = -4,
+        .complete = TRUE
+      ),
+      list(NULL, NULL, NULL)
+    )
+  }
+)
 
 test_that("works when the window is between values and `.complete = TRUE`", {
   expect_equal(
-    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 1, .after = -1, .complete = TRUE),
+    slide_period(
+      1:3,
+      new_date(c(0, 2, 3)),
+      "day",
+      identity,
+      .before = 1,
+      .after = -1,
+      .complete = TRUE
+    ),
     list(NULL, integer(), 2)
   )
 })
@@ -250,7 +317,13 @@ test_that("`.complete` cannot be NA", {
 test_that(".complete must be size 1", {
   expect_snapshot({
     expect_error(
-      slide_period(1, new_date(0), "year", identity, .complete = c(TRUE, FALSE)),
+      slide_period(
+        1,
+        new_date(0),
+        "year",
+        identity,
+        .complete = c(TRUE, FALSE)
+      ),
       class = "vctrs_error_assert_size"
     )
   })
@@ -270,15 +343,28 @@ test_that("error if .complete is NULL", {
 
 test_that("being completely OOB returns 0-slices of `x`", {
   expect_equal(
-    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 4, .after = -4),
+    slide_period(
+      1:3,
+      new_date(c(0, 2, 3)),
+      "day",
+      identity,
+      .before = 4,
+      .after = -4
+    ),
     list(integer(), integer(), integer())
   )
 })
 
 test_that("having a window completely between values returns 0-slices of `x`", {
   expect_equal(
-    slide_period(1:3, new_date(c(0, 2, 3)), "day", identity, .before = 1, .after = -1),
+    slide_period(
+      1:3,
+      new_date(c(0, 2, 3)),
+      "day",
+      identity,
+      .before = 1,
+      .after = -1
+    ),
     list(integer(), integer(), 2)
   )
 })
-

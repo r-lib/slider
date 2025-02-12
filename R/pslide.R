@@ -1,13 +1,15 @@
 #' @include slide2.R
 #' @rdname slide2
 #' @export
-pslide <- function(.l,
-                   .f,
-                   ...,
-                   .before = 0L,
-                   .after = 0L,
-                   .step = 1L,
-                   .complete = FALSE) {
+pslide <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   pslide_impl(
     .l,
     .f,
@@ -24,14 +26,16 @@ pslide <- function(.l,
 
 #' @rdname slide2
 #' @export
-pslide_vec <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .ptype = NULL) {
+pslide_vec <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .ptype = NULL
+) {
   out <- pslide_impl(
     .l,
     .f,
@@ -48,15 +52,17 @@ pslide_vec <- function(.l,
   vec_simplify(out, .ptype)
 }
 
-pslide_vec_direct <- function(.l,
-                              .f,
-                              ...,
-                              .before,
-                              .after,
-                              .step,
-                              .complete,
-                              .ptype,
-                              .slider_error_call = caller_env()) {
+pslide_vec_direct <- function(
+  .l,
+  .f,
+  ...,
+  .before,
+  .after,
+  .step,
+  .complete,
+  .ptype,
+  .slider_error_call = caller_env()
+) {
   pslide_impl(
     .l,
     .f,
@@ -74,13 +80,15 @@ pslide_vec_direct <- function(.l,
 
 #' @rdname slide2
 #' @export
-pslide_dbl <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+pslide_dbl <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   pslide_vec_direct(
     .l,
     .f,
@@ -95,13 +103,15 @@ pslide_dbl <- function(.l,
 
 #' @rdname slide2
 #' @export
-pslide_int <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+pslide_int <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   pslide_vec_direct(
     .l,
     .f,
@@ -116,13 +126,15 @@ pslide_int <- function(.l,
 
 #' @rdname slide2
 #' @export
-pslide_lgl <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+pslide_lgl <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   pslide_vec_direct(
     .l,
     .f,
@@ -137,13 +149,15 @@ pslide_lgl <- function(.l,
 
 #' @rdname slide2
 #' @export
-pslide_chr <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE) {
+pslide_chr <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE
+) {
   pslide_vec_direct(
     .l,
     .f,
@@ -159,15 +173,17 @@ pslide_chr <- function(.l,
 #' @inheritParams vctrs::vec_rbind
 #' @rdname slide2
 #' @export
-pslide_dfr <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .names_to = rlang::zap(),
-                       .name_repair = c("unique", "universal", "check_unique")) {
+pslide_dfr <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .names_to = rlang::zap(),
+  .name_repair = c("unique", "universal", "check_unique")
+) {
   out <- pslide(
     .l,
     .f,
@@ -184,15 +200,17 @@ pslide_dfr <- function(.l,
 #' @inheritParams vctrs::vec_cbind
 #' @rdname slide2
 #' @export
-pslide_dfc <- function(.l,
-                       .f,
-                       ...,
-                       .before = 0L,
-                       .after = 0L,
-                       .step = 1L,
-                       .complete = FALSE,
-                       .size = NULL,
-                       .name_repair = c("unique", "universal", "check_unique", "minimal")) {
+pslide_dfc <- function(
+  .l,
+  .f,
+  ...,
+  .before = 0L,
+  .after = 0L,
+  .step = 1L,
+  .complete = FALSE,
+  .size = NULL,
+  .name_repair = c("unique", "universal", "check_unique", "minimal")
+) {
   out <- pslide(
     .l,
     .f,
@@ -208,17 +226,19 @@ pslide_dfc <- function(.l,
 
 # ------------------------------------------------------------------------------
 
-pslide_impl <- function(.l,
-                        .f,
-                        ...,
-                        .before,
-                        .after,
-                        .step,
-                        .complete,
-                        .ptype,
-                        .constrain,
-                        .atomic,
-                        .slider_error_call = caller_env()) {
+pslide_impl <- function(
+  .l,
+  .f,
+  ...,
+  .before,
+  .after,
+  .step,
+  .complete,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
+) {
   .l <- slider_check_list(.l, call = .slider_error_call)
   list_check_all_vectors(.l, call = .slider_error_call)
 
@@ -239,7 +259,7 @@ pslide_impl <- function(.l,
   # into `.f` as argument names
   names(slicers) <- names(.l)
 
-  f_call <- expr(.f(!!! slicers, ...))
+  f_call <- expr(.f(!!!slicers, ...))
 
   params <- list(
     type,
