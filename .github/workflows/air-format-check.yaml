@@ -21,4 +21,4 @@ jobs:
       #     args: format . --check
 
       - name: test
-        run: echo "::error file=R/arithmetic.R,line=1::Help me"
+        run: echo "::error file=/home/runner/work/slider/slider/R/arithmetic.R,line=1::Help me"
