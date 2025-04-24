@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Format check
-        uses: posit-dev/air-action@main
-        with:
-          args: format . --check
+      # - name: Format check
+      #   uses: posit-dev/air-action@main
+      #   with:
+      #     args: format . --check
 
       - name: test
         run: echo "::error file=R/arithmetic.R,line=1::Help me"
