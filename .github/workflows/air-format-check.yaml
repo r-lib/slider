@@ -19,3 +19,6 @@ jobs:
         uses: posit-dev/air-action@main
         with:
           args: format . --check
+
+      - name: test
+        run: echo "::error file=R/arithmetic.R,line=1::Help me"
