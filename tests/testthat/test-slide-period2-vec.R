@@ -3,10 +3,10 @@
 
 test_that("size of each `.f` result must be 1", {
   expect_snapshot(error = TRUE, {
-    slide_period2_vec(1:2, 1:2, new_date(c(1, 2)), "day", ~c(.x, .y))
+    slide_period2_vec(1:2, 1:2, new_date(c(1, 2)), "day", ~ c(.x, .y))
   })
   expect_snapshot(error = TRUE, {
-    slide_period2_int(1:2, 1:2, new_date(c(1, 2)), "day", ~c(.x, .y))
+    slide_period2_int(1:2, 1:2, new_date(c(1, 2)), "day", ~ c(.x, .y))
   })
 })
 
@@ -17,7 +17,7 @@ test_that("inner type is allowed to be different", {
       1:2,
       new_date(c(1, 2)),
       "day",
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         list(1)
       } else {
         list("hi")
@@ -30,44 +30,40 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2_vec(
-          1:2,
-          1:2,
-          new_date(c(1, 2)),
-          "day",
-          ~if (.x == 1L) {
-            list_of(1)
-          } else {
-            list_of("hi")
-          },
-          .ptype = list_of(.ptype = double())
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_period2_vec(
+        1:2,
+        1:2,
+        new_date(c(1, 2)),
+        "day",
+        ~ if (.x == 1L) {
+          list_of(1)
+        } else {
+          list_of("hi")
+        },
+        .ptype = list_of(.ptype = double())
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
 test_that("type can be restricted", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2_int(
-          1:2,
-          1:2,
-          new_date(c(1, 2)),
-          "day",
-          ~if (.x == 1L) {
-            1L
-          } else {
-            "hi"
-          }
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_period2_int(
+        1:2,
+        1:2,
+        new_date(c(1, 2)),
+        "day",
+        ~ if (.x == 1L) {
+          1L
+        } else {
+          "hi"
+        }
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -95,19 +91,17 @@ test_that(".ptype is respected", {
     1L
   )
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2_vec(
-          1,
-          1,
-          new_date(0),
-          "day",
-          ~.x + .5,
-          .ptype = integer()
-        ),
-        class = "vctrs_error_cast_lossy"
-      )
-    )
+    (expect_error(
+      slide_period2_vec(
+        1,
+        1,
+        new_date(0),
+        "day",
+        ~ .x + .5,
+        .ptype = integer()
+      ),
+      class = "vctrs_error_cast_lossy"
+    ))
   })
 })
 
@@ -120,19 +114,17 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 
 test_that("`.ptype = NULL` fails if no common type is found", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2_vec(
-          1:2,
-          1:2,
-          new_date(c(0, 1)),
-          "day",
-          ~ifelse(.x == 1L, "hello", 1),
-          .ptype = NULL
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_period2_vec(
+        1:2,
+        1:2,
+        new_date(c(0, 1)),
+        "day",
+        ~ ifelse(.x == 1L, "hello", 1),
+        .ptype = NULL
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -143,7 +135,7 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
       1:2,
       new_date(c(0, 1)),
       "day",
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         1:2
       } else {
         1
@@ -157,7 +149,7 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
       1:2,
       new_date(c(0, 1)),
       "day",
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         NULL
       } else {
         1
@@ -217,7 +209,7 @@ test_that("with `.complete = TRUE`, padding is size stable (#93)", {
       1:3,
       new_date(c(1, 2, 3)),
       "day",
-      ~new_date(0),
+      ~ new_date(0),
       .before = 1,
       .complete = TRUE,
       .ptype = new_date()
@@ -230,7 +222,7 @@ test_that("with `.complete = TRUE`, padding is size stable (#93)", {
       1:3,
       new_date(c(1, 2, 3)),
       "day",
-      ~new_date(0),
+      ~ new_date(0),
       .after = 1,
       .complete = TRUE,
       .ptype = new_date()
@@ -243,7 +235,7 @@ test_that("with `.complete = TRUE`, padding is size stable (#93)", {
       1:3,
       new_date(c(1, 2, 3)),
       "day",
-      ~new_date(0),
+      ~ new_date(0),
       .before = 1,
       .complete = TRUE,
       .ptype = NULL
@@ -276,7 +268,7 @@ test_that("`slide_period2_vec()` falls back to `c()` method as required", {
       1:3,
       new_date(c(1, 2, 3)),
       "day",
-      ~foobar(.x),
+      ~ foobar(.x),
       .ptype = foobar(integer())
     ),
     foobar(1:3)
@@ -287,18 +279,18 @@ test_that("`slide_period2_vec()` falls back to `c()` method as required", {
       1:3,
       new_date(c(1, 2, 3)),
       "day",
-      ~foobar(.x),
+      ~ foobar(.x),
       .ptype = foobar(integer())
     ),
     class = "slider_c_foobar"
   )
 
   expect_identical(
-    slide_period2_vec(1:3, 1:3, new_date(c(1, 2, 3)), "day", ~foobar(.x)),
+    slide_period2_vec(1:3, 1:3, new_date(c(1, 2, 3)), "day", ~ foobar(.x)),
     foobar(1:3)
   )
   expect_condition(
-    slide_period2_vec(1:3, 1:3, new_date(c(1, 2, 3)), "day", ~foobar(.x)),
+    slide_period2_vec(1:3, 1:3, new_date(c(1, 2, 3)), "day", ~ foobar(.x)),
     class = "slider_c_foobar"
   )
 })
@@ -328,12 +320,10 @@ test_that("slide_period2_chr() works", {
 
 test_that("slide_period2_chr() cannot coerce", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2_chr(1, 1, new_date(0), "day", ~.x),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_period2_chr(1, 1, new_date(0), "day", ~.x),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -355,10 +345,10 @@ test_that("slide_period2_dfr() works", {
       1:2,
       new_date(c(1, 2)),
       "day",
-      ~new_data_frame(list(x = list(.x))),
+      ~ new_data_frame(list(x = list(.x))),
       .before = 1
     ),
-    slide_dfr(1:2, ~new_data_frame(list(x = list(.x))), .before = 1)
+    slide_dfr(1:2, ~ new_data_frame(list(x = list(.x))), .before = 1)
   )
 })
 

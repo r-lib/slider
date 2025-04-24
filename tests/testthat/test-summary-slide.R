@@ -731,12 +731,10 @@ test_that("arrays of dimensionality 1 are supported", {
 
 test_that("arrays of dimensionality >1 are not supported", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_sum(array(1:4, dim = c(2, 2)), before = 1),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_sum(array(1:4, dim = c(2, 2)), before = 1),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 

@@ -17,28 +17,24 @@ test_that("Recycling is carried out using tidyverse recycling rules", {
   expect_equal(phop(list(x0, x1), integer(), integer(), ~.x), list())
   expect_equal(phop(list(x0, x1), 1, 1, ~.x), list(integer()))
   expect_snapshot(
-    (
-      expect_error(
-        phop(list(x0, x2), 1, 1, ~.x),
-        class = "vctrs_error_incompatible_size"
-      )
-    )
+    (expect_error(
+      phop(list(x0, x2), 1, 1, ~.x),
+      class = "vctrs_error_incompatible_size"
+    ))
   )
   expect_equal(phop(list(x1, x1), 1, 1, ~.x), list(x1))
   expect_equal(phop(list(x1, x2), 1:2, 1:2, ~.x), list(x1, x1))
   expect_snapshot(
-    (
-      expect_error(
-        phop(list(x2, x3), 1:3, 1:3, ~.x),
-        class = "vctrs_error_incompatible_size"
-      )
-    )
+    (expect_error(
+      phop(list(x2, x3), 1:3, 1:3, ~.x),
+      class = "vctrs_error_incompatible_size"
+    ))
   )
 })
 
 test_that("phop() can iterate over a data frame", {
   x <- data.frame(x = 1:5, y = 6:10)
-  expect_equal(phop(x, 1:5, 1:5, ~.x + .y), as.list(x$x + x$y))
+  expect_equal(phop(x, 1:5, 1:5, ~ .x + .y), as.list(x$x + x$y))
 })
 
 test_that("phop() can iterate over a data frame with a data frame column", {
@@ -46,7 +42,7 @@ test_that("phop() can iterate over a data frame with a data frame column", {
   x$x <- x
 
   expect_equal(
-    phop(x, 1:2, 1:2, ~list(...)),
+    phop(x, 1:2, 1:2, ~ list(...)),
     list(as.list(vec_slice(x, 1)), as.list(vec_slice(x, 2)))
   )
 })

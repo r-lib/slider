@@ -799,12 +799,10 @@ test_that("works with size 0 input", {
 
 test_that("x and i must be the same size", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_index_sum(1, 1:3),
-        class = "slider_error_index_incompatible_size"
-      )
-    )
+    (expect_error(
+      slide_index_sum(1, 1:3),
+      class = "slider_error_index_incompatible_size"
+    ))
   })
 })
 
@@ -826,12 +824,10 @@ test_that("can cast integer and logical input", {
 
 test_that("types that can't be cast to numeric are not supported", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_index_sum("x", 1),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_index_sum("x", 1),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -844,12 +840,10 @@ test_that("arrays of dimensionality 1 are supported", {
 
 test_that("arrays of dimensionality >1 are not supported", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_index_sum(array(1:4, dim = c(2, 2)), 1:2, before = 1),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_index_sum(array(1:4, dim = c(2, 2)), 1:2, before = 1),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 

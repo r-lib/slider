@@ -2,18 +2,18 @@
 # type / size strict-ness
 
 test_that("size of each `.f` result must be 1", {
-  expect_snapshot(error = TRUE, slide_vec(1:2, ~c(.x, 1)))
+  expect_snapshot(error = TRUE, slide_vec(1:2, ~ c(.x, 1)))
 })
 
 test_that("size of each `.f` result must be 1", {
-  expect_snapshot(error = TRUE, slide_dbl(1:2, ~c(.x, 1)))
+  expect_snapshot(error = TRUE, slide_dbl(1:2, ~ c(.x, 1)))
 })
 
 test_that("inner type is allowed to be different", {
   expect_equal(
     slide_vec(
       1:2,
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         list(1)
       } else {
         list("hi")
@@ -26,38 +26,34 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_vec(
-          1:2,
-          ~if (.x == 1L) {
-            list_of(1)
-          } else {
-            list_of("hi")
-          },
-          .ptype = list_of(.ptype = double())
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_vec(
+        1:2,
+        ~ if (.x == 1L) {
+          list_of(1)
+        } else {
+          list_of("hi")
+        },
+        .ptype = list_of(.ptype = double())
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
 test_that("inner type can be restricted", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_dbl(
-          1:2,
-          ~if (.x == 1L) {
-            1
-          } else {
-            "x"
-          }
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_dbl(
+        1:2,
+        ~ if (.x == 1L) {
+          1
+        } else {
+          "x"
+        }
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -68,12 +64,10 @@ test_that(".ptype is respected", {
   expect_equal(slide_vec(1, ~.x), 1)
   expect_equal(slide_vec(1, ~.x, .ptype = int()), 1L)
   expect_snapshot({
-    (
-      expect_error(
-        slide_vec(1, ~.x + .5, .ptype = integer()),
-        class = "vctrs_error_cast_lossy"
-      )
-    )
+    (expect_error(
+      slide_vec(1, ~ .x + .5, .ptype = integer()),
+      class = "vctrs_error_cast_lossy"
+    ))
   })
 })
 
@@ -86,12 +80,10 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 
 test_that("`.ptype = NULL` fails if no common type is found", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_vec(1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_vec(1:2, ~ ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -99,7 +91,7 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
   expect_snapshot(error = TRUE, {
     slide_vec(
       1:2,
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         1:2
       } else {
         1
@@ -137,16 +129,16 @@ test_that("`slide_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
   expect_identical(
-    slide_vec(1:3, ~foobar(.x), .ptype = foobar(integer())),
+    slide_vec(1:3, ~ foobar(.x), .ptype = foobar(integer())),
     foobar(1:3)
   )
   expect_condition(
-    slide_vec(1:3, ~foobar(.x), .ptype = foobar(integer())),
+    slide_vec(1:3, ~ foobar(.x), .ptype = foobar(integer())),
     class = "slider_c_foobar"
   )
 
-  expect_identical(slide_vec(1:3, ~foobar(.x)), foobar(1:3))
-  expect_condition(slide_vec(1:3, ~foobar(.x)), class = "slider_c_foobar")
+  expect_identical(slide_vec(1:3, ~ foobar(.x)), foobar(1:3))
+  expect_condition(slide_vec(1:3, ~ foobar(.x)), class = "slider_c_foobar")
 })
 
 # ------------------------------------------------------------------------------
@@ -199,7 +191,7 @@ test_that("names exist on inner sliced elements", {
   names <- letters[1:5]
   x <- set_names(1:5, names)
   exp <- set_names(as.list(names), names)
-  expect_equal(slide_vec(x, ~list(names(.x))), exp)
+  expect_equal(slide_vec(x, ~ list(names(.x))), exp)
 })
 
 test_that("names can be placed on atomics", {
@@ -215,28 +207,32 @@ test_that("names can be placed on atomics", {
 test_that("names from `.x` are kept, and new names from `.f` results are dropped", {
   x <- set_names(1, "x")
 
-  expect_identical(slide_vec(x, ~c(y = 2), .ptype = NULL), c(x = 2))
-  expect_identical(slide_vec(1, ~c(y = 2), .ptype = NULL), 2)
+  expect_identical(slide_vec(x, ~ c(y = 2), .ptype = NULL), c(x = 2))
+  expect_identical(slide_vec(1, ~ c(y = 2), .ptype = NULL), 2)
 
-  expect_identical(slide_dbl(x, ~c(y = 2)), c(x = 2))
-  expect_identical(slide_dbl(1, ~c(y = 2)), 2)
+  expect_identical(slide_dbl(x, ~ c(y = 2)), c(x = 2))
+  expect_identical(slide_dbl(1, ~ c(y = 2)), 2)
 })
 
 test_that("names can be placed on data frames", {
   names <- letters[1:2]
   x <- set_names(1:2, names)
 
-  out <- slide_vec(x, ~data.frame(x = .x))
+  out <- slide_vec(x, ~ data.frame(x = .x))
   expect_equal(rownames(out), names)
 
-  out <- slide_vec(x, ~data.frame(x = .x), .ptype = data.frame(x = int()))
+  out <- slide_vec(x, ~ data.frame(x = .x), .ptype = data.frame(x = int()))
   expect_equal(rownames(out), names)
 })
 
 test_that("names can be placed on arrays", {
   names <- letters[1:2]
   x <- set_names(1:2, names)
-  out <- slide_vec(x, ~array(.x, c(1, 1)), .ptype = array(int(), dim = c(0, 1)))
+  out <- slide_vec(
+    x,
+    ~ array(.x, c(1, 1)),
+    .ptype = array(int(), dim = c(0, 1))
+  )
   expect_equal(rownames(out), names)
 })
 
@@ -292,7 +288,7 @@ test_that("slide_dfr() works", {
   expect_identical(
     slide_dfr(
       1:2,
-      ~new_data_frame(list(x = list(.x))),
+      ~ new_data_frame(list(x = list(.x))),
       .before = 1
     ),
     data_frame(

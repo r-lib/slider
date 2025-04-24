@@ -33,18 +33,16 @@ test_that("empty input returns a list, but after the index size check", {
   )
 
   expect_snapshot({
-    (
-      expect_error(
-        slide_period2(
-          .x = integer(),
-          .y = integer(),
-          .i = structure(0, class = "Date"),
-          .period = "day",
-          .f = ~.x
-        ),
-        class = "slider_error_index_incompatible_size"
-      )
-    )
+    (expect_error(
+      slide_period2(
+        .x = integer(),
+        .y = integer(),
+        .i = structure(0, class = "Date"),
+        .period = "day",
+        .f = ~.x
+      ),
+      class = "slider_error_index_incompatible_size"
+    ))
   })
 })
 

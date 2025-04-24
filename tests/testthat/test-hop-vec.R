@@ -2,7 +2,7 @@
 # type / size strict-ness
 
 test_that("size of each `.f` result must be 1", {
-  expect_snapshot(error = TRUE, hop_vec(1:2, 1, 1, ~c(.x, 1)))
+  expect_snapshot(error = TRUE, hop_vec(1:2, 1, 1, ~ c(.x, 1)))
 })
 
 test_that("inner type is allowed to be different", {
@@ -11,7 +11,7 @@ test_that("inner type is allowed to be different", {
       1:2,
       1:2,
       1:2,
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         list(1)
       } else {
         list("hi")
@@ -24,22 +24,20 @@ test_that("inner type is allowed to be different", {
 
 test_that("inner type can be restricted with list_of", {
   expect_snapshot({
-    (
-      expect_error(
-        hop_vec(
-          1:2,
-          1:2,
-          1:2,
-          ~if (.x == 1L) {
-            list_of(1)
-          } else {
-            list_of("hi")
-          },
-          .ptype = list_of(.ptype = double())
-        ),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      hop_vec(
+        1:2,
+        1:2,
+        1:2,
+        ~ if (.x == 1L) {
+          list_of(1)
+        } else {
+          list_of("hi")
+        },
+        .ptype = list_of(.ptype = double())
+      ),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -50,7 +48,7 @@ test_that(".ptype is respected", {
   expect_equal(hop_vec(1, 1, 1, ~.x), 1)
   expect_equal(hop_vec(1, 1, 1, ~.x, .ptype = int()), 1L)
   expect_error(
-    hop_vec(1, 1, 1, ~.x + .5, .ptype = integer()),
+    hop_vec(1, 1, 1, ~ .x + .5, .ptype = integer()),
     class = "vctrs_error_cast_lossy"
   )
 })
@@ -64,12 +62,10 @@ test_that("`.ptype = NULL` results in 'guessed' .ptype", {
 
 test_that("`.ptype = NULL` fails if no common type is found", {
   expect_snapshot({
-    (
-      expect_error(
-        hop_vec(1:2, 1:2, 1:2, ~ifelse(.x == 1L, "hello", 1), .ptype = NULL),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      hop_vec(1:2, 1:2, 1:2, ~ ifelse(.x == 1L, "hello", 1), .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -79,7 +75,7 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
       1:2,
       1:2,
       1:2,
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         1:2
       } else {
         1
@@ -92,7 +88,7 @@ test_that("`.ptype = NULL` validates that element lengths are 1", {
       1:2,
       1:2,
       1:2,
-      ~if (.x == 1L) {
+      ~ if (.x == 1L) {
         NULL
       } else {
         2
@@ -128,17 +124,17 @@ test_that("`hop_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
   expect_identical(
-    hop_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    hop_vec(1:3, 1:3, 1:3, ~ foobar(.x), .ptype = foobar(integer())),
     foobar(1:3)
   )
   expect_condition(
-    hop_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    hop_vec(1:3, 1:3, 1:3, ~ foobar(.x), .ptype = foobar(integer())),
     class = "slider_c_foobar"
   )
 
-  expect_identical(hop_vec(1:3, 1:3, 1:3, ~foobar(.x)), foobar(1:3))
+  expect_identical(hop_vec(1:3, 1:3, 1:3, ~ foobar(.x)), foobar(1:3))
   expect_condition(
-    hop_vec(1:3, 1:3, 1:3, ~foobar(.x)),
+    hop_vec(1:3, 1:3, 1:3, ~ foobar(.x)),
     class = "slider_c_foobar"
   )
 })
@@ -150,7 +146,7 @@ test_that("names exist on inner sliced elements", {
   names <- letters[1:5]
   x <- set_names(1:5, names)
   exp <- as.list(names)
-  expect_equal(hop_vec(x, 1:5, 1:5, ~list(names(.x))), exp)
+  expect_equal(hop_vec(x, 1:5, 1:5, ~ list(names(.x))), exp)
 })
 
 test_that("names are never placed on the output", {

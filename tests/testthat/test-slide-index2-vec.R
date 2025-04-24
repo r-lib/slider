@@ -2,23 +2,23 @@
 # slide_index2_*()
 
 test_that("slide_index2_*() works", {
-  expect_identical(slide_index2_vec(1L, 1L, 1, ~.x + .y), 2L)
-  expect_identical(slide_index2_int(1L, 1L, 1, ~.x + .y), 2L)
+  expect_identical(slide_index2_vec(1L, 1L, 1, ~ .x + .y), 2L)
+  expect_identical(slide_index2_int(1L, 1L, 1, ~ .x + .y), 2L)
 })
 
 test_that("slide_index2_*() retains names of x", {
   expect_identical(
-    slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~.x + .y),
+    slide_index2_vec(c(x = 1L), c(y = 1L), 1, ~ .x + .y),
     c(x = 2L)
   )
   expect_identical(
-    slide_index2_int(c(x = 1L), c(y = 1L), 1, ~.x + .y),
+    slide_index2_int(c(x = 1L), c(y = 1L), 1, ~ .x + .y),
     c(x = 2L)
   )
 })
 
 test_that("slide_index2_vec() can simplify automatically", {
-  expect_identical(slide_index2_vec(1, 2, 1, ~.x + .y, .ptype = NULL), 3)
+  expect_identical(slide_index2_vec(1, 2, 1, ~ .x + .y, .ptype = NULL), 3)
 })
 
 test_that("slide_index2_*() errors if it can't simplify", {
@@ -30,20 +30,16 @@ test_that("slide_index2_*() errors if it can't simplify", {
     }
   }
   expect_snapshot({
-    (
-      expect_error(
-        slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_index2_vec(1:2, 1:2, 1:2, fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
   expect_snapshot({
-    (
-      expect_error(
-        slide_index2_int(1:2, 1:2, 1:2, fn),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_index2_int(1:2, 1:2, 1:2, fn),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -72,12 +68,10 @@ test_that("slide_index2_chr() works", {
 
 test_that("slide_index2_chr() cannot coerce", {
   expect_snapshot({
-    (
-      expect_error(
-        slide_index2_chr(1, 1, 1, ~.x),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      slide_index2_chr(1, 1, 1, ~.x),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -98,7 +92,7 @@ test_that("slide_index2_dfr() works", {
       1:2,
       1:2,
       1:2,
-      ~new_data_frame(list(x = list(.x), y = list(.y))),
+      ~ new_data_frame(list(x = list(.x), y = list(.y))),
       .before = 1
     ),
     data_frame(
@@ -161,17 +155,17 @@ test_that("`slide_index2_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
   expect_identical(
-    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    slide_index2_vec(1:3, 1:3, 1:3, ~ foobar(.x), .ptype = foobar(integer())),
     foobar(1:3)
   )
   expect_condition(
-    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x), .ptype = foobar(integer())),
+    slide_index2_vec(1:3, 1:3, 1:3, ~ foobar(.x), .ptype = foobar(integer())),
     class = "slider_c_foobar"
   )
 
-  expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x)), foobar(1:3))
+  expect_identical(slide_index2_vec(1:3, 1:3, 1:3, ~ foobar(.x)), foobar(1:3))
   expect_condition(
-    slide_index2_vec(1:3, 1:3, 1:3, ~foobar(.x)),
+    slide_index2_vec(1:3, 1:3, 1:3, ~ foobar(.x)),
     class = "slider_c_foobar"
   )
 })

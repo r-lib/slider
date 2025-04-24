@@ -2,17 +2,17 @@
 # pslide_*()
 
 test_that("pslide_*() works", {
-  expect_identical(pslide_vec(list(1L, 1L), ~.x + .y), 2L)
-  expect_identical(pslide_int(list(1L, 1L), ~.x + .y), 2L)
+  expect_identical(pslide_vec(list(1L, 1L), ~ .x + .y), 2L)
+  expect_identical(pslide_int(list(1L, 1L), ~ .x + .y), 2L)
 })
 
 test_that("pslide_*() retains names of first input", {
-  expect_identical(pslide_vec(list(c(x = 1L), c(y = 1L)), ~.x + .y), c(x = 2L))
-  expect_identical(pslide_int(list(c(x = 1L), c(y = 1L)), ~.x + .y), c(x = 2L))
+  expect_identical(pslide_vec(list(c(x = 1L), c(y = 1L)), ~ .x + .y), c(x = 2L))
+  expect_identical(pslide_int(list(c(x = 1L), c(y = 1L)), ~ .x + .y), c(x = 2L))
 })
 
 test_that("pslide_vec() can simplify automatically", {
-  expect_identical(pslide_vec(list(1, 2), ~.x + .y, .ptype = NULL), 3)
+  expect_identical(pslide_vec(list(1, 2), ~ .x + .y, .ptype = NULL), 3)
 })
 
 test_that("pslide_vec() errors if it can't simplify", {
@@ -24,12 +24,10 @@ test_that("pslide_vec() errors if it can't simplify", {
     }
   }
   expect_snapshot({
-    (
-      expect_error(
-        pslide_vec(list(1:2, 1:2), fn, .ptype = NULL),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      pslide_vec(list(1:2, 1:2), fn, .ptype = NULL),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -42,12 +40,10 @@ test_that("pslide_*() errors if it can't cast", {
     }
   }
   expect_snapshot({
-    (
-      expect_error(
-        pslide_int(list(1:2, 1:2), fn),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      pslide_int(list(1:2, 1:2), fn),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -55,11 +51,11 @@ test_that("pslide_*() errors if it can't cast", {
 # suffix tests
 
 test_that("pslide_int() works", {
-  expect_identical(pslide_int(list(1L, 1L), ~.x + .y), 2L)
+  expect_identical(pslide_int(list(1L, 1L), ~ .x + .y), 2L)
 })
 
 test_that("pslide_int() can coerce", {
-  expect_identical(pslide_int(list(1, 1), ~.x + .y), 2L)
+  expect_identical(pslide_int(list(1, 1), ~ .x + .y), 2L)
 })
 
 test_that("pslide_dbl() works", {
@@ -67,7 +63,7 @@ test_that("pslide_dbl() works", {
 })
 
 test_that("pslide_dbl() can coerce", {
-  expect_identical(pslide_dbl(list(1L, 1L), ~.x + .y), 2)
+  expect_identical(pslide_dbl(list(1L, 1L), ~ .x + .y), 2)
 })
 
 test_that("pslide_chr() works", {
@@ -76,12 +72,10 @@ test_that("pslide_chr() works", {
 
 test_that("pslide_chr() cannot coerce", {
   expect_snapshot({
-    (
-      expect_error(
-        pslide_chr(list(1, 1), ~.x + .y),
-        class = "vctrs_error_incompatible_type"
-      )
-    )
+    (expect_error(
+      pslide_chr(list(1, 1), ~ .x + .y),
+      class = "vctrs_error_incompatible_type"
+    ))
   })
 })
 
@@ -90,7 +84,7 @@ test_that("pslide_lgl() works", {
 })
 
 test_that("pslide_lgl() can coerce", {
-  expect_identical(pslide_lgl(list(1, 0), ~.x + .y), TRUE)
+  expect_identical(pslide_lgl(list(1, 0), ~ .x + .y), TRUE)
 })
 
 # ------------------------------------------------------------------------------
@@ -100,7 +94,7 @@ test_that("pslide_dfr() works", {
   expect_identical(
     pslide_dfr(
       list(1:2, 1:2),
-      ~new_data_frame(list(x = list(.x), y = list(.y))),
+      ~ new_data_frame(list(x = list(.x), y = list(.y))),
       .before = 1
     ),
     data_frame(
@@ -147,17 +141,17 @@ test_that("`pslide_vec()` falls back to `c()` method as required", {
   local_c_foobar()
 
   expect_identical(
-    pslide_vec(list(1:3, 1:3), ~foobar(.x), .ptype = foobar(integer())),
+    pslide_vec(list(1:3, 1:3), ~ foobar(.x), .ptype = foobar(integer())),
     foobar(1:3)
   )
   expect_condition(
-    pslide_vec(list(1:3, 1:3), ~foobar(.x), .ptype = foobar(integer())),
+    pslide_vec(list(1:3, 1:3), ~ foobar(.x), .ptype = foobar(integer())),
     class = "slider_c_foobar"
   )
 
-  expect_identical(pslide_vec(list(1:3, 1:3), ~foobar(.x)), foobar(1:3))
+  expect_identical(pslide_vec(list(1:3, 1:3), ~ foobar(.x)), foobar(1:3))
   expect_condition(
-    pslide_vec(list(1:3, 1:3), ~foobar(.x)),
+    pslide_vec(list(1:3, 1:3), ~ foobar(.x)),
     class = "slider_c_foobar"
   )
 })
