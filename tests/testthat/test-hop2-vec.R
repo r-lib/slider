@@ -5,7 +5,8 @@ test_that("hop2_vec() works", {
   expect_identical(hop2_vec(1L, 1L, 1, 1, ~ .x + .y), 2L)
 })
 
-test_that("hop2_vec() doesn't retains names of x (#75)", {
+test_that(
+  "hop2_vec() doesn't retains names of x (#75)", {
   expect_named(hop2_vec(c(x = 1L), c(y = 1L), 1, 1, ~ .x + .y), NULL)
 })
 
