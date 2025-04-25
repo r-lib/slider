@@ -4,7 +4,7 @@ on:
     branches: [main, master]
   pull_request:
 
-name: air-format-check.yaml
+name: format-check.yaml
 
 permissions: read-all
 
@@ -15,10 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Format check
-      #   uses: posit-dev/air-action@main
-      #   with:
-      #     args: format . --check
-
-      - name: test
-        run: echo "::error file=/home/runner/work/slider/slider/R/arithmetic.R,line=0::Help me"
+      - name: Format check
+        uses: posit-dev/air-action@v1
+        with:
+          args: format . --check
