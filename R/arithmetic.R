@@ -56,8 +56,7 @@ NULL
 
 #' @export
 #' @rdname index-arithmetic
-slider_plus <- function(x, 
-  y) {
+slider_plus <- function(x, y) {
   return(slider_dispatch("slider_plus", x, y, slider_plus_default))
   UseMethod("slider_plus")
 }
