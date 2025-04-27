@@ -91,7 +91,7 @@ hop2_vec <- function(.x, .y, .starts, .stops, .f, ..., .ptype = NULL) {
     .atomic = TRUE
   )
 
-  vec_simplify(out, .ptype)
+  vec_simplify(  out, .ptype)
 }
 
 # ------------------------------------------------------------------------------
@@ -115,7 +115,9 @@ hop2_impl <- function(
 
   .f <- as_function(.f, call = .slider_error_call)
 
-  f_call <- expr(.f(.x, .y, ...))
+  f_call <- expr(
+    .f(
+      .x, .y, ...))
 
   type <- -2L
 
