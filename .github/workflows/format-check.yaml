@@ -1,4 +1,4 @@
-# Workflow derived from https://github.com/posit-dev/air-action/tree/main/examples
+# Workflow derived from https://github.com/posit-dev/setup-air/tree/main/examples
 on:
   pull_request:
 
@@ -15,12 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Format
-        uses: posit-dev/air-action@v1
-        with:
-          args: format .
+      - name: Install
+        uses: posit-dev/setup-air@v1
 
-      - name: Suggest changes
+      - name: Format
+        run: air format .
+
+      - name: Suggest
         uses: reviewdog/action-suggester@v1
         with:
           level: error
