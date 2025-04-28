@@ -91,7 +91,7 @@ hop2_vec <- function(.x, .y, .starts, .stops, .f, ..., .ptype = NULL) {
     .atomic = TRUE
   )
 
-  vec_simplify(  out, .ptype)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------
@@ -117,7 +117,11 @@ hop2_impl <- function(
 
   f_call <- expr(
     .f(
-      .x, .y, ...))
+      .x,
+      .y,
+      ...
+    )
+  )
 
   type <- -2L
 

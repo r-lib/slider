@@ -71,8 +71,7 @@
 block <- function(x, i, period, every = 1L, origin = NULL) {
   vec_assert(x)
 
-  check_index_incompatible_type(i, 
-    "i")
+  check_index_incompatible_type(i, "i")
   check_index_cannot_be_na(i, "i")
   check_index_must_be_ascending(i, "i")
 
