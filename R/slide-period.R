@@ -99,321 +99,321 @@
 #' @seealso [block()], [slide()], [slide_index()]
 #' @export
 slide_period <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE
 ) {
-  slide_period_impl(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = FALSE
-  )
+        slide_period_impl(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = list(),
+                .constrain = FALSE,
+                .atomic = FALSE
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_vec <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE,
-  .ptype = NULL
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE,
+        .ptype = NULL
 ) {
-  out <- slide_period_impl(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = list(),
-    .constrain = FALSE,
-    .atomic = TRUE
-  )
+        out <- slide_period_impl(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = list(),
+                .constrain = FALSE,
+                .atomic = TRUE
+        )
 
-  vec_simplify(out, .ptype)
+        vec_simplify(out, .ptype)
 }
 
 slide_period_vec_direct <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every,
-  .origin,
-  .before,
-  .after,
-  .complete,
-  .ptype,
-  .slider_error_call = caller_env()
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every,
+        .origin,
+        .before,
+        .after,
+        .complete,
+        .ptype,
+        .slider_error_call = caller_env()
 ) {
-  slide_period_impl(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = .ptype,
-    .constrain = TRUE,
-    .atomic = TRUE,
-    .slider_error_call = .slider_error_call
-  )
+        slide_period_impl(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = .ptype,
+                .constrain = TRUE,
+                .atomic = TRUE,
+                .slider_error_call = .slider_error_call
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_dbl <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE
 ) {
-  slide_period_vec_direct(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = double()
-  )
+        slide_period_vec_direct(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = double()
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_int <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE
 ) {
-  slide_period_vec_direct(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = integer()
-  )
+        slide_period_vec_direct(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = integer()
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_lgl <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE
 ) {
-  slide_period_vec_direct(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = logical()
-  )
+        slide_period_vec_direct(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = logical()
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_chr <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE
 ) {
-  slide_period_vec_direct(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete,
-    .ptype = character()
-  )
+        slide_period_vec_direct(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete,
+                .ptype = character()
+        )
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_dfr <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE,
-  .names_to = rlang::zap(),
-  .name_repair = c("unique", "universal", "check_unique")
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE,
+        .names_to = rlang::zap(),
+        .name_repair = c("unique", "universal", "check_unique")
 ) {
-  out <- slide_period(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete
-  )
+        out <- slide_period(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete
+        )
 
-  vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
+        vec_rbind(!!!out, .names_to = .names_to, .name_repair = .name_repair)
 }
 
 #' @rdname slide_period
 #' @export
 slide_period_dfc <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every = 1L,
-  .origin = NULL,
-  .before = 0L,
-  .after = 0L,
-  .complete = FALSE,
-  .size = NULL,
-  .name_repair = c("unique", "universal", "check_unique", "minimal")
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every = 1L,
+        .origin = NULL,
+        .before = 0L,
+        .after = 0L,
+        .complete = FALSE,
+        .size = NULL,
+        .name_repair = c("unique", "universal", "check_unique", "minimal")
 ) {
-  out <- slide_period(
-    .x,
-    .i,
-    .period,
-    .f,
-    ...,
-    .every = .every,
-    .origin = .origin,
-    .before = .before,
-    .after = .after,
-    .complete = .complete
-  )
+        out <- slide_period(
+                .x,
+                .i,
+                .period,
+                .f,
+                ...,
+                .every = .every,
+                .origin = .origin,
+                .before = .before,
+                .after = .after,
+                .complete = .complete
+        )
 
-  vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
+        vec_cbind(!!!out, .size = .size, .name_repair = .name_repair)
 }
 
 # ------------------------------------------------------------------------------
 
 slide_period_impl <- function(
-  .x,
-  .i,
-  .period,
-  .f,
-  ...,
-  .every,
-  .origin,
-  .before,
-  .after,
-  .complete,
-  .ptype,
-  .constrain,
-  .atomic,
-  .slider_error_call = caller_env()
+        .x,
+        .i,
+        .period,
+        .f,
+        ...,
+        .every,
+        .origin,
+        .before,
+        .after,
+        .complete,
+        .ptype,
+        .constrain,
+        .atomic,
+        .slider_error_call = caller_env()
 ) {
-  vec_assert(.x, call = .slider_error_call)
+        vec_assert(.x, call = .slider_error_call)
 
-  .f <- as_function(.f, call = .slider_error_call)
+        .f <- as_function(.f, call = .slider_error_call)
 
-  f_call <- expr(.f(.x, ...))
+        f_call <- expr(.f(.x, ...))
 
-  type <- -1L
+        type <- -1L
 
-  slide_period_common(
-    x = .x,
-    i = .i,
-    period = .period,
-    f_call = f_call,
-    every = .every,
-    origin = .origin,
-    before = .before,
-    after = .after,
-    complete = .complete,
-    ptype = .ptype,
-    constrain = .constrain,
-    atomic = .atomic,
-    env = environment(),
-    type = type,
-    slider_error_call = .slider_error_call
-  )
+        slide_period_common(
+                x = .x,
+                i = .i,
+                period = .period,
+                f_call = f_call,
+                every = .every,
+                origin = .origin,
+                before = .before,
+                after = .after,
+                complete = .complete,
+                ptype = .ptype,
+                constrain = .constrain,
+                atomic = .atomic,
+                env = environment(),
+                type = type,
+                slider_error_call = .slider_error_call
+        )
 }
