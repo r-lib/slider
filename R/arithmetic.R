@@ -57,86 +57,86 @@ NULL
 #' @export
 #' @rdname index-arithmetic
 slider_plus <- function(x, y) {
-        return(slider_dispatch("slider_plus", x, y, slider_plus_default))
-        UseMethod("slider_plus")
+  return(slider_dispatch("slider_plus", x, y, slider_plus_default))
+  UseMethod("slider_plus")
 }
 
 #' @export
 #' @rdname index-arithmetic
 slider_minus <- function(x, y) {
-        return(slider_dispatch("slider_minus", x, y, slider_minus_default))
-        UseMethod("slider_minus")
+  return(slider_dispatch("slider_minus", x, y, slider_minus_default))
+  UseMethod("slider_minus")
 }
 
 slider_plus_default <- function(x, y) {
-        x + y
+  x + y
 }
 slider_minus_default <- function(x, y) {
-        x - y
+  x - y
 }
 
 slider_dispatch <- function(generic, x, y, fn_default) {
-        fn <- slider_method_get(generic, x, y)
+  fn <- slider_method_get(generic, x, y)
 
-        if (is.null(fn)) {
-                fn_default(x, y)
-        } else {
-                fn(x, y)
-        }
+  if (is.null(fn)) {
+    fn_default(x, y)
+  } else {
+    fn(x, y)
+  }
 }
 
 slider_class <- function(x) {
-        if (is.object(x)) {
-                out <- class(x)[[1L]]
-        } else {
-                # Mainly so `1` returns `"double"` not `"numeric"`
-                # for method registration purposes
-                out <- typeof(x)
-        }
+  if (is.object(x)) {
+    out <- class(x)[[1L]]
+  } else {
+    # Mainly so `1` returns `"double"` not `"numeric"`
+    # for method registration purposes
+    out <- typeof(x)
+  }
 
-        if (!is_string(out)) {
-                abort(
-                        "Encountered object with corrupt class.",
-                        .internal = TRUE
-                )
-        }
+  if (!is_string(out)) {
+    abort(
+      "Encountered object with corrupt class.",
+      .internal = TRUE
+    )
+  }
 
-        out
+  out
 }
 
 slider_method_get <- function(generic, x, y) {
-        x_class <- slider_class(x)
-        y_class <- slider_class(y)
+  x_class <- slider_class(x)
+  y_class <- slider_class(y)
 
-        name <- paste0(generic, ".", x_class, ".", y_class)
+  name <- paste0(generic, ".", x_class, ".", y_class)
 
-        s3_method_get(name)
+  s3_method_get(name)
 }
 
 s3_method_get <- function(name) {
-        # Try global env first in case the user registered a method interactively
-        env <- global_env()
-        fn <- env_get(env, name, default = NULL)
+  # Try global env first in case the user registered a method interactively
+  env <- global_env()
+  fn <- env_get(env, name, default = NULL)
 
-        if (is_function(fn)) {
-                return(fn)
-        }
+  if (is_function(fn)) {
+    return(fn)
+  }
 
-        # Then try the slider S3 methods table
-        ns <- ns_env("slider")
-        env <- ns_methods_table(ns)
-        fn <- env_get(env, name, default = NULL)
+  # Then try the slider S3 methods table
+  ns <- ns_env("slider")
+  env <- ns_methods_table(ns)
+  fn <- env_get(env, name, default = NULL)
 
-        if (is_function(fn)) {
-                return(fn)
-        }
+  if (is_function(fn)) {
+    return(fn)
+  }
 
-        # Symbol not bound to the `env`, or it was bound to a non-function
-        NULL
+  # Symbol not bound to the `env`, or it was bound to a non-function
+  NULL
 }
 
 ns_methods_table <- function(ns) {
-        ns$.__S3MethodsTable__.
+  ns$.__S3MethodsTable__.
 }
 
 # ------------------------------------------------------------------------------
@@ -144,14 +144,14 @@ ns_methods_table <- function(ns) {
 
 #' @export
 slider_plus.slider_test_class.double <- function(x, y) {
-        new_slider_test_class(x + (y * 2))
+  new_slider_test_class(x + (y * 2))
 }
 
 #' @export
 slider_minus.slider_test_class.double <- function(x, y) {
-        new_slider_test_class(x - (y * 2))
+  new_slider_test_class(x - (y * 2))
 }
 
 new_slider_test_class <- function(x) {
-        structure(x, class = "slider_test_class")
+  structure(x, class = "slider_test_class")
 }

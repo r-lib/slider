@@ -92,66 +92,66 @@
 #' @seealso [hop2()], [hop_index()], [slide()]
 #' @export
 hop <- function(.x, .starts, .stops, .f, ...) {
-        hop_impl(
-                .x,
-                .starts,
-                .stops,
-                .f,
-                ...,
-                .ptype = list(),
-                .constrain = FALSE,
-                .atomic = FALSE
-        )
+  hop_impl(
+    .x,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = FALSE
+  )
 }
 
 #' @rdname hop
 #' @export
 hop_vec <- function(.x, .starts, .stops, .f, ..., .ptype = NULL) {
-        out <- hop_impl(
-                .x,
-                .starts,
-                .stops,
-                .f,
-                ...,
-                .ptype = list(),
-                .constrain = FALSE,
-                .atomic = TRUE
-        )
+  out <- hop_impl(
+    .x,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-        vec_simplify(out, .ptype)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------
 
 hop_impl <- function(
-        .x,
-        .starts,
-        .stops,
-        .f,
-        ...,
-        .ptype,
-        .constrain,
-        .atomic,
-        .slider_error_call = caller_env()
+  .x,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
 ) {
-        vec_assert(.x, call = .slider_error_call)
+  vec_assert(.x, call = .slider_error_call)
 
-        .f <- as_function(.f, call = .slider_error_call)
+  .f <- as_function(.f, call = .slider_error_call)
 
-        f_call <- expr(.f(.x, ...))
+  f_call <- expr(.f(.x, ...))
 
-        type <- -1L
+  type <- -1L
 
-        hop_common(
-                x = .x,
-                starts = .starts,
-                stops = .stops,
-                f_call = f_call,
-                ptype = .ptype,
-                env = environment(),
-                type = type,
-                constrain = .constrain,
-                atomic = .atomic,
-                slider_error_call = .slider_error_call
-        )
+  hop_common(
+    x = .x,
+    starts = .starts,
+    stops = .stops,
+    f_call = f_call,
+    ptype = .ptype,
+    env = environment(),
+    type = type,
+    constrain = .constrain,
+    atomic = .atomic,
+    slider_error_call = .slider_error_call
+  )
 }

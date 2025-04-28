@@ -69,25 +69,25 @@
 #' @seealso [slide_period()], [slide()], [slide_index()]
 #' @export
 block <- function(x, i, period, every = 1L, origin = NULL) {
-        vec_assert(x)
+  vec_assert(x)
 
-        check_index_incompatible_type(i, "i")
-        check_index_cannot_be_na(i, "i")
-        check_index_must_be_ascending(i, "i")
+  check_index_incompatible_type(i, "i")
+  check_index_cannot_be_na(i, "i")
+  check_index_must_be_ascending(i, "i")
 
-        x_size <- vec_size(x)
-        i_size <- vec_size(i)
+  x_size <- vec_size(x)
+  i_size <- vec_size(i)
 
-        if (x_size != i_size) {
-                stop_index_incompatible_size(i_size, x_size, "i")
-        }
+  if (x_size != i_size) {
+    stop_index_incompatible_size(i_size, x_size, "i")
+  }
 
-        boundaries <- warp_boundary(
-                i,
-                period = period,
-                every = every,
-                origin = origin
-        )
+  boundaries <- warp_boundary(
+    i,
+    period = period,
+    every = every,
+    origin = origin
+  )
 
-        .Call(slider_block, x, boundaries$start, boundaries$stop)
+  .Call(slider_block, x, boundaries$start, boundaries$stop)
 }

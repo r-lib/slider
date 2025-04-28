@@ -66,85 +66,85 @@
 #' @seealso [slide2()], [slide_index2()], [hop_index()]
 #' @export
 hop_index2 <- function(.x, .y, .i, .starts, .stops, .f, ...) {
-        hop_index2_impl(
-                .x,
-                .y,
-                .i,
-                .starts,
-                .stops,
-                .f,
-                ...,
-                .ptype = list(),
-                .constrain = FALSE,
-                .atomic = FALSE
-        )
+  hop_index2_impl(
+    .x,
+    .y,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = FALSE
+  )
 }
 
 #' @rdname hop_index2
 #' @export
 hop_index2_vec <- function(
-        .x,
-        .y,
-        .i,
-        .starts,
-        .stops,
-        .f,
-        ...,
-        .ptype = NULL
+  .x,
+  .y,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype = NULL
 ) {
-        out <- hop_index2_impl(
-                .x,
-                .y,
-                .i,
-                .starts,
-                .stops,
-                .f,
-                ...,
-                .ptype = list(),
-                .constrain = FALSE,
-                .atomic = TRUE
-        )
+  out <- hop_index2_impl(
+    .x,
+    .y,
+    .i,
+    .starts,
+    .stops,
+    .f,
+    ...,
+    .ptype = list(),
+    .constrain = FALSE,
+    .atomic = TRUE
+  )
 
-        vec_simplify(out, .ptype)
+  vec_simplify(out, .ptype)
 }
 
 # ------------------------------------------------------------------------------
 
 hop_index2_impl <- function(
-        .x,
-        .y,
-        .i,
-        .starts,
-        .stops,
-        .f,
-        ...,
-        .ptype,
-        .constrain,
-        .atomic,
-        .slider_error_call = caller_env()
+  .x,
+  .y,
+  .i,
+  .starts,
+  .stops,
+  .f,
+  ...,
+  .ptype,
+  .constrain,
+  .atomic,
+  .slider_error_call = caller_env()
 ) {
-        vec_assert(.x, call = .slider_error_call)
-        vec_assert(.y, call = .slider_error_call)
+  vec_assert(.x, call = .slider_error_call)
+  vec_assert(.y, call = .slider_error_call)
 
-        args <- vec_recycle_common(.x = .x, .y = .y, .call = .slider_error_call)
+  args <- vec_recycle_common(.x = .x, .y = .y, .call = .slider_error_call)
 
-        .f <- as_function(.f, call = .slider_error_call)
+  .f <- as_function(.f, call = .slider_error_call)
 
-        f_call <- expr(.f(.x, .y, ...))
+  f_call <- expr(.f(.x, .y, ...))
 
-        type <- -2L
+  type <- -2L
 
-        hop_index_common(
-                x = args,
-                i = .i,
-                starts = .starts,
-                stops = .stops,
-                f_call = f_call,
-                ptype = .ptype,
-                constrain = .constrain,
-                atomic = .atomic,
-                env = environment(),
-                type = type,
-                slider_error_call = .slider_error_call
-        )
+  hop_index_common(
+    x = args,
+    i = .i,
+    starts = .starts,
+    stops = .stops,
+    f_call = f_call,
+    ptype = .ptype,
+    constrain = .constrain,
+    atomic = .atomic,
+    env = environment(),
+    type = type,
+    slider_error_call = .slider_error_call
+  )
 }
