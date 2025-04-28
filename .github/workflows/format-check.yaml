@@ -21,6 +21,6 @@ jobs:
           args: format .
 
       - name: Suggest changes
-      - uses: reviewdog/action-suggester@v1
+        uses: reviewdog/action-suggester@v1
         with:
           tool_name: air
