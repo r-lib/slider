@@ -1,4 +1,4 @@
 # License
 
-    YEAR: 2024
+    YEAR: 2025
     COPYRIGHT HOLDER: slider authors
