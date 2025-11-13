@@ -2,6 +2,8 @@
 
 ## slider (development version)
 
+- Removed usage of non-API `OBJECT()`.
+
 ## slider 0.3.2
 
 CRAN release: 2024-10-25
