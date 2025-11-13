@@ -1,0 +1,590 @@
+# slider
+
+slider provides a family of general purpose “sliding window” functions.
+The API is purposefully *very* similar to purrr. The goal of these
+functions is usually to compute rolling averages, cumulative sums,
+rolling regressions, or other “window” based computations.
+
+There are 3 core functions in slider:
+
+- [`slide()`](https://slider.r-lib.org/dev/reference/slide.md) iterates
+  over your data like
+  [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html), but
+  uses a sliding window to do so. It is type-stable, and always returns
+  a result with the same size as its input.
+
+- [`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  computes a rolling calculation *relative to an index*. If you have
+  ever wanted to compute something like a “3 month rolling average”
+  where the number of days in each month is irregular, you might like
+  this function.
+
+- [`slide_period()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  is similar to
+  [`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  in that it slides relative to an index, but it first breaks the index
+  up into “time blocks”, like 2 month blocks of time, and then it slides
+  over `.x` using indices defined by those blocks.
+
+Each of these core functions have the same variants as
+[`purrr::map()`](https://purrr.tidyverse.org/reference/map.html). For
+example, [`slide()`](https://slider.r-lib.org/dev/reference/slide.md)
+has [`slide_dbl()`](https://slider.r-lib.org/dev/reference/slide.md),
+[`slide2()`](https://slider.r-lib.org/dev/reference/slide2.md), and
+[`pslide()`](https://slider.r-lib.org/dev/reference/slide2.md), along
+with the other combinations of these variants that you might expect from
+having previously used purrr.
+
+To learn more about these three functions, read the [introduction
+vignette](https://slider.r-lib.org/articles/slider.html).
+
+There are also a set of extremely fast specialized variants of
+[`slide_dbl()`](https://slider.r-lib.org/dev/reference/slide.md) for the
+most common use cases. These include
+[`slide_sum()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+for rolling sums and
+[`slide_mean()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+for rolling averages. There are index variants of each of these as well,
+like
+[`slide_index_sum()`](https://slider.r-lib.org/dev/reference/summary-index.md).
+
+## Installation
+
+Install the released version from [CRAN](https://CRAN.R-project.org)
+with:
+
+``` r
+install.packages("slider")
+```
+
+Install the development version from [GitHub](https://github.com/) with:
+
+``` r
+pak::pak("r-lib/slider")
+```
+
+## Examples
+
+The [help page for
+`slide()`](https://slider.r-lib.org/reference/slide.html) has many
+examples, but here are a few:
+
+``` r
+library(slider)
+```
+
+The classic example would be to do a moving average.
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) handles
+this with a combination of the `.before` and `.after` arguments, which
+control the width of the window and the alignment.
+
+``` r
+# Moving average (Aligned right)
+# "The current element + 2 elements before"
+slide_dbl(1:5, ~mean(.x), .before = 2)
+#> [1] 1.0 1.5 2.0 3.0 4.0
+
+# Align left
+# "The current element + 2 elements after"
+slide_dbl(1:5, ~mean(.x), .after = 2)
+#> [1] 2.0 3.0 4.0 4.5 5.0
+
+# Center aligned
+# "The current element + 1 element before + 1 element after"
+slide_dbl(1:5, ~mean(.x), .before = 1, .after = 1)
+#> [1] 1.5 2.0 3.0 4.0 4.5
+```
+
+With `Inf`, you can do a “cumulative slide” to compute cumulative
+expressions. I think of this as saying “give me everything before the
+current element.”
+
+``` r
+slide(1:4, ~.x, .before = Inf)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 1 2 3 4
+```
+
+With `.complete`, you can decide whether or not `.f` should be evaluated
+on incomplete windows. In the following example, the requested window
+size is 3, but the first two results are computed on windows of size 1
+and 2 because partial results are allowed by default. When `.complete`
+is set to `TRUE`, the first two results are not computed.
+
+``` r
+slide(1:4, ~.x, .before = 2)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 2 3 4
+
+slide(1:4, ~.x, .before = 2, .complete = TRUE)
+#> [[1]]
+#> NULL
+#> 
+#> [[2]]
+#> NULL
+#> 
+#> [[3]]
+#> [1] 1 2 3
+#> 
+#> [[4]]
+#> [1] 2 3 4
+```
+
+## Data frames
+
+Unlike [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html),
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) iterates
+over data frames in a row wise fashion. Interestingly this means the
+default of [`slide()`](https://slider.r-lib.org/dev/reference/slide.md)
+becomes a generic row wise iterator, with nice syntax for accessing data
+frame columns.
+
+There is a [vignette specifically about
+this](https://slider.r-lib.org/articles/rowwise.html).
+
+``` r
+mini_cars <- cars[1:4,]
+
+slide(mini_cars, ~.x)
+#> [[1]]
+#>   speed dist
+#> 1     4    2
+#> 
+#> [[2]]
+#>   speed dist
+#> 1     4   10
+#> 
+#> [[3]]
+#>   speed dist
+#> 1     7    4
+#> 
+#> [[4]]
+#>   speed dist
+#> 1     7   22
+
+slide_dbl(mini_cars, ~.x$speed + .x$dist)
+#> [1]  6 14 11 29
+```
+
+This makes rolling regressions trivial!
+
+``` r
+library(tibble)
+set.seed(123)
+
+df <- tibble(
+  y = rnorm(100),
+  x = rnorm(100)
+)
+
+# Window size of 20 rows
+# The current row + 19 before
+# (see slide_index() for how to do this relative to a date vector!)
+df$regressions <- slide(df, ~lm(y ~ x, data = .x), .before = 19, .complete = TRUE)
+
+df[15:25,]
+#> # A tibble: 11 × 3
+#>         y      x regressions
+#>     <dbl>  <dbl> <list>     
+#>  1 -0.556  0.519 <NULL>     
+#>  2  1.79   0.301 <NULL>     
+#>  3  0.498  0.106 <NULL>     
+#>  4 -1.97  -0.641 <NULL>     
+#>  5  0.701 -0.850 <NULL>     
+#>  6 -0.473 -1.02  <lm>       
+#>  7 -1.07   0.118 <lm>       
+#>  8 -0.218 -0.947 <lm>       
+#>  9 -1.03  -0.491 <lm>       
+#> 10 -0.729 -0.256 <lm>       
+#> 11 -0.625  1.84  <lm>
+```
+
+## Index sliding
+
+In many business settings, the value you want to compute is tied to some
+*index*, like a date vector. In these cases, you’ll probably want to
+compute sliding windows relative to the index, and not using the fixed
+window that [`slide()`](https://slider.r-lib.org/dev/reference/slide.md)
+provides. You can use
+[`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+to pass in both `.x` and an index, `.i`, and the window will be
+calculated relative to that index.
+
+Here, when computing a “2 day window”, you probably don’t want
+`"2019-08-16"` and `"2019-08-18"` to be grouped together.
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) has no
+concept of an index, so when you specify a window size of 2, it will
+group these two together.
+[`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md),
+on the other hand, will do the right thing.
+
+``` r
+x <- 1:3
+i <- as.Date(c("2019-08-15", "2019-08-16", "2019-08-18"))
+
+# slide() has no concept of an "index"
+slide(x, ~.x, .before = 1)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 2 3
+
+# "index aware"
+slide_index(x, i, ~.x, .before = 1)
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 3
+```
+
+Essentially what happens is that when we get to `"2019-08-18"`, it
+“looks backwards” 1 day to set a window boundary at `"2019-08-17"`.
+Since the date at position 2, `"2019-08-16"`, is before `"2019-08-17"`,
+it is not included.
+
+Powerfully, you can pass through any object to `.before` that computes a
+value from `.i - .before`. This means that you could also have used a
+lubridate period object (which gets even more interesting when you use
+`weeks()` or [`months()`](https://rdrr.io/r/base/weekday.POSIXt.html)):
+
+``` r
+slide_index(x, i, ~.x, .before = lubridate::days(1))
+#> [[1]]
+#> [1] 1
+#> 
+#> [[2]]
+#> [1] 1 2
+#> 
+#> [[3]]
+#> [1] 3
+```
+
+## Period sliding
+
+[`slide_period()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+is different from
+[`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+in that it first breaks the index into “time blocks” and then slides
+over `.x` relative to those blocks. For example, in the monthly period
+slide below, `i` is broken up into 4 time blocks of “the current block
+of monthly data, plus one block before this one”. The locations of those
+blocks are the locations that are used to slice `.x` with.
+
+``` r
+i <- as.Date(c(
+  "2019-01-29", 
+  "2019-01-30", 
+  "2019-02-05", 
+  "2019-04-01", 
+  "2019-05-10"
+))
+
+slide_period(i, i, "month", ~.x, .before = 1)
+#> [[1]]
+#> [1] "2019-01-29" "2019-01-30"
+#> 
+#> [[2]]
+#> [1] "2019-01-29" "2019-01-30" "2019-02-05"
+#> 
+#> [[3]]
+#> [1] "2019-04-01"
+#> 
+#> [[4]]
+#> [1] "2019-04-01" "2019-05-10"
+```
+
+One neat thing to notice is that
+[`slide_period()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+is aware of the distance between elements of `.i` in the period you
+specify. The practical implication of this is that in the above example,
+group 3 with `2019-04-01` did *not* include `2019-02-05` in it, because
+it is more than 1 month group away.
+
+## Inspiration
+
+This package is inspired heavily by SQL’s window functions. The API is
+similar, but more general because you can iterate over any kind of R
+object.
+
+There have been multiple attempts at creating sliding window functions
+(I personally created `rollify()`, and worked a little bit on
+`tsibble::slide()` with [Earo Wang](https://github.com/earowang)).
+
+- `zoo::rollapply()`
+- `tibbletime::rollify()`
+- `tsibble::slide()`
+
+I believe that slider is the next iteration of these. There are a few
+reasons for this:
+
+- To me, the API is more intuitive, and is more flexible because
+  `.before` and `.after` let you completely control the entry point (as
+  opposed to fixed entry points like `"center"`, `"left"`, etc.
+
+- It is objectively faster because it is written purely in C.
+
+- With [`slide_vec()`](https://slider.r-lib.org/dev/reference/slide.md)
+  you can return any kind of object, and are not limited to the suffixed
+  versions: `_dbl`, `_int`, etc.
+
+- It iterates rowwise over data frames, consistent with the vctrs
+  framework.
+
+- I believe it is overall more consistent, backed by a theory that can
+  always justify the sliding window generated by any combination of the
+  parameters.
+
+Earo and I have spoken, and we have mutually agreed that it would be
+best to deprecate `tsibble::slide()` in favor of
+[`slider::slide()`](https://slider.r-lib.org/dev/reference/slide.md).
+
+Additionally, [data.table](https://github.com/Rdatatable/data.table)’s
+non-equi joins have been pretty much the only solution to the problem
+that
+[`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+tries to solve. Their solution is robust and quite fast, and has been a
+nice benchmark for slider. slider is trying to solve a much narrower
+problem, so the API here is more focused.
+
+## Performance
+
+Like [`purrr::map()`](https://purrr.tidyverse.org/reference/map.html),
+the core functions of slider, such as
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) and
+[`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md),
+are optimized in C to be as fast as possible, but there is overhead
+involved in calling `.f` repeatedly. These functions are meant to be as
+*general purpose* as possible, at the cost of some performance. This
+means that slider can be used for more abstract computations, like
+rolling regressions, or any other custom function that you want to use
+in a rolling fashion.
+
+slider also provides *specialized* functions for some of the most common
+use cases, such as
+[`slide_mean()`](https://slider.r-lib.org/dev/reference/summary-slide.md),
+or
+[`slide_index_sum()`](https://slider.r-lib.org/dev/reference/summary-index.md).
+These compute their corresponding metric at the C level, using a
+specialized algorithm, and are often much faster than their
+`slide_dbl(x, fn)` equivalent.
+
+## References
+
+I’ve found the following references very useful to understand more about
+window functions:
+
+- [Postgres SQL
+  documentation](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
+
+- [dbplyr window function
+  vignette](https://dbplyr.tidyverse.org/articles/translation-function.html#window-functions)
+
+- [SQLite documentation - with a
+  flowchart](https://www.sqlite.org/windowfunctions.html)
+
+- [Vertica Rows vs Range
+  discussion](https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Functions/Analytic/window_frame_clause.htm?origin_team=T02V9CHFH#ROWSversusRANGE)
+
+## Code of Conduct
+
+Please note that the slider project is released with a [Contributor Code
+of Conduct](https://slider.r-lib.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
+
+# Package index
+
+## Slide family
+
+The `slide(.x, .f)` functions are similar to `purrr::map(.x, .f)`. Both
+iterate over `.x`, applying `.f` as they go. The difference is that
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) moves over
+`.x` in sliding windows, rather than one element at a time. The return
+value size is always the same size as `.x`, and the type is defined by
+the function suffix.
+
+- [`slide()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_vec()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_dbl()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_int()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_lgl()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_chr()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_dfr()`](https://slider.r-lib.org/dev/reference/slide.md)
+  [`slide_dfc()`](https://slider.r-lib.org/dev/reference/slide.md) :
+  Slide
+- [`slide2()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_vec()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_dbl()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_int()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_lgl()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_chr()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_dfr()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`slide2_dfc()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_vec()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_dbl()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_int()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_lgl()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_chr()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_dfr()`](https://slider.r-lib.org/dev/reference/slide2.md)
+  [`pslide_dfc()`](https://slider.r-lib.org/dev/reference/slide2.md) :
+  Slide over multiple inputs simultaneously
+- [`slide_sum()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_prod()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_mean()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_min()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_max()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_all()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  [`slide_any()`](https://slider.r-lib.org/dev/reference/summary-slide.md)
+  : Specialized sliding functions
+
+## Slide index family
+
+These functions iterate over `.x` using sliding windows defined with a
+secondary index vector, `.i`. The windows are constructed by “looking
+back” and “looking forward” a certain number of periods from each
+element of `.i`. This is useful for constructing irregular sliding
+windows, such as sliding with a look back period of two months when you
+have daily data. In that example, not all months have the same number of
+days, and some months might be missing data, so a fixed window size
+wouldn’t be useful.
+
+- [`slide_index()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_vec()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_dbl()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_int()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_lgl()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_chr()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_dfr()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  [`slide_index_dfc()`](https://slider.r-lib.org/dev/reference/slide_index.md)
+  : Slide relative to an index
+- [`slide_index2()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_vec()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_dbl()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_int()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_lgl()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_chr()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_dfr()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`slide_index2_dfc()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_vec()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_dbl()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_int()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_lgl()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_chr()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_dfr()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  [`pslide_index_dfc()`](https://slider.r-lib.org/dev/reference/slide_index2.md)
+  : Slide along multiples inputs simultaneously relative to an index
+- [`slide_index_sum()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_prod()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_mean()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_min()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_max()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_all()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  [`slide_index_any()`](https://slider.r-lib.org/dev/reference/summary-index.md)
+  : Specialized sliding functions relative to an index
+
+## Slide period family
+
+These functions work by iterating over `.x` in “period blocks”, such as
+one month blocks of data. The blocks are defined using a combination of
+a secondary date-like index vector, `.i`, and a period to block by.
+
+- [`slide_period()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_vec()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_dbl()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_int()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_lgl()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_chr()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_dfr()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  [`slide_period_dfc()`](https://slider.r-lib.org/dev/reference/slide_period.md)
+  : Slide relative to an index chunked by period
+- [`slide_period2()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_vec()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_dbl()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_int()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_lgl()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_chr()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_dfr()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`slide_period2_dfc()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_vec()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_dbl()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_int()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_lgl()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_chr()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_dfr()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  [`pslide_period_dfc()`](https://slider.r-lib.org/dev/reference/slide_period2.md)
+  : Slide along multiple inputs simultaneously relative to an index
+  chunked by period
+
+## Hop family
+
+These functions are lower level versions of their
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md)
+equivalents. They allow you to manually construct the boundaries to
+slide with, and are useful if you need more flexibility than what
+[`slide()`](https://slider.r-lib.org/dev/reference/slide.md) provides.
+
+- [`hop()`](https://slider.r-lib.org/dev/reference/hop.md)
+  [`hop_vec()`](https://slider.r-lib.org/dev/reference/hop.md) : Hop
+- [`hop2()`](https://slider.r-lib.org/dev/reference/hop2.md)
+  [`hop2_vec()`](https://slider.r-lib.org/dev/reference/hop2.md)
+  [`phop()`](https://slider.r-lib.org/dev/reference/hop2.md)
+  [`phop_vec()`](https://slider.r-lib.org/dev/reference/hop2.md) : Hop
+  along multiple inputs simultaneously
+- [`hop_index()`](https://slider.r-lib.org/dev/reference/hop_index.md)
+  [`hop_index_vec()`](https://slider.r-lib.org/dev/reference/hop_index.md)
+  : Hop relative to an index
+- [`hop_index2()`](https://slider.r-lib.org/dev/reference/hop_index2.md)
+  [`hop_index2_vec()`](https://slider.r-lib.org/dev/reference/hop_index2.md)
+  [`phop_index()`](https://slider.r-lib.org/dev/reference/hop_index2.md)
+  [`phop_index_vec()`](https://slider.r-lib.org/dev/reference/hop_index2.md)
+  : Hop along multiple inputs simultaneously relative to an index
+
+## Block
+
+[`block()`](https://slider.r-lib.org/dev/reference/block.md) breaks `.x`
+into its “period blocks”. The blocks are defined using a combination of
+a secondary date-like index vector, `.i`, and a period to block by. The
+return value is always a list, and the elements of the list are slices
+of `.x`.
+
+- [`block()`](https://slider.r-lib.org/dev/reference/block.md) : Break a
+  vector into blocks
+
+# Articles
+
+### All vignettes
+
+- [Row-wise iteration with
+  slider](https://slider.r-lib.org/dev/articles/rowwise.md):
+- [Getting started with
+  slider](https://slider.r-lib.org/dev/articles/slider.md):
+- [Converting from
+  tsibble](https://slider.r-lib.org/dev/articles/tsibble.md):

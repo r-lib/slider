@@ -42,8 +42,7 @@
 
       <div class="section-desc"><p>The <code>slide(.x, .f)</code> functions are similar to <code>purrr::map(.x, .f)</code>. Both iterate over <code>.x</code>, applying <code>.f</code> as they go. The difference is that <code><a href="../reference/slide.html">slide()</a></code> moves over <code>.x</code> in sliding windows, rather than one element at a time. The return value size is always the same size as <code>.x</code>, and the type is defined by the function suffix.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -54,13 +53,15 @@
 
         </dt>
         <dd>Slide</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="slide2.html">slide2()</a></code> <code><a href="slide2.html">slide2_vec()</a></code> <code><a href="slide2.html">slide2_dbl()</a></code> <code><a href="slide2.html">slide2_int()</a></code> <code><a href="slide2.html">slide2_lgl()</a></code> <code><a href="slide2.html">slide2_chr()</a></code> <code><a href="slide2.html">slide2_dfr()</a></code> <code><a href="slide2.html">slide2_dfc()</a></code> <code><a href="slide2.html">pslide()</a></code> <code><a href="slide2.html">pslide_vec()</a></code> <code><a href="slide2.html">pslide_dbl()</a></code> <code><a href="slide2.html">pslide_int()</a></code> <code><a href="slide2.html">pslide_lgl()</a></code> <code><a href="slide2.html">pslide_chr()</a></code> <code><a href="slide2.html">pslide_dfr()</a></code> <code><a href="slide2.html">pslide_dfc()</a></code>
 
         </dt>
         <dd>Slide over multiple inputs simultaneously</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="summary-slide.html">slide_sum()</a></code> <code><a href="summary-slide.html">slide_prod()</a></code> <code><a href="summary-slide.html">slide_mean()</a></code> <code><a href="summary-slide.html">slide_min()</a></code> <code><a href="summary-slide.html">slide_max()</a></code> <code><a href="summary-slide.html">slide_all()</a></code> <code><a href="summary-slide.html">slide_any()</a></code>
 
@@ -71,8 +72,7 @@
 
       <div class="section-desc"><p>These functions iterate over <code>.x</code> using sliding windows defined with a secondary index vector, <code>.i</code>. The windows are constructed by “looking back” and “looking forward” a certain number of periods from each element of <code>.i</code>. This is useful for constructing irregular sliding windows, such as sliding with a look back period of two months when you have daily data. In that example, not all months have the same number of days, and some months might be missing data, so a fixed window size wouldn’t be useful.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -83,13 +83,15 @@
 
         </dt>
         <dd>Slide relative to an index</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="slide_index2.html">slide_index2()</a></code> <code><a href="slide_index2.html">slide_index2_vec()</a></code> <code><a href="slide_index2.html">slide_index2_dbl()</a></code> <code><a href="slide_index2.html">slide_index2_int()</a></code> <code><a href="slide_index2.html">slide_index2_lgl()</a></code> <code><a href="slide_index2.html">slide_index2_chr()</a></code> <code><a href="slide_index2.html">slide_index2_dfr()</a></code> <code><a href="slide_index2.html">slide_index2_dfc()</a></code> <code><a href="slide_index2.html">pslide_index()</a></code> <code><a href="slide_index2.html">pslide_index_vec()</a></code> <code><a href="slide_index2.html">pslide_index_dbl()</a></code> <code><a href="slide_index2.html">pslide_index_int()</a></code> <code><a href="slide_index2.html">pslide_index_lgl()</a></code> <code><a href="slide_index2.html">pslide_index_chr()</a></code> <code><a href="slide_index2.html">pslide_index_dfr()</a></code> <code><a href="slide_index2.html">pslide_index_dfc()</a></code>
 
         </dt>
         <dd>Slide along multiples inputs simultaneously relative to an index</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="summary-index.html">slide_index_sum()</a></code> <code><a href="summary-index.html">slide_index_prod()</a></code> <code><a href="summary-index.html">slide_index_mean()</a></code> <code><a href="summary-index.html">slide_index_min()</a></code> <code><a href="summary-index.html">slide_index_max()</a></code> <code><a href="summary-index.html">slide_index_all()</a></code> <code><a href="summary-index.html">slide_index_any()</a></code>
 
@@ -100,8 +102,7 @@
 
       <div class="section-desc"><p>These functions work by iterating over <code>.x</code> in “period blocks”, such as one month blocks of data. The blocks are defined using a combination of a secondary date-like index vector, <code>.i</code>, and a period to block by.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -112,7 +113,8 @@
 
         </dt>
         <dd>Slide relative to an index chunked by period</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="slide_period2.html">slide_period2()</a></code> <code><a href="slide_period2.html">slide_period2_vec()</a></code> <code><a href="slide_period2.html">slide_period2_dbl()</a></code> <code><a href="slide_period2.html">slide_period2_int()</a></code> <code><a href="slide_period2.html">slide_period2_lgl()</a></code> <code><a href="slide_period2.html">slide_period2_chr()</a></code> <code><a href="slide_period2.html">slide_period2_dfr()</a></code> <code><a href="slide_period2.html">slide_period2_dfc()</a></code> <code><a href="slide_period2.html">pslide_period()</a></code> <code><a href="slide_period2.html">pslide_period_vec()</a></code> <code><a href="slide_period2.html">pslide_period_dbl()</a></code> <code><a href="slide_period2.html">pslide_period_int()</a></code> <code><a href="slide_period2.html">pslide_period_lgl()</a></code> <code><a href="slide_period2.html">pslide_period_chr()</a></code> <code><a href="slide_period2.html">pslide_period_dfr()</a></code> <code><a href="slide_period2.html">pslide_period_dfc()</a></code>
 
@@ -123,8 +125,7 @@
 
       <div class="section-desc"><p>These functions are lower level versions of their <code><a href="../reference/slide.html">slide()</a></code> equivalents. They allow you to manually construct the boundaries to slide with, and are useful if you need more flexibility than what <code><a href="../reference/slide.html">slide()</a></code> provides.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -135,19 +136,22 @@
 
         </dt>
         <dd>Hop</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="hop2.html">hop2()</a></code> <code><a href="hop2.html">hop2_vec()</a></code> <code><a href="hop2.html">phop()</a></code> <code><a href="hop2.html">phop_vec()</a></code>
 
         </dt>
         <dd>Hop along multiple inputs simultaneously</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="hop_index.html">hop_index()</a></code> <code><a href="hop_index.html">hop_index_vec()</a></code>
 
         </dt>
         <dd>Hop relative to an index</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="hop_index2.html">hop_index2()</a></code> <code><a href="hop_index2.html">hop_index2_vec()</a></code> <code><a href="hop_index2.html">phop_index()</a></code> <code><a href="hop_index2.html">phop_index_vec()</a></code>
 
@@ -158,8 +162,7 @@
 
       <div class="section-desc"><p><code><a href="../reference/block.html">block()</a></code> breaks <code>.x</code> into its “period blocks”. The blocks are defined using a combination of a secondary date-like index vector, <code>.i</code>, and a period to block by. The return value is always a list, and the elements of the list are slices of <code>.x</code>.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -182,7 +185,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer></body></html>
