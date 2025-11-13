@@ -1,5 +1,7 @@
 # slider (development version)
 
+* Removed usage of non-API `OBJECT()`.
+
 # slider 0.3.2
 
 * Removed usage of non-API `STRING_PTR()` (#209).

@@ -47,7 +47,7 @@ static SEXP check_scalar_lgl(SEXP x, SEXP x_arg) {
 // -----------------------------------------------------------------------------
 
 static bool is_unbounded(SEXP x) {
-  return !OBJECT(x) && TYPEOF(x) == REALSXP && REAL(x)[0] == R_PosInf;
+  return !Rf_isObject(x) && TYPEOF(x) == REALSXP && REAL(x)[0] == R_PosInf;
 }
 
 // -----------------------------------------------------------------------------
