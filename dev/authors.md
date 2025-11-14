@@ -15,12 +15,12 @@ Source:
 [`DESCRIPTION`](https://github.com/r-lib/slider/blob/main/DESCRIPTION)
 
 Vaughan D (2025). *slider: Sliding Window Functions*. R package version
-0.3.2.9000, <https://github.com/r-lib/slider>.
+0.3.3.9000, <https://github.com/r-lib/slider>.
 
     @Manual{,
       title = {slider: Sliding Window Functions},
       author = {Davis Vaughan},
       year = {2025},
-      note = {R package version 0.3.2.9000},
+      note = {R package version 0.3.3.9000},
       url = {https://github.com/r-lib/slider},
     }

@@ -2,6 +2,8 @@
 
 ## slider (development version)
 
+## slider 0.3.3
+
 - Fixed the C level function signature for a vctrs callable
   ([\#224](https://github.com/r-lib/slider/issues/224)).
 
